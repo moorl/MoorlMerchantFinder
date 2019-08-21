@@ -1,0 +1,83 @@
+{
+    "moorl-merchant-finder": {
+        "general": {
+            "mainMenuItemGeneral": "Merchant Finder",
+            "descriptionTextModule": "Manage your Merchants here"
+        },
+        "importAssistant": {
+            "title": "Import Assistant",
+            "loadedText": "There are {count} datarows in your file. Please configure datamapping in the next step.",
+            "errorText": "Something went wrong",
+            "name": "Name",
+            "propertyName": "Fieldname",
+            "target": "Mapping",
+            "fromImport": "From import",
+            "defined": "Fixed values",
+            "country": "Countries",
+            "salesChannel": "Sales channel",
+            "customerGroup": "Customer group",
+            "categoryId": "Category",
+            "noSelection": "-"
+        },
+        "notification": {
+            "successTitle": "Success",
+            "successText": "All merchants have been imported",
+            "importTitle": "Merchants are importing now",
+            "importText": "This proccess could take a while, please calm...",
+            "errorTitle": "Some error while saving"
+        },
+        "buttons": {
+            "saveButtonText": "Save",
+            "refreshButtonText": "Reload",
+            "addMerchantButtonText": "New merchant",
+            "cancelButtonText": "Cancel",
+            "startImportButtonText": "Start import",
+            "importButtonText": "Import CSV",
+            "exportButtonText": "Export CSV",
+            "importButtonTitle": "Upload your CSV",
+            "exportButtonTitle": "Download your CSV",
+            "getLocButtonText": "Get positions by OpenStreetMap",
+            "selectLocButtonText": "Chose",
+            "openMapButtonText": "Open Map",
+            "overwriteText": "Overwrite existing datarows (originId need to be set)."
+        },
+        "properties": {
+            "logo": "Logo",
+            "location": "Position",
+            "originId": "Origin ID",
+            "firstName": "Firstname",
+            "lastName": "Lastname",
+            "company": "Company",
+            "email": "E-Mail",
+            "title": "Title",
+            "active": "Active",
+            "zipcode": "Zipcode",
+            "city": "City",
+            "street": "Street",
+            "streetNumber": "Number",
+            "countryCode": "Country code",
+            "locationLat": "Latitude",
+            "locationLon": "Longitude",
+            "department": "Department",
+            "vatId": "VAT-ID",
+            "additionalAddressLine1": "Address line 1",
+            "additionalAddressLine2": "Address line 2",
+            "shopUrl": "Shop URL",
+            "merchantUrl": "Merchant URL",
+            "createdAt": "Created at",
+            "updatedAt": "Updated at",
+            "phoneNumber": "Phone",
+            "openingHours": "Opening hours",
+            "description": "Description",
+            "salesChannelId": "Sales Channel",
+            "customerGroupId": "Customer group",
+            "countryId": "Country",
+            "country": "Country"
+        },
+        "label": {
+            "accountCard": "General",
+            "locationCard": "Location",
+            "addressCard": "Address"
+        }
+    }
+}

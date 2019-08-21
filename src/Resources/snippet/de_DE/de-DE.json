@@ -1,0 +1,16 @@
+{
+  "moorl-merchant-finder": {
+    "radius": "Umkreis",
+    "km": "KM",
+    "searchFor": "Suche nach",
+    "zipcodeCity": "PLZ, Stadt",
+    "search": "Suche",
+    "distance": "Entfernung",
+    "phoneNumber": "Tel.",
+    "description" : "Beschreibung",
+    "openingHours" : "Öffnungszeiten",
+    "merchantUrl" : "Homepage",
+    "shopUrl": "Zum Shop",
+    "displayOnMap": "Auf Karte"
+  }
+}

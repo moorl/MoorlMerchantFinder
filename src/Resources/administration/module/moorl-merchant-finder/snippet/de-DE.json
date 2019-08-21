@@ -1,0 +1,83 @@
+{
+    "moorl-merchant-finder": {
+        "general": {
+            "mainMenuItemGeneral": "Händlersuche",
+            "descriptionTextModule": "Verwalte die Händler hier"
+        },
+        "importAssistant": {
+            "title": "Import Assistent",
+            "loadedText": "Es wurden {count} Datensätze in deinem Import gefunden. Bitte wähle im nächsten Schritt die Zuweisungen aus",
+            "errorText": "Dein Import wurde leider nicht erkannt, möglicherweise verwendest du ein falsches Format. Format: Es wird kein Excel erkannt, bitte verwende das Format CSV. Kodierung: Excel CSV Exports verwenden ANSI (Windows-1252) Kodierung, bitte verwende UTF-8. Datensätze: Es muss mindestens ein Datensatz in dem Import stehen",
+            "name": "Name",
+            "propertyName": "Feldname",
+            "target": "Zuweisung",
+            "fromImport": "Aus Import",
+            "defined": "Feste Werte",
+            "country": "Länder",
+            "salesChannel": "Sales Channel",
+            "customerGroup": "Kundengruppe",
+            "categoryId": "Kategorie",
+            "noSelection": "-"
+        },
+        "notification": {
+            "successTitle": "Erfolgreich",
+            "successText": "Alle Händler wurden erfolgreich importiert",
+            "importTitle": "Händler werden importiert",
+            "importText": "Dieser Vorgang kann einige Minuten dauern. Bitte habe etwas Geduld...",
+            "errorTitle": "Fehler beim Speichern des Händlers"
+        },
+        "buttons": {
+            "saveButtonText": "Speichern",
+            "refreshButtonText": "Neu laden",
+            "addMerchantButtonText": "Neuer Händler",
+            "cancelButtonText": "Abbrechen",
+            "startImportButtonText": "Starte Import",
+            "importButtonText": "Import CSV",
+            "exportButtonText": "Export CSV",
+            "importButtonTitle": "Lade dein CSV hoch",
+            "exportButtonTitle": "Lade ein CSV runter",
+            "getLocButtonText": "Beschaffe Koordinaten",
+            "selectLocButtonText": "Auswählen",
+            "openMapButtonText": "Karte öffnen",
+            "overwriteText": "Bereits vorhandene Datensätze aktualisieren (originId muss gesetzt sein)."
+        },
+        "properties": {
+            "logo": "Logo",
+            "location": "Koordinaten",
+            "originId": "Original ID",
+            "firstName": "Vorname",
+            "lastName": "Nachname",
+            "company": "Firma",
+            "email": "E-Mail",
+            "title": "Titel",
+            "active": "Aktiv",
+            "zipcode": "PLZ",
+            "city": "Stadt",
+            "street": "Straße",
+            "streetNumber": "Hausnummer",
+            "countryCode": "Länderkürzel",
+            "locationLat": "Breitengrad",
+            "locationLon": "Längengrad",
+            "department": "Filiale",
+            "vatId": "Steuer-ID",
+            "additionalAddressLine1": "Adressfeld 1",
+            "additionalAddressLine2": "Adressfeld 2",
+            "shopUrl": "Shop URL",
+            "merchantUrl": "Händler URL",
+            "createdAt": "Erstellt",
+            "updatedAt": "Aktualisiert",
+            "phoneNumber": "Telefon",
+            "openingHours": "Öffnungszeiten",
+            "description": "Beschreibung",
+            "salesChannelId": "Sales Channel",
+            "customerGroupId": "Kundengruppe",
+            "countryId": "Land",
+            "country": "Land"
+        },
+        "label": {
+            "accountCard": "Stammdaten",
+            "locationCard": "Standort",
+            "addressCard": "Adresse"
+        }
+    }
+}

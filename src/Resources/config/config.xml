@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/platform/master/src/Core/System/SystemConfig/Schema/config.xsd">
+
+    <card>
+        <title>General</title>
+        <title lang="de-DE">Einstellungen</title>
+        <input-field>
+            <name>allowedSearchCountryCodes</name>
+            <label>Filter Countries</label>
+            <label lang="de-DE">Länder Filtern</label>
+            <helpText>Cities can also exist in foreign countries, define your desried countries to guaranty the best search results</helpText>
+            <helpText lang="de-DE">Städte können auch in fremden Ländern existieren, definiere hier deine gewünschten Länder um die besten Suchergebnisse zu garantieren</helpText>
+            <placeholder>de,at,ch</placeholder>
+            <placeholder lang="de-DE">de,at,ch</placeholder>
+        </input-field>
+        <input-field>
+            <name>nominatim</name>
+            <label>OpenStreetMap Search Engine</label>
+            <label lang="de-DE">OpenStreetMap Suchmaschine</label>
+            <placeholder>https://nominatim.openstreetmap.org/search</placeholder>
+            <placeholder lang="de-DE">https://nominatim.openstreetmap.org/search</placeholder>
+            <helpText>If not defined, its always https://nominatim.openstreetmap.org/search</helpText>
+            <helpText lang="de-DE">Wenn nicht definiert wird immer https://nominatim.openstreetmap.org/search verwendet</helpText>
+        </input-field>
+    </card>
+
+</config>

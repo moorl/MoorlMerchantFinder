@@ -1,0 +1,157 @@
+<sw-page class="moorl-merchant-finder-list">
+
+    <sw-sidebar slot="sidebar">
+
+        <sw-sidebar-item icon="default-arrow-360-left"
+                         :title="$t('moorl-merchant-finder.buttons.refreshButtonText')"
+                         @click="onRefresh"></sw-sidebar-item>
+
+        <sw-sidebar-item icon="default-action-cloud-upload"
+                         :title="$t('moorl-merchant-finder.buttons.importButtonText')"
+                         @click="onClickUpload"></sw-sidebar-item>
+        <form style="display: none;" ref="fileForm">
+            <input class="sw-plugin-file-upload__file-input"
+                   type="file"
+                   id="files"
+                   ref="fileInput"
+                   @change="onFileInputChange"/>
+        </form>
+
+        <sw-sidebar-item icon="default-action-cloud-download"
+                         :title="$t('moorl-merchant-finder.buttons.exportButtonText')"
+                         @click="onClickDownload"></sw-sidebar-item>
+        <form id="exportCSV"
+              style="display: none;"
+              method="get"
+              action="api.moorl.merchant-finder.export">
+        </form>
+
+    </sw-sidebar>
+
+    <template slot="smart-bar-actions">
+
+        <sw-button variant="primary" :routerLink="{ name: 'moorl.merchant.finder.create' }">
+            {{ $t('moorl-merchant-finder.buttons.addMerchantButtonText') }}
+        </sw-button>
+
+    </template>
+
+    <template slot="content">
+
+        <sw-loader v-if="isImporting"></sw-loader>
+
+        <sw-entity-listing
+                v-if="merchants"
+                :items="merchants"
+                :repository="repository"
+                :showSelection="true"
+                :columns="columns"
+                :isLoading="isLoading"
+                detailRoute="moorl.merchant.finder.detail"
+                @select-item="updateSelection"
+                @update-records="updateTotal">
+
+            <template #column-active="{ item, isInlineEdit }">
+                <template v-if="isInlineEdit">
+                    <sw-checkbox-field v-model="item.active"></sw-checkbox-field>
+                </template>
+                <template v-else>
+                    <sw-icon v-if="item.active" name="small-default-checkmark-line-medium" small class="is--active"></sw-icon>
+                    <sw-icon v-else name="small-default-x-line-medium" small class="is--inactive"></sw-icon>
+                </template>
+            </template>
+
+            <template #column-locationLon="{ item }">
+                <span>{{ item.locationLon }}|{{ item.locationLat }}</span>
+            </template>
+
+            <template #preview-company="{ item }">
+                <sw-media-preview :source="item.mediaId"></sw-media-preview>
+            </template>
+
+        </sw-entity-listing>
+
+        <sw-modal v-if="showImportModal" @modal-close="onCloseModal" :title="$t('moorl-merchant-finder.importAssistant.title')" variant="default">
+
+            <div v-if="csv.data.length == 0">
+                <p>{{ $t('moorl-merchant-finder.importAssistant.errorText') }}</p>
+            </div>
+
+            <div v-if="csv.data.length > 0">
+
+                <p>{{ $t('moorl-merchant-finder.importAssistant.loadedText', { count: csv.data.length }) }}</p>
+
+                <br>
+
+                <table class="moorl-merchant-finder-mapping-table" cellpadding="0" cellspacing="0">
+                    <thead>
+                    <tr class="">
+                        <th class="">{{ $t('moorl-merchant-finder.importAssistant.name') }}</th>
+                        <th class="">{{ $t('moorl-merchant-finder.importAssistant.propertyName') }}</th>
+                        <th class="">{{ $t('moorl-merchant-finder.importAssistant.target') }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="schemaProperty in csv.schemaProperties"
+                        v-if="csv.filterSchemaProperties.indexOf(schemaProperty) === -1">
+                        <td>
+                            <div>{{ $t("moorl-merchant-finder.properties." + schemaProperty) }}</div>
+                        </td>
+                        <td>
+                            <div>{{ schemaProperty }}</div>
+                        </td>
+                        <td>
+                            <div>
+                                <select v-model="csv.propertyMapping[schemaProperty]">
+
+                                    <optgroup :label="$t('moorl-merchant-finder.importAssistant.fromImport')">
+                                        <option v-for="csvProperty in csv.csvProperties" :value="csvProperty">{{ csvProperty }}</option>
+                                    </optgroup>
+
+                                    <optgroup :label="$t('moorl-merchant-finder.importAssistant.defined')">
+                                        <option value>{{ $t('moorl-merchant-finder.importAssistant.noSelection') }}</option>
+                                        <option value="1">true</option>
+                                        <option value="0">false</option>
+                                    </optgroup>
+
+                                    <optgroup :label="$t('moorl-merchant-finder.importAssistant.salesChannel')">
+                                        <option v-for="salesChannel in salesChannels" :value="salesChannel.id">{{ salesChannel.name }}</option>
+                                    </optgroup>
+
+                                    <optgroup :label="$t('moorl-merchant-finder.importAssistant.country')">
+                                        <option v-for="country in countries" :value="country.id">{{ country.name }}</option>
+                                    </optgroup>
+
+                                    <optgroup :label="$t('moorl-merchant-finder.importAssistant.customerGroup')">
+                                        <option v-for="customerGroup in customerGroups" :value="customerGroup.id">{{ customerGroup.name }}</option>
+                                    </optgroup>
+
+                                </select>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <sw-field type="switch" bordered :label="$t('moorl-merchant-finder.buttons.getLocButtonText')" v-model="csv.options.getPosition"></sw-field>
+
+                <sw-field type="switch" bordered :label="$t('moorl-merchant-finder.buttons.overwriteText')" v-model="csv.options.overwrite"></sw-field>
+
+            </div>
+
+            <template #modal-footer>
+                <sw-button @click="onCloseModal" size="small">
+                    {{ $t('moorl-merchant-finder.buttons.cancelButtonText') }}
+                </sw-button>
+                <sw-button v-if="csv.data.length > 0"
+                           @click="onClickImport"
+                           variant="primary"
+                           size="small">
+                    {{ $t('moorl-merchant-finder.buttons.startImportButtonText') }}
+                </sw-button>
+            </template>
+
+        </sw-modal>
+
+    </template>
+</sw-page>

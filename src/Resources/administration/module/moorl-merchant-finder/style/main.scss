@@ -1,0 +1,33 @@
+@import "ol";
+
+.moorl-merchant-finder-mapping-table {
+  width: 100%;
+
+  select {
+    width: 100%;
+    border: 0;
+    background: none;
+  }
+
+  tbody {
+    tr {
+      td {
+        > div {
+          padding: 3px;
+        }
+
+        border-right: 1px solid #d1d9e0;
+
+        &:last-child {
+          border-right: 0;
+        }
+      }
+
+      &:nth-child(2n) {
+        td {
+          background-color: #f0f2f5;
+        }
+      }
+    }
+  }
+}
