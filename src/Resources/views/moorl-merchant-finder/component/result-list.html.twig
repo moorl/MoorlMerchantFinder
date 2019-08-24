@@ -1,0 +1,13 @@
+<!-- Loading Indicator -->
+{% block page_merchant_finder_loading_indicator %}
+    <div id="loadingIndicator">
+        <div class="spinner-border"></div>
+    </div>
+{% endblock %}
+
+<!-- Search Results Template -->
+<ul class="moorl-merchant-finder-results list-group d-none" id="searchResults">
+    {% block page_merchant_finder_search_result_item %}
+        {% sw_include '@MoorlMerchantFinder/moorl-merchant-finder/component/result-item.html.twig' %}
+    {% endblock %}
+</ul>

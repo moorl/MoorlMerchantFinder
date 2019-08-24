@@ -4,124 +4,21 @@
     <div class="moorl-merchant-finder-bg">
         <div class="container">
             <div class="container-main">
-                {% block page_merchant_finder_form %}
-                    <form data-moorl-merchant-finder="true"
-                          action="{{ path('moorl.merchant-finder.search') }}"
-                          method="post">
-                        {% block page_merchant_finder_form_inner %}
-                            <div class="row form-row">
-                                <div class="form-group col-12 col-lg-3">
-                                    <input name="term" class="form-control" placeholder="{{ "moorl-merchant-finder.searchFor"|trans }}">
-                                </div>
-                                <div class="form-group col-12 col-lg-3">
-                                    <input name="zipcode" class="form-control" placeholder="{{ "moorl-merchant-finder.zipcodeCity"|trans }}">
-                                </div>
-                                <div class="form-group col-6 col-lg-3">
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">{{ "moorl-merchant-finder.radius"|trans }}</span>
-                                        </div>
-                                        <select name="distance" class="form-control">
-                                            <option value="10">10</option>
-                                            <option value="25">25</option>
-                                            <option value="50">50</option>
-                                            <option value="100">100</option>
-                                            <option value="200">200</option>
-                                            <option value="300">300</option>
-                                        </select>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">{{ "moorl-merchant-finder.km"|trans }}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group col-6 col-lg-3">
-                                    <button type="submit" class="btn btn-block btn-primary">
-                                        {{ "moorl-merchant-finder.search"|trans }}
-                                    </button>
-                                </div>
-                            </div>
-                        {% endblock %}
-                    </form>
-                {% endblock %}
+
+                {% sw_include '@MoorlMerchantFinder/moorl-merchant-finder/component/search-form.html.twig' %}
+
                 <div class="row form-row">
-                    <div class="form-group col-12 col-lg-6">
-                        <!-- Loading Indicator -->
-                        {% block page_merchant_finder_loading_indicator %}
-                            <div id="loadingIndicator">
-                                <div class="spinner-border"></div>
-                            </div>
-                        {% endblock %}
-                        <!-- Search Results Template -->
-                        <ul class="moorl-merchant-finder-results list-group d-none" id="searchResults">
-                            {% block page_merchant_finder_search_result_item %}
-                                <li id="<% v.id %>" class="list-group-item moorl-merchant-finder-result-item">
-                                    <div class="">
-                                        <div class="">
-                                            <h4 class="">
-                                                <% v.company %>
-                                                <% if (v.distance != null) { %>
-                                                <small class="text-small float-right">{{ "moorl-merchant-finder.distance"|trans }}: <% parseInt(v.distance) %> {{ "moorl-merchant-finder.km"|trans }}</small>
-                                                <% } %>
-                                            </h4>
-                                            <div class="row justify-content-between">
-                                                <div class="col-6">
-                                                    <p class=""><% v.street %> <% v.streetNumber %>
-                                                        <br><% v.zipcode %> <% v.city %>
-                                                        <% if (v.country != null) { %>
-                                                        <br><% v.country %>
-                                                        <% } %>
-                                                    </p>
-                                                    <% if (v.phoneNumber != null) { %>
-                                                    <p class="">{{ "moorl-merchant-finder.phoneNumber"|trans }} <% v.phoneNumber %></p>
-                                                    <% } %>
-                                                </div>
-                                                <div class="col-6">
-                                                    <% if (v.description != null) { %>
-                                                    <b>{{ "moorl-merchant-finder.description"|trans }}</b>
-                                                    <p class=""><% v.description %></p>
-                                                    <% } %>
-                                                    <% if (v.openingHours != null) { %>
-                                                    <b>{{ "moorl-merchant-finder.openingHours"|trans }}</b>
-                                                    <p class=""><% v.openingHours %></p>
-                                                    <% } %>
-                                                </div>
-                                            </div>
-                                            <p class="mt-2">
-                                                <% if (v.merchantUrl != null) { %>
-                                                <a href="<% v.merchantUrl %>" class="btn btn-secondary">{{ "moorl-merchant-finder.merchantUrl"|trans }}</a>
-                                                <% } %>
-                                                <% if (v.shopUrl != null) { %>
-                                                <a href="<% v.shopUrl %>" class="btn btn-secondary">{{ "moorl-merchant-finder.shopUrl"|trans }}</a>
-                                                <% } %>
-                                                <% if (v.locationLon != null) { %>
-                                                <a href="javascript:" data-location-lat="<% v.locationLat %>" data-location-lon="<% v.locationLon %>" data-item="<% v.id %>" class="btn btn-secondary">{{ "moorl-merchant-finder.displayOnMap"|trans }}</a>
-                                                <% } %>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </li>
-                            {% endblock %}
-                        </ul>
+
+                    <div class="col-12 col-lg-6 mb-4">
+                        {% sw_include '@MoorlMerchantFinder/moorl-merchant-finder/component/result-list.html.twig' %}
                     </div>
-                    {% block page_merchant_finder_map %}
-                        <div class="form-group col-12 col-lg-6">
-                            <div id="embedMap" class="moorl-merchant-finder-map">
-                                <!-- Map Popup Template -->
-                                {% block page_merchant_finder_map_popup %}
-                                    <div class="moorl-merchant-finder-popup">
-                                        <b><% v.company %></b>
-                                        <p><% v.street %> <% v.streetNumber %>
-                                            <br><% v.zipcode %> <% v.city %>
-                                            <% if (v.country != null) { %>
-                                            <br><% v.country %>
-                                            <% } %>
-                                        </p>
-                                    </div>
-                                {% endblock %}
-                            </div>
-                        </div>
-                    {% endblock %}
+
+                    <div class="col-12 col-lg-6 mb-4">
+                        {% sw_include '@MoorlMerchantFinder/moorl-merchant-finder/component/map.html.twig' %}
+                    </div>
+
                 </div>
+
             </div>
         </div>
     </div>

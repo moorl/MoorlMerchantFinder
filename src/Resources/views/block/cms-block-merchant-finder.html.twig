@@ -1,0 +1,27 @@
+{% block block_merchant_finder %}
+
+    {% set element = block.slots.getSlot('merchantFinder') %}
+
+    {% if element.translated.config.title.value != null %}
+        <h1 class="col-12 mb-4 {{ element.translated.config.titleCss.value }}">{{ element.translated.config.title.value }}</h1>
+    {% endif %}
+
+    <div class="col-12">
+
+        {% sw_include '@MoorlMerchantFinder/moorl-merchant-finder/component/search-form.html.twig' %}
+
+        <div class="row form-row">
+
+            <div class="col-12 col-lg-6 mb-4">
+                {% sw_include '@MoorlMerchantFinder/moorl-merchant-finder/component/result-list.html.twig' %}
+            </div>
+
+            <div class="col-12 col-lg-6 mb-4">
+                {% sw_include '@MoorlMerchantFinder/moorl-merchant-finder/component/map.html.twig' %}
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}
