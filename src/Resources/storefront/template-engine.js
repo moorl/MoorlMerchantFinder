@@ -7,7 +7,7 @@ export default class Te {
 
         const re = /<%([^%>]+)?%>/g
         const reExp = /(^( )?(if|for|else|switch|case|break|{|}))(.*)?/g
-        let code = 'var r=[];\n' + 'var v=' + JSON.stringify(options) + ';\n'
+        let code = 'var r=[];\n'
         let cursor = 0;
         let blabla;
 
