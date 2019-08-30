@@ -5,8 +5,6 @@ namespace Moorl\MerchantFinder\Controller;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\ParameterType;
-use GuzzleHttp\Client;
-use Moorl\MerchantFinder\MoorlMerchantFinder;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
@@ -19,7 +17,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
+use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 
+/**
+ * @RouteScope(scopes={"api"})
+ */
 class ApiController extends AbstractController
 {
 

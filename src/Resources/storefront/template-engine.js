@@ -1,6 +1,5 @@
 export default class Te {
 
-    // TODO: Use other Template Engine soon
     render(html, options) {
 
         html = html.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
