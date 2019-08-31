@@ -1,7 +1,7 @@
 {
   "name": "moorl/merchant-finder",
   "description": "Merchant finder for Shopware 6",
-  "version": "v1.0.1",
+  "version": "v1.0.2",
   "license": "proprietary",
   "authors": [
     {
