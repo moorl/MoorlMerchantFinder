@@ -1,4 +1,4 @@
-@import "ol";
+@import "leaflet";
 
 .moorl-merchant-finder-bg {
   background-color: $light;
@@ -13,10 +13,7 @@
 }
 
 .moorl-merchant-finder-popup {
-  background-color: rgba($body-bg, 0.8);
   color: $body-color;
-  border-radius: $border-radius;
-  padding: 5px;
 }
 
 @include media-breakpoint-up(lg) {

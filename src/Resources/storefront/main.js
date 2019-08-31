@@ -1,5 +1,5 @@
 // Import all necessary Storefront plugins and scss files
-import MoorlMerchantFinder from './moorl-merchant-finder/moorl-merchant-finder';
+import MoorlMerchantFinder from './moorl-merchant-finder/moorl-merchant-finder-leaflet';
 
 // Register them via the existing PluginManager
 const PluginManager = window.PluginManager;
