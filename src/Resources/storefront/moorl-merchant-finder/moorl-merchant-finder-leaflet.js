@@ -3,7 +3,6 @@ import FormSerializeUtil from 'src/script/utility/form/form-serialize.util';
 import DomAccess from 'src/script/helper/dom-access.helper';
 import HttpClient from 'src/script/service/http-client.service';
 import Te from '../template-engine';
-
 import L from 'leaflet';
 
 export default class MoorlMerchantFinder extends Plugin {
@@ -41,27 +40,19 @@ export default class MoorlMerchantFinder extends Plugin {
     }
 
     _registerEvents() {
-
         const that = this;
-
         this.el.addEventListener('submit', this._formSubmit.bind(this));
-
         $(document).on('click','[data-item]', function () {
             that._focusItem($(this).data('item'));
         });
-
     }
 
     _formSubmit(event) {
-
         if (typeof event != 'undefined') {
             event.preventDefault();
         }
-
         const requestUrl = DomAccess.getAttribute(this._form, 'action').toLowerCase();
-
         const formData = FormSerializeUtil.serialize(this._form);
-
         this._client.post(requestUrl, formData, this._onLoaded.bind(this))
     }
 
@@ -73,26 +64,19 @@ export default class MoorlMerchantFinder extends Plugin {
     }
 
     _buildSearchResults(response) {
-
         const that = this;
         const te = new Te();
-
         response.data.forEach(function (item) {
             that._results.insertAdjacentHTML('beforeend', te.render(that._resultTemplate, item));
         });
-
         $(this._results).removeClass('d-none');
         $(this._loadingIndicator).addClass('d-none');
-
     }
 
     _buildMapMarkers(response) {
-
         const that = this;
         const te = new Te();
-
         const featureMarker = [];
-
         let minLon = 10000,
             minLat = 10000,
             maxLon = 0,
@@ -108,9 +92,18 @@ export default class MoorlMerchantFinder extends Plugin {
                 maxLon = item.locationLon > maxLon ? item.locationLon : maxLon;
 
                 featureMarker.push(
-                    L.marker([item.locationLat, item.locationLon], {id: item.id})
-                        .bindPopup(te.render(that._popupTemplate, item))
+                    L.marker([item.locationLat, item.locationLon], {data: item})
+                        .bindPopup(te.render(that._popupTemplate, item), {
+                            autoPan: false,
+                            autoClose: false
+                        })
                         .on('click', function() {that._focusItem(item.id)})
+                        .on('popupclose', function () {
+                            if (that.ol.center) {
+                                that.ol.map.flyTo(that.ol.center, that.ol.zoom, {animate: true, duration: 1});
+                                that.ol.center = that.ol.zoom = null;
+                            }
+                        })
                 );
 
 
@@ -123,12 +116,10 @@ export default class MoorlMerchantFinder extends Plugin {
         if (response.data.length != 0) {
 
             if (response.data.length == 1) {
-
                 minLat = minLat - 0.02;
                 maxLat = maxLat + 0.02;
                 minLon = minLon - 0.02;
                 maxLon = maxLon + 0.02;
-
             }
 
             // relocate bounding box
@@ -142,9 +133,6 @@ export default class MoorlMerchantFinder extends Plugin {
     }
 
     _focusItem(id) {
-
-        //const te = new Te();
-
         const that = this;
         const myElement = document.getElementById(id);
         const topPos = myElement.offsetTop;
@@ -159,17 +147,20 @@ export default class MoorlMerchantFinder extends Plugin {
 
         this.ol.markers.eachLayer(function(layer) {
 
-            if (layer.options.id == id) {
+            if (layer.options.data.id == id) {
                 let position = layer.getLatLng();
-                that.ol.center = that.ol.map.getCenter();
-                that.ol.zoom = that.ol.map.getZoom();
-                that.ol.map.setView(position, 16);
-                layer.openPopup();
+                if (!layer.getPopup().isOpen()) {
+                    layer.openPopup();
+                }
+                if (that.ol.center == null) {
+                    that.ol.center = that.ol.map.getCenter();
+                    that.ol.zoom = that.ol.map.getZoom();
+                }
+                that.ol.map.flyTo(position, 16, {animate: true, duration: 1});
                 console.log(layer);
             }
 
         });
-
     }
 
     _buildMap() {

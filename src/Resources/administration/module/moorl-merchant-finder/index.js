@@ -1,6 +1,6 @@
 import { Module } from 'src/core/shopware';
 import './page/moorl-merchant-finder-list';
-import './page/moorl-merchant-finder-detail';
+import './page/moorl-merchant-finder-detail/index-leaflet';
 import './page/moorl-merchant-finder-create';
 import deDE from './snippet/de-DE';
 import enGB from './snippet/en-GB';
