@@ -3,7 +3,7 @@ import FormSerializeUtil from 'src/script/utility/form/form-serialize.util';
 import DomAccess from 'src/script/helper/dom-access.helper';
 import HttpClient from 'src/script/service/http-client.service';
 import Te from '../template-engine';
-import L from 'leaflet';
+import L from '../../node_modules/leaflet/dist/leaflet-src.js';
 
 export default class MoorlMerchantFinder extends Plugin {
 
