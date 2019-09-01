@@ -7,6 +7,9 @@ use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\ParameterType;
 use GuzzleHttp\Client;
 use Moorl\MerchantFinder\MoorlMerchantFinder;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\ContainsFilter;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
@@ -18,7 +21,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
-
 
 /**
  * @RouteScope(scopes={"storefront"})
@@ -165,6 +167,7 @@ SQL;
 SELECT 
     LOWER(HEX(`id`)) AS `id`,
     LOWER(HEX(`sales_channel_id`)) AS `salesChannelId`,
+    LOWER(HEX(`media_id`)) AS `mediaId`,
     `origin_id` AS `originId`,
     `first_name` AS `firstName`,
     `last_name` AS `lastName`,
@@ -211,6 +214,7 @@ SQL;
 SELECT 
     LOWER(HEX(`id`)) AS `id`,
     LOWER(HEX(`sales_channel_id`)) AS `salesChannelId`,
+    LOWER(HEX(`media_id`)) AS `mediaId`,
     `origin_id` AS `originId`,
     `first_name` AS `firstName`,
     `last_name` AS `lastName`,
@@ -247,11 +251,42 @@ SQL;
         $response = new JsonResponse();
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
         $response->setData([
-            'data' => $data,
+            'data' => $this->extendResultData($data, $context->getContext()),
             'loc' => $myLocation,
         ]);
 
         return $response;
+
+    }
+
+    private function extendResultData($data, $context)
+    {
+
+        // collect and add media
+        $mediaIds = [];
+        foreach ($data as $item) {
+            if (!empty($item['mediaId'])) {
+                $mediaIds[] = $item['mediaId'];
+            }
+        }
+
+        if (count($mediaIds) > 0) {
+            $mediaRepository = $this->container->get("media.repository");
+            $criteria = new Criteria();
+            $criteria->addFilter(new EqualsAnyFilter('id', $mediaIds));
+            $mediaEntries = $mediaRepository->search($criteria, $context)->getEntities()->getElements();
+            foreach ($data as &$item) {
+                if (!empty($item['mediaId'])) {
+                    foreach ($mediaEntries as $mediaEntry) {
+                        if ($mediaEntry->getId() == $item['mediaId']) {
+                            $item['mediaUrl'] = $mediaEntry->getUrl();
+                        }
+                    }
+                }
+            }
+        }
+
+        return $data;
 
     }
 

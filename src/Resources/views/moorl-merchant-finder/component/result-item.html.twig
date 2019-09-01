@@ -1,6 +1,11 @@
 <li id="<% this.id %>" class="list-group-item moorl-merchant-finder-result-item">
-    <div class="">
-        <div class="">
+    <div class="row form-row">
+        <% if (this.mediaId != null) { %>
+            <div class="col-2">
+                <img src="<% this.mediaUrl %>" class="img-fluid">
+            </div>
+        <% } %>
+        <div class="col-<% if (this.mediaId != null) { %>10<% } else { %>12<% } %>">
             <h4 class="">
                 <% this.company %>
                 <% if (this.distance != null) { %>
@@ -22,25 +27,25 @@
                 <div class="col-6">
                     <% if (this.description != null) { %>
                     <b>{{ "moorl-merchant-finder.description"|trans }}</b>
-                    <p class=""><% this.description %></p>
+                    <p style="white-space: pre-line"><% this.description %></p>
                     <% } %>
                     <% if (this.openingHours != null) { %>
                     <b>{{ "moorl-merchant-finder.openingHours"|trans }}</b>
-                    <p class=""><% this.openingHours %></p>
+                    <p style="white-space: pre-line"><% this.openingHours %></p>
                     <% } %>
                 </div>
             </div>
-            <p class="mt-2">
-                <% if (this.merchantUrl != null) { %>
-                <a href="<% this.merchantUrl %>" class="btn btn-secondary">{{ "moorl-merchant-finder.merchantUrl"|trans }}</a>
-                <% } %>
-                <% if (this.shopUrl != null) { %>
-                <a href="<% this.shopUrl %>" class="btn btn-secondary">{{ "moorl-merchant-finder.shopUrl"|trans }}</a>
-                <% } %>
-                <% if (this.locationLon != null) { %>
-                <a href="javascript:" data-location-lat="<% this.locationLat %>" data-location-lon="<% this.locationLon %>" data-item="<% this.id %>" class="btn btn-secondary">{{ "moorl-merchant-finder.displayOnMap"|trans }}</a>
-                <% } %>
-            </p>
         </div>
+    </div>
+    <div class="mt-2">
+        <% if (this.merchantUrl != null) { %>
+        <a href="<% this.merchantUrl %>" target="_blank" class="btn btn-secondary">{{ "moorl-merchant-finder.merchantUrl"|trans }}</a>
+        <% } %>
+        <% if (this.shopUrl != null) { %>
+        <a href="<% this.shopUrl %>" target="_blank" class="btn btn-secondary">{{ "moorl-merchant-finder.shopUrl"|trans }}</a>
+        <% } %>
+        <% if (this.locationLon != null) { %>
+        <a href="javascript:" data-location-lat="<% this.locationLat %>" data-location-lon="<% this.locationLon %>" data-item="<% this.id %>" class="btn btn-secondary">{{ "moorl-merchant-finder.displayOnMap"|trans }}</a>
+        <% } %>
     </div>
 </li>
