@@ -261,7 +261,6 @@ SQL;
 
     private function extendResultData($data, $context)
     {
-
         // collect and add media
         $mediaIds = [];
         foreach ($data as $item) {
@@ -289,5 +288,4 @@ SQL;
         return $data;
 
     }
-
 }

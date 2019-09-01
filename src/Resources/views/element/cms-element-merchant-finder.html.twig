@@ -1,12 +1,9 @@
-{% block block_merchant_finder %}
+{% block element_merchant_finder %}
+    <div class="cms-element-{{ element.type }}">
 
-    {% set element = block.slots.getSlot('merchantFinder') %}
-
-    {% if element.translated.config.title.value != null %}
-        <h1 class="col-12 mb-4 {{ element.translated.config.titleCss.value }}">{{ element.translated.config.title.value }}</h1>
-    {% endif %}
-
-    <div class="col-12">
+        {% if element.translated.config.title.value != null %}
+            <h1 class="mb-4 {{ element.translated.config.titleCss.value }}">{{ element.translated.config.title.value }}</h1>
+        {% endif %}
 
         {% sw_include '@MoorlMerchantFinder/moorl-merchant-finder/component/search-form.html.twig' %}
 
@@ -23,5 +20,4 @@
         </div>
 
     </div>
-
 {% endblock %}
