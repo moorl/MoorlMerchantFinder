@@ -15,6 +15,7 @@
             "defined": "Fixed values",
             "country": "Countries",
             "salesChannel": "Sales channel",
+            "media": "Media",
             "customerGroup": "Customer group",
             "categoryId": "Category",
             "noSelection": "-"
@@ -43,6 +44,9 @@
         },
         "properties": {
             "logo": "Logo",
+            "markerId": "Marker",
+            "markerShadowId": "Marker Shadow",
+            "markerSettings": "Marker Settings",
             "location": "Position",
             "originId": "Origin ID",
             "firstName": "Firstname",

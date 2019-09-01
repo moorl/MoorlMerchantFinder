@@ -24,6 +24,53 @@ class MerchantEntity extends Entity
     /**
      * @var string
      */
+    protected $markerId;
+
+    /**
+     * @var string
+     */
+    protected $markerShadowId;
+
+    /**
+     * @var string
+     */
+    protected $markerSettings;
+
+    /**
+     * @return string
+     */
+    public function getMarkerShadowId(): string
+    {
+        return $this->markerShadowId;
+    }
+
+    /**
+     * @param string $markerShadowId
+     */
+    public function setMarkerShadowId(string $markerShadowId): void
+    {
+        $this->markerShadowId = $markerShadowId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMarkerSettings(): string
+    {
+        return $this->markerSettings;
+    }
+
+    /**
+     * @param string $markerSettings
+     */
+    public function setMarkerSettings(string $markerSettings): void
+    {
+        $this->markerSettings = $markerSettings;
+    }
+
+    /**
+     * @var string
+     */
     protected $salesChannelId;
 
     /**
@@ -236,6 +283,22 @@ class MerchantEntity extends Entity
     public function setOpeningHours(string $openingHours): void
     {
         $this->openingHours = $openingHours;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMarkerId(): string
+    {
+        return $this->markerId;
+    }
+
+    /**
+     * @param string $mediaId
+     */
+    public function setMarkerId(string $markerId): void
+    {
+        $this->markerId = $markerId;
     }
 
     /**

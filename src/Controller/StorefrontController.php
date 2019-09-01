@@ -168,6 +168,8 @@ SELECT
     LOWER(HEX(`id`)) AS `id`,
     LOWER(HEX(`sales_channel_id`)) AS `salesChannelId`,
     LOWER(HEX(`media_id`)) AS `mediaId`,
+    LOWER(HEX(`marker_id`)) AS `markerId`,
+    LOWER(HEX(`marker_shadow_id`)) AS `markerShadowId`,
     `origin_id` AS `originId`,
     `first_name` AS `firstName`,
     `last_name` AS `lastName`,
@@ -185,6 +187,7 @@ SELECT
     `merchant_url` AS `merchantUrl`,
     `description`,
     `opening_hours` AS `openingHours`,
+    `marker_settings` AS `markerSettings`,
     ACOS(
          SIN(RADIANS(:lat)) * SIN(RADIANS(`location_lat`)) 
          + COS(RADIANS(:lat)) * COS(RADIANS(`location_lat`))
@@ -215,6 +218,8 @@ SELECT
     LOWER(HEX(`id`)) AS `id`,
     LOWER(HEX(`sales_channel_id`)) AS `salesChannelId`,
     LOWER(HEX(`media_id`)) AS `mediaId`,
+    LOWER(HEX(`marker_id`)) AS `markerId`,
+    LOWER(HEX(`marker_shadow_id`)) AS `markerShadowId`,
     `origin_id` AS `originId`,
     `first_name` AS `firstName`,
     `last_name` AS `lastName`,
@@ -231,7 +236,8 @@ SELECT
     `shop_url` AS `shopUrl`,
     `merchant_url` AS `merchantUrl`,
     `description`,
-    `opening_hours` AS `openingHours`
+    `opening_hours` AS `openingHours`,
+    `marker_settings` AS `markerSettings`
 FROM `moorl_merchant`
 WHERE CONCAT(`company`, `city`) LIKE :term 
 AND `active` IS TRUE
@@ -267,18 +273,38 @@ SQL;
             if (!empty($item['mediaId'])) {
                 $mediaIds[] = $item['mediaId'];
             }
+            if (!empty($item['markerId'])) {
+                $mediaIds[] = $item['markerId'];
+            }
+            if (!empty($item['markerShadowId'])) {
+                $mediaIds[] = $item['markerShadowId'];
+            }
         }
 
         if (count($mediaIds) > 0) {
             $mediaRepository = $this->container->get("media.repository");
             $criteria = new Criteria();
-            $criteria->addFilter(new EqualsAnyFilter('id', $mediaIds));
+            $criteria->addFilter(new EqualsAnyFilter('id', array_unique($mediaIds)));
             $mediaEntries = $mediaRepository->search($criteria, $context)->getEntities()->getElements();
             foreach ($data as &$item) {
                 if (!empty($item['mediaId'])) {
                     foreach ($mediaEntries as $mediaEntry) {
                         if ($mediaEntry->getId() == $item['mediaId']) {
                             $item['mediaUrl'] = $mediaEntry->getUrl();
+                        }
+                    }
+                }
+                if (!empty($item['markerId'])) {
+                    foreach ($mediaEntries as $mediaEntry) {
+                        if ($mediaEntry->getId() == $item['markerId']) {
+                            $item['markerUrl'] = $mediaEntry->getUrl();
+                        }
+                    }
+                }
+                if (!empty($item['markerShadowId'])) {
+                    foreach ($mediaEntries as $mediaEntry) {
+                        if ($mediaEntry->getId() == $item['markerShadowId']) {
+                            $item['markerShadowUrl'] = $mediaEntry->getUrl();
                         }
                     }
                 }

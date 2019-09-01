@@ -42,7 +42,7 @@ export default class MoorlMerchantFinder extends Plugin {
     _registerEvents() {
         const that = this;
         this.el.addEventListener('submit', this._formSubmit.bind(this));
-        $(document).on('click','[data-item]', function () {
+        $(document).on('click', '[data-item]', function () {
             that._focusItem($(this).data('item'));
         });
     }
@@ -86,18 +86,36 @@ export default class MoorlMerchantFinder extends Plugin {
         response.data.forEach(function (item) {
             if (item.locationLon != null) {
 
+                let iconOptions = {};
+                let markerOptions = {data: item};
+
+                if (item.markerSettings != null) {
+                    iconOptions = JSON.parse(item.markerSettings);
+                }
+
+                if (typeof item.markerShadowUrl != 'undefined') {
+                    iconOptions.shadowUrl = item.markerShadowUrl;
+                }
+
+                if (typeof item.markerUrl != 'undefined') {
+                    iconOptions.iconUrl = item.markerUrl;
+                    markerOptions.icon = L.icon(iconOptions);
+                }
+
                 minLat = item.locationLat < minLat ? item.locationLat : minLat;
                 maxLat = item.locationLat > maxLat ? item.locationLat : maxLat;
                 minLon = item.locationLon < minLon ? item.locationLon : minLon;
                 maxLon = item.locationLon > maxLon ? item.locationLon : maxLon;
 
                 featureMarker.push(
-                    L.marker([item.locationLat, item.locationLon], {data: item})
+                    L.marker([item.locationLat, item.locationLon], markerOptions)
                         .bindPopup(te.render(that._popupTemplate, item), {
                             autoPan: false,
                             autoClose: false
                         })
-                        .on('click', function() {that._focusItem(item.id)})
+                        .on('click', function () {
+                            that._focusItem(item.id)
+                        })
                         .on('popupclose', function () {
                             if (that.ol.center) {
                                 that.ol.map.flyTo(that.ol.center, that.ol.zoom, {animate: true, duration: 1});
@@ -145,7 +163,7 @@ export default class MoorlMerchantFinder extends Plugin {
         $('#searchResults li').removeClass('active');
         $('#' + id).addClass('active');
 
-        this.ol.markers.eachLayer(function(layer) {
+        this.ol.markers.eachLayer(function (layer) {
 
             if (layer.options.data.id == id) {
                 let position = layer.getLatLng();

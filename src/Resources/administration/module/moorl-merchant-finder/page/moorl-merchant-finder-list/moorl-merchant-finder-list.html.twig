@@ -126,6 +126,10 @@
                                         <option v-for="customerGroup in customerGroups" :value="customerGroup.id">{{ customerGroup.name }}</option>
                                     </optgroup>
 
+                                    <optgroup :label="$t('moorl-merchant-finder.importAssistant.media')">
+                                        <option v-for="media in medias" :value="media.id">{{ media.fileName }}</option>
+                                    </optgroup>
+
                                 </select>
                             </div>
                         </td>

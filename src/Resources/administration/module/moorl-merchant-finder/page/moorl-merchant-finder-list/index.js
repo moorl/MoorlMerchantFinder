@@ -42,6 +42,10 @@ Component.register('moorl-merchant-finder-list', {
             return this.repositoryFactory.create('moorl_merchant');
         },
 
+        mediaRepository() {
+            return this.repositoryFactory.create('media');
+        },
+
         customerGroupRepository() {
             return this.repositoryFactory.create('customer_group');
         },
@@ -141,6 +145,12 @@ Component.register('moorl-merchant-finder-list', {
 
             this.salesChannelRepository.search(new Criteria(1, 100), this.context).then((searchResult) => {
                 this.salesChannels = searchResult;
+            });
+
+            const mediaCriteria = new Criteria(1, 500);
+            mediaCriteria.addSorting(Criteria.sort('fileName'));
+            this.mediaRepository.search(mediaCriteria, this.context).then((searchResult) => {
+                this.medias = searchResult;
             });
 
             this.customerGroupRepository.search(new Criteria(1, 100), this.context).then((searchResult) => {

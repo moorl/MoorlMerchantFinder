@@ -2,84 +2,7 @@ import {Component, Mixin, Application, State} from 'src/core/shopware';
 import utils from 'src/core/service/util.service';
 import Criteria from 'src/core/data-new/criteria.data';
 import template from './moorl-merchant-finder-detail.html.twig';
-
-import {fromLonLat, toLonLat} from 'ol/proj.js';
-import {Map, Overlay, View, Feature} from 'ol';
-import {Tile, Vector} from 'ol/layer';
-import {Vector as VectorSource} from 'ol/source';
-import {Style, Icon} from 'ol/style';
-import {Point} from 'ol/geom';
-import {defaults as defaultInteractions, Pointer as PointerInteraction} from 'ol/interaction';
-import OSM from 'ol/source/OSM';
-
-var Drag = (function (PointerInteraction) {
-    function Drag() {
-        PointerInteraction.call(this, {
-            handleDownEvent: handleDownEvent,
-            handleDragEvent: handleDragEvent,
-            handleMoveEvent: handleMoveEvent,
-            handleUpEvent: handleUpEvent
-        });
-        this.coordinate_ = null;
-        this.cursor_ = 'pointer';
-        this.feature_ = null;
-        this.previousCursor_ = undefined;
-    }
-
-    if ( PointerInteraction ) Drag.__proto__ = PointerInteraction;
-    Drag.prototype = Object.create( PointerInteraction && PointerInteraction.prototype );
-    Drag.prototype.constructor = Drag;
-
-    return Drag;
-}(PointerInteraction));
-
-function handleDownEvent(evt) {
-    var map = evt.map;
-    var feature = map.forEachFeatureAtPixel(evt.pixel,
-        function(feature) {
-            return feature;
-        });
-    if (feature) {
-        this.coordinate_ = evt.coordinate;
-        this.feature_ = feature;
-    }
-    return !!feature;
-}
-
-function handleDragEvent(evt) {
-    var deltaX = evt.coordinate[0] - this.coordinate_[0];
-    var deltaY = evt.coordinate[1] - this.coordinate_[1];
-    var geometry = this.feature_.getGeometry();
-    geometry.translate(deltaX, deltaY);
-    this.coordinate_[0] = evt.coordinate[0];
-    this.coordinate_[1] = evt.coordinate[1];
-}
-
-function handleMoveEvent(evt) {
-    if (this.cursor_) {
-        var map = evt.map;
-        var feature = map.forEachFeatureAtPixel(evt.pixel,
-            function(feature) {
-                return feature;
-            });
-        var element = evt.map.getTargetElement();
-        if (feature) {
-            if (element.style.cursor != this.cursor_) {
-                this.previousCursor_ = element.style.cursor;
-                element.style.cursor = this.cursor_;
-            }
-        } else if (this.previousCursor_ !== undefined) {
-            element.style.cursor = this.previousCursor_;
-            this.previousCursor_ = undefined;
-        }
-    }
-}
-
-function handleUpEvent() {
-    this.coordinate_ = null;
-    this.feature_ = null;
-    return false;
-}
+import L from 'leaflet';
 
 Component.register('moorl-merchant-finder-detail', {
     template,
@@ -124,6 +47,8 @@ Component.register('moorl-merchant-finder-detail', {
             pickerClasses: {},
             uploadTag: utils.createId(),
             mediaItem: null,
+            markerItem: null,
+            markerShadowItem: null,
             customFieldSets: [],
         };
     },
@@ -186,57 +111,30 @@ Component.register('moorl-merchant-finder-detail', {
                 .then((entity) => {
                     this.merchant = entity;
                     this.mediaItem = this.merchant.mediaId ? this.mediaStore.getById(this.merchant.mediaId) : null;
+                    this.markerItem = this.merchant.markerId ? this.mediaStore.getById(this.merchant.markerId) : null;
+                    this.markerShadowItem = this.merchant.markerShadowId ? this.mediaStore.getById(this.merchant.markerShadowId) : null;
                     this.isLoading = false;
                 });
         },
 
         drawMap() {
-
-            if (typeof this.ol != 'undefined') {
-                console.log(this.ol);
-                return
-            }
-
-            var styleMarker = new Style({
-                image: new Icon({
-                    scale: .7, anchor: [0.5, 1],
-                    src: 'https://cdn.mapmarker.io/api/v1/fa?size=70&icon=fa-pin&color=%23D33115&'
-                })
-            });
-
+            const that = this;
             this.ol = {};
-
-            this.ol.loc = [
-                this.merchant.locationLon,
-                this.merchant.locationLat
+            this.ol.center = [
+                this.merchant.locationLat,
+                this.merchant.locationLon
             ];
-
-            this.ol.pos = fromLonLat(this.ol.loc);
-
-            this.ol.featureMarker = new Feature(
-                new Point(this.ol.pos)
-            );
-
-            this.ol.view = new View({
-                center: this.ol.pos,
+            this.ol.map = L.map('embedMap', {
+                center: this.ol.center,
                 zoom: 16
             });
-
-            this.ol.map = new Map({
-                interactions: defaultInteractions().extend([new Drag()]),
-                target: 'embedMap',
-                layers: [
-                    new Tile({source: new OSM()}),
-                    new Vector({
-                        source: new VectorSource({
-                            features: [this.ol.featureMarker]
-                        }),
-                        style: [styleMarker],
-                    })
-                ],
-                view: this.ol.view
-            });
-
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', {foo: 'bar', attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'}).addTo(this.ol.map);
+            this.ol.marker = L.marker(this.ol.center, {draggable: true})
+                .on('dragend',function () {
+                    that.ol.center = that.ol.marker.getLatLng();
+                    that.ol.map.flyTo(that.ol.center, 16, {animate: true, duration: 1});
+                })
+                .addTo(this.ol.map);
         },
 
         getPositionByAddress() {
@@ -251,26 +149,14 @@ Component.register('moorl-merchant-finder-detail', {
                 "country": this.merchant.countryCode
             });
             httpClient.get(`http://nominatim.openstreetmap.org/search?` + searchParams).then((response) => {
-
                 console.log(response);
-
-                this.ol.loc = [
-                    parseFloat(response.data[0].lon),
+                this.ol.center = [
                     parseFloat(response.data[0].lat),
+                    parseFloat(response.data[0].lon),
                 ];
-
-                this.ol.pos = fromLonLat(this.ol.loc);
-
-                this.ol.featureMarker.getGeometry().setCoordinates(this.ol.pos);
-
-                this.ol.view.animate({
-                    center: this.ol.pos,
-                    duration: 500,
-                    zoom: 16
-                });
-
+                this.ol.map.flyTo(this.ol.center, 16, {animate: true, duration: 1});
+                this.ol.marker.setLatLng(this.ol.center);
                 this.isLoading = false;
-
             }).catch((exception) => {
                 console.log(exception);
                 this.isLoading = false;
@@ -279,10 +165,9 @@ Component.register('moorl-merchant-finder-detail', {
         },
 
         posSelect() {
-            this.ol.loc = toLonLat(this.ol.featureMarker.getGeometry().getCoordinates());
-            console.log("Koordinaten", this.ol.loc);
-            this.merchant.locationLon = this.ol.loc[0];
-            this.merchant.locationLat = this.ol.loc[1];
+            console.log(this.ol.center);
+            this.merchant.locationLat = this.ol.center.lat;
+            this.merchant.locationLon = this.ol.center.lng;
         },
 
         onClickSave() {
@@ -306,26 +191,55 @@ Component.register('moorl-merchant-finder-detail', {
             this.processSuccess = false;
         },
 
+        openMediaSidebar() {
+            this.$refs.mediaSidebarItem.openContent();
+        },
+
+        // Logo
         setMediaItem({ targetId }) {
             this.merchant.mediaId = targetId;
             this.mediaStore.getByIdAsync(targetId);
         },
-
         onDropMedia(dragData) {
             this.setMediaItem({ targetId: dragData.id });
         },
-
         setMediaFromSidebar(mediaEntity) {
             this.merchant.mediaId = mediaEntity.id;
         },
-
-        onUnlinkLogo() {
+        onUnlinkMedia() {
             this.merchant.mediaId = null;
         },
 
-        openMediaSidebar() {
-            this.$refs.mediaSidebarItem.openContent();
+        // Marker
+        setMarkerItem({ targetId }) {
+            this.merchant.markerId = targetId;
+            this.mediaStore.getByIdAsync(targetId);
+        },
+        onDropMarker(dragData) {
+            this.setMarkerItem({ targetId: dragData.id });
+        },
+        setMarkerFromSidebar(mediaEntity) {
+            this.merchant.markerId = mediaEntity.id;
+        },
+        onUnlinkMarker() {
+            this.merchant.markerId = null;
+        },
+
+        // Marker Shadow
+        setMarkerShadowItem({ targetId }) {
+            this.merchant.markerShadowId = targetId;
+            this.mediaStore.getByIdAsync(targetId);
+        },
+        onDropMarkerShadow(dragData) {
+            this.setMarkerShadowItem({ targetId: dragData.id });
+        },
+        setMarkerShadowFromSidebar(mediaEntity) {
+            this.merchant.markerShadowId = mediaEntity.id;
+        },
+        onUnlinkMarkerShadow() {
+            this.merchant.markerShadowId = null;
         }
+
     }
 
 });
