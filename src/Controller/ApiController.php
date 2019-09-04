@@ -40,7 +40,7 @@ class ApiController extends AbstractController
     /**
      * @Route("/api/v{version}/moorl/merchant-finder/import", name="api.moorl.merchant-finder.import", methods={"POST"}, requirements={"version"="\d+"})
      */
-    public function importItem(Context $context): JsonResponse
+    public function import(Request $request, Context $context): JsonResponse
     {
         // TODO: make it happen
         return new JsonResponse();
@@ -74,6 +74,9 @@ SELECT
     LOWER(HEX(`sales_channel_id`)) AS `salesChannelId`,
     LOWER(HEX(`country_id`)) AS `countryId`,
     LOWER(HEX(`customer_group_id`)) AS `customerGroupId`,
+    LOWER(HEX(`media_id`)) AS `mediaId`,
+    LOWER(HEX(`marker_id`)) AS `markerId`,
+    LOWER(HEX(`marker_shadow_id`)) AS `markerShadowId`,
     `company`,
     `first_name` AS `firstName`,
     `last_name` AS `lastName`,
@@ -91,7 +94,8 @@ SELECT
     `shop_url` AS `shopUrl`,
     `merchant_url` AS `merchantUrl`,
     `description`,
-    `opening_hours` AS `openingHours`
+    `opening_hours` AS `openingHours`,
+    `marker_settings` AS `markerSettings`
 FROM `moorl_merchant`
 ORDER BY `originId`;
 SQL;
