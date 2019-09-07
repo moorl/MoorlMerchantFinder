@@ -8,6 +8,9 @@
       "name": "Moorleiche Web Solutions"
     }
   ],
+  "require": {
+    "shopware/core": "*"
+  },
   "type": "shopware-platform-plugin",
   "autoload": {
     "psr-4": {
