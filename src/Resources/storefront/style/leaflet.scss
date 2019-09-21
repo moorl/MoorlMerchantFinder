@@ -343,7 +343,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 
 .leaflet-control-layers {
 	box-shadow: 0 1px 5px rgba(0,0,0,0.4);
-	background: #fff;
+	background: $card-bg;
 	border-radius: 5px;
 	}
 .leaflet-control-layers-toggle {
@@ -369,8 +369,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
 	}
 .leaflet-control-layers-expanded {
 	padding: 6px 10px 6px 6px;
-	color: #333;
-	background: #fff;
+	color: $card-color;
+	background: $card-bg;
 	}
 .leaflet-control-layers-scrollbar {
 	overflow-y: scroll;
@@ -387,7 +387,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 	}
 .leaflet-control-layers-separator {
 	height: 0;
-	border-top: 1px solid #ddd;
+	border-top: 1px solid $card-border-color;
 	margin: 5px -10px 5px -6px;
 	}
 
@@ -400,14 +400,14 @@ svg.leaflet-image-layer.leaflet-interactive path {
 /* attribution and scale controls */
 
 .leaflet-container .leaflet-control-attribution {
-	background: #fff;
+	background: $card-bg;
 	background: rgba(255, 255, 255, 0.7);
 	margin: 0;
 	}
 .leaflet-control-attribution,
 .leaflet-control-scale-line {
 	padding: 0 5px;
-	color: #333;
+	color: $card-color;
 	}
 .leaflet-control-attribution a {
 	text-decoration: none;
@@ -426,7 +426,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 	margin-bottom: 5px;
 	}
 .leaflet-control-scale-line {
-	border: 2px solid #777;
+	border: 2px solid $card-border-color;
 	border-top: none;
 	line-height: 1.1;
 	padding: 2px 5px 1px;
@@ -436,16 +436,16 @@ svg.leaflet-image-layer.leaflet-interactive path {
 	-moz-box-sizing: border-box;
 	     box-sizing: border-box;
 
-	background: #fff;
+	background: $card-bg;
 	background: rgba(255, 255, 255, 0.5);
 	}
 .leaflet-control-scale-line:not(:first-child) {
-	border-top: 2px solid #777;
+	border-top: 2px solid $card-border-color;
 	border-bottom: none;
 	margin-top: -2px;
 	}
 .leaflet-control-scale-line:not(:first-child):not(:last-child) {
-	border-bottom: 2px solid #777;
+	border-bottom: 2px solid $card-border-color;
 	}
 
 .leaflet-touch .leaflet-control-attribution,
@@ -502,8 +502,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
 	}
 .leaflet-popup-content-wrapper,
 .leaflet-popup-tip {
-	background: white;
-	color: #333;
+	background: $card-bg;
+	color: $card-color;
 	box-shadow: 0 3px 14px rgba(0,0,0,0.4);
 	}
 .leaflet-container a.leaflet-popup-close-button {
@@ -516,18 +516,18 @@ svg.leaflet-image-layer.leaflet-interactive path {
 	width: 18px;
 	height: 14px;
 	font: 16px/14px Tahoma, Verdana, sans-serif;
-	color: #c3c3c3;
+	color: $text-muted;
 	text-decoration: none;
 	font-weight: bold;
 	background: transparent;
 	}
 .leaflet-container a.leaflet-popup-close-button:hover {
-	color: #999;
+	color: $primary;
 	}
 .leaflet-popup-scrolled {
 	overflow: auto;
-	border-bottom: 1px solid #ddd;
-	border-top: 1px solid #ddd;
+	border-bottom: 1px solid $card-border-color;
+	border-top: 1px solid $card-border-color;
 	}
 
 .leaflet-oldie .leaflet-popup-content-wrapper {
@@ -555,8 +555,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
 /* div icon */
 
 .leaflet-div-icon {
-	background: #fff;
-	border: 1px solid #666;
+	background: $card-bg;
+	border: 1px solid $card-border-color;
 	}
 
 
@@ -565,8 +565,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
 .leaflet-tooltip {
 	position: absolute;
 	padding: 6px;
-	background-color: #fff;
-	border: 1px solid #fff;
+	background-color: $card-bg;
+	border: 1px solid $card-bg;
 	border-radius: 3px;
 	color: #222;
 	white-space: nowrap;
@@ -608,13 +608,13 @@ svg.leaflet-image-layer.leaflet-interactive path {
 .leaflet-tooltip-top:before {
 	bottom: 0;
 	margin-bottom: -12px;
-	border-top-color: #fff;
+	border-top-color: $card-bg;
 	}
 .leaflet-tooltip-bottom:before {
 	top: 0;
 	margin-top: -12px;
 	margin-left: -6px;
-	border-bottom-color: #fff;
+	border-bottom-color: $card-bg;
 	}
 .leaflet-tooltip-left {
 	margin-left: -6px;
@@ -630,10 +630,10 @@ svg.leaflet-image-layer.leaflet-interactive path {
 .leaflet-tooltip-left:before {
 	right: 0;
 	margin-right: -12px;
-	border-left-color: #fff;
+	border-left-color: $card-bg;
 	}
 .leaflet-tooltip-right:before {
 	left: 0;
 	margin-left: -12px;
-	border-right-color: #fff;
+	border-right-color: $card-bg;
 	}
