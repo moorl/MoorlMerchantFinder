@@ -1,4 +1,4 @@
-import { Module } from 'src/core/shopware';
+const { Module } = Shopware;
 import './page/moorl-merchant-finder-list';
 import './page/moorl-merchant-finder-detail';
 import './page/moorl-merchant-finder-create';

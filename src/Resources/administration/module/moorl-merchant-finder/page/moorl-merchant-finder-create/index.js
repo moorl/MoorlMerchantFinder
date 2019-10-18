@@ -1,6 +1,10 @@
-import {Component} from 'src/core/shopware';
+const { Component } = Shopware;
+import template from './../moorl-merchant-finder-detail/moorl-merchant-finder-detail.html.twig';
 
 Component.extend('moorl-merchant-finder-create', 'moorl-merchant-finder-detail', {
+
+    template,
+
     methods: {
         getMerchant() {
             this.merchant = this.repository.create(this.context);
