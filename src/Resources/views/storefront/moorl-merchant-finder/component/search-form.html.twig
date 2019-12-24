@@ -1,6 +1,9 @@
 <form data-moorl-merchant-finder="true"
       action="{{ path('moorl.merchant-finder.search') }}"
-      method="post">
+      method="post"
+      data-form-csrf-handler="true">
+    {{ sw_csrf('moorl.merchant-finder.search') }}
+
     {% block page_merchant_finder_form_inner %}
         <div class="row form-row">
             <div class="form-group col-12 col-lg-3">
