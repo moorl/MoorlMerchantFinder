@@ -47,7 +47,7 @@ class StorefrontController extends \Shopware\Storefront\Controller\StorefrontCon
     {
         $page = $this->genericLoader->load($request, $context);
 
-        return $this->renderStorefront('@Storefront/moorl-merchant-finder/page/index.html.twig', [
+        return $this->renderStorefront('@Storefront/storefront/moorl-merchant-finder/page/index.html.twig', [
             'pluginConfig' => $this->systemConfigService->getDomain('MoorlMerchantFinder.config'),
             'data' => $data,
             'page' => $page,

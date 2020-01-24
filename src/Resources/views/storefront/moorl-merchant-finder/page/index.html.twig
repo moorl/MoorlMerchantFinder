@@ -1,20 +1,20 @@
-{% sw_extends '@Storefront/base.html.twig' %}
+{% sw_extends '@Storefront/storefront/base.html.twig' %}
 
 {% block base_main_inner %}
     <div class="moorl-merchant-finder-bg">
         <div class="container">
             <div class="container-main">
 
-                {% sw_include '@MoorlMerchantFinder/moorl-merchant-finder/component/search-form.html.twig' %}
+                {% sw_include '@MoorlMerchantFinder/storefront/moorl-merchant-finder/component/search-form.html.twig' %}
 
                 <div class="row form-row">
 
                     <div class="col-12 col-lg-6 mb-4">
-                        {% sw_include '@MoorlMerchantFinder/moorl-merchant-finder/component/result-list.html.twig' %}
+                        {% sw_include '@MoorlMerchantFinder/storefront/moorl-merchant-finder/component/result-list.html.twig' %}
                     </div>
 
                     <div class="col-12 col-lg-6 mb-4">
-                        {% sw_include '@MoorlMerchantFinder/moorl-merchant-finder/component/map.html.twig' %}
+                        {% sw_include '@MoorlMerchantFinder/storefront/moorl-merchant-finder/component/map.html.twig' %}
                     </div>
 
                 </div>
