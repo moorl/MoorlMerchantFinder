@@ -13,19 +13,24 @@ use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\SearchRanking;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\WriteProtected;
+use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\CascadeDelete;
+use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\Inherited;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\FloatField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\IntField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\JsonField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\OneToOneAssociationField;
+use Shopware\Core\Framework\DataAbstractionLayer\Field\ManyToManyAssociationField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Shopware\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Shopware\Core\System\Country\CountryDefinition;
 use Shopware\Core\System\SalesChannel\SalesChannelDefinition;
 use Shopware\Core\System\Salutation\SalutationDefinition;
+use Shopware\Core\Content\Category\CategoryDefinition;
+use Shopware\Core\System\Tag\TagDefinition;
 
-class MerchantEntityDefinition extends EntityDefinition
+class MerchantDefinition extends EntityDefinition
 {
     public const ENTITY_NAME = 'moorl_merchant';
 
@@ -36,7 +41,7 @@ class MerchantEntityDefinition extends EntityDefinition
 
     public function getCollectionClass(): string
     {
-        return MerchantEntityCollection::class;
+        return MerchantCollection::class;
     }
 
     public function getEntityClass(): string
@@ -82,10 +87,12 @@ class MerchantEntityDefinition extends EntityDefinition
             new StringField('merchant_url', 'merchantUrl'),
             new CustomFields(),
             (new IntField('auto_increment', 'autoIncrement'))->addFlags(new WriteProtected()),
-            //new ManyToOneAssociationField('salesChannel', 'sales_channel_id', SalesChannelDefinition::class, 'id', false),
             new ManyToOneAssociationField('media', 'media_id', MediaDefinition::class, 'id', false),
-            //new ManyToOneAssociationField('productManufacturer', 'product_manufacturer_id', ProductManufacturerDefinition::class, 'id', false),
+            //new ManyToManyAssociationField('productManufacturer', 'product_manufacturer_id', ProductManufacturerDefinition::class, 'id', false),
             //new ManyToOneAssociationField('salutation', 'salutation_id', SalutationDefinition::class, 'id', false),
+            (new ManyToManyAssociationField('categories', CategoryDefinition::class, MerchantCategoryDefinition::class, 'moorl_merchant_id', 'category_id'))->addFlags(new CascadeDelete(), new Inherited()),
+            new ManyToManyAssociationField('tags', TagDefinition::class, MerchantTagDefinition::class, 'moorl_merchant_id', 'tag_id'),
+            new ManyToManyAssociationField('productManufacturers', ProductManufacturerDefinition::class, MerchantProductManufacturerDefinition::class, 'moorl_merchant_id', 'product_manufacturer_id'),
         ]);
     }
 }

@@ -35,6 +35,34 @@
                             <option v-for="customerGroup in customerGroups" :value="customerGroup.id">{{ customerGroup.name }}</option>
                         </sw-select-field>
 
+
+                        <sw-entity-tag-select v-model="merchant.tags"></sw-entity-tag-select>
+
+                        <sw-inherit-wrapper v-model="merchant.categories"
+                                            isAssociation
+                                            :label="$tc('sw-product.categoryForm.labelCategory')">
+                            <template #content="{ currentValue, isInherited }">
+
+                                <sw-category-tree-field :categoriesCollection="currentValue ? currentValue : []"
+                                                        class="sw-product-detail__select-category"
+                                                        :disabled="isInherited"
+                                                        :key="isInherited"
+                                                        :placeholder="$tc('sw-product.categoryForm.placeholderCategory')">
+                                </sw-category-tree-field>
+
+                            </template>
+                        </sw-inherit-wrapper>
+
+                        <sw-entity-multi-select
+                            v-model="merchant.manufacturers"
+                            entity="product_manufacturer">
+                        </sw-entity-multi-select>
+
+                        <sw-entity-multi-select
+                            size="medium"
+                            :entityCollection="salesChannels">
+                        </sw-entity-multi-select>
+
                         <sw-field type="textarea"
                                   :label="$t('moorl-merchant-finder.properties.description')"
                                   :placeholder="$t('moorl-merchant-finder.properties.description')"

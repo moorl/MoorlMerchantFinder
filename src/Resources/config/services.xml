@@ -20,8 +20,20 @@
         </service>
 
         <!-- Entity -->
-        <service id="Moorl\MerchantFinder\Merchant\MerchantEntityDefinition">
+        <service id="Moorl\MerchantFinder\Merchant\MerchantDefinition">
             <tag name="shopware.entity.definition" entity="moorl_merchant" />
+        </service>
+
+        <service id="Moorl\MerchantFinder\Merchant\MerchantCategoryDefinition">
+            <tag name="shopware.entity.definition" entity="moorl_merchant_category" />
+        </service>
+
+        <service id="Moorl\MerchantFinder\Merchant\MerchantTagDefinition">
+            <tag name="shopware.entity.definition" entity="moorl_merchant_tag" />
+        </service>
+
+        <service id="Moorl\MerchantFinder\Merchant\MerchantProductManufacturerDefinition">
+            <tag name="shopware.entity.definition" entity="moorl_merchant_tag" />
         </service>
 
         <!-- Snippet Files -->

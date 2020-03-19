@@ -75,9 +75,23 @@ Component.register('moorl-merchant-finder-detail', {
             return this.repositoryFactory.create('sales_channel');
         },
 
+        categoryRepository() {
+            return this.repositoryFactory.create('category');
+        },
+
         customFieldSetRepository() {
             return this.repositoryFactory.create('custom_field_set');
         },
+
+        defaultCriteria() {
+            const criteria = new Criteria();
+            criteria
+                .addAssociation('tags')
+                .addAssociation('productManufacturers')
+                .addAssociation('categories');
+
+            return criteria;
+        }
     },
 
     created() {
@@ -98,6 +112,10 @@ Component.register('moorl-merchant-finder-detail', {
                 this.customerGroups = searchResult;
             });
 
+            this.categoryRepository.search(new Criteria(1, 100), Shopware.Context.api).then((searchResult) => {
+                this.categories = searchResult;
+            });
+
             const countryCriteria = new Criteria(1, 100);
             countryCriteria.addSorting(Criteria.sort('name'));
             this.countryRepository.search(countryCriteria, Shopware.Context.api).then((searchResult) => {
@@ -108,8 +126,9 @@ Component.register('moorl-merchant-finder-detail', {
 
         getMerchant() {
             this.repository
-                .get(this.$route.params.id, Shopware.Context.api)
+                .get(this.$route.params.id, Shopware.Context.api, this.defaultCriteria)
                 .then((entity) => {
+                    console.log(entity.tags);
                     this.merchant = entity;
                     this.mediaItem = this.merchant.mediaId ? this.mediaStore.getById(this.merchant.mediaId) : null;
                     this.markerItem = this.merchant.markerId ? this.mediaStore.getById(this.merchant.markerId) : null;

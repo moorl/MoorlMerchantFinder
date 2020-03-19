@@ -4,12 +4,15 @@ namespace Moorl\MerchantFinder\Merchant;
 
 use Shopware\Core\Content\Media\MediaEntity;
 use Shopware\Core\Content\Product\Aggregate\ProductManufacturer\ProductManufacturerEntity;
+use Shopware\Core\Content\Product\Aggregate\ProductManufacturer\ProductManufacturerCollection;
 use Shopware\Core\Framework\DataAbstractionLayer\Entity;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Shopware\Core\System\Country\Aggregate\CountryState\CountryStateEntity;
 use Shopware\Core\System\Country\CountryEntity;
 use Shopware\Core\System\SalesChannel\SalesChannelEntity;
 use Shopware\Core\System\Salutation\SalutationEntity;
+use Shopware\Core\Content\Category\CategoryCollection;
+use Shopware\Core\System\Tag\TagCollection;
 
 class MerchantEntity extends Entity
 {
@@ -17,24 +20,212 @@ class MerchantEntity extends Entity
     use EntityIdTrait;
 
     /**
+     * @var ProductManufacturerCollection|null
+     */
+    protected $manufacturers;
+
+    /**
+     * @var TagCollection|null
+     */
+    protected $tags;
+    /**
+     * @var CategoryCollection|null
+     */
+    protected $categories;
+    /**
      * @var string
      */
     protected $mediaId;
-
     /**
      * @var string
      */
     protected $markerId;
-
     /**
      * @var string
      */
     protected $markerShadowId;
-
     /**
      * @var string
      */
     protected $markerSettings;
+    /**
+     * @var string
+     */
+    protected $salesChannelId;
+    /**
+     * @var string
+     */
+    protected $customerGroupId;
+    /**
+     * @var MediaEntity|null
+     */
+    protected $media;
+    /**
+     * @var ProductManufacturerEntity|null
+     */
+    protected $manufacturer;
+    /**
+     * @var string
+     */
+    protected $firstName;
+    /**
+     * @var string
+     */
+    protected $lastName;
+    /**
+     * @var string|null
+     */
+    protected $company;
+    /**
+     * @var string
+     */
+    protected $email;
+    /**
+     * @var string|null
+     */
+    protected $title;
+    /**
+     * @var bool
+     */
+    protected $active;
+    /**
+     * @var SalesChannelEntity|null
+     */
+    protected $salesChannel;
+    /**
+     * @var array|null
+     */
+    protected $customFields;
+    /**
+     * @var array|null
+     */
+    protected $data;
+    /**
+     * @var SalutationEntity|null
+     */
+    protected $salutation;
+    /**
+     * @var string
+     */
+    protected $countryId;
+    /**
+     * @var string|null
+     */
+    protected $countryStateId;
+    /**
+     * @var string
+     */
+    protected $salutationId;
+    /**
+     * @var string
+     */
+    protected $zipcode;
+    /**
+     * @var string
+     */
+    protected $city;
+    /**
+     * @var string|null
+     */
+    protected $department;
+    /**
+     * @var string
+     */
+    protected $street;
+    /**
+     * @var string|null
+     */
+    protected $vatId;
+    /**
+     * @var string|null
+     */
+    protected $phoneNumber;
+    /**
+     * @var string|null
+     */
+    protected $additionalAddressLine1;
+    /**
+     * @var string|null
+     */
+    protected $additionalAddressLine2;
+    /**
+     * @var CountryEntity|null
+     */
+    protected $country;
+    /**
+     * @var CountryStateEntity|null
+     */
+    protected $countryState;
+    /**
+     * @var CustomerEntity|null
+     */
+    protected $customer;
+    /**
+     * @var string
+     */
+    protected $shopUrl;
+    /**
+     * @var string
+     */
+    protected $merchantUrl;
+    /**
+     * @var string
+     */
+    protected $description;
+    /**
+     * @var string
+     */
+    protected $openingHours;
+    /**
+     * @var float
+     */
+    protected $locationLat;
+    /**
+     * @var float
+     */
+    protected $locationLon;
+    /**
+     * @var string
+     */
+    protected $originId;
+    /**
+     * @var string
+     */
+    protected $streetNumber;
+    /**
+     * @var string
+     */
+    protected $countryCode;
+
+    public function getTags(): ?TagCollection
+    {
+        return $this->tags;
+    }
+
+    public function setTags(TagCollection $tags): void
+    {
+        $this->tags = $tags;
+    }
+
+    public function getManufacturers(): ?TagCollection
+    {
+        return $this->manufacturers;
+    }
+
+    public function setManufacturers(ProductManufacturerCollection $manufacturers): void
+    {
+        $this->manufacturers = $manufacturers;
+    }
+
+    public function getCategories(): ?CategoryCollection
+    {
+        return $this->categories;
+    }
+
+    public function setCategories(CategoryCollection $categories): void
+    {
+        $this->categories = $categories;
+    }
 
     /**
      * @return string
@@ -67,191 +258,6 @@ class MerchantEntity extends Entity
     {
         $this->markerSettings = $markerSettings;
     }
-
-    /**
-     * @var string
-     */
-    protected $salesChannelId;
-
-    /**
-     * @var string
-     */
-    protected $customerGroupId;
-
-    /**
-     * @var MediaEntity|null
-     */
-    protected $media;
-
-    /**
-     * @var ProductManufacturerEntity|null
-     */
-    protected $manufacturer;
-
-    /**
-     * @var string
-     */
-    protected $firstName;
-
-    /**
-     * @var string
-     */
-    protected $lastName;
-
-    /**
-     * @var string|null
-     */
-    protected $company;
-
-    /**
-     * @var string
-     */
-    protected $email;
-
-    /**
-     * @var string|null
-     */
-    protected $title;
-
-    /**
-     * @var bool
-     */
-    protected $active;
-
-    /**
-     * @var SalesChannelEntity|null
-     */
-    protected $salesChannel;
-
-    /**
-     * @var array|null
-     */
-    protected $customFields;
-
-    /**
-     * @var array|null
-     */
-    protected $data;
-
-    /**
-     * @var SalutationEntity|null
-     */
-    protected $salutation;
-
-    /**
-     * @var string
-     */
-    protected $countryId;
-
-    /**
-     * @var string|null
-     */
-    protected $countryStateId;
-
-    /**
-     * @var string
-     */
-    protected $salutationId;
-
-    /**
-     * @var string
-     */
-    protected $zipcode;
-
-    /**
-     * @var string
-     */
-    protected $city;
-
-    /**
-     * @var string|null
-     */
-    protected $department;
-
-    /**
-     * @var string
-     */
-    protected $street;
-
-    /**
-     * @var string|null
-     */
-    protected $vatId;
-
-    /**
-     * @var string|null
-     */
-    protected $phoneNumber;
-
-    /**
-     * @var string|null
-     */
-    protected $additionalAddressLine1;
-
-    /**
-     * @var string|null
-     */
-    protected $additionalAddressLine2;
-
-    /**
-     * @var CountryEntity|null
-     */
-    protected $country;
-
-    /**
-     * @var CountryStateEntity|null
-     */
-    protected $countryState;
-
-    /**
-     * @var CustomerEntity|null
-     */
-    protected $customer;
-
-    /**
-     * @var string
-     */
-    protected $shopUrl;
-
-    /**
-     * @var string
-     */
-    protected $merchantUrl;
-
-    /**
-     * @var string
-     */
-    protected $description;
-
-    /**
-     * @var string
-     */
-    protected $openingHours;
-
-    /**
-     * @var float
-     */
-    protected $locationLat;
-
-    /**
-     * @var float
-     */
-    protected $locationLon;
-
-    /**
-     * @var string
-     */
-    protected $originId;
-
-    /**
-     * @var string
-     */
-    protected $streetNumber;
-
-    /**
-     * @var string
-     */
-    protected $countryCode;
 
     /**
      * @return string

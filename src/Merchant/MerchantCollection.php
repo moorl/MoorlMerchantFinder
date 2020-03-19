@@ -16,7 +16,7 @@ use Shopware\Core\System\Country\CountryCollection;
  * @method MerchantEntity|null first()
  * @method MerchantEntity|null last()
  */
-class MerchantEntityCollection extends EntityCollection
+class MerchantCollection extends EntityCollection
 {
 
     public function getMediaIds(): array
