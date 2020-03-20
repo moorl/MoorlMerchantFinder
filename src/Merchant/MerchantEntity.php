@@ -20,6 +20,21 @@ class MerchantEntity extends Entity
     use EntityIdTrait;
 
     /**
+     * @var int|null
+     */
+    protected $distance;
+
+    public function getDistance(): ?int
+    {
+        return $this->distance;
+    }
+
+    public function setDistance(int $distance): void
+    {
+        $this->distance = $distance;
+    }
+
+    /**
      * @var ProductManufacturerCollection|null
      */
     protected $manufacturers;

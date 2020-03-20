@@ -25,16 +25,16 @@
     .moorl-merchant-finder-results {
 
         &::-webkit-scrollbar {
-            width: 4px;
+            width: 5px;
         }
         &::-webkit-scrollbar-track {
-            background: #ccc;
+            background: $border-color;
         }
         &::-webkit-scrollbar-thumb {
-            background: #aaa;
+            background: $secondary;
         }
         &::-webkit-scrollbar-thumb:hover {
-            background: #888;
+            background: $primary;
         }
 
         .manufacturers {
@@ -54,6 +54,7 @@
         .moorl-merchant-finder-result-item {
 
             position: relative;
+            border-radius: 0 !important;
 
             .actions {
                 margin-top: 20px;

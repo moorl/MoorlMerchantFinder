@@ -174,38 +174,14 @@ SQL;
             $sql = <<<SQL
 SELECT 
     LOWER(HEX(`id`)) AS `id`,
-    LOWER(HEX(`sales_channel_id`)) AS `salesChannelId`,
-    LOWER(HEX(`media_id`)) AS `mediaId`,
-    LOWER(HEX(`marker_id`)) AS `markerId`,
-    LOWER(HEX(`marker_shadow_id`)) AS `markerShadowId`,
-    `origin_id` AS `originId`,
-    `first_name` AS `firstName`,
-    `last_name` AS `lastName`,
-    `zipcode`,
-    `city`,
-    `company`,
-    `street`,
-    `street_number` AS `streetNumber`,
-    `country`,
-    `country_code` AS `countryCode`,
-    `location_lat` AS `locationLat`,
-    `location_lon` AS `locationLon`,
-    `phone_number` AS `phoneNumber`,
-    `shop_url` AS `shopUrl`,
-    `merchant_url` AS `merchantUrl`,
-    `description`,
-    `opening_hours` AS `openingHours`,
-    `marker_settings` AS `markerSettings`,
     ACOS(
          SIN(RADIANS(:lat)) * SIN(RADIANS(`location_lat`)) 
          + COS(RADIANS(:lat)) * COS(RADIANS(`location_lat`))
          * COS(RADIANS(:lon) - RADIANS(`location_lon`))
     ) * 6380 AS distance
 FROM `moorl_merchant`
-WHERE CONCAT(`company`, `city`) LIKE :term
-AND `active` IS TRUE
-HAVING (`salesChannelId` = :salesChannelId OR `salesChannelId` IS NULL)
-AND `distance` < :distance
+WHERE `active` IS TRUE
+HAVING `distance` < :distance
 ORDER BY `distance`
 LIMIT 500;
 SQL;
@@ -213,36 +189,50 @@ SQL;
             $data = $connection->executeQuery($sql, [
                     'lat' => $myLocation[0]['lat'],
                     'lon' => $myLocation[0]['lon'],
-                    'term' => '%' . $request->request->get('term') . '%',
-                    'distance' => $request->request->get('distance'),
-                    'salesChannelId' => $context->getSalesChannel()->getId(),
+                    'distance' => $request->request->get('distance')
                 ]
             )->fetchAll(FetchMode::ASSOCIATIVE);
 
+            $merchantIds = [];
+            $distance = [];
+
+            foreach ($data as $item) {
+                $merchantIds[] = $item['id'];
+                $distance[$item['id']] = $item['distance'];
+            }
+
+            $criteria = new Criteria($merchantIds);
+
         } else {
 
-            //
             $criteria = new Criteria();
-            $criteria->addAssociation('tags');
-            $criteria->addAssociation('productManufacturers');
-            $criteria->addAssociation('productManufacturers.media');
-            $criteria->addAssociation('categories');
-            $criteria->addAssociation('media');
-            $criteria->addFilter(new EqualsFilter('active', true));
-            $criteria->setTerm($request->request->get('term'));
-
-            $result = $this->repository->search($criteria, $context->getContext());
-
-            $response = new JsonResponse();
-            $response->setEncodingOptions(JSON_NUMERIC_CHECK);
-            $response->setData([
-                'data' => $result->getEntities(),
-                'loc' => $myLocation,
-            ]);
-
-            return $response;
 
         }
+
+        $criteria->addAssociation('tags');
+        $criteria->addAssociation('productManufacturers');
+        $criteria->addAssociation('productManufacturers.media');
+        $criteria->addAssociation('categories');
+        $criteria->addAssociation('media');
+        $criteria->addFilter(new EqualsFilter('active', true));
+        $criteria->setTerm($request->request->get('term'));
+
+        $result = $this->repository->search($criteria, $context->getContext());
+
+        if (isset($distance)) {
+            foreach ($result->getEntities() as $entity) {
+                $entity->setDistance($distance[$entity->getId()]);
+            }
+        }
+
+        $response = new JsonResponse();
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        $response->setData([
+            'data' => $result->getEntities(),
+            'loc' => $myLocation,
+        ]);
+
+        return $response;
 
     }
 
