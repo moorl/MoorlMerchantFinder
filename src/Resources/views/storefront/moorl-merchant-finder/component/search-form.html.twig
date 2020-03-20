@@ -30,7 +30,7 @@
                     </div>
                 </div>
             </div>
-            {% if element.data.tags %}
+            {% if element.data.tags and element.config.tagFilter.value %}
                 <div class="form-group col-6 col-lg">
                     <select name="tags" class="form-control">
                         <option value="">{{ "moorl-merchant-finder.allResults"|trans }}</option>
@@ -40,7 +40,7 @@
                     </select>
                 </div>
             {% endif %}
-            {% if element.data.productManufacturers %}
+            {% if element.data.productManufacturers and element.config.manufacturerFilter.value %}
                 <div class="form-group col-6 col-lg">
                     <select name="productManufacturers" class="form-control">
                         <option value="">{{ "moorl-merchant-finder.allResults"|trans }}</option>
@@ -50,7 +50,7 @@
                     </select>
                 </div>
             {% endif %}
-            {% if element.data.categories %}
+            {% if element.data.categories and element.config.categoryFilter.value %}
                 <div class="form-group col-6 col-lg">
                     <select name="categories" class="form-control">
                         <option value="">{{ "moorl-merchant-finder.allResults"|trans }}</option>
@@ -62,6 +62,7 @@
             {% endif %}
             <div class="form-group col-6 col-lg">
                 <button type="submit" class="btn btn-block btn-primary">
+                    <i class="fas fa-search-location"></i>
                     {{ "moorl-merchant-finder.search"|trans }}
                 </button>
             </div>

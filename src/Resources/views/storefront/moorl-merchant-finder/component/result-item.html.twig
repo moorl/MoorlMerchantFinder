@@ -12,7 +12,7 @@
                 <small class="text-small float-right">{{ "moorl-merchant-finder.distance"|trans }}: <% parseInt(this.distance) %> {{ "moorl-merchant-finder.km"|trans }}</small>
                 <% } %>
             </h4>
-            <div class="row justify-content-between">
+            <div class="row form-row justify-content-between">
                 <div class="col-6">
                     <p class=""><% this.street %> <% this.streetNumber %>
                         <br><% this.zipcode %> <% this.city %>
@@ -35,47 +35,47 @@
                     <% } %>
                 </div>
             </div>
-            <div class="row">
-                <% if (this.tags.length != 0) { %>
-                <div class="col-6">
-                    <i class="fas fa-tags"></i> <b>{{ "moorl-merchant-finder.tags"|trans }}</b>
-                    <div class="tags">
-                        <% for ( var i = 0; i < this.tags.length; i++ ) { %>
-                        <span><% this.tags[i].name %></span>
-                        <% } %>
-                    </div>
-                </div>
-                <% } %>
-                <% if (this.categories.length != 0) { %>
-                <div class="col-6">
-                    <i class="fas fa-tshirt"></i> <b>{{ "moorl-merchant-finder.categories"|trans }}</b>
-                    <div class="categories">
-                        <% for ( var i = 0; i < this.categories.length; i++ ) { %>
-                        <span><% this.categories[i].name %></span>
-                        <% } %>
-                    </div>
-                </div>
-                <% } %>
-            </div>
-            <% if (this.productManufacturers.length != 0) { %>
-            <div class="row">
-                <div class="col-12">
-                    <i class="fas fa-industry"></i> <b>{{ "moorl-merchant-finder.manufacturers"|trans }}</b>
-                    <div class="manufacturers">
-                        <% for ( var i = 0; i < this.productManufacturers.length; i++ ) { %>
-                        <% if (this.productManufacturers[i].media != null) { %>
-                        <img src="<% this.productManufacturers[i].media.url %>" title="<% this.productManufacturers[i].name %>">
-                        <% } else { %>
-                        <span><% this.productManufacturers[i].name %></span>
-                        <% } %>
-                        <% } %>
-                    </div>
-                </div>
-            </div>
-            <% } %>
         </div>
     </div>
-    <div class="actions">
+    <div class="row form-row">
+        <% if (this.tags.length != 0) { %>
+        <div class="col-6">
+            <i class="fas fa-tags"></i> <b>{{ "moorl-merchant-finder.tags"|trans }}</b>
+            <div class="tags">
+                <% for ( var i = 0; i < this.tags.length; i++ ) { %>
+                <span><% this.tags[i].name %></span>
+                <% } %>
+            </div>
+        </div>
+        <% } %>
+        <% if (this.categories.length != 0) { %>
+        <div class="col-6">
+            <i class="fas fa-tshirt"></i> <b>{{ "moorl-merchant-finder.categories"|trans }}</b>
+            <div class="categories">
+                <% for ( var i = 0; i < this.categories.length; i++ ) { %>
+                <span><% this.categories[i].name %></span>
+                <% } %>
+            </div>
+        </div>
+        <% } %>
+    </div>
+    <% if (this.productManufacturers.length != 0) { %>
+    <div class="row form-row">
+        <div class="col-12">
+            <i class="fas fa-industry"></i> <b>{{ "moorl-merchant-finder.manufacturers"|trans }}</b>
+            <div class="manufacturers">
+                <% for ( var i = 0; i < this.productManufacturers.length; i++ ) { %>
+                <% if (this.productManufacturers[i].media != null) { %>
+                <img src="<% this.productManufacturers[i].media.url %>" title="<% this.productManufacturers[i].name %>">
+                <% } else { %>
+                <span><% this.productManufacturers[i].name %></span>
+                <% } %>
+                <% } %>
+            </div>
+        </div>
+    </div>
+    <% } %>
+    <div class="mt-2">
         <% if (this.merchantUrl != null) { %>
         <a href="<% this.merchantUrl %>" target="_blank" class="btn btn-sm btn-outline-dark"><i class="fas fa-info-circle"></i> {{ "moorl-merchant-finder.merchantUrl"|trans }}</a>
         <% } %>

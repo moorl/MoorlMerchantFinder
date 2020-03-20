@@ -4,10 +4,10 @@
         :label="$tc('moorl-cms.elements.general.config.label.style')"
         v-model="element.config.style.value">
         <option value="map-results">{{ $tc('moorl-cms.elements.general.config.label.styleMapResults') }}</option>
-        <option value="results-map">{{ $tc('moorl-cms.elements.general.config.label.styleGrid') }}</option>
-        <option value="fixed-map">{{ $tc('moorl-cms.elements.general.config.label.styleFixedMap') }}</option>
+        <option value="results-map">{{ $tc('moorl-cms.elements.general.config.label.styleResultsMap') }}</option>
+        <option value="fixed-map" disabled>{{ $tc('moorl-cms.elements.general.config.label.styleFixedMap') }}</option>
         <option value="results-overlay">{{ $tc('moorl-cms.elements.general.config.label.styleResultsOverlay') }}</option>
-        <option value="results-masonry">{{ $tc('moorl-cms.elements.general.config.label.styleMasonry') }}</option>
+        <option value="results-masonry" disabled>{{ $tc('moorl-cms.elements.general.config.label.styleMasonry') }}</option>
     </sw-select-field>
 
     <sw-select-field

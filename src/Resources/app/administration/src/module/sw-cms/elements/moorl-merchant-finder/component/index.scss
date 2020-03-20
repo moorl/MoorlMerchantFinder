@@ -2,37 +2,125 @@
     min-height: 200px;
     width: 100%;
 
-    .search {
-        margin-bottom: 20px;
+    &.results-map {
+        .element-content {
+            .results-box {
+                order: 2;
+            }
+
+            .map-box {
+                order: 3;
+            }
+        }
     }
 
-    .content {
-        height: 400px;
-        display: grid;
-        grid-template-columns: 500px 1fr;
-        gap: 20px;
+    &.results-overlay {
+        .element-content {
+            height: 50vh;
+            display: block;
+            position: relative;
 
-        .results {
+            .map-box {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                z-index: 1;
+            }
+
+            .search-box {
+                position: absolute;
+                width: calc(100% - 460px);
+                left: 20px;
+                top: 20px;
+                z-index: 2;
+            }
+
+            .results-box {
+                position: absolute;
+                width: auto;
+                height: auto;
+                right: 20px;
+                top: 20px;
+                bottom: 20px;
+                z-index: 2;
+            }
+
+            .results-content {
+                background: rgba(255, 255, 255, 0.4);
+                padding: 20px;
+            }
+
+        }
+
+    }
+
+    .element-content {
+
+        display: flex;
+        flex-wrap: wrap;
+        margin-right: -10px;
+        margin-left: -10px;
+
+        .search-box {
+            order: 1;
+            margin-bottom: 20px;
+            padding-right: 10px;
+            padding-left: 10px;
+            position: relative;
+            width: 100%;
+        }
+
+        .results-box {
+            order: 3;
+            padding-right: 10px;
+            padding-left: 10px;
+            position: relative;
+            width: auto;
+            flex-basis: 0;
+            flex-grow: 0;
+            max-width: 100%;
+            height: 600px;
+        }
+
+        .map-box {
+            order: 2;
+            padding-right: 10px;
+            padding-left: 10px;
+            position: relative;
+            width: 100%;
+            flex-basis: 0;
+            flex-grow: 1;
+            max-width: 100%;
+            height: 600px;
+        }
+
+        .results-content {
+            width: 400px;
             max-height: 100%;
             overflow: auto;
+
             ul {
                 list-style: none;
                 padding: 0;
                 margin: 0;
+
                 li {
                     padding: 20px;
                     margin-bottom: 20px;
                     background: #d6d8db;
                 }
             }
-
         }
 
-        .map {
+        .map-content {
             height: 100%;
-            background: #0F9D58;
+            background-color: #0F9D58;
+            background-image: repeating-linear-gradient(-45deg,
+                #0f763b,
+                #0f763b 10px,
+                #0F9D58 10px,
+                #0F9D58 20px);
         }
-
 
     }
 

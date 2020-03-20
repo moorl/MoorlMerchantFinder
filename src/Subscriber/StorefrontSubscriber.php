@@ -49,7 +49,7 @@ class StorefrontSubscriber implements EventSubscriberInterface
 
         foreach ($event->getEntities() as $entity) {
 
-            if ($entity->getType() == 'merchant-finder') {
+            if ($entity->getType() == 'moorl-merchant-finder') {
 
                 $languageId = $event->getContext()->getLanguageId();
 
