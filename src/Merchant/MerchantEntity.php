@@ -25,6 +25,11 @@ class MerchantEntity extends Entity
     protected $manufacturers;
 
     /**
+     * @var ProductManufacturerCollection|null
+     */
+    protected $productManufacturers;
+
+    /**
      * @var TagCollection|null
      */
     protected $tags;
@@ -207,7 +212,7 @@ class MerchantEntity extends Entity
         $this->tags = $tags;
     }
 
-    public function getManufacturers(): ?TagCollection
+    public function getManufacturers(): ?ProductManufacturerCollection
     {
         return $this->manufacturers;
     }
@@ -215,6 +220,16 @@ class MerchantEntity extends Entity
     public function setManufacturers(ProductManufacturerCollection $manufacturers): void
     {
         $this->manufacturers = $manufacturers;
+    }
+
+    public function getProductManufacturers(): ?ProductManufacturerCollection
+    {
+        return $this->productManufacturers;
+    }
+
+    public function setProductManufacturers(ProductManufacturerCollection $manufacturers): void
+    {
+        $this->productManufacturers = $manufacturers;
     }
 
     public function getCategories(): ?CategoryCollection

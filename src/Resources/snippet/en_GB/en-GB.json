@@ -1,16 +1,19 @@
 {
-  "moorl-merchant-finder": {
-    "radius": "Radius",
-    "km": "KM",
-    "searchFor": "Search for",
-    "zipcodeCity": "zipcode, city",
-    "search": "Search",
-    "distance": "Distance",
-    "phoneNumber": "Phone",
-    "description" : "Description",
-    "openingHours" : "Opening hours",
-    "merchantUrl" : "Website",
-    "shopUrl": "Visit shop",
-    "displayOnMap": "Display on map"
-  }
+    "moorl-merchant-finder": {
+        "radius": "Radius",
+        "km": "KM",
+        "searchFor": "Search for",
+        "zipcodeCity": "zipcode, city",
+        "search": "Search",
+        "distance": "Distance",
+        "phoneNumber": "Phone",
+        "description": "Description",
+        "openingHours": "Opening hours",
+        "merchantUrl": "Website",
+        "shopUrl": "Visit shop",
+        "displayOnMap": "Display on map",
+        "manufacturers": "Manufacturers",
+        "categories": "Categories",
+        "tags": "Tags"
+    }
 }

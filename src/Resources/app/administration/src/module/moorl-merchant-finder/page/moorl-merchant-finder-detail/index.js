@@ -1,5 +1,5 @@
 const { Component, Mixin, Application, StateDeprecated } = Shopware;
-const { Criteria } = Shopware.Data;
+const { Criteria, EntityCollection } = Shopware.Data;
 const utils = Shopware.Utils;
 
 import template from './moorl-merchant-finder-detail.html.twig';
@@ -51,6 +51,8 @@ Component.register('moorl-merchant-finder-detail', {
             markerItem: null,
             markerShadowItem: null,
             customFieldSets: [],
+            manufacturers: null,
+            manufacturerIds: []
         };
     },
 
@@ -104,6 +106,8 @@ Component.register('moorl-merchant-finder-detail', {
 
         initializeFurtherComponents() {
 
+            this.manufacturers = new EntityCollection('/product-manufacturer', 'product_manufacturer', Shopware.Context.api);
+
             this.salesChannelRepository.search(new Criteria(1, 100), Shopware.Context.api).then((searchResult) => {
                 this.salesChannels = searchResult;
             });
@@ -128,13 +132,21 @@ Component.register('moorl-merchant-finder-detail', {
             this.repository
                 .get(this.$route.params.id, Shopware.Context.api, this.defaultCriteria)
                 .then((entity) => {
-                    console.log(entity.tags);
+                    console.log(entity.manufacturers);
+                    console.log(entity.productManufacturers);
                     this.merchant = entity;
                     this.mediaItem = this.merchant.mediaId ? this.mediaStore.getById(this.merchant.mediaId) : null;
                     this.markerItem = this.merchant.markerId ? this.mediaStore.getById(this.merchant.markerId) : null;
                     this.markerShadowItem = this.merchant.markerShadowId ? this.mediaStore.getById(this.merchant.markerShadowId) : null;
                     this.isLoading = false;
                 });
+        },
+
+        onManufacturersChange() {
+            this.merchant.manufacturers = this.manufacturers;
+            this.manufacturerIds = this.manufacturers.getIds();
+            console.log(this.merchant.manufacturers);
+            console.log(this.manufacturerIds);
         },
 
         drawMap() {

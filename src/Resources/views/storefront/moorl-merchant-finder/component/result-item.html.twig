@@ -1,9 +1,9 @@
 <li id="<% this.id %>" class="list-group-item moorl-merchant-finder-result-item">
     <div class="row form-row">
         <% if (this.mediaId != null) { %>
-            <div class="col-2">
-                <img src="<% this.mediaUrl %>" class="img-fluid">
-            </div>
+        <div class="col-2">
+            <img src="<% this.media.url %>" class="img-fluid">
+        </div>
         <% } %>
         <div class="col-<% if (this.mediaId != null) { %>10<% } else { %>12<% } %>">
             <h4 class="">
@@ -35,17 +35,55 @@
                     <% } %>
                 </div>
             </div>
+            <div class="row">
+                <% if (this.tags.length != 0) { %>
+                <div class="col-6">
+                    <i class="fas fa-tags"></i> <b>{{ "moorl-merchant-finder.tags"|trans }}</b>
+                    <div class="tags">
+                        <% for ( var i = 0; i < this.tags.length; i++ ) { %>
+                        <span><% this.tags[i].name %></span>
+                        <% } %>
+                    </div>
+                </div>
+                <% } %>
+                <% if (this.categories.length != 0) { %>
+                <div class="col-6">
+                    <i class="fas fa-tshirt"></i> <b>{{ "moorl-merchant-finder.categories"|trans }}</b>
+                    <div class="categories">
+                        <% for ( var i = 0; i < this.categories.length; i++ ) { %>
+                        <span><% this.categories[i].name %></span>
+                        <% } %>
+                    </div>
+                </div>
+                <% } %>
+            </div>
+            <% if (this.productManufacturers.length != 0) { %>
+            <div class="row">
+                <div class="col-12">
+                    <i class="fas fa-industry"></i> <b>{{ "moorl-merchant-finder.manufacturers"|trans }}</b>
+                    <div class="manufacturers">
+                        <% for ( var i = 0; i < this.productManufacturers.length; i++ ) { %>
+                        <% if (this.productManufacturers[i].media != null) { %>
+                        <img src="<% this.productManufacturers[i].media.url %>" title="<% this.productManufacturers[i].name %>">
+                        <% } else { %>
+                        <span><% this.productManufacturers[i].name %></span>
+                        <% } %>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+            <% } %>
         </div>
     </div>
-    <div class="mt-2">
+    <div class="actions">
         <% if (this.merchantUrl != null) { %>
-        <a href="<% this.merchantUrl %>" target="_blank" class="btn btn-secondary">{{ "moorl-merchant-finder.merchantUrl"|trans }}</a>
+        <a href="<% this.merchantUrl %>" target="_blank" class="btn btn-sm btn-outline-dark"><i class="fas fa-info-circle"></i> {{ "moorl-merchant-finder.merchantUrl"|trans }}</a>
         <% } %>
         <% if (this.shopUrl != null) { %>
-        <a href="<% this.shopUrl %>" target="_blank" class="btn btn-secondary">{{ "moorl-merchant-finder.shopUrl"|trans }}</a>
+        <a href="<% this.shopUrl %>" target="_blank" class="btn btn-sm btn-outline-dark"><i class="fas fa-shopping-cart"></i> {{ "moorl-merchant-finder.shopUrl"|trans }}</a>
         <% } %>
         <% if (this.locationLon != null) { %>
-        <a href="javascript:" data-location-lat="<% this.locationLat %>" data-location-lon="<% this.locationLon %>" data-item="<% this.id %>" class="btn btn-secondary">{{ "moorl-merchant-finder.displayOnMap"|trans }}</a>
+        <a href="javascript:" data-location-lat="<% this.locationLat %>" data-location-lon="<% this.locationLon %>" data-item="<% this.id %>" class="btn btn-sm btn-outline-dark"><i class="fas fa-map-pin"></i> {{ "moorl-merchant-finder.displayOnMap"|trans }}</a>
         <% } %>
     </div>
 </li>

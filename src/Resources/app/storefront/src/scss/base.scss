@@ -18,3 +18,57 @@
     overflow-y: auto;
   }
 }
+
+
+.cms-element-merchant-finder {
+
+    .moorl-merchant-finder-results {
+
+        &::-webkit-scrollbar {
+            width: 4px;
+        }
+        &::-webkit-scrollbar-track {
+            background: #ccc;
+        }
+        &::-webkit-scrollbar-thumb {
+            background: #aaa;
+        }
+        &::-webkit-scrollbar-thumb:hover {
+            background: #888;
+        }
+
+        .manufacturers {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            margin: 8px 0;
+            img, span {
+                height: 50px;
+                width: auto;
+                line-height: 50px;
+                font-weight: 600;
+                margin-right: 8px;
+            }
+        }
+
+        .moorl-merchant-finder-result-item {
+
+            position: relative;
+
+            .actions {
+                margin-top: 20px;
+                opacity: 0;
+                transition: all 0.5s;
+            }
+
+            &:hover {
+                .actions {
+                    opacity: 1;
+                }
+            }
+
+        }
+
+    }
+
+}

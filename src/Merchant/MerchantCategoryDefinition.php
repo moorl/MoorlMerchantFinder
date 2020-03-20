@@ -31,6 +31,8 @@ class MerchantCategoryDefinition extends MappingEntityDefinition
             (new FkField('moorl_merchant_id', 'moorlMerchantId', MerchantDefinition::class))->addFlags(new PrimaryKey(), new Required()),
 
             (new FkField('category_id', 'categoryId', CategoryDefinition::class))->addFlags(new PrimaryKey(), new Required()),
+            (new ReferenceVersionField(CategoryDefinition::class))->addFlags(new PrimaryKey(), new Required()),
+
 
             new ManyToOneAssociationField('moorlMerchant', 'moorl_merchant_id', MerchantDefinition::class, 'id', false),
             new ManyToOneAssociationField('category', 'category_id', CategoryDefinition::class, 'id', false),

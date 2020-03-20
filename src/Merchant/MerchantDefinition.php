@@ -90,7 +90,8 @@ class MerchantDefinition extends EntityDefinition
             new ManyToOneAssociationField('media', 'media_id', MediaDefinition::class, 'id', false),
             //new ManyToManyAssociationField('productManufacturer', 'product_manufacturer_id', ProductManufacturerDefinition::class, 'id', false),
             //new ManyToOneAssociationField('salutation', 'salutation_id', SalutationDefinition::class, 'id', false),
-            (new ManyToManyAssociationField('categories', CategoryDefinition::class, MerchantCategoryDefinition::class, 'moorl_merchant_id', 'category_id'))->addFlags(new CascadeDelete(), new Inherited()),
+            (new ManyToManyAssociationField('categories', CategoryDefinition::class, MerchantCategoryDefinition::class, 'moorl_merchant_id', 'category_id'))
+                ->addFlags(new CascadeDelete()),
             new ManyToManyAssociationField('tags', TagDefinition::class, MerchantTagDefinition::class, 'moorl_merchant_id', 'tag_id'),
             new ManyToManyAssociationField('productManufacturers', ProductManufacturerDefinition::class, MerchantProductManufacturerDefinition::class, 'moorl_merchant_id', 'product_manufacturer_id'),
         ]);

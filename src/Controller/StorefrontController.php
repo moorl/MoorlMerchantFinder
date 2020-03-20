@@ -7,8 +7,10 @@ use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\ParameterType;
 use GuzzleHttp\Client;
 use Moorl\MerchantFinder\MoorlMerchantFinder;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\ContainsFilter;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
@@ -28,16 +30,22 @@ use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 class StorefrontController extends \Shopware\Storefront\Controller\StorefrontController
 {
 
+    /**
+     * @var EntityRepositoryInterface
+     */
+    private $repository;
     private $genericLoader;
     private $systemConfigService;
 
     public function __construct(
         GenericPageLoader $genericLoader,
-        SystemConfigService $systemConfigService
+        SystemConfigService $systemConfigService,
+        EntityRepositoryInterface $repository
     )
     {
         $this->genericLoader = $genericLoader;
         $this->systemConfigService = $systemConfigService;
+        $this->repository = $repository;
     }
 
     /**
@@ -213,55 +221,28 @@ SQL;
 
         } else {
 
-            $sql = <<<SQL
-SELECT 
-    LOWER(HEX(`id`)) AS `id`,
-    LOWER(HEX(`sales_channel_id`)) AS `salesChannelId`,
-    LOWER(HEX(`media_id`)) AS `mediaId`,
-    LOWER(HEX(`marker_id`)) AS `markerId`,
-    LOWER(HEX(`marker_shadow_id`)) AS `markerShadowId`,
-    `origin_id` AS `originId`,
-    `first_name` AS `firstName`,
-    `last_name` AS `lastName`,
-    `zipcode`,
-    `city`,
-    `company`,
-    `street`,
-    `street_number` AS `streetNumber`,
-    `country`,
-    `country_code` AS `countryCode`,
-    `location_lat` AS `locationLat`,
-    `location_lon` AS `locationLon`,
-    `phone_number` AS `phoneNumber`,
-    `shop_url` AS `shopUrl`,
-    `merchant_url` AS `merchantUrl`,
-    `description`,
-    `opening_hours` AS `openingHours`,
-    `marker_settings` AS `markerSettings`
-FROM `moorl_merchant`
-WHERE CONCAT(`company`, `city`) LIKE :term 
-AND `active` IS TRUE
-HAVING `salesChannelId` = :salesChannelId OR `salesChannelId` IS NULL
-ORDER BY `company`
-LIMIT 500;
-SQL;
+            //
+            $criteria = new Criteria();
+            $criteria->addAssociation('tags');
+            $criteria->addAssociation('productManufacturers');
+            $criteria->addAssociation('productManufacturers.media');
+            $criteria->addAssociation('categories');
+            $criteria->addAssociation('media');
+            $criteria->addFilter(new EqualsFilter('active', true));
+            $criteria->setTerm($request->request->get('term'));
 
-            $data = $connection->executeQuery($sql, [
-                    'term' => '%' . $request->request->get('term') . '%',
-                    'salesChannelId' => $context->getSalesChannel()->getId(),
-                ]
-            )->fetchAll(FetchMode::ASSOCIATIVE);
+            $result = $this->repository->search($criteria, $context->getContext());
+
+            $response = new JsonResponse();
+            $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+            $response->setData([
+                'data' => $result->getEntities(),
+                'loc' => $myLocation,
+            ]);
+
+            return $response;
 
         }
-
-        $response = new JsonResponse();
-        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
-        $response->setData([
-            'data' => $this->extendResultData($data, $context->getContext()),
-            'loc' => $myLocation,
-        ]);
-
-        return $response;
 
     }
 

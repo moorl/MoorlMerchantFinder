@@ -32,9 +32,9 @@ class MoorlMerchantFinder extends Plugin
             return;
         }
         $connection = $this->container->get(Connection::class);
-        $connection->executeQuery('DROP TABLE IF EXISTS `moorl_merchant_product_manufacturers`');
-        $connection->executeQuery('DROP TABLE IF EXISTS `moorl_merchant_category`');
         $connection->executeQuery('DROP TABLE IF EXISTS `moorl_merchant_tag`');
+        $connection->executeQuery('DROP TABLE IF EXISTS `moorl_merchant_category`');
+        $connection->executeQuery('DROP TABLE IF EXISTS `moorl_merchant_product_manufacturer`');
         $connection->executeQuery('DROP TABLE IF EXISTS `moorl_merchant`');
         $connection->executeQuery('DROP TABLE IF EXISTS `moorl_zipcode`');
     }
