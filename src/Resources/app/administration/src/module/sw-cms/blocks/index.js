@@ -1,1 +1,1 @@
-import './text-image/merchant-finder';
+import './moorl-merchant-finder'

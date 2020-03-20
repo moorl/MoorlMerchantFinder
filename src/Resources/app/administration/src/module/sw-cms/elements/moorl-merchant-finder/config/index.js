@@ -1,8 +1,8 @@
 const { Component, Mixin, StateDeprecated } = Shopware;
-import template from './sw-cms-el-config-merchant-finder.html.twig';
-import './sw-cms-el-config-merchant-finder.scss';
+import template from './index.html.twig';
+import './index.scss';
 
-Component.register('sw-cms-el-config-merchant-finder', {
+Component.register('sw-cms-el-config-moorl-merchant-finder', {
     template,
 
     mixins: [
@@ -13,7 +13,11 @@ Component.register('sw-cms-el-config-merchant-finder', {
         return {};
     },
 
-    computed: {},
+    computed: {
+        moorlFoundation() {
+            return MoorlFoundation;
+        },
+    },
 
     created() {
         this.createdComponent();
@@ -21,7 +25,7 @@ Component.register('sw-cms-el-config-merchant-finder', {
 
     methods: {
         createdComponent() {
-            this.initElementConfig('merchant-finder');
+            this.initElementConfig('moorl-merchant-finder');
         }
     }
 });

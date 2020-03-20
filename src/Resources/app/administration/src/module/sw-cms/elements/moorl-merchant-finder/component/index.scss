@@ -1,0 +1,39 @@
+.sw-cms-el-moorl-merchant-finder {
+    min-height: 200px;
+    width: 100%;
+
+    .search {
+        margin-bottom: 20px;
+    }
+
+    .content {
+        height: 400px;
+        display: grid;
+        grid-template-columns: 500px 1fr;
+        gap: 20px;
+
+        .results {
+            max-height: 100%;
+            overflow: auto;
+            ul {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+                li {
+                    padding: 20px;
+                    margin-bottom: 20px;
+                    background: #d6d8db;
+                }
+            }
+
+        }
+
+        .map {
+            height: 100%;
+            background: #0F9D58;
+        }
+
+
+    }
+
+}

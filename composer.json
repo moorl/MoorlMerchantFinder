@@ -1,29 +1,29 @@
 {
-  "name": "moorl/merchant-finder",
-  "description": "Merchant finder for Shopware 6",
-  "version": "1.1.0",
-  "license": "proprietary",
-  "authors": [
-    {
-      "name": "Moorleiche Web Solutions"
+    "name": "moorl/merchant-finder",
+    "description": "Merchant finder for Shopware 6",
+    "version": "1.1.0",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Moorleiche Web Solutions"
+        }
+    ],
+    "require": {
+        "shopware/core": "*",
+        "moorl/foundation": "*"
+    },
+    "type": "shopware-platform-plugin",
+    "autoload": {
+        "psr-4": {
+            "Moorl\\MerchantFinder\\": "src/"
+        }
+    },
+    "extra": {
+        "shopware-plugin-class": "Moorl\\MerchantFinder\\MoorlMerchantFinder",
+        "copyright": "(c) by Moorleiche Web Solutions",
+        "label": {
+            "de-DE": "Händler Suche für Shopware 6",
+            "en-GB": "Merchant finder for Shopware 6"
+        }
     }
-  ],
-  "require": {
-    "shopware/core": "*",
-      "moorl/foundation": "*"
-  },
-  "type": "shopware-platform-plugin",
-  "autoload": {
-    "psr-4": {
-      "Moorl\\MerchantFinder\\": "src/"
-    }
-  },
-  "extra": {
-    "shopware-plugin-class": "Moorl\\MerchantFinder\\MoorlMerchantFinder",
-    "copyright": "(c) by Moorleiche Web Solutions",
-    "label": {
-      "de-DE": "Händler Suche für Shopware 6",
-      "en-GB": "Merchant finder for Shopware 6"
-    }
-  }
 }

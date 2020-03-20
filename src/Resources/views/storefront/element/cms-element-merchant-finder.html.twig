@@ -1,10 +1,6 @@
 {% block element_merchant_finder %}
     <div class="cms-element-{{ element.type }}">
 
-        {% if element.translated.config.title.value != null %}
-            <h1 class="mb-4 {{ element.translated.config.titleCss.value }}">{{ element.translated.config.title.value }}</h1>
-        {% endif %}
-
         {% sw_include '@MoorlMerchantFinder/storefront/moorl-merchant-finder/component/search-form.html.twig' %}
 
         <div class="row form-row">

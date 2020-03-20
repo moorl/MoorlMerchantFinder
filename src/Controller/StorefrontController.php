@@ -215,6 +215,17 @@ SQL;
         $criteria->addAssociation('categories');
         $criteria->addAssociation('media');
         $criteria->addFilter(new EqualsFilter('active', true));
+
+        if ($request->request->get('tags')) {
+            $criteria->addFilter(new EqualsFilter('tags.id', $request->request->get('tags')));
+        }
+        if ($request->request->get('productManufacturers')) {
+            $criteria->addFilter(new EqualsFilter('productManufacturers.id', $request->request->get('productManufacturers')));
+        }
+        if ($request->request->get('categories')) {
+            $criteria->addFilter(new EqualsFilter('categories.id', $request->request->get('categories')));
+        }
+
         $criteria->setTerm($request->request->get('term'));
 
         $result = $this->repository->search($criteria, $context->getContext());
@@ -236,53 +247,4 @@ SQL;
 
     }
 
-    private function extendResultData($data, $context)
-    {
-        // collect and add media
-        $mediaIds = [];
-        foreach ($data as $item) {
-            if (!empty($item['mediaId'])) {
-                $mediaIds[] = $item['mediaId'];
-            }
-            if (!empty($item['markerId'])) {
-                $mediaIds[] = $item['markerId'];
-            }
-            if (!empty($item['markerShadowId'])) {
-                $mediaIds[] = $item['markerShadowId'];
-            }
-        }
-
-        if (count($mediaIds) > 0) {
-            $mediaRepository = $this->container->get("media.repository");
-            $criteria = new Criteria();
-            $criteria->addFilter(new EqualsAnyFilter('id', array_unique($mediaIds)));
-            $mediaEntries = $mediaRepository->search($criteria, $context)->getEntities()->getElements();
-            foreach ($data as &$item) {
-                if (!empty($item['mediaId'])) {
-                    foreach ($mediaEntries as $mediaEntry) {
-                        if ($mediaEntry->getId() == $item['mediaId']) {
-                            $item['mediaUrl'] = $mediaEntry->getUrl();
-                        }
-                    }
-                }
-                if (!empty($item['markerId'])) {
-                    foreach ($mediaEntries as $mediaEntry) {
-                        if ($mediaEntry->getId() == $item['markerId']) {
-                            $item['markerUrl'] = $mediaEntry->getUrl();
-                        }
-                    }
-                }
-                if (!empty($item['markerShadowId'])) {
-                    foreach ($mediaEntries as $mediaEntry) {
-                        if ($mediaEntry->getId() == $item['markerShadowId']) {
-                            $item['markerShadowUrl'] = $mediaEntry->getUrl();
-                        }
-                    }
-                }
-            }
-        }
-
-        return $data;
-
-    }
 }

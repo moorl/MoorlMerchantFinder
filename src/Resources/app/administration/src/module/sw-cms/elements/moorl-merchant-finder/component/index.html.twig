@@ -1,0 +1,28 @@
+<div class="sw-cms-el-moorl-merchant-finder">
+
+    <div class="search">
+        <div class="sw-block-field">
+            <input type="text" placeholder="Searchbar..." disabled>
+        </div>
+    </div>
+
+    <div class="content">
+
+        <div class="results">
+            <ul>
+                <li v-for="merchant in merchants">
+                    <h4>{{ merchant.company }}</h4>
+                    <p class="">{{ merchant.street }} {{ merchant.streetNumber }}
+                        <br>{{ merchant.zipcode }} {{ merchant.city }}
+                        <br>{{ merchant.country }}
+                    </p>
+                    <p class="">Phone: {{ merchant.phoneNumber }}</p>
+                </li>
+            </ul>
+        </div>
+
+        <div class="map"></div>
+
+    </div>
+
+</div>

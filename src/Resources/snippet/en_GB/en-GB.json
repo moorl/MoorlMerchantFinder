@@ -14,6 +14,7 @@
         "displayOnMap": "Display on map",
         "manufacturers": "Manufacturers",
         "categories": "Categories",
-        "tags": "Tags"
+        "tags": "Tags",
+        "allResults": "-- Select --"
     }
 }

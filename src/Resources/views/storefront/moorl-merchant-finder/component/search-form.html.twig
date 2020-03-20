@@ -6,13 +6,13 @@
 
     {% block page_merchant_finder_form_inner %}
         <div class="row form-row">
-            <div class="form-group col-12 col-lg-3">
+            <div class="form-group col-6 col-lg">
                 <input name="term" class="form-control" placeholder="{{ "moorl-merchant-finder.searchFor"|trans }}">
             </div>
-            <div class="form-group col-12 col-lg-3">
+            <div class="form-group col-6 col-lg">
                 <input name="zipcode" class="form-control" placeholder="{{ "moorl-merchant-finder.zipcodeCity"|trans }}">
             </div>
-            <div class="form-group col-6 col-lg-3">
+            <div class="form-group col-6 col-lg">
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text">{{ "moorl-merchant-finder.radius"|trans }}</span>
@@ -30,7 +30,37 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group col-6 col-lg-3">
+            {% if element.data.tags %}
+                <div class="form-group col-6 col-lg">
+                    <select name="tags" class="form-control">
+                        <option value="">{{ "moorl-merchant-finder.allResults"|trans }}</option>
+                        {% for item in element.data.tags %}
+                            <option value="{{ item.value }}">{{ item.label }} ({{ item.count }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            {% endif %}
+            {% if element.data.productManufacturers %}
+                <div class="form-group col-6 col-lg">
+                    <select name="productManufacturers" class="form-control">
+                        <option value="">{{ "moorl-merchant-finder.allResults"|trans }}</option>
+                        {% for item in element.data.productManufacturers %}
+                            <option value="{{ item.value }}">{{ item.label }} ({{ item.count }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            {% endif %}
+            {% if element.data.categories %}
+                <div class="form-group col-6 col-lg">
+                    <select name="categories" class="form-control">
+                        <option value="">{{ "moorl-merchant-finder.allResults"|trans }}</option>
+                        {% for item in element.data.categories %}
+                            <option value="{{ item.value }}">{{ item.label }} ({{ item.count }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            {% endif %}
+            <div class="form-group col-6 col-lg">
                 <button type="submit" class="btn btn-block btn-primary">
                     {{ "moorl-merchant-finder.search"|trans }}
                 </button>
