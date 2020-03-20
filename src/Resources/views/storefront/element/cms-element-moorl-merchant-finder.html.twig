@@ -1,17 +1,21 @@
 {% block element_moorl_merchant_finder %}
-    <div class="cms-element-{{ element.type }} {{ element.config.style.value }}">
+    <div class="cms-element-{{ element.type }} {{ element.config.style.value }}"
+         style="
+             --style-height: {{ element.config.minHeight.value }};
+             --style-gutter: {{ element.config.borders.value }};
+             --style-results-width: {{ element.config.resultsWidth.value }};">
         <div class="element-content" id="{{ element.id }}">
             <div class="search-box">
-                {% sw_include '@MoorlMerchantFinder/storefront/moorl-merchant-finder/component/search-form.html.twig' %}
+                {% sw_include '@MoorlMerchantFinder/plugin/moorl-merchant-finder/component/search-form.html.twig' %}
             </div>
             <div class="map-box">
                 <div class="map-content">
-                    {% sw_include '@MoorlMerchantFinder/storefront/moorl-merchant-finder/component/map.html.twig' %}
+                    {% sw_include '@MoorlMerchantFinder/plugin/moorl-merchant-finder/component/map.html.twig' %}
                 </div>
             </div>
             <div class="results-box">
                 <div class="results-content">
-                    {% sw_include '@MoorlMerchantFinder/storefront/moorl-merchant-finder/component/result-list.html.twig' %}
+                    {% sw_include '@MoorlMerchantFinder/plugin/moorl-merchant-finder/component/result-list.html.twig' %}
                 </div>
             </div>
         </div>

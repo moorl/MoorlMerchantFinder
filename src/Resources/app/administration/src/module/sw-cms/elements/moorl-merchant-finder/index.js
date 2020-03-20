@@ -24,11 +24,11 @@ Application.getContainer('service').cmsService.registerCmsElement({
         },
         minHeight: {
             source: 'static',
-            value: '100vh'
+            value: 'calc(100vh - 310px)'
         },
         resultsWidth: {
             source: 'static',
-            value: '300px'
+            value: '500px'
         },
         categoryFilter: {
             source: 'static',

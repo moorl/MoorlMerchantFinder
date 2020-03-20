@@ -6,6 +6,7 @@ use Doctrine\DBAL\Connection;
 use Shopware\Core\Framework\Plugin;
 use Shopware\Core\Framework\Plugin\Context\InstallContext;
 use Shopware\Core\Framework\Plugin\Context\UninstallContext;
+use MoorlFoundation\Core\PluginHelpers;
 
 class MoorlMerchantFinder extends Plugin
 {
@@ -28,20 +29,20 @@ class MoorlMerchantFinder extends Plugin
     public function uninstall(UninstallContext $context): void
     {
         parent::uninstall($context);
+
         if ($context->keepUserData()) {
             return;
         }
-        $connection = $this->container->get(Connection::class);
-        $connection->executeQuery('DROP TABLE IF EXISTS `moorl_merchant_tag`');
-        $connection->executeQuery('DROP TABLE IF EXISTS `moorl_merchant_category`');
-        $connection->executeQuery('DROP TABLE IF EXISTS `moorl_merchant_product_manufacturer`');
-        $connection->executeQuery('DROP TABLE IF EXISTS `moorl_merchant`');
-        $connection->executeQuery('DROP TABLE IF EXISTS `moorl_zipcode`');
-    }
 
-    public function getStorefrontScriptPath(): string
-    {
-        return 'Resources/dist/storefront/js';
+        PluginHelpers::dropTables($this->container, $context->getContext(), [
+            'moorl_merchant_tag',
+            'moorl_merchant_category',
+            'moorl_merchant_product_manufacturer',
+            'moorl_merchant',
+            'moorl_zipcode'
+        ]);
+
+        PluginHelpers::removeCmsBlocks($this->container, $context->getContext(), ['moorl-merchant-finder-basic']);
     }
 
 }

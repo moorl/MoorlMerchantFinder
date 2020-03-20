@@ -49,20 +49,6 @@ class StorefrontController extends \Shopware\Storefront\Controller\StorefrontCon
     }
 
     /**
-     * @Route("/moorl/merchant-finder", name="moorl.merchant-finder.index", options={"seo"=true}, methods={"GET"})
-     */
-    public function index(Request $request, RequestDataBag $data, SalesChannelContext $context): Response
-    {
-        $page = $this->genericLoader->load($request, $context);
-
-        return $this->renderStorefront('@Storefront/storefront/moorl-merchant-finder/page/index.html.twig', [
-            'pluginConfig' => $this->systemConfigService->getDomain('MoorlMerchantFinder.config'),
-            'data' => $data,
-            'page' => $page,
-        ]);
-    }
-
-    /**
      * @Route("/moorl/merchant-finder/suggest", name="moorl.merchant-finder.search", methods={"POST"}, defaults={"XmlHttpRequest"=true})
      */
     public function suggest(Request $request, RequestDataBag $data, SalesChannelContext $context): JsonResponse

@@ -128,7 +128,7 @@
 
         &.results-overlay {
             .element-content {
-                height: 100vh;
+                height: var(--style-height);
                 display: block;
                 position: relative;
 
@@ -200,7 +200,7 @@
                 flex-basis: 0;
                 flex-grow: 0;
                 max-width: 100%;
-                height: 600px;
+                height: var(--style-height);
             }
 
             .map-box {
@@ -212,11 +212,11 @@
                 flex-basis: 0;
                 flex-grow: 1;
                 max-width: 100%;
-                height: 600px;
+                height: var(--style-height);
             }
 
             .results-content {
-                width: 500px;
+                width: var(--style-results-width);
                 max-height: 100%;
                 overflow: auto;
 
