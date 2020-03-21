@@ -11,19 +11,23 @@ export default class MoorlMerchantFinder extends Plugin {
 
     init() {
 
-        this._form = this.el;
-
         this._client = new HttpClient(window.accessKey, window.contextToken);
 
-        this._results = document.getElementById('searchResults');
+        this._form = this.el.getElementsByTagName("form")[0];
 
-        this._loadingIndicator = document.getElementById('loadingIndicator');
+        this._results = this.el.getElementsByClassName('moorl-merchant-finder-results')[0];
 
-        this._popupTemplate = document.getElementById('embedMap').innerHTML;
+        this._resultsContent = this.el.getElementsByClassName('results-content')[0];
+
+        this._loadingIndicator = this.el.getElementsByClassName('moorl-merchant-finder-loading')[0];
+
+        this._mapElement = this.el.getElementsByClassName('moorl-merchant-finder-map')[0];
+
+        this._popupTemplate = this._mapElement.innerHTML;
 
         this._popupElement = document.createElement('div');
 
-        document.getElementById('embedMap').innerHTML = '';
+        this._mapElement.innerHTML = '';
 
         this._resultTemplate = this._results.innerHTML;
 
@@ -93,12 +97,12 @@ export default class MoorlMerchantFinder extends Plugin {
                     iconOptions = JSON.parse(item.markerSettings);
                 }
 
-                if (typeof item.markerShadowUrl != 'undefined') {
-                    iconOptions.shadowUrl = item.markerShadowUrl;
+                if (item.markerShadow) {
+                    iconOptions.shadowUrl = item.markerShadow.url;
                 }
 
-                if (typeof item.markerUrl != 'undefined') {
-                    iconOptions.iconUrl = item.markerUrl;
+                if (item.marker) {
+                    iconOptions.iconUrl = item.marker.url;
                     markerOptions.icon = L.icon(iconOptions);
                 }
 
@@ -155,12 +159,12 @@ export default class MoorlMerchantFinder extends Plugin {
         const myElement = document.getElementById(id);
         const topPos = myElement.offsetTop;
 
-        document.getElementById('searchResults').scrollTo({
+        this._resultsContent.scrollTo({
             top: topPos,
             behavior: 'smooth',
         });
 
-        $('#searchResults li').removeClass('active');
+        $('.moorl-merchant-finder-results li').removeClass('active');
         $('#' + id).addClass('active');
 
         this.ol.markers.eachLayer(function (layer) {
@@ -184,7 +188,7 @@ export default class MoorlMerchantFinder extends Plugin {
     _buildMap() {
         this.ol = {};
         this.ol.markers = L.layerGroup([]);
-        this.ol.map = L.map('embedMap', {});
+        this.ol.map = L.map(this._mapElement, {});
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', {foo: 'bar', attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'}).addTo(this.ol.map);
     }
 

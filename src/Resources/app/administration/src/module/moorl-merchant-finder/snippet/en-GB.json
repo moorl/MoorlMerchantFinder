@@ -76,12 +76,16 @@
             "salesChannelId": "Sales Channel",
             "customerGroupId": "Customer group",
             "countryId": "Country",
-            "country": "Country"
+            "country": "Country",
+            "markerSettingsExample": "You can copy this example to adjust your custom marker settings.",
+            "markerSettingsLink": "Leaflet custom marker example"
         },
         "label": {
             "accountCard": "General",
             "locationCard": "Location",
-            "addressCard": "Address"
+            "addressCard": "Address",
+            "markerCard": "Marker",
+            "relationsCard": "Relations and Filters"
         }
     }
 }

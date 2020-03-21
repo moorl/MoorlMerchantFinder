@@ -23,27 +23,14 @@ class MerchantEntity extends Entity
      * @var int|null
      */
     protected $distance;
-
-    public function getDistance(): ?int
-    {
-        return $this->distance;
-    }
-
-    public function setDistance(int $distance): void
-    {
-        $this->distance = $distance;
-    }
-
     /**
      * @var ProductManufacturerCollection|null
      */
     protected $manufacturers;
-
     /**
      * @var ProductManufacturerCollection|null
      */
     protected $productManufacturers;
-
     /**
      * @var TagCollection|null
      */
@@ -60,6 +47,10 @@ class MerchantEntity extends Entity
      * @var string
      */
     protected $markerId;
+    /**
+     * @var MediaEntity|null
+     */
+    protected $marker;
     /**
      * @var string
      */
@@ -217,6 +208,16 @@ class MerchantEntity extends Entity
      */
     protected $countryCode;
 
+    public function getDistance(): ?int
+    {
+        return $this->distance;
+    }
+
+    public function setDistance(int $distance): void
+    {
+        $this->distance = $distance;
+    }
+
     public function getTags(): ?TagCollection
     {
         return $this->tags;
@@ -351,6 +352,22 @@ class MerchantEntity extends Entity
     public function setMediaId(string $mediaId): void
     {
         $this->mediaId = $mediaId;
+    }
+
+    /**
+     * @return MediaEntity|null
+     */
+    public function getMarker(): ?MediaEntity
+    {
+        return $this->marker;
+    }
+
+    /**
+     * @param MediaEntity|null $media
+     */
+    public function setMarker(?MediaEntity $marker): void
+    {
+        $this->marker = $marker;
     }
 
     /**

@@ -88,6 +88,8 @@ class MerchantDefinition extends EntityDefinition
             new CustomFields(),
             (new IntField('auto_increment', 'autoIncrement'))->addFlags(new WriteProtected()),
             new ManyToOneAssociationField('media', 'media_id', MediaDefinition::class, 'id', false),
+            new ManyToOneAssociationField('marker', 'marker_id', MediaDefinition::class, 'id', false),
+            new ManyToOneAssociationField('markerShadow', 'marker_shadow_id', MediaDefinition::class, 'id', false),
             //new ManyToManyAssociationField('productManufacturer', 'product_manufacturer_id', ProductManufacturerDefinition::class, 'id', false),
             //new ManyToOneAssociationField('salutation', 'salutation_id', SalutationDefinition::class, 'id', false),
             (new ManyToManyAssociationField('categories', CategoryDefinition::class, MerchantCategoryDefinition::class, 'moorl_merchant_id', 'category_id'))

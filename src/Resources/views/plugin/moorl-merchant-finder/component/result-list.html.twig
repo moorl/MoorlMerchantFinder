@@ -1,12 +1,12 @@
 <!-- Loading Indicator -->
 {% block page_merchant_finder_loading_indicator %}
-    <div class="text-center mt-5" id="loadingIndicator">
+    <div class="moorl-merchant-finder-loading text-center mt-5">
         <div class="spinner-border"></div>
     </div>
 {% endblock %}
 
 <!-- Search Results Template -->
-<ul class="moorl-merchant-finder-results list-group d-none" id="searchResults">
+<ul class="moorl-merchant-finder-results list-group d-none">
     {% block page_merchant_finder_search_result_item %}
         {% sw_include '@MoorlMerchantFinder/plugin/moorl-merchant-finder/component/result-item.html.twig' %}
     {% endblock %}

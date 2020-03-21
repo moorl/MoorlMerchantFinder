@@ -2,7 +2,7 @@ export default class Te {
 
     render(html, options) {
 
-        html = html.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+        html = html.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/data-src/g, 'src');
 
         const re = /<%([^%>]+)?%>/g
         const reExp = /(^( )?(if|for|else|switch|case|break|{|}))(.*)?/g

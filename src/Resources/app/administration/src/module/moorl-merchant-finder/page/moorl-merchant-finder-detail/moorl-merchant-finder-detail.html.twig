@@ -212,6 +212,36 @@
                                   name="markerSettings"
                                   v-model="merchant.markerSettings">
                         </sw-field>
+
+                        <div class="sw-field__label">
+                            <label for="markerSettings" class="">
+                                {{ $t('moorl-merchant-finder.properties.markerSettingsExample') }}<br>
+                                <a href="https://leafletjs.com/examples/custom-icons/" target="_blank">{{ $t('moorl-merchant-finder.properties.markerSettingsLink') }}</a>
+                            </label>
+                        </div>
+
+                        <pre style="font-size: 12px; background: #0b2e13; color: #ffffff; padding: 10px; margin-top: 10px">{
+   "iconSize":[
+      38,
+      95
+   ],
+   "shadowSize":[
+      50,
+      64
+   ],
+   "iconAnchor":[
+      22,
+      94
+   ],
+   "shadowAnchor":[
+      4,
+      62
+   ],
+   "popupAnchor":[
+      -3,
+      -76
+   ]
+}</pre>
                     </div>
                 </sw-container>
             </sw-card>

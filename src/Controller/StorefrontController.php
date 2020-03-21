@@ -200,6 +200,8 @@ SQL;
         $criteria->addAssociation('productManufacturers.media');
         $criteria->addAssociation('categories');
         $criteria->addAssociation('media');
+        $criteria->addAssociation('marker');
+        $criteria->addAssociation('markerShadow');
         $criteria->addFilter(new EqualsFilter('active', true));
 
         if ($request->request->get('tags')) {
