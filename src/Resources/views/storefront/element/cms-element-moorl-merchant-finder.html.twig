@@ -1,8 +1,18 @@
+{% if shopware.config.MoorlMerchantFinder.config.tileLayerUrl %}
+    {% set tileLayerUrl = shopware.config.MoorlMerchantFinder.config.tileLayerUrl %}
+{% else %}
+    {% set tileLayerUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' %}
+{% endif %}
+{% if shopware.config.MoorlMerchantFinder.config.tileLayerCopy %}
+    {% set tileLayerCopy = shopware.config.MoorlMerchantFinder.config.tileLayerCopy %}
+{% else %}
+    {% set tileLayerCopy = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>' %}
+{% endif %}
+
 {% block element_moorl_merchant_finder %}
     <div class="cms-element-{{ element.type }} {{ element.config.style.value }}"
-         data-tile-layer-url="{{ shopware.config.MoorlMerchantFinder.config.tileLayerUrl|raw }}"
-         data-tile-layer-copy='{{ shopware.config.MoorlMerchantFinder.config.tileLayerCopy|raw }}'
-         data-tile-layer-token="{{ shopware.config.MoorlMerchantFinder.config.tileLayerToken|raw }}"
+         data-tile-layer-url="{{ tileLayerUrl|raw }}"
+         data-tile-layer-copy='{{ tileLayerCopy|raw }}'
          style="
              --style-height: {{ element.config.minHeight.value }};
              --style-gutter: {{ element.config.borders.value }};

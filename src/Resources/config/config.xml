@@ -32,8 +32,8 @@
             <name>tileLayerUrl</name>
             <label>Tile Layer Provider URL</label>
             <label lang="de-DE">Map Design Anbieter URL</label>
-            <defaultValue><![CDATA[https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}]]></defaultValue>
-            <placeholder><![CDATA[https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}]]></placeholder>
+            <defaultValue><![CDATA[https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png]]></defaultValue>
+            <placeholder><![CDATA[https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png]]></placeholder>
         </input-field>
         <input-field type="textarea">
             <name>tileLayerCopy</name>

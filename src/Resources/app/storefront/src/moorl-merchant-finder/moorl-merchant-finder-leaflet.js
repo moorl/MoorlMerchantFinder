@@ -189,7 +189,7 @@ export default class MoorlMerchantFinder extends Plugin {
         this.ol = {};
         this.ol.markers = L.layerGroup([]);
         this.ol.map = L.map(this._mapElement, {});
-        L.tileLayer(this.el.dataset.tileLayerUrl, {foo: 'bar', attribution: this.el.dataset.tileLayerCopy}).addTo(this.ol.map);
+        L.tileLayer(this.el.dataset.tileLayerUrl, {attribution: this.el.dataset.tileLayerCopy}).addTo(this.ol.map);
     }
 
 }
