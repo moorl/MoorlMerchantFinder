@@ -1,5 +1,5 @@
-const { Component, Mixin, Application, StateDeprecated } = Shopware;
-const { Criteria, EntityCollection } = Shopware.Data;
+const {Component, Mixin, Application} = Shopware;
+const {Criteria, EntityCollection} = Shopware.Data;
 const utils = Shopware.Utils;
 
 import template from './moorl-merchant-finder-detail.html.twig';
@@ -46,10 +46,9 @@ Component.register('moorl-merchant-finder-detail', {
             suggestedItems: [],
             isLoadingSuggestions: false,
             pickerClasses: {},
-            uploadTag: utils.createId(),
-            mediaItem: null,
-            markerItem: null,
-            markerShadowItem: null,
+            uploadTagMedia: utils.createId(),
+            uploadTagMarker: utils.createId(),
+            uploadTagMarkerShadow: utils.createId(),
             customFieldSets: [],
             manufacturers: null,
             manufacturerIds: []
@@ -57,8 +56,9 @@ Component.register('moorl-merchant-finder-detail', {
     },
 
     computed: {
-        mediaStore() {
-            return StateDeprecated.getStore('media');
+
+        mediaRepository() {
+            return this.repositoryFactory.create('media');
         },
 
         moorlMerchantRepository() {
@@ -132,12 +132,7 @@ Component.register('moorl-merchant-finder-detail', {
             this.repository
                 .get(this.$route.params.id, Shopware.Context.api, this.defaultCriteria)
                 .then((entity) => {
-                    console.log(entity.manufacturers);
-                    console.log(entity.productManufacturers);
                     this.merchant = entity;
-                    this.mediaItem = this.merchant.mediaId ? this.mediaStore.getById(this.merchant.mediaId) : null;
-                    this.markerItem = this.merchant.markerId ? this.mediaStore.getById(this.merchant.markerId) : null;
-                    this.markerShadowItem = this.merchant.markerShadowId ? this.mediaStore.getById(this.merchant.markerShadowId) : null;
                     this.isLoading = false;
                 });
         },
@@ -145,8 +140,6 @@ Component.register('moorl-merchant-finder-detail', {
         onManufacturersChange() {
             this.merchant.manufacturers = this.manufacturers;
             this.manufacturerIds = this.manufacturers.getIds();
-            console.log(this.merchant.manufacturers);
-            console.log(this.manufacturerIds);
         },
 
         drawMap() {
@@ -162,7 +155,7 @@ Component.register('moorl-merchant-finder-detail', {
             });
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', {foo: 'bar', attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'}).addTo(this.ol.map);
             this.ol.marker = L.marker(this.ol.center, {draggable: true})
-                .on('dragend',function () {
+                .on('dragend', function () {
                     that.ol.center = that.ol.marker.getLatLng();
                     that.ol.map.flyTo(that.ol.center, 16, {animate: true, duration: 1});
                 })
@@ -228,12 +221,14 @@ Component.register('moorl-merchant-finder-detail', {
         },
 
         // Logo
-        setMediaItem({ targetId }) {
-            this.merchant.mediaId = targetId;
-            this.mediaStore.getByIdAsync(targetId);
+        setMediaItem({targetId}) {
+            this.mediaRepository.get(targetId, Shopware.Context.api).then((updatedMedia) => {
+                this.merchant.mediaId = targetId;
+                this.merchant.media = updatedMedia;
+            });
         },
         onDropMedia(dragData) {
-            this.setMediaItem({ targetId: dragData.id });
+            this.setMediaItem({targetId: dragData.id});
         },
         setMediaFromSidebar(mediaEntity) {
             this.merchant.mediaId = mediaEntity.id;
@@ -243,12 +238,14 @@ Component.register('moorl-merchant-finder-detail', {
         },
 
         // Marker
-        setMarkerItem({ targetId }) {
-            this.merchant.markerId = targetId;
-            this.mediaStore.getByIdAsync(targetId);
+        setMarkerItem({targetId}) {
+            this.mediaRepository.get(targetId, Shopware.Context.api).then((updatedMedia) => {
+                this.merchant.markerId = targetId;
+                this.merchant.marker = updatedMedia;
+            });
         },
         onDropMarker(dragData) {
-            this.setMarkerItem({ targetId: dragData.id });
+            this.setMarkerItem({targetId: dragData.id});
         },
         setMarkerFromSidebar(mediaEntity) {
             this.merchant.markerId = mediaEntity.id;
@@ -258,12 +255,14 @@ Component.register('moorl-merchant-finder-detail', {
         },
 
         // Marker Shadow
-        setMarkerShadowItem({ targetId }) {
-            this.merchant.markerShadowId = targetId;
-            this.mediaStore.getByIdAsync(targetId);
+        setMarkerShadowItem({targetId}) {
+            this.mediaRepository.get(targetId, Shopware.Context.api).then((updatedMedia) => {
+                this.merchant.markerShadowId = targetId;
+                this.merchant.markerShadow = updatedMedia;
+            });
         },
         onDropMarkerShadow(dragData) {
-            this.setMarkerShadowItem({ targetId: dragData.id });
+            this.setMarkerShadowItem({targetId: dragData.id});
         },
         setMarkerShadowFromSidebar(mediaEntity) {
             this.merchant.markerShadowId = mediaEntity.id;

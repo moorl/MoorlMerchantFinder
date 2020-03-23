@@ -25,16 +25,15 @@
 
                         <div class="sw-field">
                             <sw-upload-store-listener
-                                :uploadTag="uploadTag"
+                                :uploadTag="uploadTagMedia"
                                 autoUpload
                                 @media-upload-finish="setMediaItem">
                             </sw-upload-store-listener>
                             <sw-media-upload
-                                :uploadTag="uploadTag"
+                                :uploadTag="uploadTagMedia"
                                 :source="merchant.mediaId"
                                 :allowMultiSelect="false"
                                 :label="$t('moorl-merchant-finder.properties.logo')"
-                                :defaultFolder="mediaStore.entityName"
                                 variant="regular"
                                 @sw-media-upload-media-upload-success="setMediaItem"
                                 @media-drop="onDropMedia"
@@ -170,16 +169,15 @@
                     <div>
                         <div class="sw-field">
                             <sw-upload-store-listener
-                                :uploadTag="uploadTag"
+                                :uploadTag="uploadTagMarker"
                                 autoUpload
                                 @media-upload-finish="setMarkerItem">
                             </sw-upload-store-listener>
                             <sw-media-upload
-                                :uploadTag="uploadTag"
+                                :uploadTag="uploadTagMarker"
                                 :source="merchant.markerId"
                                 :allowMultiSelect="false"
                                 :label="$t('moorl-merchant-finder.properties.markerId')"
-                                :defaultFolder="mediaStore.entityName"
                                 variant="regular"
                                 @sw-media-upload-media-upload-success="setMarkerItem"
                                 @media-drop="onDropMarker"
@@ -188,16 +186,15 @@
                         </div>
                         <div class="sw-field">
                             <sw-upload-store-listener
-                                :uploadTag="uploadTag"
+                                :uploadTag="uploadTagMarkerShadow"
                                 autoUpload
                                 @media-upload-finish="setMarkerShadowItem">
                             </sw-upload-store-listener>
                             <sw-media-upload
-                                :uploadTag="uploadTag"
+                                :uploadTag="uploadTagMarkerShadow"
                                 :source="merchant.markerShadowId"
                                 :allowMultiSelect="false"
                                 :label="$t('moorl-merchant-finder.properties.markerShadowId')"
-                                :defaultFolder="mediaStore.entityName"
                                 variant="regular"
                                 @sw-media-upload-media-upload-success="setMarkerShadowItem"
                                 @media-drop="onDropMarkerShadow"

@@ -1,5 +1,8 @@
 {% block element_moorl_merchant_finder %}
     <div class="cms-element-{{ element.type }} {{ element.config.style.value }}"
+         data-tile-layer-url="{{ shopware.config.MoorlMerchantFinder.config.tileLayerUrl|raw }}"
+         data-tile-layer-copy='{{ shopware.config.MoorlMerchantFinder.config.tileLayerCopy|raw }}'
+         data-tile-layer-token="{{ shopware.config.MoorlMerchantFinder.config.tileLayerToken|raw }}"
          style="
              --style-height: {{ element.config.minHeight.value }};
              --style-gutter: {{ element.config.borders.value }};

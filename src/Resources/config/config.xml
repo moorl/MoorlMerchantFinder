@@ -25,4 +25,23 @@
         </input-field>
     </card>
 
+    <card>
+        <title>Advanced</title>
+        <title lang="de-DE">Erweitert</title>
+        <input-field>
+            <name>tileLayerUrl</name>
+            <label>Tile Layer Provider URL</label>
+            <label lang="de-DE">Map Design Anbieter URL</label>
+            <defaultValue><![CDATA[https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}]]></defaultValue>
+            <placeholder><![CDATA[https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}]]></placeholder>
+        </input-field>
+        <input-field type="textarea">
+            <name>tileLayerCopy</name>
+            <label>Tile Layer Provider Copyright</label>
+            <label lang="de-DE">Map Design Anbieter Copyright</label>
+            <defaultValue><![CDATA[Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>]]></defaultValue>
+            <placeholder><![CDATA[Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>]]></placeholder>
+        </input-field>
+    </card>
+
 </config>
