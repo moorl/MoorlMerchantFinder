@@ -15,6 +15,9 @@
         "manufacturers": "Manufacturers",
         "categories": "Categories",
         "tags": "Tags",
-        "allResults": "-- Select --"
+        "allResults": "-- Select --",
+        "allManufacturers": "All manufacturers",
+        "allCategories": "All categories",
+        "allTags": "All Tags"
     }
 }

@@ -1,7 +1,9 @@
-<b><% this.company %></b>
-<p><% this.street %> <% this.streetNumber %>
-    <br><% this.zipcode %> <% this.city %>
-    <% if (this.country != null) { %>
-    <br><% this.country %>
-    <% } %>
-</p>
+{% block element_moorl_merchant_finder_popup %}
+    <b><% this.company %></b>
+    <p><% this.street %> <% this.streetNumber %>
+        <br><% this.zipcode %> <% this.city %>
+        <% if (this.country != null) { %>
+        <br><% this.country %>
+        <% } %>
+    </p>
+{% endblock %}

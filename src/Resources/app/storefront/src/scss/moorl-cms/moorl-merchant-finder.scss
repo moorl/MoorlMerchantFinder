@@ -2,7 +2,22 @@
 
     .element-content {
 
-        .search-box {}
+        .tags,
+        .categories,
+        .manufacturers {
+            span {
+                &:after {
+                    content: ",";
+                }
+                &:last-child:after {
+                    content: none;
+                }
+
+            }
+        }
+
+        .search-box {
+        }
 
         .results-box {}
 
