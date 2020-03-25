@@ -3,6 +3,7 @@
 namespace Moorl\MerchantFinder\Merchant;
 
 use Shopware\Core\Checkout\Customer\CustomerEntity;
+use Shopware\Core\Framework\DataAbstractionLayer\Entity;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Shopware\Core\System\Country\Aggregate\CountryState\CountryStateCollection;
 use Shopware\Core\System\Country\CountryCollection;
@@ -18,6 +19,13 @@ use Shopware\Core\System\Country\CountryCollection;
  */
 class MerchantCollection extends EntityCollection
 {
+
+    public function getExport(): array
+    {
+        return $this->fmap(function (MerchantEntity $merchant) {
+            return $merchant->getMediaId();
+        });
+    }
 
     public function getMediaIds(): array
     {

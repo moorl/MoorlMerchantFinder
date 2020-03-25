@@ -18,6 +18,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\ContainsFilter;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
+use Shopware\Core\Framework\DataAbstractionLayer\Entity;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
 
 /**
  * @RouteScope(scopes={"api"})
@@ -60,71 +65,94 @@ class ApiController extends AbstractController
      */
     public function export(Context $context): void
     {
-        // TODO: clean export, maybe save as temp file & download
-        $connection = $this->container->get(Connection::class);
 
-        //$repo = $this->container->get('moorl_merchant.repository');
-        //$criteria = new Criteria();
-        //$data = $repo->search($criteria, $context);
+        $data = [];
 
-        $sql = <<<SQL
-SELECT 
-    LOWER(HEX(`id`)) AS `id`,
-    `origin_id` AS `originId`,
-    LOWER(HEX(`sales_channel_id`)) AS `salesChannelId`,
-    LOWER(HEX(`country_id`)) AS `countryId`,
-    LOWER(HEX(`customer_group_id`)) AS `customerGroupId`,
-    LOWER(HEX(`media_id`)) AS `mediaId`,
-    LOWER(HEX(`marker_id`)) AS `markerId`,
-    LOWER(HEX(`marker_shadow_id`)) AS `markerShadowId`,
-    `company`,
-    `first_name` AS `firstName`,
-    `last_name` AS `lastName`,
-    `email`,
-    `zipcode`,
-    `city`,
-    `street`,
-    `street_number` AS `streetNumber`,
-    `country`,
-    `country_code` AS `countryCode`,
-    `location_lat` AS `locationLat`,
-    `location_lon` AS `locationLon`,
-    `vat_id` AS `vatId`,
-    `phone_number` AS `phoneNumber`,
-    `shop_url` AS `shopUrl`,
-    `merchant_url` AS `merchantUrl`,
-    `description`,
-    `opening_hours` AS `openingHours`,
-    `marker_settings` AS `markerSettings`
-FROM `moorl_merchant`
-ORDER BY `originId`;
-SQL;
+        $mapping = [
+            'id' => null,
+            'originId' => null,
+            'active' => null,
+            'company' => null,
+            'department' => null,
+            'vatId' => null,
+            'email' => null,
+            'firstName' => null,
+            'lastName' => null,
+            'zipcode' => null,
+            'city' => null,
+            'street' => null,
+            'streetNumber' => null,
+            'phoneNumber' => null,
+            'country' => null,
+            'countryCode' => null,
+            'additionalAddressLine1' => null,
+            'additionalAddressLine2' => null,
+            'locationLat' => null,
+            'locationLon' => null,
+            'shopUrl' => null,
+            'merchantUrl' => null,
+            'description' => null,
+            'openingHours' => null,
+            'tags' => 'name',
+            'categories' => 'id',
+            'productManufacturers' => 'id',
+            'media' => 'url',
+            'marker' => 'url',
+            'markerShadow' => 'url',
+            'mediaId' => null,
+            'markerId' => null,
+            'markerShadowId' => null,
+            /*'markerSettings' => null,*/
+            'countryId' => null,
+            'customerGroupId' => null,
+            'salesChannelId' => null,
+        ];
 
-        $data = $connection->executeQuery($sql)->fetchAll(FetchMode::ASSOCIATIVE);
+        $repo = $this->container->get('moorl_merchant.repository');
+
+        $criteria = new Criteria();
+        $criteria->addAssociation('tags');
+        $criteria->addAssociation('productManufacturers');
+        $criteria->addAssociation('categories');
+        $criteria->addAssociation('media');
+        $criteria->addAssociation('marker');
+        $criteria->addAssociation('markerShadow');
+        $result = $repo->search($criteria, $context)->getEntities();
+
+        foreach ($result as $entity) {
+            $item = [];
+            foreach ($mapping as $k => $v) {
+                if ($v) {
+                    $obj = $entity->get($k);
+                    if ($obj instanceof EntityCollection) {
+                        $item[$k] = implode("|", $obj->map(function(Entity $subEntity) use ($v) {
+                            return $subEntity->get($v);
+                        }));
+                    }
+                    if ($obj instanceof Entity) {
+                        $item[$k] = $obj->get($v);
+                    }
+                    if ($obj == null) {
+                        $item[$k] = null;
+                    }
+                } else {
+                    $item[$k] = $entity->get($k);
+                }
+            }
+            $data[] = $item;
+        }
 
         $file = "MerchantFinder_export_" . date("Y-m-d-h-i-s") . ".csv";
-
-        foreach ($data as &$item) {
-
-            if (empty($item['originId'])) {
-
-                $item['originId'] = $item['id'];
-
-            }
-
-            unset($item['id']);
-
-        }
 
         header( 'Content-Type: text/csv' );
         header( 'Content-Disposition: attachment;filename='.$file);
 
         $out = fopen('php://output', 'w');
 
-        fputcsv($out, array_keys($data[0]));
+        fputcsv($out, array_keys($data[0]), ";");
 
         foreach ($data as $item) {
-            fputcsv($out, array_values($item));
+            fputcsv($out, array_values($item), ";");
         }
 
         fclose($out);

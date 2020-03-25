@@ -39,6 +39,17 @@ Component.register('moorl-merchant-finder-list', {
 
     computed: {
 
+        // TODO: rebuild all repositories by entity name
+        /*repositories() {
+            return [
+                'moorl_merchant',
+                'media',
+                'product_manufacturer'
+            ].map(function(entityName) {
+                return this.repositoryFactory.create(entityName);
+            });
+        },*/
+
         moorlMerchantRepository() {
             return this.repositoryFactory.create('moorl_merchant');
         },
@@ -47,12 +58,24 @@ Component.register('moorl-merchant-finder-list', {
             return this.repositoryFactory.create('media');
         },
 
+        productManufacturerRepository() {
+            return this.repositoryFactory.create('product_manufacturer');
+        },
+
+        categoryRepository() {
+            return this.repositoryFactory.create('category');
+        },
+
         customerGroupRepository() {
             return this.repositoryFactory.create('customer_group');
         },
 
         countryRepository() {
             return this.repositoryFactory.create('country');
+        },
+
+        tagRepository() {
+            return this.repositoryFactory.create('tag');
         },
 
         salesChannelRepository() {
@@ -111,20 +134,20 @@ Component.register('moorl-merchant-finder-list', {
 
         this.repository = this.moorlMerchantRepository;
 
+        this.collections = {};
+
         this.csv = {
             data: [],
             matches: 0,
             schemaProperties: Object.keys(this.moorlMerchantRepository.schema.properties),
             filterSchemaProperties: [
                 'id',
-                'mediaId',
                 'productManufacturerId',
                 'customFields',
                 'autoIncrement',
                 'data',
                 'createdAt',
-                'updatedAt',
-                'media',
+                'updatedAt'
             ],
             csvProperties: [],
             propertyMapping: {},
@@ -147,6 +170,21 @@ Component.register('moorl-merchant-finder-list', {
 
             this.salesChannelRepository.search(new Criteria(1, 100), Shopware.Context.api).then((searchResult) => {
                 this.salesChannels = searchResult;
+            });
+
+            this.productManufacturerRepository.search(new Criteria(1, 100), Shopware.Context.api).then((searchResult) => {
+                this.manufacturers = searchResult;
+                this.collections.product_manufacturer = searchResult;
+            });
+
+            this.categoryRepository.search(new Criteria(1, 100), Shopware.Context.api).then((searchResult) => {
+                this.categories = searchResult;
+                this.collections.category = searchResult;
+            });
+
+            this.tagRepository.search(new Criteria(1, 100), Shopware.Context.api).then((searchResult) => {
+                this.tags = searchResult;
+                this.collections.tag = searchResult;
             });
 
             const mediaCriteria = new Criteria(1, 500);
@@ -247,6 +285,10 @@ Component.register('moorl-merchant-finder-list', {
             this.showImportModal = false;
             let item = this.csv.data.shift();
             item = this.sanitizeItem(item);
+
+            console.log("sanitized...");
+            console.log(item);
+
             if (this.csv.options.getPosition) {
                 this.getPositionByAddress(item);
             } else {
@@ -266,9 +308,56 @@ Component.register('moorl-merchant-finder-list', {
 
                 if (typeof that.csv.propertyMapping[schemaProperty] == 'string') {
 
-                    let propertyType = that.moorlMerchantRepository.schema.properties[schemaProperty].type;
+                    let property = that.moorlMerchantRepository.schema.properties[schemaProperty];
 
-                    switch (propertyType) {
+                    switch (property.type) {
+                        case 'association':
+                            if (property.relation == 'many_to_one') {
+                                if (property.entity == 'media' && typeof that.csv.propertyMapping[property.localField] == 'undefined') {
+                                    // Todo: Upload media from url/blob and set mediaId
+                                }
+                            } else if (property.relation == 'many_to_many') {
+                                // Split string - If uuid then ok, if not uuid then get uuid from entity name
+                                let parts = item[that.csv.propertyMapping[schemaProperty]].split("|");
+                                if (parts[0].length == 32) {
+                                    newItem[schemaProperty] = parts.map(function(id) {
+                                        // TODO: Clean validation of all relationsship data
+                                        if (!that.collections[property.entity].has(id)) {
+                                            that.createNotificationError({
+                                                title: that.$t('moorl-merchant-finder.notification.errorTitle'),
+                                                message: schemaProperty + " - import validation error: unknown ID (" + id + ")",
+                                                autoClose: false
+                                            });
+                                            return false;
+                                        } else {
+                                            return {id: id};
+                                        }
+                                    });
+                                } else if (parts[0].length > 0) {
+                                    // TODO: Try to auto add new Entities by name
+                                    if (property.entity == 'tag') {
+                                        let tagsCollection = [];
+                                        that.tags.forEach(function(tag) {
+                                            for (let i = 0; i < parts.length; i++) {
+                                                if (tag.name == parts[i]) {
+                                                    tagsCollection.push(tag);
+                                                    parts.splice(i,1);
+                                                }
+                                            }
+                                        });
+                                        for (let i = 0; i < parts.length; i++) {
+                                            let result = that.tagRepository.create(Shopware.Context.api);
+                                            result.name = parts[i];
+                                            result.id = Shopware.Utils.createId();
+                                            that.tagRepository.save(result, Shopware.Context.api);
+                                            that.tags.add(result);
+                                            tagsCollection.push(result);
+                                        }
+                                        newItem[schemaProperty] = tagsCollection;
+                                    }
+                                }
+                            }
+                            break;
                         case 'boolean':
                             if (['1','0'].indexOf(that.csv.propertyMapping[schemaProperty]) != -1) {
                                 newItem[schemaProperty] = regex.test(that.csv.propertyMapping[schemaProperty]);
@@ -283,8 +372,8 @@ Component.register('moorl-merchant-finder-list', {
                             newItem[schemaProperty] = parseFloat(item[that.csv.propertyMapping[schemaProperty]]);
                             break;
                         case 'uuid':
-                            if (that.csv.propertyMapping[schemaProperty].length == 32) {
-                                newItem[schemaProperty] = that.csv.propertyMapping[schemaProperty];
+                            if (item[that.csv.propertyMapping[schemaProperty]].length == 32) {
+                                newItem[schemaProperty] = item[that.csv.propertyMapping[schemaProperty]];
                             }
                             break;
                         case 'date':
@@ -295,7 +384,6 @@ Component.register('moorl-merchant-finder-list', {
                     }
 
                 }
-
             });
 
             return newItem;
@@ -419,16 +507,12 @@ Component.register('moorl-merchant-finder-list', {
             const httpClient = initContainer.httpClient;
 
             httpClient.get("/moorl/merchant-finder/export").then((response) => {
-                console.log(response.data);
-
                 let a         = document.createElement('a');
                 a.href        = 'data:attachment/csv,' +  encodeURIComponent(response.data);
                 a.target      = '_blank';
                 a.download    = 'export.csv';
-
                 document.body.appendChild(a);
                 a.click();
-
             });
 
         },

@@ -78,7 +78,14 @@
             "countryId": "Country",
             "country": "Country",
             "markerSettingsExample": "You can copy this example to adjust your custom marker settings.",
-            "markerSettingsLink": "Leaflet custom marker example"
+            "markerSettingsLink": "Leaflet custom marker example",
+            "mediaId": "Media ID",
+            "media": "Media URL/BLOB",
+            "marker": "Marker URL/BLOB",
+            "markerShadow": "Marker shadow URL/BLOB",
+            "categories": "Category IDs",
+            "tags": "Tag Names/IDs",
+            "productManufacturers": "Manufacturer IDs"
         },
         "label": {
             "accountCard": "General",
