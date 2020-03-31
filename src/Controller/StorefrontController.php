@@ -225,7 +225,7 @@ SQL;
         }
 
         $response = new JsonResponse();
-        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        //$response->setEncodingOptions(JSON_NUMERIC_CHECK);
         $response->setData([
             'data' => $result->getEntities(),
             'loc' => $myLocation,

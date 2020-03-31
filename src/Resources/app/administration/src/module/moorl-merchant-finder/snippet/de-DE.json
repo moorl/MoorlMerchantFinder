@@ -76,7 +76,14 @@
             "salesChannelId": "Sales Channel",
             "customerGroupId": "Kundengruppe",
             "countryId": "Land",
-            "country": "Land"
+            "country": "Land",
+            "mediaId": "Medien ID",
+            "media": "Medien URL/BLOB",
+            "marker": "Marker URL/BLOB",
+            "markerShadow": "Marker Schatten URL/BLOB",
+            "categories": "Kategorie IDs",
+            "tags": "Tag Namen/IDs",
+            "productManufacturers": "Hersteller IDs"
         },
         "label": {
             "accountCard": "Stammdaten",
