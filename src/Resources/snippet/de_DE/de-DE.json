@@ -18,6 +18,14 @@
         "allResults": "-- Bitte wählen --",
         "allManufacturers": "Alle Hersteller",
         "allCategories": "Alle Kategorien",
-        "allTags": "Alle Tags"
+        "allTags": "Alle Tags",
+        "choseMerchant": "Wählen Sie einen Händler aus",
+        "findMerchants": "Händler Finden",
+        "save": "Speichern",
+        "cancel": "Abbrechen",
+        "zipcodeCityEnter": "Geben Sie Ihre Stadt oder PLZ ein",
+        "choseMerchantToProceed": "Bitte wählen Sie einen Händler aus um die Bestellung abzuschließen",
+        "selectedMerchant": "Ausgewählter Händler",
+        "chose": "Wählen"
     }
 }
