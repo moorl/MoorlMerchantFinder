@@ -12,33 +12,21 @@ export default class MoorlMerchantFinder extends Plugin {
     init() {
 
         this._client = new HttpClient(window.accessKey, window.contextToken);
-
         this._form = this.el.getElementsByTagName("form")[0];
-
         this._results = this.el.getElementsByClassName('moorl-merchant-finder-results')[0];
-
         this._resultsContent = this.el.getElementsByClassName('results-content')[0];
-
         this._loadingIndicator = this.el.getElementsByClassName('moorl-merchant-finder-loading')[0];
-
         this._resultTemplate = this._results.innerHTML;
-
         this._mapElement = this.el.getElementsByClassName('moorl-merchant-finder-map')[0];
 
         if (this._mapElement) {
-
             this._popupTemplate = this._mapElement.innerHTML;
-
             this._popupElement = document.createElement('div');
-
             this._mapElement.innerHTML = '';
-
             this._buildMap();
-
         }
 
         this._registerEvents();
-
         this._formSubmit();
     }
 
@@ -50,17 +38,25 @@ export default class MoorlMerchantFinder extends Plugin {
     _registerEvents() {
         const that = this;
         this.el.addEventListener('submit', this._formSubmit.bind(this));
-        $(document).on('click', '[data-item]', function () {
+        $(this.el).on('click', '[data-item]', function () {
             that._focusItem($(this).data('item'));
+        });
+        $(this.el).on('click', '[data-merchant]', function () {
+            const button = that._form.getElementsByTagName("button")[0];
+
+            button.dataset.merchant= this.dataset.merchant;
+            button.value = 'pick';
+            button.click();
         });
     }
 
     _formSubmit(event) {
+        console.log(event);
+
         if (typeof event != 'undefined') {
             event.preventDefault();
         }
 
-        console.log(event);
         const requestUrl = DomAccess.getAttribute(this._form, 'action').toLowerCase();
         const formData = FormSerializeUtil.serialize(this._form);
 
