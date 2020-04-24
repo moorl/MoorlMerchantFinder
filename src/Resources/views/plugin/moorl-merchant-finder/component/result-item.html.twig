@@ -1,9 +1,11 @@
-<li id="<% this.id %>" class="list-group-item moorl-merchant-finder-result-item">
+{% set displayMode = displayMode ?: 'full' %}
+
+<li id="<% this.id %>" class="list-group-item moorl-merchant-finder-result-item display-mode-{{ displayMode }}">
     <div class="row form-row">
         <% if (this.mediaId != null) { %>
         {% block element_moorl_merchant_finder_result_logo %}
-            <div class="col-2">
-                <img data-src="<% this.media.url %>" class="img-fluid">
+            <div class="col-auto">
+                <img data-src="<% this.media.url %>">
             </div>
         {% endblock %}
         <% } %>
@@ -92,18 +94,21 @@
     <div class="mt-2">
         {% block element_moorl_merchant_finder_result_button_merchant_url %}
             <% if (this.merchantUrl != null) { %>
-            <a href="<% this.merchantUrl %>" target="_blank" class="btn btn-sm btn-outline-dark"><i class="fas fa-info-circle"></i> {{ "moorl-merchant-finder.merchantUrl"|trans }}</a>
+            <a href="<% this.merchantUrl %>" target="_blank" class="btn btn-sm btn-light"><i class="fas fa-info-circle"></i> {{ "moorl-merchant-finder.merchantUrl"|trans }}</a>
             <% } %>
         {% endblock %}
         {% block element_moorl_merchant_finder_result_button_shop_url %}
             <% if (this.shopUrl != null) { %>
-            <a href="<% this.shopUrl %>" target="_blank" class="btn btn-sm btn-outline-dark"><i class="fas fa-shopping-cart"></i> {{ "moorl-merchant-finder.shopUrl"|trans }}</a>
+            <a href="<% this.shopUrl %>" target="_blank" class="btn btn-sm btn-light"><i class="fas fa-shopping-cart"></i> {{ "moorl-merchant-finder.shopUrl"|trans }}</a>
             <% } %>
         {% endblock %}
         {% block element_moorl_merchant_finder_result_button_location %}
+            {# displayMode full is always with map #}
+            {% if displayMode == 'full' %}
             <% if (this.locationLon != null) { %>
-            <a href="javascript:" data-location-lat="<% this.locationLat %>" data-location-lon="<% this.locationLon %>" data-item="<% this.id %>" class="btn btn-sm btn-outline-dark"><i class="fas fa-map-pin"></i> {{ "moorl-merchant-finder.displayOnMap"|trans }}</a>
+            <a href="javascript:" data-location-lat="<% this.locationLat %>" data-location-lon="<% this.locationLon %>" data-item="<% this.id %>" class="btn btn-sm btn-light"><i class="fas fa-map-pin"></i> {{ "moorl-merchant-finder.displayOnMap"|trans }}</a>
             <% } %>
+            {% endif %}
         {% endblock %}
         {% block element_moorl_merchant_finder_result_button_cms %}
         {% endblock %}

@@ -9,9 +9,7 @@ use GuzzleHttp\Client;
 use Moorl\MerchantFinder\MoorlMerchantFinder;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\ContainsFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
@@ -23,27 +21,25 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
+use Shopware\Storefront\Controller\StorefrontController as OriginController;
 
 /**
  * @RouteScope(scopes={"storefront"})
  */
-class StorefrontController extends \Shopware\Storefront\Controller\StorefrontController
+class StorefrontController extends OriginController
 {
 
     /**
      * @var EntityRepositoryInterface
      */
     private $repository;
-    private $genericLoader;
     private $systemConfigService;
 
     public function __construct(
-        GenericPageLoader $genericLoader,
         SystemConfigService $systemConfigService,
         EntityRepositoryInterface $repository
     )
     {
-        $this->genericLoader = $genericLoader;
         $this->systemConfigService = $systemConfigService;
         $this->repository = $repository;
     }
@@ -60,20 +56,62 @@ class StorefrontController extends \Shopware\Storefront\Controller\StorefrontCon
     /**
      * @Route("/moorl/merchant-finder/search", name="moorl.merchant-finder.search", methods={"POST"}, defaults={"XmlHttpRequest"=true})
      */
-    public function search(Request $request, RequestDataBag $data, SalesChannelContext $context): JsonResponse
+    public function search(RequestDataBag $data, SalesChannelContext $context): JsonResponse
     {
+        $response = new JsonResponse();
+
+        if ($data->get('action') == 'pick' && $data->get('merchant')) {
+            $response->setData($this->setCustomerSession($data, $context));
+        } else {
+            $response->setData($this->searchProcess($data, $context->getContext()));
+        }
+
+        return $response;
+    }
+
+    protected function setCustomerSession($data, $context): array
+    {
+        if ($customer = $context->getCustomer()) {
+            $customerRepo = $this->container->get('customer.repository');
+
+            $customFields = $customer->getCustomFields() ?: [];
+            $customFields['moorl_mf_merchant_id'] = $data->get('merchant');
+
+            $customerRepo->update([[
+                'id' => $customer->getId(),
+                'customFields' => $customFields
+            ]], $context->getContext());
+        }
+
+        $session = new Session();
+        $session->set('moorl-merchant-finder_selected_merchant', $data->get('merchant'));
+
+        /* unset to debug */
+        if ($data->get('merchant') == 'b3bd48adbcb748e8a910f9155e0a8d05') {
+            $session->remove('moorl-merchant-finder_selected_merchant');
+        }
+
+        return [
+            'reload' => true,
+        ];
+    }
+
+    protected function searchProcess($data, $context): array
+    {
+        $repo = $this->container->get('moorl_merchant.repository');
+        $connection = $this->container->get(Connection::class);
+
+        $data->set('distance', $data->get('distance') ?: '30');
+        $data->set('items', (int)$data->get('items') ?: 500);
+
         $pluginConfig = $this->systemConfigService->getDomain('MoorlMerchantFinder.config');
-
         $filterCountries = !empty($pluginConfig['MoorlMerchantFinder.config.allowedSearchCountryCodes']) ? explode(',', $pluginConfig['MoorlMerchantFinder.config.allowedSearchCountryCodes']) : MoorlMerchantFinder::getDefault('allowedSearchCountryCodes');
-
         $searchEngine = !empty($pluginConfig['MoorlMerchantFinder.config.nominatim']) ? $pluginConfig['MoorlMerchantFinder.config.allowedSearchCountryCodes'] : MoorlMerchantFinder::getDefault('nominatim');
 
-        $connection = $this->container->get(Connection::class);
 
         $myLocation = [];
 
-        if (!empty($request->request->get('zipcode'))) {
-
+        if (!empty($data->get('zipcode'))) {
             $sql = <<<SQL
 SELECT * FROM `moorl_zipcode`
 WHERE `city` LIKE :city OR `zipcode` LIKE :zipcode
@@ -81,28 +119,25 @@ LIMIT 10;
 SQL;
 
             $myLocation = $connection->executeQuery($sql, [
-                    'city' => '%' . $request->request->get('zipcode') . '%',
-                    'zipcode' => '%' . $request->request->get('zipcode') . '%'
+                    'city' => '%' . $data->get('zipcode') . '%',
+                    'zipcode' => '%' . $data->get('zipcode') . '%'
                 ]
             )->fetchAll(FetchMode::ASSOCIATIVE);
 
             // No location found - Get them from OSM
             if (count($myLocation) == 0) {
-
                 $query = http_build_query([
-                    'q' => $request->request->get('zipcode'),
+                    'q' => $data->get('zipcode'),
                     'format' => 'json',
                     'addressdetails' => 1,
                 ]);
 
                 $client = new Client();
                 $res = $client->request('GET', $searchEngine . '?' . $query, ['headers' => ['Accept' => 'application/json', 'Content-type' => 'application/json']]);
-                $data = json_decode($res->getBody()->getContents(), true);
+                $resultData = json_decode($res->getBody()->getContents(), true);
 
-                foreach ($data as $item) {
-
+                foreach ($resultData as $item) {
                     if (in_array($item['address']['country_code'], $filterCountries)) {
-
                         // Fill local database with locations
                         $sql = <<<SQL
 INSERT IGNORE INTO `moorl_zipcode` (
@@ -146,17 +181,12 @@ SQL;
                         $connection->executeQuery($sql, $placeholder);
 
                         $myLocation[] = $placeholder;
-
                     }
-
                 }
-
             }
-
         }
 
         if (count($myLocation) > 0) {
-
             $sql = <<<SQL
 SELECT 
     LOWER(HEX(`id`)) AS `id`,
@@ -172,29 +202,27 @@ ORDER BY `distance`
 LIMIT 500;
 SQL;
 
-            $data = $connection->executeQuery($sql, [
+            $resultData = $connection->executeQuery($sql, [
                     'lat' => $myLocation[0]['lat'],
                     'lon' => $myLocation[0]['lon'],
-                    'distance' => $request->request->get('distance')
+                    'distance' => $data->get('distance'),
                 ]
             )->fetchAll(FetchMode::ASSOCIATIVE);
 
             $merchantIds = [];
             $distance = [];
 
-            foreach ($data as $item) {
+            foreach ($resultData as $item) {
                 $merchantIds[] = $item['id'];
                 $distance[$item['id']] = $item['distance'];
             }
 
             $criteria = new Criteria($merchantIds);
-
         } else {
-
             $criteria = new Criteria();
-
         }
 
+        $criteria->setLimit($data->get('items'));
         $criteria->addAssociation('tags');
         $criteria->addAssociation('productManufacturers');
         $criteria->addAssociation('productManufacturers.media');
@@ -204,35 +232,29 @@ SQL;
         $criteria->addAssociation('markerShadow');
         $criteria->addFilter(new EqualsFilter('active', true));
 
-        if ($request->request->get('tags')) {
-            $criteria->addFilter(new EqualsFilter('tags.id', $request->request->get('tags')));
+        if ($data->get('tags')) {
+            $criteria->addFilter(new EqualsFilter('tags.id', $data->get('tags')));
         }
-        if ($request->request->get('productManufacturers')) {
-            $criteria->addFilter(new EqualsFilter('productManufacturers.id', $request->request->get('productManufacturers')));
+        if ($data->get('productManufacturers')) {
+            $criteria->addFilter(new EqualsFilter('productManufacturers.id', $data->get('productManufacturers')));
         }
-        if ($request->request->get('categories')) {
-            $criteria->addFilter(new EqualsFilter('categories.id', $request->request->get('categories')));
+        if ($data->get('categories')) {
+            $criteria->addFilter(new EqualsFilter('categories.id', $data->get('categories')));
         }
 
-        $criteria->setTerm($request->request->get('term'));
+        $criteria->setTerm($data->get('term'));
 
-        $result = $this->repository->search($criteria, $context->getContext());
+        $resultData = $this->repository->search($criteria, $context);
 
-        if (isset($distance)) {
-            foreach ($result->getEntities() as $entity) {
+        if (isset($distance) && count($distance) > 0) {
+            foreach ($resultData->getEntities() as $entity) {
                 $entity->setDistance($distance[$entity->getId()]);
             }
         }
 
-        $response = new JsonResponse();
-        //$response->setEncodingOptions(JSON_NUMERIC_CHECK);
-        $response->setData([
-            'data' => $result->getEntities(),
+        return [
+            'data' => $resultData->getEntities(),
             'loc' => $myLocation,
-        ]);
-
-        return $response;
-
+        ];
     }
-
 }

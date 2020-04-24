@@ -204,7 +204,7 @@ class MerchantEntity extends Entity
      */
     protected $streetNumber;
     /**
-     * @var string
+     * @var null|string
      */
     protected $countryCode;
 
@@ -869,7 +869,7 @@ class MerchantEntity extends Entity
     /**
      * @return string
      */
-    public function getStreetNumber(): string
+    public function getStreetNumber(): ?string
     {
         return $this->streetNumber;
     }

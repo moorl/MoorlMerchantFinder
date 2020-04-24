@@ -18,6 +18,16 @@
         "allResults": "-- Select --",
         "allManufacturers": "All manufacturers",
         "allCategories": "All categories",
-        "allTags": "All Tags"
+        "allTags": "All Tags",
+        "choseMerchant": "Chose a merchant",
+        "findMerchants": "Find merchants",
+        "save": "Save",
+        "cancel": "Cancel",
+        "zipcodeCityEnter": "Type a zipcode or city and press enter",
+        "choseMerchantToProceed": "Please chose your local merchant to proceed the checkout",
+        "selectedMerchant": "Selected merchant"
+    },
+    "error": {
+        "merchant-not-selected": "Please chose your local merchant to proceed the checkout."
     }
 }

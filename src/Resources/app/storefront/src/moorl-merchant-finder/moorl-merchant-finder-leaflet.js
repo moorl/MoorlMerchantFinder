@@ -21,17 +21,21 @@ export default class MoorlMerchantFinder extends Plugin {
 
         this._loadingIndicator = this.el.getElementsByClassName('moorl-merchant-finder-loading')[0];
 
-        this._mapElement = this.el.getElementsByClassName('moorl-merchant-finder-map')[0];
-
-        this._popupTemplate = this._mapElement.innerHTML;
-
-        this._popupElement = document.createElement('div');
-
-        this._mapElement.innerHTML = '';
-
         this._resultTemplate = this._results.innerHTML;
 
-        this._buildMap();
+        this._mapElement = this.el.getElementsByClassName('moorl-merchant-finder-map')[0];
+
+        if (this._mapElement) {
+
+            this._popupTemplate = this._mapElement.innerHTML;
+
+            this._popupElement = document.createElement('div');
+
+            this._mapElement.innerHTML = '';
+
+            this._buildMap();
+
+        }
 
         this._registerEvents();
 
@@ -55,16 +59,37 @@ export default class MoorlMerchantFinder extends Plugin {
         if (typeof event != 'undefined') {
             event.preventDefault();
         }
+
+        console.log(event);
         const requestUrl = DomAccess.getAttribute(this._form, 'action').toLowerCase();
         const formData = FormSerializeUtil.serialize(this._form);
+
+        if (event && event.submitter && event.submitter.value) {
+            console.log(formData);
+            formData.set("action", event.submitter.value);
+            if (event.submitter.dataset.merchant) {
+                formData.set("merchant", event.submitter.dataset.merchant);
+            }
+        }
+
         this._client.post(requestUrl, formData, this._onLoaded.bind(this))
     }
 
     _onLoaded(response) {
         response = JSON.parse(response);
-        this._refresh();
-        this._buildSearchResults(response);
-        this._buildMapMarkers(response);
+
+        if (response.reload) {
+            location.reload();
+        }
+
+        if (response.data) {
+            this._refresh();
+            this._buildSearchResults(response);
+
+            if (this._mapElement) {
+                this._buildMapMarkers(response);
+            }
+        }
     }
 
     _buildSearchResults(response) {

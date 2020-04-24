@@ -1,6 +1,25 @@
-.cms-element-moorl-merchant-finder {
+img.moorl-mf-logo {
+    width: 100px;
+}
 
-    .element-content {
+.cms-element-moorl-merchant-finder {
+    label.moorl-merchant-finder-result-item {
+        cursor: pointer;
+    }
+
+    .moorl-merchant-finder-result-item {
+        border-radius: 0 !important;
+        transition: all .3s;
+
+        img {
+            width: 100px;
+        }
+
+        &:hover {
+            background: $light;
+            border-color: $primary;
+            z-index: 100;
+        }
 
         .tags,
         .categories,
@@ -16,6 +35,41 @@
             }
         }
 
+        .manufacturers {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            margin: 8px 0;
+
+            img, span {
+                height: 50px;
+                width: auto;
+                line-height: 50px;
+                font-weight: 600;
+                margin-right: 8px;
+            }
+        }
+
+        .btn:focus,
+        .btn.focus {
+            outline: 0;
+            box-shadow: none;
+        }
+    }
+
+    [type="radio"]:checked + .moorl-merchant-finder-result-item,
+    .moorl-merchant-finder-result-item.active {
+        color: $body-color;
+        background: $light;
+        border-color: $primary;
+        border-left: 10px solid $primary;
+        z-index: 200;
+    }
+
+    .element-content {
+
+
+
         .search-box {
         }
 
@@ -27,32 +81,6 @@
         }
 
         .results-content {
-            ul {
-                li {
-                    border-radius: 0 !important;
-                    .manufacturers {
-                        display: flex;
-                        align-items: center;
-                        flex-wrap: wrap;
-                        margin: 8px 0;
-
-                        img, span {
-                            height: 50px;
-                            width: auto;
-                            line-height: 50px;
-                            font-weight: 600;
-                            margin-right: 8px;
-                        }
-                    }
-
-                    .btn:focus,
-                    .btn.focus {
-                        outline: 0;
-                        box-shadow: none;
-                    }
-
-                }
-            }
         }
 
         .map-content {
@@ -96,28 +124,12 @@
         }
 
         &::-webkit-scrollbar-thumb {
-            background: $secondary;
+            background: $primary;
         }
 
         &::-webkit-scrollbar-thumb:hover {
             background: $primary;
         }
-
-        .manufacturers {
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            margin: 8px 0;
-
-            img, span {
-                height: 50px;
-                width: auto;
-                line-height: 50px;
-                font-weight: 600;
-                margin-right: 8px;
-            }
-        }
-
     }
 
 }
@@ -181,9 +193,6 @@
                 .results-content {
                     .list-group-item {
                         background-color: rgba($body-bg, 80%);
-                        &.active {
-                            background-color: rgba($primary, 80%);
-                        }
                     }
                 }
 

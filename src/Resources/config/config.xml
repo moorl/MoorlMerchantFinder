@@ -5,6 +5,18 @@
     <card>
         <title>General</title>
         <title lang="de-DE">Einstellungen</title>
+
+        <component name="sw-entity-single-select">
+            <name>category</name>
+            <entity>category</entity>
+            <label>Page with merchant finder</label>
+            <label lang="de-DE">Seite mit Händlersuche</label>
+        </component>
+    </card>
+
+    <card>
+        <title>Advanced</title>
+        <title lang="de-DE">Erweitert</title>
         <input-field>
             <name>allowedSearchCountryCodes</name>
             <label>Filter Countries</label>
@@ -23,11 +35,6 @@
             <helpText>If not defined, its always https://nominatim.openstreetmap.org/search</helpText>
             <helpText lang="de-DE">Wenn nicht definiert wird immer https://nominatim.openstreetmap.org/search verwendet</helpText>
         </input-field>
-    </card>
-
-    <card>
-        <title>Advanced</title>
-        <title lang="de-DE">Erweitert</title>
         <input-field>
             <name>tileLayerUrl</name>
             <label>Tile Layer Provider URL</label>

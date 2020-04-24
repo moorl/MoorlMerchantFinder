@@ -4,6 +4,8 @@
       data-form-csrf-handler="true">
     {{ sw_csrf('moorl.merchant-finder.search') }}
 
+    <input type="hidden" name="items" value="{{ element.config.items.value }}">
+
     {% block element_moorl_merchant_finder_form_inner %}
         <div class="row form-row">
             {% block element_moorl_merchant_finder_form_inner_search %}
