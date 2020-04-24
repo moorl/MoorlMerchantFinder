@@ -26,7 +26,8 @@
         "zipcodeCityEnter": "Type a zipcode or city and press enter",
         "choseMerchantToProceed": "Please chose your local merchant to proceed the checkout",
         "selectedMerchant": "Selected merchant",
-        "chose": "Chose"
+        "chose": "Chose",
+        "loading": "Loading..."
     },
     "error": {
         "merchant-not-selected": "Please chose your local merchant to proceed the checkout."

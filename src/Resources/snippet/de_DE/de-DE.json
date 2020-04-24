@@ -26,6 +26,7 @@
         "zipcodeCityEnter": "Geben Sie Ihre Stadt oder PLZ ein",
         "choseMerchantToProceed": "Bitte wählen Sie einen Händler aus um die Bestellung abzuschließen",
         "selectedMerchant": "Ausgewählter Händler",
-        "chose": "Wählen"
+        "chose": "Wählen",
+        "loading": "Lade..."
     }
 }
