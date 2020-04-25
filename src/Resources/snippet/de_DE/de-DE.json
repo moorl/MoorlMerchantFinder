@@ -28,5 +28,8 @@
         "selectedMerchant": "Ausgewählter Händler",
         "chose": "Wählen",
         "loading": "Lade..."
+    },
+    "error": {
+        "merchant-not-selected": "Bitte wählen Sie einen Händler aus um die Bestellung abzuschließen"
     }
 }
