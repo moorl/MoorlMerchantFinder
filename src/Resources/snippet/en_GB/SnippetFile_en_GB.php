@@ -23,7 +23,7 @@ class SnippetFile_en_GB implements SnippetFileInterface
 
     public function getAuthor(): string
     {
-        return 'Moorleiche Web Solutions';
+        return 'moori';
     }
 
     public function isBase(): bool

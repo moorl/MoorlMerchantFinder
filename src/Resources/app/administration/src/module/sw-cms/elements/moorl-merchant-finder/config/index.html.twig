@@ -32,17 +32,32 @@
               :label="$tc('moorl-cms.elements.general.config.label.categoryFilter')">
     </sw-field>
 
+    <sw-entity-single-select
+        :label="$tc('moorl-cms.elements.general.config.label.categorySelected')"
+        v-model="element.config.categoryId.value"
+        entity="category"></sw-entity-single-select>
+
     <sw-field v-model="element.config.tagFilter.value"
               bordered
               type="switch"
               :label="$tc('moorl-cms.elements.general.config.label.tagFilter')">
     </sw-field>
 
+    <sw-entity-single-select
+        :label="$tc('moorl-cms.elements.general.config.label.tagSelected')"
+        v-model="element.config.tagId.value"
+        entity="tag"></sw-entity-single-select>
+
     <sw-field v-model="element.config.manufacturerFilter.value"
               bordered
               type="switch"
               :label="$tc('moorl-cms.elements.general.config.label.manufacturerFilter')">
     </sw-field>
+
+    <sw-entity-single-select
+        :label="$tc('moorl-cms.elements.general.config.label.manufacturerSelected')"
+        v-model="element.config.manufacturerId.value"
+        entity="product_manufacturer"></sw-entity-single-select>
 
     <sw-text-field
         :label="$tc('moorl-cms.elements.general.config.label.borders')"

@@ -23,7 +23,7 @@ class SnippetFile_de_DE implements SnippetFileInterface
 
     public function getAuthor(): string
     {
-        return 'Moorleiche Web Solutions';
+        return 'moori';
     }
 
     public function isBase(): bool

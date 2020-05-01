@@ -42,6 +42,18 @@ Application.getContainer('service').cmsService.registerCmsElement({
             source: 'static',
             value: true
         },
+        categoryId: {
+            source: 'static',
+            value: null
+        },
+        tagId: {
+            source: 'static',
+            value: null
+        },
+        manufacturerId: {
+            source: 'static',
+            value: null
+        },
         borders: {
             source: 'static',
             value: '20px'

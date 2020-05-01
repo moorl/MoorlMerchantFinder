@@ -35,6 +35,7 @@ Module.register('moorl-merchant-finder', {
         color: '#ff3d58',
         path: 'moorl.merchant.finder.list',
         icon: 'default-object-globe',
-        position: 40
+        position: 40,
+        parent: 'sw-content'
     }]
 });

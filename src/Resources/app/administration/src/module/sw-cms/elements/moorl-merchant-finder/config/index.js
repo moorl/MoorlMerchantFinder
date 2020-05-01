@@ -1,4 +1,5 @@
-const { Component, Mixin, StateDeprecated } = Shopware;
+const { Component, Mixin } = Shopware;
+
 import template from './index.html.twig';
 import './index.scss';
 

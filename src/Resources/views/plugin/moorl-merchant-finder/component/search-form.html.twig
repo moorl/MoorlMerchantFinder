@@ -44,7 +44,7 @@
                         <select name="tags" class="form-control">
                             <option value="">{{ "moorl-merchant-finder.allTags"|trans }}</option>
                             {% for item in element.data.tags %}
-                                <option value="{{ item.value }}">{{ item.label }} ({{ item.count }})</option>
+                                <option {% if item.value == element.config.tagId.value  %}selected{% endif %} value="{{ item.value }}">{{ item.label }} ({{ item.count }})</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -56,7 +56,7 @@
                         <select name="productManufacturers" class="form-control">
                             <option value="">{{ "moorl-merchant-finder.allManufacturers"|trans }}</option>
                             {% for item in element.data.productManufacturers %}
-                                <option value="{{ item.value }}">{{ item.label }} ({{ item.count }})</option>
+                                <option {% if item.value == element.config.manufacturerId.value  %}selected{% endif %} value="{{ item.value }}">{{ item.label }} ({{ item.count }})</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -68,7 +68,7 @@
                         <select name="categories" class="form-control">
                             <option value="">{{ "moorl-merchant-finder.allCategories"|trans }}</option>
                             {% for item in element.data.categories %}
-                                <option value="{{ item.value }}">{{ item.label }} ({{ item.count }})</option>
+                                <option {% if item.value == element.config.categoryId.value  %}selected{% endif %} value="{{ item.value }}">{{ item.label }} ({{ item.count }})</option>
                             {% endfor %}
                         </select>
                     </div>
