@@ -10,6 +10,7 @@ use Moorl\MerchantFinder\MoorlMerchantFinder;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
@@ -220,6 +221,9 @@ SQL;
             $criteria = new Criteria($merchantIds);
         } else {
             $criteria = new Criteria();
+
+            $criteria->addSorting(new FieldSorting('priority', FieldSorting::DESCENDING));
+            $criteria->addSorting(new FieldSorting('company', FieldSorting::ASCENDING));
         }
 
         $criteria->setLimit($data->get('items'));

@@ -21,6 +21,8 @@
             "noSelection": "-"
         },
         "notification": {
+            "progressTitle": "Import wird ausgeführt",
+            "progressText": "Verbleibende Einträge: {remaining}",
             "successTitle": "Erfolgreich",
             "successText": "Alle Händler wurden erfolgreich importiert",
             "importTitle": "Händler werden importiert",
@@ -83,7 +85,9 @@
             "markerShadow": "Marker Schatten URL/BLOB",
             "categories": "Kategorie IDs",
             "tags": "Tag Namen/IDs",
-            "productManufacturers": "Hersteller IDs"
+            "productManufacturers": "Hersteller IDs",
+            "priority": "Priorität",
+            "highlight": "Hervorheben"
         },
         "label": {
             "accountCard": "Stammdaten",

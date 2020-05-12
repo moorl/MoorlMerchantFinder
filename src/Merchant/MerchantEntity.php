@@ -16,13 +16,20 @@ use Shopware\Core\System\Tag\TagCollection;
 
 class MerchantEntity extends Entity
 {
-
     use EntityIdTrait;
 
     /**
      * @var int|null
      */
     protected $distance;
+    /**
+     * @var bool|null
+     */
+    protected $highlight;
+    /**
+     * @var int|null
+     */
+    protected $priority;
     /**
      * @var ProductManufacturerCollection|null
      */
@@ -207,6 +214,54 @@ class MerchantEntity extends Entity
      * @var null|string
      */
     protected $countryCode;
+
+    /**
+     * @return string
+     */
+    public function getUniqueIdentifier(): string
+    {
+        return $this->_uniqueIdentifier;
+    }
+
+    /**
+     * @param string $uniqueIdentifier
+     */
+    public function setUniqueIdentifier(string $uniqueIdentifier): void
+    {
+        $this->_uniqueIdentifier = $uniqueIdentifier;
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function getHighlight(): ?bool
+    {
+        return $this->highlight;
+    }
+
+    /**
+     * @param bool|null $highlight
+     */
+    public function setHighlight(?bool $highlight): void
+    {
+        $this->highlight = $highlight;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getPriority(): ?int
+    {
+        return $this->priority;
+    }
+
+    /**
+     * @param int|null $priority
+     */
+    public function setPriority(?int $priority): void
+    {
+        $this->priority = $priority;
+    }
 
     public function getDistance(): ?int
     {
@@ -929,5 +984,4 @@ class MerchantEntity extends Entity
     {
         $this->customerGroupId = $customerGroupId;
     }
-
 }

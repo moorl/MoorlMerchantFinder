@@ -22,7 +22,6 @@
                 <sw-container columns="repeat(auto-fit, minmax(250px, 1fr)" gap="0 30px">
 
                     <div>
-
                         <div class="sw-field">
                             <sw-upload-store-listener
                                 :uploadTag="uploadTagMedia"
@@ -40,6 +39,8 @@
                                 @media-upload-remove-image="onUnlinkMedia">
                             </sw-media-upload>
                         </div>
+
+                        <sw-number-field :label="$t('moorl-merchant-finder.properties.priority')" v-model="merchant.priority"></sw-number-field>
 
                         <sw-field type="switch" bordered :label="$t('moorl-merchant-finder.properties.active')" v-model="merchant.active"></sw-field>
 

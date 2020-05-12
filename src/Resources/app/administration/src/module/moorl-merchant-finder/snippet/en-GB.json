@@ -21,6 +21,8 @@
             "noSelection": "-"
         },
         "notification": {
+            "progressTitle": "Import in progress",
+            "progressText": "Remaining entries: {remaining}",
             "successTitle": "Success",
             "successText": "All merchants have been imported",
             "importTitle": "Merchants are importing now",
@@ -85,7 +87,9 @@
             "markerShadow": "Marker shadow URL/BLOB",
             "categories": "Category IDs",
             "tags": "Tag Names/IDs",
-            "productManufacturers": "Manufacturer IDs"
+            "productManufacturers": "Manufacturer IDs",
+            "priority": "Priority",
+            "highlight": "Highlight"
         },
         "label": {
             "accountCard": "General",

@@ -38,7 +38,6 @@ Component.register('moorl-merchant-finder-list', {
     },
 
     computed: {
-
         // TODO: rebuild all repositories by entity name
         /*repositories() {
             return [
@@ -88,6 +87,13 @@ Component.register('moorl-merchant-finder-list', {
 
         columns() {
             return [{
+                property: 'priority',
+                dataIndex: 'priority',
+                label: this.$t('moorl-merchant-finder.properties.priority'),
+                inlineEdit: 'number',
+                allowResize: true,
+                align: 'right'
+            }, {
                 property: 'active',
                 dataIndex: 'active',
                 label: this.$t('moorl-merchant-finder.properties.active'),
@@ -131,7 +137,6 @@ Component.register('moorl-merchant-finder-list', {
     },
 
     created() {
-
         this.repository = this.moorlMerchantRepository;
 
         this.collections = {};
@@ -161,13 +166,10 @@ Component.register('moorl-merchant-finder-list', {
         this.initializeFurtherComponents();
 
         this.getList();
-
     },
 
     methods: {
-
         initializeFurtherComponents() {
-
             this.salesChannelRepository.search(new Criteria(1, 100), Shopware.Context.api).then((searchResult) => {
                 this.salesChannels = searchResult;
             });
@@ -202,7 +204,6 @@ Component.register('moorl-merchant-finder-list', {
             this.countryRepository.search(countryCriteria, Shopware.Context.api).then((searchResult) => {
                 this.countries = searchResult;
             });
-
         },
 
         getList() {
@@ -248,7 +249,6 @@ Component.register('moorl-merchant-finder-list', {
         },
 
         validateCsv() {
-
             const that = this;
             let result = false;
 
@@ -256,18 +256,15 @@ Component.register('moorl-merchant-finder-list', {
             this.csv.matches = 0;
 
             this.csv.schemaProperties.forEach(function (schemaProperty) {
-
                 result = that.csv.csvProperties.indexOf(schemaProperty);
 
                 if (result != -1) {
                     that.csv.propertyMapping[schemaProperty] = that.csv.csvProperties[result];
                     that.csv.matches++;
                 }
-
             });
 
             this.showImportModal = true;
-
         },
 
         onClickImport() {
@@ -281,7 +278,7 @@ Component.register('moorl-merchant-finder-list', {
         },
 
         importCsvRow() {
-            this.isImporting = true;
+            this.isLoading = true;
             this.showImportModal = false;
             let item = this.csv.data.shift();
             item = this.sanitizeItem(item);
@@ -297,7 +294,6 @@ Component.register('moorl-merchant-finder-list', {
         },
 
         sanitizeItem(item) {
-
             console.log("sanitizeItem() ", item);
 
             const that = this;
@@ -387,11 +383,9 @@ Component.register('moorl-merchant-finder-list', {
             });
 
             return newItem;
-
         },
 
         prepareSaveItem(item) {
-
             console.log("prepareSaveItem()", item);
 
             if (item.originId && this.csv.options.overwrite) {
@@ -418,20 +412,24 @@ Component.register('moorl-merchant-finder-list', {
                 Object.assign(result, item);
                 this.saveItem(result);
             }
-
         },
 
         saveItem(item) {
-
             console.log("saveItem()", item);
 
             this.moorlMerchantRepository
                 .save(item, Shopware.Context.api)
                 .then(() => {
                     if (this.csv.data.length != 0) {
+                        this.createNotificationSuccess({
+                            title: this.$t('moorl-merchant-finder.notification.progressTitle'),
+                            message: this.$t('moorl-merchant-finder.notification.progressText', 0, {
+                                remaining: this.csv.data.length
+                            })
+                        });
                         this.importCsvRow();
                     } else {
-                        this.isImporting = false;
+                        this.isLoading = false;
                         this.createSystemNotificationSuccess({
                             title: this.$t('moorl-merchant-finder.notification.successTitle'),
                             message: this.$t('moorl-merchant-finder.notification.successText')
@@ -448,7 +446,6 @@ Component.register('moorl-merchant-finder-list', {
         },
 
         getPositionByAddress(item) {
-
             console.log("getPositionByAddress()", item);
 
             const that = this;
@@ -461,13 +458,17 @@ Component.register('moorl-merchant-finder-list', {
                 }
             });
 
+            if (typeof item.streetNumber != 'undefined' && item.streetNumber.trim() != "") {
+                item.street = item.street + " " + item.streetNumber;
+            }
+
             const initContainer = Application.getContainer('init');
             const httpClient = initContainer.httpClient;
             const searchParams = new URLSearchParams({
                 "format": "json",
                 "zipcode": item.zipcode,
                 "city": item.city,
-                "street": item.street + " " + item.streetNumber,
+                "street": item.street,
                 "country": item.countryCode
             });
 
@@ -483,10 +484,9 @@ Component.register('moorl-merchant-finder-list', {
                 this.prepareSaveItem(item);
             }).catch((exception) => {
                 console.log(exception);
-                this.isImporting = false;
+                this.isLoading = false;
                 throw exception;
             });
-
         },
 
         onCloseModal() {
@@ -500,7 +500,6 @@ Component.register('moorl-merchant-finder-list', {
         },
 
         onClickDownload() {
-
             console.log("onClickDownload()");
 
             const initContainer = Application.getContainer('init');
@@ -514,9 +513,6 @@ Component.register('moorl-merchant-finder-list', {
                 document.body.appendChild(a);
                 a.click();
             });
-
         },
-
     }
-
 });

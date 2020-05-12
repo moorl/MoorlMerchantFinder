@@ -86,6 +86,8 @@ class MerchantDefinition extends EntityDefinition
             new StringField('shop_url', 'shopUrl'),
             new StringField('merchant_url', 'merchantUrl'),
             new CustomFields(),
+            new IntField('priority', 'priority'),
+            new BoolField('highlight', 'highlight'),
             (new IntField('auto_increment', 'autoIncrement'))->addFlags(new WriteProtected()),
             new ManyToOneAssociationField('media', 'media_id', MediaDefinition::class, 'id', false),
             new ManyToOneAssociationField('marker', 'marker_id', MediaDefinition::class, 'id', false),

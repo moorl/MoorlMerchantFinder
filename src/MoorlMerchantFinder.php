@@ -18,7 +18,7 @@ class MoorlMerchantFinder extends Plugin
 
     public static function getDefault($key)
     {
-        return self::$_defaults[$key];
+        return static::$_defaults[$key];
     }
 
     public function install(InstallContext $installContext): void

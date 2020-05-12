@@ -29,7 +29,6 @@ use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
  */
 class ApiController extends AbstractController
 {
-
     private $genericLoader;
     private $systemConfigService;
 
@@ -65,13 +64,14 @@ class ApiController extends AbstractController
      */
     public function export(Context $context): void
     {
-
         $data = [];
 
         $mapping = [
             'id' => null,
             'originId' => null,
             'active' => null,
+            'highlight' => null,
+            'priority' => null,
             'company' => null,
             'department' => null,
             'vatId' => null,
@@ -156,8 +156,5 @@ class ApiController extends AbstractController
         }
 
         fclose($out);
-        exit;
-
     }
-
 }
