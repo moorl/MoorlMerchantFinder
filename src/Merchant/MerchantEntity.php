@@ -19,6 +19,10 @@ class MerchantEntity extends Entity
     use EntityIdTrait;
 
     /**
+     * @var string|null
+     */
+    protected $cmsPageId;
+    /**
      * @var int|null
      */
     protected $distance;
@@ -214,6 +218,22 @@ class MerchantEntity extends Entity
      * @var null|string
      */
     protected $countryCode;
+
+    /**
+     * @return string|null
+     */
+    public function getCmsPageId(): ?string
+    {
+        return $this->cmsPageId;
+    }
+
+    /**
+     * @param string|null $cmsPageId
+     */
+    public function setCmsPageId(?string $cmsPageId): void
+    {
+        $this->cmsPageId = $cmsPageId;
+    }
 
     /**
      * @return string

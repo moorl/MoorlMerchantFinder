@@ -10,6 +10,31 @@ img.moorl-mf-logo {
     .moorl-merchant-finder-result-item {
         border-radius: 0 !important;
         transition: all .3s;
+        overflow: hidden;
+
+        .highlight {
+            width: 160px;
+            background: $warning;
+            position: absolute;
+            top: 20px;
+            left: -40px;
+            text-align: center;
+            line-height: 40px;
+            color: $white;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            transform: rotate(-45deg);
+            -webkit-transform: rotate(-45deg);
+            white-space: nowrap;
+
+            &.top-right {
+                top: 20px;
+                right: -40px;
+                left: auto;
+                transform: rotate(45deg);
+                -webkit-transform: rotate(45deg);
+            }
+        }
 
         img {
             width: 100px;

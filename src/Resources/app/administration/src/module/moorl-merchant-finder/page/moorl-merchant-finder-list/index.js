@@ -472,7 +472,7 @@ Component.register('moorl-merchant-finder-list', {
                 "country": item.countryCode
             });
 
-            httpClient.get(`http://nominatim.openstreetmap.org/search?` + searchParams).then((response) => {
+            httpClient.get(`//nominatim.openstreetmap.org/search?` + searchParams).then((response) => {
                 console.log(response);
                 if (response.data.length > 0) {
                     console.log("NOTICE: Position found");
@@ -480,6 +480,10 @@ Component.register('moorl-merchant-finder-list', {
                     item.locationLat = parseFloat(response.data[0].lat);
                 } else {
                     console.log("NOTICE: No Position found");
+                    this.createNotificationError({
+                        title: this.$t('moorl-merchant-finder.notification.nominatimErrorTitle'),
+                        message: this.$t('moorl-merchant-finder.notification.nominatimErrorText', 0, item)
+                    });
                 }
                 this.prepareSaveItem(item);
             }).catch((exception) => {

@@ -27,7 +27,9 @@
             "successText": "Alle Händler wurden erfolgreich importiert",
             "importTitle": "Händler werden importiert",
             "importText": "Dieser Vorgang kann einige Minuten dauern. Bitte habe etwas Geduld...",
-            "errorTitle": "Fehler beim Speichern des Händlers"
+            "errorTitle": "Fehler beim Speichern des Händlers",
+            "nominatimErrorTitle": "Adresse Fehler",
+            "nominatimErrorText": "Position für {street} {stretNumber}, {zipcode} {city}, {countryCode} nicht gefunden."
         },
         "buttons": {
             "saveButtonText": "Speichern",
@@ -87,7 +89,8 @@
             "tags": "Tag Namen/IDs",
             "productManufacturers": "Hersteller IDs",
             "priority": "Priorität",
-            "highlight": "Hervorheben"
+            "highlight": "Hervorheben",
+            "cmsPage": "CMS Seite"
         },
         "label": {
             "accountCard": "Stammdaten",

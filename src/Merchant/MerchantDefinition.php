@@ -3,6 +3,7 @@
 namespace Moorl\MerchantFinder\Merchant;
 
 use Shopware\Core\Checkout\Customer\Aggregate\CustomerGroup\CustomerGroupDefinition;
+use Shopware\Core\Content\Cms\CmsPageDefinition;
 use Shopware\Core\Content\Media\MediaDefinition;
 use Shopware\Core\Content\Product\Aggregate\ProductManufacturer\ProductManufacturerDefinition;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityDefinition;
@@ -61,6 +62,7 @@ class MerchantDefinition extends EntityDefinition
             new FkField('media_id', 'mediaId', MediaDefinition::class),
             new FkField('marker_id', 'markerId', MediaDefinition::class),
             new FkField('marker_shadow_id', 'markerShadowId', MediaDefinition::class),
+            new FkField('cms_page_id', 'cmsPageId', CmsPageDefinition::class),
             new StringField('marker_settings', 'markerSettings'),
             new StringField('first_name', 'firstName'),
             new StringField('last_name', 'lastName'),

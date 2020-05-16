@@ -106,6 +106,7 @@ class ApiController extends AbstractController
             'countryId' => null,
             'customerGroupId' => null,
             'salesChannelId' => null,
+            'cmsPageId' => null,
         ];
 
         $repo = $this->container->get('moorl_merchant.repository');
@@ -156,5 +157,6 @@ class ApiController extends AbstractController
         }
 
         fclose($out);
+        die();
     }
 }

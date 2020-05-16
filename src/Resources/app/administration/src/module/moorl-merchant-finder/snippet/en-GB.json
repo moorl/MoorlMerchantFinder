@@ -27,7 +27,9 @@
             "successText": "All merchants have been imported",
             "importTitle": "Merchants are importing now",
             "importText": "This proccess could take a while, please calm...",
-            "errorTitle": "Some error while saving"
+            "errorTitle": "Some error while saving",
+            "nominatimErrorTitle": "Address Error",
+            "nominatimErrorText": "Position for {street} {stretNumber}, {zipcode} {city}, {countryCode} not found."
         },
         "buttons": {
             "saveButtonText": "Save",
@@ -89,7 +91,8 @@
             "tags": "Tag Names/IDs",
             "productManufacturers": "Manufacturer IDs",
             "priority": "Priority",
-            "highlight": "Highlight"
+            "highlight": "Highlight",
+            "cmsPage": "CMS page"
         },
         "label": {
             "accountCard": "General",

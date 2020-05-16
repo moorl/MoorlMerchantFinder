@@ -27,7 +27,9 @@
         "choseMerchantToProceed": "Bitte wählen Sie einen Händler aus um die Bestellung abzuschließen",
         "selectedMerchant": "Ausgewählter Händler",
         "chose": "Wählen",
-        "loading": "Lade..."
+        "loading": "Lade...",
+        "more": "Mehr",
+        "highlight": "Tipp"
     },
     "error": {
         "merchant-not-selected": "Bitte wählen Sie einen Händler aus um die Bestellung abzuschließen"

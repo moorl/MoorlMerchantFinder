@@ -27,7 +27,9 @@
         "choseMerchantToProceed": "Please chose your local merchant to proceed the checkout",
         "selectedMerchant": "Selected merchant",
         "chose": "Chose",
-        "loading": "Loading..."
+        "loading": "Loading...",
+        "more": "More",
+        "highlight": "Tip"
     },
     "error": {
         "merchant-not-selected": "Please chose your local merchant to proceed the checkout."

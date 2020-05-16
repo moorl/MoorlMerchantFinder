@@ -10,7 +10,6 @@ use MoorlFoundation\Core\PluginHelpers;
 
 class MoorlMerchantFinder extends Plugin
 {
-
     private static $_defaults = [
         'allowedSearchCountryCodes' => ['de', 'at', 'ch'],
         'nominatim' => 'https://nominatim.openstreetmap.org/search',
@@ -44,5 +43,4 @@ class MoorlMerchantFinder extends Plugin
 
         PluginHelpers::removeCmsBlocks($this->container, $context->getContext(), ['moorl-merchant-finder-basic']);
     }
-
 }

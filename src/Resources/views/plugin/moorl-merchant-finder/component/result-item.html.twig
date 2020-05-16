@@ -1,6 +1,10 @@
 {% set displayMode = displayMode ?: 'full' %}
 
 <li id="<% this.id %>" class="list-group-item moorl-merchant-finder-result-item display-mode-{{ displayMode }}">
+    <% if (this.highlight == 1) { %>
+    <div class="highlight top-right">{{ "moorl-merchant-finder.highlight"|trans }}</div>
+    <% } %>
+
     <div class="row form-row">
         <% if (this.mediaId != null) { %>
         {% block element_moorl_merchant_finder_result_logo %}
@@ -111,6 +115,12 @@
             {% endif %}
         {% endblock %}
         {% block element_moorl_merchant_finder_result_button_cms %}
+            <% if (this.cmsPageId != null) { %>
+            <a data-toggle="modal"
+               href="{{ path('frontend.cms.page') }}/<% this.cmsPageId %>"
+               data-url="{{ path('frontend.cms.page') }}/<% this.cmsPageId %>"
+               class="btn btn-sm btn-light">{{ "moorl-merchant-finder.more"|trans }}</a>
+            <% } %>
         {% endblock %}
     </div>
 </li>
