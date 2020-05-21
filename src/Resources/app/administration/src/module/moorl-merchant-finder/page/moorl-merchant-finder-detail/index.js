@@ -56,7 +56,6 @@ Component.register('moorl-merchant-finder-detail', {
     },
 
     computed: {
-
         mediaRepository() {
             return this.repositoryFactory.create('media');
         },
@@ -102,10 +101,15 @@ Component.register('moorl-merchant-finder-detail', {
         this.getMerchant();
     },
 
+    mounted() {
+        const that = this;
+        setTimeout(function() {
+            that.drawMap();
+        }, 3000);
+    },
+
     methods: {
-
         initializeFurtherComponents() {
-
             this.manufacturers = new EntityCollection('/product-manufacturer', 'product_manufacturer', Shopware.Context.api);
 
             this.salesChannelRepository.search(new Criteria(1, 100), Shopware.Context.api).then((searchResult) => {
@@ -125,7 +129,6 @@ Component.register('moorl-merchant-finder-detail', {
             this.countryRepository.search(countryCriteria, Shopware.Context.api).then((searchResult) => {
                 this.countries = searchResult;
             });
-
         },
 
         getMerchant() {
@@ -146,53 +149,69 @@ Component.register('moorl-merchant-finder-detail', {
             const that = this;
             this.ol = {};
             this.ol.center = [
-                this.merchant.locationLat,
-                this.merchant.locationLon
+                this.merchant.locationLat ? this.merchant.locationLat : 52.5173,
+                this.merchant.locationLon ? this.merchant.locationLon : 13.4020,
             ];
-            this.ol.map = L.map('embedMap', {
+            this.ol.map = L.map(this.$refs['embedMap'], {
                 center: this.ol.center,
-                zoom: 16
+                zoom: this.merchant.locationLat ? 16 : 5
             });
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', {foo: 'bar', attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'}).addTo(this.ol.map);
+            L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'}).addTo(this.ol.map);
             this.ol.marker = L.marker(this.ol.center, {draggable: true})
                 .on('dragend', function () {
                     that.ol.center = that.ol.marker.getLatLng();
-                    that.ol.map.flyTo(that.ol.center, 16, {animate: true, duration: 1});
+                    that.ol.map.setView(that.ol.center);
+
+                    that.merchant.locationLat = that.ol.center.lat;
+                    that.merchant.locationLon = that.ol.center.lng;
                 })
                 .addTo(this.ol.map);
         },
 
         getPositionByAddress() {
-            this.isLoading = true;
+            //this.isLoading = true;
             const initContainer = Application.getContainer('init');
             const httpClient = initContainer.httpClient;
+            let street = this.merchant.street;
+            if (this.merchant.streetNumber !== null) {
+                street += " " + this.merchant.streetNumber;
+            }
             const searchParams = new URLSearchParams({
                 "format": "json",
                 "zipcode": this.merchant.zipcode,
                 "city": this.merchant.city,
-                "street": this.merchant.street + " " + this.merchant.streetNumber,
+                "street": street,
                 "country": this.merchant.countryCode
             });
-            httpClient.get(`http://nominatim.openstreetmap.org/search?` + searchParams).then((response) => {
-                console.log(response);
-                this.ol.center = [
-                    parseFloat(response.data[0].lat),
-                    parseFloat(response.data[0].lon),
-                ];
-                this.ol.map.flyTo(this.ol.center, 16, {animate: true, duration: 1});
-                this.ol.marker.setLatLng(this.ol.center);
-                this.isLoading = false;
+            httpClient.get(`//nominatim.openstreetmap.org/search?` + searchParams).then((response) => {
+                if (!response.data[0]) {
+                    this.createNotificationError({
+                        title: this.$t('moorl-merchant-finder.notification.nominatimErrorTitle'),
+                        message: this.$t('moorl-merchant-finder.notification.nominatimErrorText', 0, this.merchant)
+                    });
+                } else {
+                    if (this.ol) {
+                        console.log(response);
+                        this.ol.center = [
+                            parseFloat(response.data[0].lat),
+                            parseFloat(response.data[0].lon),
+                        ];
+                        this.ol.map.flyTo(this.ol.center, 16, {animate: true, duration: 1});
+                        this.ol.marker.setLatLng(this.ol.center);
+                    }
+                    this.merchant.locationLat = parseFloat(response.data[0].lat);
+                    this.merchant.locationLon = parseFloat(response.data[0].lon);
+                    this.$forceUpdate();
+                }
+                //this.isLoading = false;
             }).catch((exception) => {
-                console.log(exception);
-                this.isLoading = false;
-                throw exception;
+                // console.log(exception);
+                //this.isLoading = false;
+                this.createNotificationError({
+                    title: this.$t('moorl-merchant-finder.detail.errorTitle'),
+                    message: exception
+                });
             });
-        },
-
-        posSelect() {
-            console.log(this.ol.center);
-            this.merchant.locationLat = this.ol.center.lat;
-            this.merchant.locationLon = this.ol.center.lng;
         },
 
         onClickSave() {
@@ -270,7 +289,5 @@ Component.register('moorl-merchant-finder-detail', {
         onUnlinkMarkerShadow() {
             this.merchant.markerShadowId = null;
         }
-
     }
-
 });

@@ -99,7 +99,6 @@ class StorefrontController extends OriginController
 
     protected function searchProcess($data, $context): array
     {
-        $repo = $this->container->get('moorl_merchant.repository');
         $connection = $this->container->get(Connection::class);
 
         $data->set('distance', $data->get('distance') ?: '30');
@@ -107,8 +106,7 @@ class StorefrontController extends OriginController
 
         $pluginConfig = $this->systemConfigService->getDomain('MoorlMerchantFinder.config');
         $filterCountries = !empty($pluginConfig['MoorlMerchantFinder.config.allowedSearchCountryCodes']) ? explode(',', $pluginConfig['MoorlMerchantFinder.config.allowedSearchCountryCodes']) : MoorlMerchantFinder::getDefault('allowedSearchCountryCodes');
-        $searchEngine = !empty($pluginConfig['MoorlMerchantFinder.config.nominatim']) ? $pluginConfig['MoorlMerchantFinder.config.allowedSearchCountryCodes'] : MoorlMerchantFinder::getDefault('nominatim');
-
+        $searchEngine = !empty($pluginConfig['MoorlMerchantFinder.config.nominatim']) ? $pluginConfig['MoorlMerchantFinder.config.nominatim'] : MoorlMerchantFinder::getDefault('nominatim');
 
         $myLocation = [];
 
