@@ -116,8 +116,7 @@
         {% endblock %}
         {% block element_moorl_merchant_finder_result_button_cms %}
             <% if (this.cmsPageId != null) { %>
-            <a data-toggle="modal"
-               href="{{ path('frontend.cms.page') }}/<% this.cmsPageId %>"
+            <a href="javascript:" data-trigger="#merchant_finder_more"
                data-url="{{ path('frontend.cms.page') }}/<% this.cmsPageId %>"
                class="btn btn-sm btn-light">{{ "moorl-merchant-finder.more"|trans }}</a>
             <% } %>

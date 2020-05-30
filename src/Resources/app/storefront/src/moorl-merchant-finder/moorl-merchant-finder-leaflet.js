@@ -45,6 +45,14 @@ export default class MoorlMerchantFinder extends Plugin {
             that._focusItem($(this).data('item'));
         });
 
+        $(this.el).on('click', '[data-trigger]', function () {
+            const button = that.el.querySelector('[data-toggle=modal]');
+
+            button.dataset.url = this.dataset.url;
+            button.click();
+            console.log(this);
+        });
+
         $(this.el).on('click', '[data-merchant]', function () {
             const button = that._form.getElementsByTagName("button")[0];
 
