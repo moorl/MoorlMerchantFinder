@@ -24,6 +24,9 @@ export default class MoorlMerchantFinder extends Plugin {
             this._buildMap();
         }
 
+        this._defaultMarker = JSON.parse(this.el.dataset.defaultMarker);
+        this._searchParams = this.el.dataset.searchParams;
+
         this._registerEvents();
         this._formSubmit();
     }
@@ -35,16 +38,26 @@ export default class MoorlMerchantFinder extends Plugin {
 
     _registerEvents() {
         const that = this;
+
         this.el.addEventListener('submit', this._formSubmit.bind(this));
+
         $(this.el).on('click', '[data-item]', function () {
             that._focusItem($(this).data('item'));
         });
+
         $(this.el).on('click', '[data-merchant]', function () {
             const button = that._form.getElementsByTagName("button")[0];
 
             button.dataset.merchant = this.dataset.merchant;
             button.value = 'pick';
             button.click();
+        });
+
+        const urlParams = new URLSearchParams(window.location.search);
+
+        urlParams.forEach(function (value, name) {
+            //console.log(name, value);
+            that._form.querySelector('[name='+name+']').value = value;
         });
     }
 
@@ -57,6 +70,17 @@ export default class MoorlMerchantFinder extends Plugin {
 
         const requestUrl = DomAccess.getAttribute(this._form, 'action').toLowerCase();
         const formData = FormSerializeUtil.serialize(this._form);
+
+        if (this._searchParams) {
+            const queryString = new URLSearchParams(formData);
+            queryString.delete("_csrf_token");
+            queryString.delete("items");
+
+            if (history.pushState) {
+                let newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?' + queryString.toString();
+                window.history.pushState({path: newUrl}, '', newUrl);
+            }
+        }
 
         if (event && event.submitter && event.submitter.value) {
             console.log(formData);
@@ -108,7 +132,7 @@ export default class MoorlMerchantFinder extends Plugin {
         // add features
         response.data.forEach(function (item) {
             if (item.locationLon != null) {
-                let iconOptions = {};
+                let iconOptions = that._defaultMarker;
                 let markerOptions = {data: item};
 
                 if (item.markerSettings != null) {
@@ -121,6 +145,9 @@ export default class MoorlMerchantFinder extends Plugin {
 
                 if (item.marker) {
                     iconOptions.iconUrl = item.marker.url;
+                }
+
+                if (iconOptions) {
                     markerOptions.icon = L.icon(iconOptions);
                 }
 

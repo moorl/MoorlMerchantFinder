@@ -113,20 +113,21 @@ class StorefrontController extends OriginController
         if (!empty($data->get('zipcode'))) {
             $sql = <<<SQL
 SELECT * FROM `moorl_zipcode`
-WHERE `city` LIKE :city OR `zipcode` LIKE :zipcode
+WHERE `city` LIKE :city OR `zipcode` LIKE :zipcode AND country_code IN (:countries)
 LIMIT 10; 
 SQL;
 
             $myLocation = $connection->executeQuery($sql, [
                     'city' => '%' . $data->get('zipcode') . '%',
-                    'zipcode' => '%' . $data->get('zipcode') . '%'
+                    'zipcode' => $data->get('zipcode') . '%',
+                    'countries' => implode(',', $filterCountries),
                 ]
             )->fetchAll(FetchMode::ASSOCIATIVE);
 
             // No location found - Get them from OSM
             if (count($myLocation) == 0) {
                 $query = http_build_query([
-                    'q' => $data->get('zipcode'),
+                    'q' => trim($data->get('zipcode') . ' ' . count($filterCountries) == 1 ? current($filterCountries) : ""),
                     'format' => 'json',
                     'addressdetails' => 1,
                 ]);
@@ -168,7 +169,7 @@ SQL;
                             'id' => $item['place_id'],
                             'zipcode' => isset($item['address']['postcode']) ? $item['address']['postcode'] : null,
                             'city' => isset($item['address']['city']) ? $item['address']['city'] : null,
-                            'state' => $item['address']['state'],
+                            'state' => isset($item['address']['state']) ? $item['address']['state'] : null,
                             'country' => $item['address']['country'],
                             'country_code' => $item['address']['country_code'],
                             'suburb' => isset($item['address']['suburb']) ? $item['address']['suburb'] : null,
@@ -248,10 +249,11 @@ SQL;
 
         $resultData = $this->repository->search($criteria, $context);
 
-        if (isset($distance) && count($distance) > 0) {
-            foreach ($resultData->getEntities() as $entity) {
+        foreach ($resultData->getEntities() as $entity) {
+            if (isset($distance) && count($distance) > 0) {
                 $entity->setDistance($distance[$entity->getId()]);
             }
+            // TODO: Add SEO Url
         }
 
         return [
