@@ -129,17 +129,14 @@
         <component name="sw-media-field">
             <name>iconUrl</name>
             <label>Icon</label>
-            <defaultValue>bundles/moorlmerchantfinder/storefront/css/images/marker-icon.png</defaultValue>
         </component>
         <component name="sw-media-field">
             <name>iconRetinaUrl</name>
             <label>Icon retina</label>
-            <defaultValue>bundles/moorlmerchantfinder/storefront/css/images/marker-icon-2x.png</defaultValue>
         </component>
         <component name="sw-media-field">
             <name>shadowUrl</name>
             <label>Shadow</label>
-            <defaultValue>bundles/moorlmerchantfinder/storefront/css/images/marker-shadow.png</defaultValue>
         </component>
     </card>
 
