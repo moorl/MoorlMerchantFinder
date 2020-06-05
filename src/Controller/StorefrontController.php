@@ -126,8 +126,13 @@ SQL;
 
             // No location found - Get them from OSM
             if (count($myLocation) == 0) {
+                $queryString = implode(' ', [
+                    $data->get('zipcode'),
+                    count($filterCountries) == 1 ? current($filterCountries) : "",
+                ]);
+
                 $query = http_build_query([
-                    'q' => trim($data->get('zipcode') . ' ' . count($filterCountries) == 1 ? current($filterCountries) : ""),
+                    'q' => $queryString,
                     'format' => 'json',
                     'addressdetails' => 1,
                 ]);
