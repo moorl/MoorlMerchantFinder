@@ -10,6 +10,7 @@ use Moorl\MerchantFinder\MoorlMerchantFinder;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\NotFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
@@ -227,6 +228,7 @@ SQL;
             $criteria = new Criteria();
 
             $criteria->addSorting(new FieldSorting('priority', FieldSorting::DESCENDING));
+            $criteria->addSorting(new FieldSorting('highlight', FieldSorting::DESCENDING));
             $criteria->addSorting(new FieldSorting('company', FieldSorting::ASCENDING));
         }
 
@@ -248,6 +250,26 @@ SQL;
         }
         if ($data->get('categories')) {
             $criteria->addFilter(new EqualsFilter('categories.id', $data->get('categories')));
+        }
+        
+        if ($data->get('rules')) {
+            $rules = $data->get('rules')->all();
+
+            if (is_array($rules)) {
+                if (in_array('isHighlighted', $rules)) {
+                    $criteria->addFilter(new EqualsFilter('highlight', 1));
+                }
+                if (in_array('hasPriority', $rules)) {
+                    $criteria->addFilter(new NotFilter(NotFilter::CONNECTION_AND, [
+                        new EqualsFilter('priority', 0)
+                    ]));
+                }
+                if (in_array('hasLogo', $rules)) {
+                    $criteria->addFilter(new NotFilter(NotFilter::CONNECTION_AND, [
+                        new EqualsFilter('media.id', null)
+                    ]));
+                }
+            }
         }
 
         $criteria->setTerm($data->get('term'));

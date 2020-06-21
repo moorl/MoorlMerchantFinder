@@ -24,7 +24,12 @@ export default class MoorlMerchantFinder extends Plugin {
             this._buildMap();
         }
 
-        this._defaultMarker = JSON.parse(this.el.dataset.defaultMarker);
+        if (this.el.dataset.defaultMarker) {
+            this._defaultMarker = JSON.parse(this.el.dataset.defaultMarker);
+        } else {
+            this._defaultMarker = null;
+        }
+
         this._searchParams = this.el.dataset.searchParams;
 
         this._registerEvents();
@@ -65,7 +70,9 @@ export default class MoorlMerchantFinder extends Plugin {
 
         urlParams.forEach(function (value, name) {
             //console.log(name, value);
-            that._form.querySelector('[name='+name+']').value = value;
+            if (that._form.querySelector('[name='+name+']')) {
+                that._form.querySelector('[name=' + name + ']').value = value;
+            }
         });
     }
 
