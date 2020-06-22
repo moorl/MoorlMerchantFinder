@@ -7,6 +7,7 @@ use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\ParameterType;
 use GuzzleHttp\Client;
 use Moorl\MerchantFinder\MoorlMerchantFinder;
+use Moorl\MerchantFinder\Service\MerchantService;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
@@ -30,20 +31,22 @@ use Shopware\Storefront\Controller\StorefrontController as OriginController;
  */
 class StorefrontController extends OriginController
 {
-
     /**
      * @var EntityRepositoryInterface
      */
     private $repository;
     private $systemConfigService;
+    private $merchantService;
 
     public function __construct(
         SystemConfigService $systemConfigService,
-        EntityRepositoryInterface $repository
+        EntityRepositoryInterface $repository,
+        MerchantService $merchantService
     )
     {
         $this->systemConfigService = $systemConfigService;
         $this->repository = $repository;
+        $this->merchantService = $merchantService;
     }
 
     /**
@@ -105,92 +108,11 @@ class StorefrontController extends OriginController
         $data->set('distance', $data->get('distance') ?: '30');
         $data->set('items', (int)$data->get('items') ?: 500);
 
-        $pluginConfig = $this->systemConfigService->getDomain('MoorlMerchantFinder.config');
-        $filterCountries = !empty($pluginConfig['MoorlMerchantFinder.config.allowedSearchCountryCodes']) ? explode(',', $pluginConfig['MoorlMerchantFinder.config.allowedSearchCountryCodes']) : MoorlMerchantFinder::getDefault('allowedSearchCountryCodes');
-        $searchEngine = !empty($pluginConfig['MoorlMerchantFinder.config.nominatim']) ? $pluginConfig['MoorlMerchantFinder.config.nominatim'] : MoorlMerchantFinder::getDefault('nominatim');
+        //$pluginConfig = $this->systemConfigService->getDomain('MoorlMerchantFinder.config');
+        //$filterCountries = !empty($pluginConfig['MoorlMerchantFinder.config.allowedSearchCountryCodes']) ? explode(',', $pluginConfig['MoorlMerchantFinder.config.allowedSearchCountryCodes']) : MoorlMerchantFinder::getDefault('allowedSearchCountryCodes');
+        //$searchEngine = !empty($pluginConfig['MoorlMerchantFinder.config.nominatim']) ? $pluginConfig['MoorlMerchantFinder.config.nominatim'] : MoorlMerchantFinder::getDefault('nominatim');
 
-        $myLocation = [];
-
-        if (!empty($data->get('zipcode'))) {
-            $sql = <<<SQL
-SELECT * FROM `moorl_zipcode`
-WHERE `city` LIKE :city OR `zipcode` LIKE :zipcode AND country_code IN (:countries)
-LIMIT 10; 
-SQL;
-
-            $myLocation = $connection->executeQuery($sql, [
-                    'city' => '%' . $data->get('zipcode') . '%',
-                    'zipcode' => $data->get('zipcode') . '%',
-                    'countries' => implode(',', $filterCountries),
-                ]
-            )->fetchAll(FetchMode::ASSOCIATIVE);
-
-            // No location found - Get them from OSM
-            if (count($myLocation) == 0) {
-                $queryString = implode(' ', [
-                    $data->get('zipcode'),
-                    count($filterCountries) == 1 ? current($filterCountries) : "",
-                ]);
-
-                $query = http_build_query([
-                    'q' => $queryString,
-                    'format' => 'json',
-                    'addressdetails' => 1,
-                ]);
-
-                $client = new Client();
-                $res = $client->request('GET', $searchEngine . '?' . $query, ['headers' => ['Accept' => 'application/json', 'Content-type' => 'application/json']]);
-                $resultData = json_decode($res->getBody()->getContents(), true);
-
-                foreach ($resultData as $item) {
-                    if (in_array($item['address']['country_code'], $filterCountries)) {
-                        // Fill local database with locations
-                        $sql = <<<SQL
-INSERT IGNORE INTO `moorl_zipcode` (
-    `id`,
-    `zipcode`,
-    `city`,
-    `state`,
-    `country`,
-    `country_code`,
-    `suburb`,
-    `lon`,
-    `lat`,
-    `licence`
-) VALUES (
-    :id,
-    :zipcode,
-    :city,
-    :state,
-    :country,
-    :country_code,
-    :suburb,
-    :lon,
-    :lat,
-    :licence
-);
-SQL;
-
-                        $placeholder = [
-                            'id' => $item['place_id'],
-                            'zipcode' => isset($item['address']['postcode']) ? $item['address']['postcode'] : null,
-                            'city' => isset($item['address']['city']) ? $item['address']['city'] : null,
-                            'state' => isset($item['address']['state']) ? $item['address']['state'] : null,
-                            'country' => $item['address']['country'],
-                            'country_code' => $item['address']['country_code'],
-                            'suburb' => isset($item['address']['suburb']) ? $item['address']['suburb'] : null,
-                            'lon' => $item['lon'],
-                            'lat' => $item['lat'],
-                            'licence' => $item['licence']
-                        ];
-
-                        $connection->executeQuery($sql, $placeholder);
-
-                        $myLocation[] = $placeholder;
-                    }
-                }
-            }
-        }
+        $myLocation = $this->merchantService->getLocationByTerm($data->get('zipcode'));
 
         if (count($myLocation) > 0) {
             $sql = <<<SQL

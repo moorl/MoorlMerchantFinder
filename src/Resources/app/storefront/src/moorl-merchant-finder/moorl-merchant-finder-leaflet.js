@@ -70,7 +70,7 @@ export default class MoorlMerchantFinder extends Plugin {
 
         urlParams.forEach(function (value, name) {
             //console.log(name, value);
-            if (that._form.querySelector('[name='+name+']')) {
+            if (that._form.querySelector('[name=' + name + ']')) {
                 that._form.querySelector('[name=' + name + ']').value = value;
             }
         });
@@ -90,6 +90,8 @@ export default class MoorlMerchantFinder extends Plugin {
             const queryString = new URLSearchParams(formData);
             queryString.delete("_csrf_token");
             queryString.delete("items");
+            queryString.delete("rules");
+            queryString.delete("rules[]");
 
             if (history.pushState) {
                 let newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?' + queryString.toString();

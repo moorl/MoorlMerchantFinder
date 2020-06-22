@@ -15,6 +15,33 @@
     </card>
 
     <card>
+        <title>Behaviour</title>
+
+        <input-field type="multi-select">
+            <name>searchRules</name>
+            <label>Additional filters</label>
+            <label lang="de-DE">Zusätzliche Filter</label>
+            <options>
+                <option>
+                    <id>isHighlighted</id>
+                    <name>Highlighted</name>
+                    <name lang="de-DE">Hervorgehoben</name>
+                </option>
+                <option>
+                    <id>hasPriority</id>
+                    <name>Priority added</name>
+                    <name lang="de-DE">Priorität hinzugefügt</name>
+                </option>
+                <option>
+                    <id>hasLogo</id>
+                    <name>Has logo</name>
+                    <name lang="de-DE">Mit Logo</name>
+                </option>
+            </options>
+        </input-field>
+    </card>
+
+    <card>
         <title>Advanced</title>
         <title lang="de-DE">Erweitert</title>
         <input-field type="bool">

@@ -46,13 +46,10 @@ class StorefrontSubscriber implements EventSubscriberInterface
 
     public function onEntityLoadedEvent(EntityLoadedEvent $event): void
     {
-
         foreach ($event->getEntities() as $entity) {
-
             if ($entity->getType() == 'moorl-merchant-finder') {
 
                 $languageId = $event->getContext()->getLanguageId();
-
                 $config = $entity->getConfig();
 
                 $sql = <<<SQL
@@ -105,11 +102,7 @@ SQL;
                     'categories' => $categories ?: null,
                     'productManufacturers' => $productManufacturers ?: null
                 ]));
-
             }
-
         }
-
     }
-
 }

@@ -3,8 +3,14 @@
 <container xmlns="http://symfony.com/schema/dic/services"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
-
     <services>
+        <!-- Service -->
+        <service id="Moorl\MerchantFinder\Service\MerchantService" public="true">
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <argument type="service" id="moorl_merchant.repository"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="session"/>
+        </service>
 
         <!-- Controller -->
         <service id="Moorl\MerchantFinder\Controller\ApiController" public="true">
@@ -16,6 +22,7 @@
         <service id="Moorl\MerchantFinder\Controller\StorefrontController" public="true">
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
             <argument type="service" id="moorl_merchant.repository"/>
+            <argument type="service" id="Moorl\MerchantFinder\Service\MerchantService"/>
         </service>
 
         <!-- Subscriber -->
@@ -51,7 +58,5 @@
         <service id="Moorl\MerchantFinder\Resources\snippet\en_GB\SnippetFile_en_GB" public="true">
             <tag name="shopware.snippet.file" priority="100"/>
         </service>
-
     </services>
-
 </container>

@@ -83,5 +83,19 @@
                 </div>
             {% endblock %}
         </div>
+        {% block element_moorl_merchant_finder_form_inner_additional %}
+            {% if shopware.config.MoorlMerchantFinder.config.searchRules %}
+                <div class="row form-row">
+                    {% for rule in shopware.config.MoorlMerchantFinder.config.searchRules %}
+                        <div class="form-group col-6 col-lg">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="{{ rule }}Check" name="rules[]" value="{{ rule }}" checked>
+                                <label class="custom-control-label" for="{{ rule }}Check">{{ "moorl-merchant-finder.searchRules.#{rule}"|trans }}</label>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endblock %}
     {% endblock %}
 </form>
