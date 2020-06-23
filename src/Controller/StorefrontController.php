@@ -115,27 +115,7 @@ class StorefrontController extends OriginController
         $myLocation = $this->merchantService->getLocationByTerm($data->get('zipcode'));
 
         if (count($myLocation) > 0) {
-            $sql = <<<SQL
-SELECT 
-    LOWER(HEX(`id`)) AS `id`,
-    ACOS(
-         SIN(RADIANS(:lat)) * SIN(RADIANS(`location_lat`)) 
-         + COS(RADIANS(:lat)) * COS(RADIANS(`location_lat`))
-         * COS(RADIANS(:lon) - RADIANS(`location_lon`))
-    ) * 6380 AS distance
-FROM `moorl_merchant`
-WHERE `active` IS TRUE
-HAVING `distance` < :distance
-ORDER BY `distance`
-LIMIT 500;
-SQL;
-
-            $resultData = $connection->executeQuery($sql, [
-                    'lat' => $myLocation[0]['lat'],
-                    'lon' => $myLocation[0]['lon'],
-                    'distance' => $data->get('distance'),
-                ]
-            )->fetchAll(FetchMode::ASSOCIATIVE);
+            $resultData = $this->merchantService->getMerchantsByDistance($myLocation, $data->get('distance'));
 
             $merchantIds = [];
             $distance = [];

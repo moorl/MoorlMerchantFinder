@@ -44,6 +44,33 @@ class MerchantService
         $this->session = $session;
     }
 
+    public function getMerchantsByDistance($myLocation, $distance): array
+    {
+        $sql = <<<SQL
+SELECT 
+    LOWER(HEX(`id`)) AS `id`,
+    ACOS(
+         SIN(RADIANS(:lat)) * SIN(RADIANS(`location_lat`)) 
+         + COS(RADIANS(:lat)) * COS(RADIANS(`location_lat`))
+         * COS(RADIANS(:lon) - RADIANS(`location_lon`))
+    ) * 6380 AS distance
+FROM `moorl_merchant`
+WHERE `active` IS TRUE
+HAVING `distance` < :distance
+ORDER BY `distance`
+LIMIT 500;
+SQL;
+
+        $resultData = $this->connection->executeQuery($sql, [
+                'lat' => $myLocation[0]['lat'],
+                'lon' => $myLocation[0]['lon'],
+                'distance' => $distance,
+            ]
+        )->fetchAll(FetchMode::ASSOCIATIVE);
+
+        return $resultData;
+    }
+
     public function getLocationByTerm($term): array
     {
         if (!$term || empty($term)) {
