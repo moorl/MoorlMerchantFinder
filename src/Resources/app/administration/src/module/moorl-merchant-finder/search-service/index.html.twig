@@ -1,0 +1,16 @@
+{% block sw_search_bar_item_cms_page %}
+    {% parent %}
+
+    <router-link v-else-if="type === 'moorl_merchant'"
+                 v-bind:to="{ name: 'moorl.merchant.finder.detail', params: { id: item.id } }"
+                 ref="routerLink"
+                 class="sw-search-bar-item__link">
+        {% block sw_search_bar_item_foo_bar_label %}
+            <span class="sw-search-bar-item__label">
+                <sw-highlight-text v-bind:searchTerm="searchTerm"
+                                   v-bind:text="item.company">
+                </sw-highlight-text>
+            </span>
+        {% endblock %}
+    </router-link>
+{% endblock %}

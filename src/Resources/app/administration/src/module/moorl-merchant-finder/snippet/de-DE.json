@@ -1,8 +1,14 @@
 {
+    "global": {
+        "entities": {
+            "moorl_merchant": "Händlersuche"
+        }
+    },
     "moorl-merchant-finder": {
         "general": {
             "mainMenuItemGeneral": "Händlersuche",
-            "descriptionTextModule": "Verwalte die Händler hier"
+            "descriptionTextModule": "Verwalte die Händler hier",
+            "placeholderSearchBar": "Search for merchants"
         },
         "importAssistant": {
             "title": "Import Assistent",
