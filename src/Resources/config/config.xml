@@ -15,7 +15,14 @@
     </card>
 
     <card>
-        <title>Behaviour</title>
+        <title>Search Logic</title>
+        <title lang="de-DE">Suchlogig</title>
+
+        <input-field type="bool">
+            <name>resultInfo</name>
+            <label>Such Info anzeigen</label>
+            <defaultValue>true</defaultValue>
+        </input-field>
 
         <input-field type="multi-select">
             <name>searchRules</name>

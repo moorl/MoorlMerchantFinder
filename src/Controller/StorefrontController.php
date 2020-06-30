@@ -13,6 +13,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\NotFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
+use Shopware\Core\Framework\Uuid\Uuid;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
@@ -117,7 +118,7 @@ class StorefrontController extends OriginController
         if (count($myLocation) > 0) {
             $resultData = $this->merchantService->getMerchantsByDistance($myLocation, $data->get('distance'));
 
-            $merchantIds = [];
+            $merchantIds = [Uuid::randomHex()];
             $distance = [];
 
             foreach ($resultData as $item) {
@@ -153,7 +154,7 @@ class StorefrontController extends OriginController
         if ($data->get('categories')) {
             $criteria->addFilter(new EqualsFilter('categories.id', $data->get('categories')));
         }
-        
+
         if ($data->get('rules')) {
             $rules = $data->get('rules')->all();
 
@@ -185,9 +186,30 @@ class StorefrontController extends OriginController
             // TODO: Add SEO Url
         }
 
+        if ($data->get('term') || $data->get('zipcode')) {
+            $searchInfo = $this->trans('moorl-merchant-finder.forTheSearch');
+            if ($data->get('term')) {
+                $searchInfo .= '"' . $data->get('term') . '" ';
+            }
+            if ($data->get('zipcode')) {
+                $searchInfo .= $this->trans('moorl-merchant-finder.forTheSearchZipcode', [
+                    'zipcode' => $data->get('zipcode'),
+                    'distance' => $data->get('distance')
+                ]);
+            }
+            $searchInfo .= $this->trans('moorl-merchant-finder.are');
+        } else {
+            $searchInfo = $this->trans('moorl-merchant-finder.thereAre');
+        }
+
+        $searchInfo .= $this->trans('moorl-merchant-finder.resultsFound', [
+            'count' => ($resultData->count() !== 0 ? $resultData->count() : $this->trans('moorl-merchant-finder.none')),
+        ]);
+
         return [
             'data' => $resultData->getEntities(),
             'loc' => $myLocation,
+            'searchInfo' => $searchInfo,
         ];
     }
 }

@@ -1,5 +1,11 @@
 {
     "moorl-merchant-finder": {
+        "forTheSearch": "for the search ",
+        "forTheSearchZipcode": "in zipcode and distance km surroundings ",
+        "are": "are ",
+        "thereAre": "there are ",
+        "resultsFound": "count results found",
+        "none": "none",
         "radius": "Radius",
         "km": "KM",
         "searchFor": "Search for",

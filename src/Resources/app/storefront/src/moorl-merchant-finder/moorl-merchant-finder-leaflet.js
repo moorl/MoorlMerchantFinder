@@ -15,6 +15,7 @@ export default class MoorlMerchantFinder extends Plugin {
         this._resultsContent = this.el.getElementsByClassName('results-content')[0];
         this._loadingIndicator = this.el.getElementsByClassName('moorl-merchant-finder-loading')[0];
         this._resultTemplate = this._results.innerHTML;
+        this._resultInfo = this.el.getElementsByClassName('moorl-merchant-finder-result-info')[0];
         this._mapElement = this.el.getElementsByClassName('moorl-merchant-finder-map')[0];
 
         if (this._mapElement) {
@@ -130,6 +131,9 @@ export default class MoorlMerchantFinder extends Plugin {
     _buildSearchResults(response) {
         const that = this;
         const te = new Te();
+        if (this._resultInfo) {
+            this._resultInfo.innerHTML = response.searchInfo ;
+        }
         response.data.forEach(function (item) {
             that._results.insertAdjacentHTML('beforeend', te.render(that._resultTemplate, item));
         });

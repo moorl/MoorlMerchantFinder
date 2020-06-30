@@ -97,5 +97,10 @@
                 </div>
             {% endif %}
         {% endblock %}
+        {% block element_moorl_merchant_finder_form_result_info %}
+            {% if shopware.config.MoorlMerchantFinder.config.resultInfo %}
+                <div class="mb-3 text-muted text-center moorl-merchant-finder-result-info">&nbsp;</div>
+            {% endif %}
+        {% endblock %}
     {% endblock %}
 </form>
