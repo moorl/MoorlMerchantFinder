@@ -48,9 +48,28 @@ class StorefrontSubscriber implements EventSubscriberInterface
     {
         foreach ($event->getEntities() as $entity) {
             if ($entity->getType() == 'moorl-merchant-finder') {
-
                 $languageId = $event->getContext()->getLanguageId();
                 $config = $entity->getConfig();
+                $countries = null;
+
+                $countryCode = $this->systemConfigService->get('MoorlMerchantFinder.config.countryCode');
+
+                if ($countryCode) {
+                    $sql = <<<SQL
+SELECT
+    `country_translation`.`name` AS `label`,
+    `country`.`iso` AS `value`,
+    COUNT(*) AS `count`
+FROM `moorl_merchant`
+RIGHT JOIN `country` ON `moorl_merchant`.`country_code` = `country`.`iso`
+RIGHT JOIN `country_translation` ON `country`.`id` = `country_translation`.`country_id`
+WHERE `moorl_merchant`.`active` IS TRUE AND LOWER(HEX(`country_translation`.`language_id`)) = :languageId
+GROUP BY `country_translation`.`country_id`
+ORDER BY `country_translation`.`name` ASC;
+SQL;
+
+                    $countries = $this->connection->executeQuery($sql, ['languageId' => $languageId])->fetchAll(FetchMode::ASSOCIATIVE);
+                }
 
                 $sql = <<<SQL
 SELECT
@@ -98,6 +117,7 @@ SQL;
                 $categories = $this->connection->executeQuery($sql, ['languageId' => $languageId])->fetchAll(FetchMode::ASSOCIATIVE);
 
                 $entity->setData(new GeneralStruct([
+                    'countries' => $countries ?: null,
                     'tags' => $tags ?: null,
                     'categories' => $categories ?: null,
                     'productManufacturers' => $productManufacturers ?: null

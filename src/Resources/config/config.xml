@@ -19,6 +19,12 @@
         <title lang="de-DE">Suchlogig</title>
 
         <input-field type="bool">
+            <name>countryCode</name>
+            <label>Enable country filter</label>
+            <defaultValue>false</defaultValue>
+        </input-field>
+
+        <input-field type="bool">
             <name>resultInfo</name>
             <label>Such Info anzeigen</label>
             <defaultValue>true</defaultValue>

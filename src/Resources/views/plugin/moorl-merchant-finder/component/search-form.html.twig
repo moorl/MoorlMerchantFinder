@@ -13,6 +13,18 @@
                     <input name="term" class="form-control" placeholder="{{ "moorl-merchant-finder.searchFor"|trans }}">
                 </div>
             {% endblock %}
+            {% if element.data.countries %}
+                {% block element_moorl_merchant_finder_form_inner_countries %}
+                    <div class="form-group col-6 col-lg">
+                        <select name="countryCode" class="form-control">
+                            <option value="">{{ "moorl-merchant-finder.allCountries"|trans }}</option>
+                            {% for item in element.data.countries %}
+                                <option {% if item.value == 'DE' %}selected{% endif %} value="{{ item.value }}">{{ item.label }} ({{ item.count }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                {% endblock %}
+            {% endif %}
             {% block element_moorl_merchant_finder_form_inner_zipcode %}
                 <div class="form-group col-6 col-lg">
                     <input name="zipcode" class="form-control" placeholder="{{ "moorl-merchant-finder.zipcodeCity"|trans }}">
@@ -44,7 +56,7 @@
                         <select name="tags" class="form-control">
                             <option value="">{{ "moorl-merchant-finder.allTags"|trans }}</option>
                             {% for item in element.data.tags %}
-                                <option {% if item.value == element.config.tagId.value  %}selected{% endif %} value="{{ item.value }}">{{ item.label }} ({{ item.count }})</option>
+                                <option {% if item.value == element.config.tagId.value %}selected{% endif %} value="{{ item.value }}">{{ item.label }} ({{ item.count }})</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -56,7 +68,7 @@
                         <select name="productManufacturers" class="form-control">
                             <option value="">{{ "moorl-merchant-finder.allManufacturers"|trans }}</option>
                             {% for item in element.data.productManufacturers %}
-                                <option {% if item.value == element.config.manufacturerId.value  %}selected{% endif %} value="{{ item.value }}">{{ item.label }} ({{ item.count }})</option>
+                                <option {% if item.value == element.config.manufacturerId.value %}selected{% endif %} value="{{ item.value }}">{{ item.label }} ({{ item.count }})</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -68,7 +80,7 @@
                         <select name="categories" class="form-control">
                             <option value="">{{ "moorl-merchant-finder.allCategories"|trans }}</option>
                             {% for item in element.data.categories %}
-                                <option {% if item.value == element.config.categoryId.value  %}selected{% endif %} value="{{ item.value }}">{{ item.label }} ({{ item.count }})</option>
+                                <option {% if item.value == element.config.categoryId.value %}selected{% endif %} value="{{ item.value }}">{{ item.label }} ({{ item.count }})</option>
                             {% endfor %}
                         </select>
                     </div>

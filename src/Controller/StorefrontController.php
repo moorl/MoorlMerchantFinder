@@ -145,6 +145,9 @@ class StorefrontController extends OriginController
         $criteria->addAssociation('markerShadow');
         $criteria->addFilter(new EqualsFilter('active', true));
 
+        if ($data->get('countryCode')) {
+            $criteria->addFilter(new EqualsFilter('countryCode', $data->get('countryCode')));
+        }
         if ($data->get('tags')) {
             $criteria->addFilter(new EqualsFilter('tags.id', $data->get('tags')));
         }
