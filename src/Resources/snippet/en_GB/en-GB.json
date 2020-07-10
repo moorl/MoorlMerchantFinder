@@ -37,7 +37,12 @@
         "loading": "Loading...",
         "more": "More",
         "highlight": "Tip",
-        "resetSelection": "Reset selection"
+        "resetSelection": "Reset selection",
+        "searchRules": {
+            "isHighlighted": "Premium merchant",
+            "hasPriority": "Priority merchant",
+            "hasLogo": "Merchant with logo"
+        }
     },
     "error": {
         "merchant-not-selected": "Please chose your local merchant to proceed the checkout."

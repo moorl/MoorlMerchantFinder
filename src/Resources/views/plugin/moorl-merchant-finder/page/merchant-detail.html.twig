@@ -7,7 +7,7 @@
         {% if merchant.media %}
             {% block element_moorl_merchant_finder_detail_logo %}
                 <div class="col-auto">
-                    <img data-src="{{ merchant.media.url }}">
+                    <img src="{{ merchant.media.url }}">
                 </div>
             {% endblock %}
         {% endif %}
@@ -91,7 +91,7 @@
                     <div class="manufacturers">
                         {% for manufacturer in merchant.productManufacturers.length %}
                             {% if manufacturer.media %}
-                                <img data-src="{{ manufacturer.media.url }}" title="{{ manufacturer.name }}">
+                                <img src="{{ manufacturer.media.url }}" title="{{ manufacturer.name }}">
                             {% else %}
                                 <span>{{ manufacturer.name }}</span>
                             {% endif %}

@@ -36,7 +36,13 @@
         "chose": "Wählen",
         "loading": "Lade...",
         "more": "Mehr",
-        "highlight": "Tipp"
+        "highlight": "Tipp",
+        "resetSelection": "Auswahl zurücksetzen",
+        "searchRules": {
+            "isHighlighted": "Premium Fachhändler",
+            "hasPriority": "Empfehlung",
+            "hasLogo": "Fachhändler mit Logo"
+        }
     },
     "error": {
         "merchant-not-selected": "Bitte wählen Sie einen Händler aus um die Bestellung abzuschließen"
