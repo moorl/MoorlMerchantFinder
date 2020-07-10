@@ -50,7 +50,11 @@ class StorefrontSubscriber implements EventSubscriberInterface
             if ($entity->getType() == 'moorl-merchant-finder') {
                 $languageId = $event->getContext()->getLanguageId();
                 $config = $entity->getConfig();
+
                 $countries = null;
+                $categories = null;
+                $tags = null;
+                $productManufacturers = null;
 
                 $countryCode = $this->systemConfigService->get('MoorlMerchantFinder.config.countryCode');
 

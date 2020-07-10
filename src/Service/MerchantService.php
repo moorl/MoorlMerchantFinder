@@ -2,27 +2,28 @@
 
 namespace Moorl\MerchantFinder\Service;
 
-use Moorl\MerchantFinder\MoorlMerchantFinder;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
-use Shopware\Core\System\SystemConfig\SystemConfigService;
-use Symfony\Component\HttpFoundation\Session\Session;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\ParameterType;
 use GuzzleHttp\Client;
+use Moorl\MerchantFinder\MoorlMerchantFinder;
+use Shopware\Core\Framework\Context;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\NotFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
-use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
-use Shopware\Core\System\SalesChannel\SalesChannelContext;
-use Shopware\Storefront\Page\GenericPageLoader;
+use Shopware\Core\Framework\Uuid\Uuid;
+use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
-use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 
 class MerchantService
 {
@@ -30,6 +31,14 @@ class MerchantService
     private $systemConfigService;
     private $session;
     private $connection;
+    /**
+     * @var int|null
+     */
+    private $merchantsCount;
+    /**
+     * @var array|null
+     */
+    private $myLocation;
 
     public function __construct(
         SystemConfigService $systemConfigService,
@@ -44,31 +53,152 @@ class MerchantService
         $this->session = $session;
     }
 
-    public function getMerchantsByDistance($myLocation, $distance): array
+    /**
+     * @return array|null
+     */
+    public function getMyLocation(): ?array
     {
-        $sql = <<<SQL
-SELECT 
-    LOWER(HEX(`id`)) AS `id`,
-    ACOS(
-         SIN(RADIANS(:lat)) * SIN(RADIANS(`location_lat`)) 
-         + COS(RADIANS(:lat)) * COS(RADIANS(`location_lat`))
-         * COS(RADIANS(:lon) - RADIANS(`location_lon`))
-    ) * 6380 AS distance
-FROM `moorl_merchant`
-WHERE `active` IS TRUE
-HAVING `distance` < :distance
-ORDER BY `distance`
-LIMIT 500;
-SQL;
+        return $this->myLocation;
+    }
 
-        $resultData = $this->connection->executeQuery($sql, [
-                'lat' => $myLocation[0]['lat'],
-                'lon' => $myLocation[0]['lon'],
-                'distance' => $distance,
-            ]
-        )->fetchAll(FetchMode::ASSOCIATIVE);
+    /**
+     * @param array|null $myLocation
+     */
+    public function setMyLocation(?array $myLocation): void
+    {
+        $this->myLocation = $myLocation;
+    }
 
-        return $resultData;
+    /**
+     * @return int|null
+     */
+    public function getMerchantsCount(): ?int
+    {
+        return $this->merchantsCount;
+    }
+
+    /**
+     * @param int|null $merchantsCount
+     */
+    public function setMerchantsCount(?int $merchantsCount): void
+    {
+        $this->merchantsCount = $merchantsCount;
+    }
+
+    public function getMerchants(Context $context, ?ParameterBag $data): EntityCollection
+    {
+        $options = new ParameterBag(json_decode($data->get('options'), true) ?: []);
+
+        if ($data->get('id')) {
+            $criteria = new Criteria([$data->get('id')]);
+        } else {
+            $data->set('distance', $data->get('distance') ?: '30');
+            $data->set('items', (int)$data->get('items') ?: 500);
+
+            $this->getLocationByTerm($data->get('zipcode'));
+
+            if (!$this->myLocation && $coords = $options->get('coords')) {
+                $this->myLocation = [
+                    [
+                        'lat' => $coords['latitude'],
+                        'lon' => $coords['longitude']
+                    ]
+                ];
+            }
+
+            if ($this->myLocation) {
+                $resultData = $this->getMerchantsByDistance(
+                    $this->myLocation[0]['lat'],
+                    $this->myLocation[0]['lon'],
+                    $data->get('distance')
+                );
+
+                $merchantIds = [Uuid::randomHex()];
+                $distance = [];
+
+                foreach ($resultData as $item) {
+                    $merchantIds[] = $item['id'];
+                    $distance[$item['id']] = $item['distance'];
+                }
+
+                $criteria = new Criteria($merchantIds);
+            } else {
+                $criteria = new Criteria();
+
+                $criteria->addSorting(new FieldSorting('priority', FieldSorting::DESCENDING));
+                $criteria->addSorting(new FieldSorting('highlight', FieldSorting::DESCENDING));
+                $criteria->addSorting(new FieldSorting('company', FieldSorting::ASCENDING));
+            }
+
+            $criteria->setLimit($data->get('items'));
+        }
+
+        $criteria->addAssociation('tags');
+        $criteria->addAssociation('productManufacturers');
+        $criteria->addAssociation('productManufacturers.media');
+        $criteria->addAssociation('categories');
+        $criteria->addAssociation('media');
+        $criteria->addAssociation('marker');
+        $criteria->addAssociation('markerShadow');
+        $criteria->addFilter(new EqualsFilter('active', true));
+
+        if ($data->get('categoryId')) {
+            $criteria->addFilter(new EqualsFilter('categories.id', $data->get('categoryId')));
+        }
+
+        if ($data->get('productId')) {
+            $criteria->addFilter(new EqualsFilter('products.id', $data->get('productId')));
+        }
+
+        if ($data->get('tags')) {
+            $criteria->addFilter(new EqualsAnyFilter('tags.name', $data->get('tags')));
+        }
+
+        if ($data->get('search')) {
+            $criteria->setTerm($data->get('search'));
+        }
+
+        if ($data->get('term')) {
+            $criteria->setTerm($data->get('term'));
+        }
+
+        if ($data->get('rules')) {
+            $rules = is_array($data->get('rules')) ? $data->get('rules') : $data->get('rules')->all();
+
+            if (is_array($rules)) {
+                if (in_array('isHighlighted', $rules)) {
+                    $criteria->addFilter(new EqualsFilter('highlight', 1));
+                }
+                if (in_array('hasPriority', $rules)) {
+                    $criteria->addFilter(new NotFilter(NotFilter::CONNECTION_AND, [
+                        new EqualsFilter('priority', 0)
+                    ]));
+                }
+                if (in_array('hasLogo', $rules)) {
+                    $criteria->addFilter(new NotFilter(NotFilter::CONNECTION_AND, [
+                        new EqualsFilter('media.id', null)
+                    ]));
+                }
+            }
+        }
+
+        $resultData = $this->repository->search($criteria, $context);
+
+        foreach ($resultData->getEntities() as $entity) {
+            if (isset($distance) && count($distance) > 0) {
+                $entity->setDistance($distance[$entity->getId()]);
+            }
+
+            if ($data->get('seoUrl')) {
+                $entity->setSeoUrl(
+                    $this->seoUrlReplacer->generate('moorl.merchant-finder.merchant', ['merchantId' => $entity->getId()])
+                );
+            }
+        }
+
+        $this->setMerchantsCount($resultData->count());
+
+        return $resultData->getEntities();
     }
 
     public function getLocationByTerm($term): array
@@ -160,6 +290,35 @@ SQL;
             }
         }
 
+        $this->setMyLocation($myLocation);
+
         return $myLocation;
+    }
+
+    public function getMerchantsByDistance($lat, $lon, $distance): array
+    {
+        $sql = <<<SQL
+SELECT 
+    LOWER(HEX(`id`)) AS `id`,
+    ACOS(
+         SIN(RADIANS(:lat)) * SIN(RADIANS(`location_lat`)) 
+         + COS(RADIANS(:lat)) * COS(RADIANS(`location_lat`))
+         * COS(RADIANS(:lon) - RADIANS(`location_lon`))
+    ) * 6380 AS distance
+FROM `moorl_merchant`
+WHERE `active` IS TRUE
+HAVING `distance` < :distance
+ORDER BY `distance`
+LIMIT 500;
+SQL;
+
+        $resultData = $this->connection->executeQuery($sql, [
+                'lat' => $lat,
+                'lon' => $lon,
+                'distance' => $distance,
+            ]
+        )->fetchAll(FetchMode::ASSOCIATIVE);
+
+        return $resultData;
     }
 }

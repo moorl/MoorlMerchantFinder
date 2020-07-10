@@ -2,6 +2,7 @@
 
 namespace Moorl\MerchantFinder\Merchant;
 
+use Shopware\Core\Content\Cms\CmsPageEntity;
 use Shopware\Core\Content\Media\MediaEntity;
 use Shopware\Core\Content\Product\Aggregate\ProductManufacturer\ProductManufacturerEntity;
 use Shopware\Core\Content\Product\Aggregate\ProductManufacturer\ProductManufacturerCollection;
@@ -22,6 +23,14 @@ class MerchantEntity extends Entity
      * @var string|null
      */
     protected $cmsPageId;
+    /**
+     * @var CmsPageEntity|null
+     */
+    protected $cmsPage;
+    /**
+     * @var string|null
+     */
+    protected $seoUrl;
     /**
      * @var int|null
      */
@@ -51,11 +60,11 @@ class MerchantEntity extends Entity
      */
     protected $categories;
     /**
-     * @var string
+     * @var string|null
      */
     protected $mediaId;
     /**
-     * @var string
+     * @var string|null
      */
     protected $markerId;
     /**
@@ -63,19 +72,19 @@ class MerchantEntity extends Entity
      */
     protected $marker;
     /**
-     * @var string
+     * @var string|null
      */
     protected $markerShadowId;
     /**
-     * @var string
+     * @var string|null
      */
     protected $markerSettings;
     /**
-     * @var string
+     * @var string|null
      */
     protected $salesChannelId;
     /**
-     * @var string
+     * @var string|null
      */
     protected $customerGroupId;
     /**
@@ -87,11 +96,11 @@ class MerchantEntity extends Entity
      */
     protected $manufacturer;
     /**
-     * @var string
+     * @var string|null
      */
     protected $firstName;
     /**
-     * @var string
+     * @var string|null
      */
     protected $lastName;
     /**
@@ -99,7 +108,7 @@ class MerchantEntity extends Entity
      */
     protected $company;
     /**
-     * @var string
+     * @var string|null
      */
     protected $email;
     /**
@@ -107,7 +116,7 @@ class MerchantEntity extends Entity
      */
     protected $title;
     /**
-     * @var bool
+     * @var bool|null
      */
     protected $active;
     /**
@@ -127,7 +136,7 @@ class MerchantEntity extends Entity
      */
     protected $salutation;
     /**
-     * @var string
+     * @var string|null
      */
     protected $countryId;
     /**
@@ -135,15 +144,15 @@ class MerchantEntity extends Entity
      */
     protected $countryStateId;
     /**
-     * @var string
+     * @var string|null
      */
     protected $salutationId;
     /**
-     * @var string
+     * @var string|null
      */
     protected $zipcode;
     /**
-     * @var string
+     * @var string|null
      */
     protected $city;
     /**
@@ -151,7 +160,7 @@ class MerchantEntity extends Entity
      */
     protected $department;
     /**
-     * @var string
+     * @var string|null
      */
     protected $street;
     /**
@@ -183,41 +192,57 @@ class MerchantEntity extends Entity
      */
     protected $customer;
     /**
-     * @var string
+     * @var string|null
      */
     protected $shopUrl;
     /**
-     * @var string
+     * @var string|null
      */
     protected $merchantUrl;
     /**
-     * @var string
+     * @var string|null
      */
     protected $description;
     /**
-     * @var string
+     * @var string|null
      */
     protected $openingHours;
     /**
-     * @var float
+     * @var float|null
      */
     protected $locationLat;
     /**
-     * @var float
+     * @var float|null
      */
     protected $locationLon;
     /**
-     * @var string
+     * @var string|null
      */
     protected $originId;
     /**
-     * @var string
+     * @var string|null
      */
     protected $streetNumber;
     /**
      * @var null|string
      */
     protected $countryCode;
+
+    /**
+     * @return CmsPageEntity|null
+     */
+    public function getCmsPage(): ?CmsPageEntity
+    {
+        return $this->cmsPage;
+    }
+
+    /**
+     * @param CmsPageEntity|null $cmsPage
+     */
+    public function setCmsPage(?CmsPageEntity $cmsPage): void
+    {
+        $this->cmsPage = $cmsPage;
+    }
 
     /**
      * @return string|null
@@ -236,19 +261,35 @@ class MerchantEntity extends Entity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getUniqueIdentifier(): string
+    public function getSeoUrl(): ?string
     {
-        return $this->_uniqueIdentifier;
+        return $this->seoUrl;
     }
 
     /**
-     * @param string $uniqueIdentifier
+     * @param string|null $seoUrl
      */
-    public function setUniqueIdentifier(string $uniqueIdentifier): void
+    public function setSeoUrl(?string $seoUrl): void
     {
-        $this->_uniqueIdentifier = $uniqueIdentifier;
+        $this->seoUrl = $seoUrl;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getDistance(): ?int
+    {
+        return $this->distance;
+    }
+
+    /**
+     * @param int|null $distance
+     */
+    public function setDistance(?int $distance): void
+    {
+        $this->distance = $distance;
     }
 
     /**
@@ -283,150 +324,100 @@ class MerchantEntity extends Entity
         $this->priority = $priority;
     }
 
-    public function getDistance(): ?int
-    {
-        return $this->distance;
-    }
-
-    public function setDistance(int $distance): void
-    {
-        $this->distance = $distance;
-    }
-
-    public function getTags(): ?TagCollection
-    {
-        return $this->tags;
-    }
-
-    public function setTags(TagCollection $tags): void
-    {
-        $this->tags = $tags;
-    }
-
+    /**
+     * @return ProductManufacturerCollection|null
+     */
     public function getManufacturers(): ?ProductManufacturerCollection
     {
         return $this->manufacturers;
     }
 
-    public function setManufacturers(ProductManufacturerCollection $manufacturers): void
+    /**
+     * @param ProductManufacturerCollection|null $manufacturers
+     */
+    public function setManufacturers(?ProductManufacturerCollection $manufacturers): void
     {
         $this->manufacturers = $manufacturers;
     }
 
+    /**
+     * @return ProductManufacturerCollection|null
+     */
     public function getProductManufacturers(): ?ProductManufacturerCollection
     {
         return $this->productManufacturers;
     }
 
-    public function setProductManufacturers(ProductManufacturerCollection $manufacturers): void
+    /**
+     * @param ProductManufacturerCollection|null $productManufacturers
+     */
+    public function setProductManufacturers(?ProductManufacturerCollection $productManufacturers): void
     {
-        $this->productManufacturers = $manufacturers;
+        $this->productManufacturers = $productManufacturers;
     }
 
+    /**
+     * @return TagCollection|null
+     */
+    public function getTags(): ?TagCollection
+    {
+        return $this->tags;
+    }
+
+    /**
+     * @param TagCollection|null $tags
+     */
+    public function setTags(?TagCollection $tags): void
+    {
+        $this->tags = $tags;
+    }
+
+    /**
+     * @return CategoryCollection|null
+     */
     public function getCategories(): ?CategoryCollection
     {
         return $this->categories;
     }
 
-    public function setCategories(CategoryCollection $categories): void
+    /**
+     * @param CategoryCollection|null $categories
+     */
+    public function setCategories(?CategoryCollection $categories): void
     {
         $this->categories = $categories;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getMarkerShadowId(): string
-    {
-        return $this->markerShadowId;
-    }
-
-    /**
-     * @param string $markerShadowId
-     */
-    public function setMarkerShadowId(string $markerShadowId): void
-    {
-        $this->markerShadowId = $markerShadowId;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMarkerSettings(): string
-    {
-        return $this->markerSettings;
-    }
-
-    /**
-     * @param string $markerSettings
-     */
-    public function setMarkerSettings(string $markerSettings): void
-    {
-        $this->markerSettings = $markerSettings;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescription(): string
-    {
-        return $this->description;
-    }
-
-    /**
-     * @param string $description
-     */
-    public function setDescription(string $description): void
-    {
-        $this->description = $description;
-    }
-
-    /**
-     * @return string
-     */
-    public function getOpeningHours(): string
-    {
-        return $this->openingHours;
-    }
-
-    /**
-     * @param string $openingHours
-     */
-    public function setOpeningHours(string $openingHours): void
-    {
-        $this->openingHours = $openingHours;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMarkerId(): string
-    {
-        return $this->markerId;
-    }
-
-    /**
-     * @param string $mediaId
-     */
-    public function setMarkerId(string $markerId): void
-    {
-        $this->markerId = $markerId;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMediaId(): string
+    public function getMediaId(): ?string
     {
         return $this->mediaId;
     }
 
     /**
-     * @param string $mediaId
+     * @param string|null $mediaId
      */
-    public function setMediaId(string $mediaId): void
+    public function setMediaId(?string $mediaId): void
     {
         $this->mediaId = $mediaId;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getMarkerId(): ?string
+    {
+        return $this->markerId;
+    }
+
+    /**
+     * @param string|null $markerId
+     */
+    public function setMarkerId(?string $markerId): void
+    {
+        $this->markerId = $markerId;
     }
 
     /**
@@ -438,11 +429,75 @@ class MerchantEntity extends Entity
     }
 
     /**
-     * @param MediaEntity|null $media
+     * @param MediaEntity|null $marker
      */
     public function setMarker(?MediaEntity $marker): void
     {
         $this->marker = $marker;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getMarkerShadowId(): ?string
+    {
+        return $this->markerShadowId;
+    }
+
+    /**
+     * @param string|null $markerShadowId
+     */
+    public function setMarkerShadowId(?string $markerShadowId): void
+    {
+        $this->markerShadowId = $markerShadowId;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getMarkerSettings(): ?string
+    {
+        return $this->markerSettings;
+    }
+
+    /**
+     * @param string|null $markerSettings
+     */
+    public function setMarkerSettings(?string $markerSettings): void
+    {
+        $this->markerSettings = $markerSettings;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getSalesChannelId(): ?string
+    {
+        return $this->salesChannelId;
+    }
+
+    /**
+     * @param string|null $salesChannelId
+     */
+    public function setSalesChannelId(?string $salesChannelId): void
+    {
+        $this->salesChannelId = $salesChannelId;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCustomerGroupId(): ?string
+    {
+        return $this->customerGroupId;
+    }
+
+    /**
+     * @param string|null $customerGroupId
+     */
+    public function setCustomerGroupId(?string $customerGroupId): void
+    {
+        $this->customerGroupId = $customerGroupId;
     }
 
     /**
@@ -478,33 +533,33 @@ class MerchantEntity extends Entity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getFirstName(): string
+    public function getFirstName(): ?string
     {
         return $this->firstName;
     }
 
     /**
-     * @param string $firstName
+     * @param string|null $firstName
      */
-    public function setFirstName(string $firstName): void
+    public function setFirstName(?string $firstName): void
     {
         $this->firstName = $firstName;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getLastName(): string
+    public function getLastName(): ?string
     {
         return $this->lastName;
     }
 
     /**
-     * @param string $lastName
+     * @param string|null $lastName
      */
-    public function setLastName(string $lastName): void
+    public function setLastName(?string $lastName): void
     {
         $this->lastName = $lastName;
     }
@@ -526,17 +581,17 @@ class MerchantEntity extends Entity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getEmail(): string
+    public function getEmail(): ?string
     {
         return $this->email;
     }
 
     /**
-     * @param string $email
+     * @param string|null $email
      */
-    public function setEmail(string $email): void
+    public function setEmail(?string $email): void
     {
         $this->email = $email;
     }
@@ -558,17 +613,17 @@ class MerchantEntity extends Entity
     }
 
     /**
-     * @return bool
+     * @return bool|null
      */
-    public function isActive(): bool
+    public function getActive(): ?bool
     {
         return $this->active;
     }
 
     /**
-     * @param bool $active
+     * @param bool|null $active
      */
-    public function setActive(bool $active): void
+    public function setActive(?bool $active): void
     {
         $this->active = $active;
     }
@@ -638,17 +693,17 @@ class MerchantEntity extends Entity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getCountryId(): string
+    public function getCountryId(): ?string
     {
         return $this->countryId;
     }
 
     /**
-     * @param string $countryId
+     * @param string|null $countryId
      */
-    public function setCountryId(string $countryId): void
+    public function setCountryId(?string $countryId): void
     {
         $this->countryId = $countryId;
     }
@@ -670,49 +725,49 @@ class MerchantEntity extends Entity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getSalutationId(): string
+    public function getSalutationId(): ?string
     {
         return $this->salutationId;
     }
 
     /**
-     * @param string $salutationId
+     * @param string|null $salutationId
      */
-    public function setSalutationId(string $salutationId): void
+    public function setSalutationId(?string $salutationId): void
     {
         $this->salutationId = $salutationId;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getZipcode(): string
+    public function getZipcode(): ?string
     {
         return $this->zipcode;
     }
 
     /**
-     * @param string $zipcode
+     * @param string|null $zipcode
      */
-    public function setZipcode(string $zipcode): void
+    public function setZipcode(?string $zipcode): void
     {
         $this->zipcode = $zipcode;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getCity(): string
+    public function getCity(): ?string
     {
         return $this->city;
     }
 
     /**
-     * @param string $city
+     * @param string|null $city
      */
-    public function setCity(string $city): void
+    public function setCity(?string $city): void
     {
         $this->city = $city;
     }
@@ -734,17 +789,17 @@ class MerchantEntity extends Entity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getStreet(): string
+    public function getStreet(): ?string
     {
         return $this->street;
     }
 
     /**
-     * @param string $street
+     * @param string|null $street
      */
-    public function setStreet(string $street): void
+    public function setStreet(?string $street): void
     {
         $this->street = $street;
     }
@@ -862,87 +917,119 @@ class MerchantEntity extends Entity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getShopUrl(): string
+    public function getShopUrl(): ?string
     {
         return $this->shopUrl;
     }
 
     /**
-     * @param string $shopUrl
+     * @param string|null $shopUrl
      */
-    public function setShopUrl(string $shopUrl): void
+    public function setShopUrl(?string $shopUrl): void
     {
         $this->shopUrl = $shopUrl;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getMerchantUrl(): string
+    public function getMerchantUrl(): ?string
     {
         return $this->merchantUrl;
     }
 
     /**
-     * @param string $merchantUrl
+     * @param string|null $merchantUrl
      */
-    public function setMerchantUrl(string $merchantUrl): void
+    public function setMerchantUrl(?string $merchantUrl): void
     {
         $this->merchantUrl = $merchantUrl;
     }
 
     /**
-     * @return float
+     * @return string|null
      */
-    public function getLocationLat(): float
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string|null $description
+     */
+    public function setDescription(?string $description): void
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getOpeningHours(): ?string
+    {
+        return $this->openingHours;
+    }
+
+    /**
+     * @param string|null $openingHours
+     */
+    public function setOpeningHours(?string $openingHours): void
+    {
+        $this->openingHours = $openingHours;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getLocationLat(): ?float
     {
         return $this->locationLat;
     }
 
     /**
-     * @param float $locationLat
+     * @param float|null $locationLat
      */
-    public function setLocationLat(float $locationLat): void
+    public function setLocationLat(?float $locationLat): void
     {
         $this->locationLat = $locationLat;
     }
 
     /**
-     * @return float
+     * @return float|null
      */
-    public function getLocationLon(): float
+    public function getLocationLon(): ?float
     {
         return $this->locationLon;
     }
 
     /**
-     * @param float $locationLon
+     * @param float|null $locationLon
      */
-    public function setLocationLon(float $locationLon): void
+    public function setLocationLon(?float $locationLon): void
     {
         $this->locationLon = $locationLon;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getOriginId(): string
+    public function getOriginId(): ?string
     {
         return $this->originId;
     }
 
     /**
-     * @param string $originId
+     * @param string|null $originId
      */
-    public function setOriginId(string $originId): void
+    public function setOriginId(?string $originId): void
     {
         $this->originId = $originId;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getStreetNumber(): ?string
     {
@@ -950,58 +1037,26 @@ class MerchantEntity extends Entity
     }
 
     /**
-     * @param string $streetNumber
+     * @param string|null $streetNumber
      */
-    public function setStreetNumber(string $streetNumber): void
+    public function setStreetNumber(?string $streetNumber): void
     {
         $this->streetNumber = $streetNumber;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getCountryCode(): string
+    public function getCountryCode(): ?string
     {
         return $this->countryCode;
     }
 
     /**
-     * @param string $countryCode
+     * @param string|null $countryCode
      */
-    public function setCountryCode(string $countryCode): void
+    public function setCountryCode(?string $countryCode): void
     {
         $this->countryCode = $countryCode;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSalesChannelId(): string
-    {
-        return $this->salesChannelId;
-    }
-
-    /**
-     * @param string $salesChannelId
-     */
-    public function setSalesChannelId(string $salesChannelId): void
-    {
-        $this->salesChannelId = $salesChannelId;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCustomerGroupId(): string
-    {
-        return $this->customerGroupId;
-    }
-
-    /**
-     * @param string $customerGroupId
-     */
-    public function setCustomerGroupId(string $customerGroupId): void
-    {
-        $this->customerGroupId = $customerGroupId;
     }
 }

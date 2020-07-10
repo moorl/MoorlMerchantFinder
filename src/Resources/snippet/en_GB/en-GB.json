@@ -36,7 +36,8 @@
         "chose": "Chose",
         "loading": "Loading...",
         "more": "More",
-        "highlight": "Tip"
+        "highlight": "Tip",
+        "resetSelection": "Reset selection"
     },
     "error": {
         "merchant-not-selected": "Please chose your local merchant to proceed the checkout."

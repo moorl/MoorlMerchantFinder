@@ -8,6 +8,8 @@ use Doctrine\DBAL\ParameterType;
 use GuzzleHttp\Client;
 use Moorl\MerchantFinder\MoorlMerchantFinder;
 use Moorl\MerchantFinder\Service\MerchantService;
+use Shopware\Core\Content\Cms\Exception\PageNotFoundException;
+use Shopware\Core\Content\Cms\SalesChannel\SalesChannelCmsPageLoaderInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
@@ -25,6 +27,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
+use Symfony\Component\HttpFoundation\ParameterBag;
+
 use Shopware\Storefront\Controller\StorefrontController as OriginController;
 
 /**
@@ -38,16 +42,22 @@ class StorefrontController extends OriginController
     private $repository;
     private $systemConfigService;
     private $merchantService;
+    /**
+     * @var SalesChannelCmsPageLoaderInterface
+     */
+    private $cmsPageLoader;
 
     public function __construct(
         SystemConfigService $systemConfigService,
         EntityRepositoryInterface $repository,
-        MerchantService $merchantService
+        MerchantService $merchantService,
+        SalesChannelCmsPageLoaderInterface $cmsPageLoader
     )
     {
         $this->systemConfigService = $systemConfigService;
         $this->repository = $repository;
         $this->merchantService = $merchantService;
+        $this->cmsPageLoader = $cmsPageLoader;
     }
 
     /**
@@ -68,20 +78,52 @@ class StorefrontController extends OriginController
 
         if ($data->get('action') == 'pick' && $data->get('merchant')) {
             $response->setData($this->setCustomerSession($data, $context));
+        } else if ($data->get('action') == 'unset') {
+            $response->setData($this->setCustomerSession($data, $context));
         } else {
-            $response->setData($this->searchProcess($data, $context->getContext()));
+            $response->setData($this->searchProcess($data, $context));
         }
 
         return $response;
     }
 
+    /**
+     * @Route("/moorl/merchant-finder/merchant/{merchantId}", name="moorl.merchant-finder.merchant", methods={"GET"}, defaults={"XmlHttpRequest"=true})
+     */
+    public function merchant($merchantId, Request $request, SalesChannelContext $context): Response
+    {
+        $merchant = $this->merchantService->getMerchants($context->getContext(), new ParameterBag([
+            'id' => $merchantId
+        ]))->first();
+
+        if ($merchant->getCmsPageId()) {
+            $pages = $this->cmsPageLoader->load($request, new Criteria([$merchant->getCmsPageId()]), $context);
+
+            if (!$pages->has($merchant->getCmsPageId())) {
+                throw new PageNotFoundException($merchant->getCmsPageId());
+            }
+
+            $merchant->setCmsPage($pages->first());
+        }
+
+        return $this->renderStorefront('@MoorlMerchantFinder/plugin/moorl-merchant-finder/page/merchant-detail.html.twig', [
+            'merchant' => $merchant
+        ]);
+    }
+
     protected function setCustomerSession($data, $context): array
     {
+        if ($data->get('action') == 'unset') {
+            $merchantId = null;
+        } else {
+            $merchantId = $data->get('merchant');
+        }
+
         if ($customer = $context->getCustomer()) {
             $customerRepo = $this->container->get('customer.repository');
 
             $customFields = $customer->getCustomFields() ?: [];
-            $customFields['moorl_mf_merchant_id'] = $data->get('merchant');
+            $customFields['moorl_mf_merchant_id'] = $merchantId;
 
             $customerRepo->update([[
                 'id' => $customer->getId(),
@@ -90,107 +132,34 @@ class StorefrontController extends OriginController
         }
 
         $session = new Session();
-        $session->set('moorl-merchant-finder_selected_merchant', $data->get('merchant'));
-
-        /* unset to debug */
-        if ($data->get('merchant') == 'b3bd48adbcb748e8a910f9155e0a8d05') {
-            $session->remove('moorl-merchant-finder_selected_merchant');
-        }
+        $session->set('moorl-merchant-finder_selected_merchant', $merchantId);
 
         return [
             'reload' => true,
         ];
     }
 
-    protected function searchProcess($data, $context): array
+    protected function searchProcess(RequestDataBag $data, SalesChannelContext $context): array
     {
-        $connection = $this->container->get(Connection::class);
+        $merchants = $this->merchantService->getMerchants($context->getContext(), $data);
 
-        $data->set('distance', $data->get('distance') ?: '30');
-        $data->set('items', (int)$data->get('items') ?: 500);
-
-        //$pluginConfig = $this->systemConfigService->getDomain('MoorlMerchantFinder.config');
-        //$filterCountries = !empty($pluginConfig['MoorlMerchantFinder.config.allowedSearchCountryCodes']) ? explode(',', $pluginConfig['MoorlMerchantFinder.config.allowedSearchCountryCodes']) : MoorlMerchantFinder::getDefault('allowedSearchCountryCodes');
-        //$searchEngine = !empty($pluginConfig['MoorlMerchantFinder.config.nominatim']) ? $pluginConfig['MoorlMerchantFinder.config.nominatim'] : MoorlMerchantFinder::getDefault('nominatim');
-
-        $myLocation = $this->merchantService->getLocationByTerm($data->get('zipcode'));
-
-        if (count($myLocation) > 0) {
-            $resultData = $this->merchantService->getMerchantsByDistance($myLocation, $data->get('distance'));
-
-            $merchantIds = [Uuid::randomHex()];
-            $distance = [];
-
-            foreach ($resultData as $item) {
-                $merchantIds[] = $item['id'];
-                $distance[$item['id']] = $item['distance'];
-            }
-
-            $criteria = new Criteria($merchantIds);
-        } else {
-            $criteria = new Criteria();
-
-            $criteria->addSorting(new FieldSorting('priority', FieldSorting::DESCENDING));
-            $criteria->addSorting(new FieldSorting('highlight', FieldSorting::DESCENDING));
-            $criteria->addSorting(new FieldSorting('company', FieldSorting::ASCENDING));
+        switch ($data->get('initiator')) {
+            case 'merchant-picker':
+                $listItemTemplate = '@MoorlMerchantPicker/plugin/moorl-merchant-picker/component/result-item-static.html.twig';
+                break;
+            default:
+                $listItemTemplate = '@MoorlMerchantFinder/plugin/moorl-merchant-finder/component/result-item-static.html.twig';
         }
 
-        $criteria->setLimit($data->get('items'));
-        $criteria->addAssociation('tags');
-        $criteria->addAssociation('productManufacturers');
-        $criteria->addAssociation('productManufacturers.media');
-        $criteria->addAssociation('categories');
-        $criteria->addAssociation('media');
-        $criteria->addAssociation('marker');
-        $criteria->addAssociation('markerShadow');
-        $criteria->addFilter(new EqualsFilter('active', true));
+        $html = '';
 
-        if ($data->get('countryCode')) {
-            $criteria->addFilter(new EqualsFilter('countryCode', $data->get('countryCode')));
-        }
-        if ($data->get('tags')) {
-            $criteria->addFilter(new EqualsFilter('tags.id', $data->get('tags')));
-        }
-        if ($data->get('productManufacturers')) {
-            $criteria->addFilter(new EqualsFilter('productManufacturers.id', $data->get('productManufacturers')));
-        }
-        if ($data->get('categories')) {
-            $criteria->addFilter(new EqualsFilter('categories.id', $data->get('categories')));
-        }
-
-        if ($data->get('rules')) {
-            $rules = $data->get('rules')->all();
-
-            if (is_array($rules)) {
-                if (in_array('isHighlighted', $rules)) {
-                    $criteria->addFilter(new EqualsFilter('highlight', 1));
-                }
-                if (in_array('hasPriority', $rules)) {
-                    $criteria->addFilter(new NotFilter(NotFilter::CONNECTION_AND, [
-                        new EqualsFilter('priority', 0)
-                    ]));
-                }
-                if (in_array('hasLogo', $rules)) {
-                    $criteria->addFilter(new NotFilter(NotFilter::CONNECTION_AND, [
-                        new EqualsFilter('media.id', null)
-                    ]));
-                }
-            }
-        }
-
-        $criteria->setTerm($data->get('term'));
-
-        $resultData = $this->repository->search($criteria, $context);
-
-        foreach ($resultData->getEntities() as $entity) {
-            if (isset($distance) && count($distance) > 0) {
-                $entity->setDistance($distance[$entity->getId()]);
-            }
-            // TODO: Add SEO Url
+        foreach ($merchants as $merchant) {
+            $html .= $this->renderView($listItemTemplate, ['merchant' => $merchant]);
         }
 
         if ($data->get('term') || $data->get('zipcode')) {
             $searchInfo = $this->trans('moorl-merchant-finder.forTheSearch');
+
             if ($data->get('term')) {
                 $searchInfo .= '"' . $data->get('term') . '" ';
             }
@@ -200,18 +169,20 @@ class StorefrontController extends OriginController
                     'distance' => $data->get('distance')
                 ]);
             }
+
             $searchInfo .= $this->trans('moorl-merchant-finder.are');
         } else {
             $searchInfo = $this->trans('moorl-merchant-finder.thereAre');
         }
 
         $searchInfo .= $this->trans('moorl-merchant-finder.resultsFound', [
-            'count' => ($resultData->count() !== 0 ? $resultData->count() : $this->trans('moorl-merchant-finder.none')),
+            'count' => ($this->merchantService->getMerchantsCount() !== 0 ? $this->merchantService->getMerchantsCount() : $this->trans('moorl-merchant-finder.none')),
         ]);
 
         return [
-            'data' => $resultData->getEntities(),
-            'loc' => $myLocation,
+            'data' => $merchants,
+            'html' => $html,
+            'loc' => null,
             'searchInfo' => $searchInfo,
         ];
     }

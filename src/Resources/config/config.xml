@@ -57,6 +57,28 @@
     <card>
         <title>Advanced</title>
         <title lang="de-DE">Erweitert</title>
+        <input-field type="single-select">
+            <name>detailPage</name>
+            <label>Merchant info page</label>
+            <label lang="de-DE">Händler Infoseite</label>
+            <options>
+                <option>
+                    <id>none</id>
+                    <name>None</name>
+                    <name lang="de-DE">Keine</name>
+                </option>
+                <option>
+                    <id>popup</id>
+                    <name>Open as popup</name>
+                    <name lang="de-DE">Als Popup öffnen</name>
+                </option>
+                <option>
+                    <id>page</id>
+                    <name>Open as Page</name>
+                    <name lang="de-DE">Als Seite öffnen</name>
+                </option>
+            </options>
+        </input-field>
         <input-field type="bool">
             <name>searchParams</name>
             <label>Use search params in URL</label>

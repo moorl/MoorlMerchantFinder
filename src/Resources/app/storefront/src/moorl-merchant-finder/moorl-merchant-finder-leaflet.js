@@ -6,7 +6,13 @@ import Te from '../template-engine';
 import L from '../../../../node_modules/leaflet/dist/leaflet';
 
 export default class MoorlMerchantFinder extends Plugin {
-    static options = {};
+
+    static options = {
+        /*'coords': {
+            'latitude': 51.7335284,
+            'longitude': 8.6706804
+        }*/
+    };
 
     init() {
         this._client = new HttpClient(window.accessKey, window.contextToken);
@@ -34,6 +40,7 @@ export default class MoorlMerchantFinder extends Plugin {
         this._searchParams = this.el.dataset.searchParams;
 
         this._registerEvents();
+        this._getLocation();
         this._formSubmit();
     }
 
@@ -77,6 +84,18 @@ export default class MoorlMerchantFinder extends Plugin {
         });
     }
 
+    _getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(this._setPosition);
+        } else {
+            console.log("Geolocation is not supported by this browser.");
+        }
+    }
+
+    _setPosition(position) {
+        this.options.coords = position.coords;
+    }
+
     _formSubmit(event) {
         console.log(event);
 
@@ -100,9 +119,12 @@ export default class MoorlMerchantFinder extends Plugin {
             }
         }
 
+        formData.set("options", JSON.stringify(this.options));
+
         if (event && event.submitter && event.submitter.value) {
-            console.log(formData);
+            //console.log(formData);
             formData.set("action", event.submitter.value);
+
             if (event.submitter.dataset.merchant) {
                 formData.set("merchant", event.submitter.dataset.merchant);
             }
@@ -134,9 +156,15 @@ export default class MoorlMerchantFinder extends Plugin {
         if (this._resultInfo) {
             this._resultInfo.innerHTML = response.searchInfo ;
         }
-        response.data.forEach(function (item) {
-            that._results.insertAdjacentHTML('beforeend', te.render(that._resultTemplate, item));
-        });
+
+        if (typeof response.html != 'undefined') {
+            this._results.innerHTML = response.html;
+        } else {
+            response.data.forEach(function (item) {
+                that._results.insertAdjacentHTML('beforeend', te.render(that._resultTemplate, item));
+            });
+        }
+
         $(this._results).removeClass('d-none');
         $(this._loadingIndicator).addClass('d-none');
     }
