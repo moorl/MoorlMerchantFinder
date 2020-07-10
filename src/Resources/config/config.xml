@@ -19,8 +19,25 @@
         <title lang="de-DE">Suchlogig</title>
 
         <input-field type="bool">
+            <name>positionRequest</name>
+            <label>Enable browser position request</label>
+            <label lang="de-DE">Standort Abfrage des Browsers nutzen</label>
+            <defaultValue>true</defaultValue>
+        </input-field>
+
+        <input-field>
+            <name>positionDistance</name>
+            <label>Search distance if browser position is given</label>
+            <label lang="de-DE">Suchradius wenn Standortabfrage vorhanden</label>
+            <placeholder>Leave empty to use default</placeholder>
+            <placeholder lang="de-DE">Freilassen für Standard</placeholder>
+            <defaultValue>250</defaultValue>
+        </input-field>
+
+        <input-field type="bool">
             <name>countryCode</name>
             <label>Enable country filter</label>
+            <label lang="de-DE">Länderfilter aktivieren</label>
             <defaultValue>false</defaultValue>
         </input-field>
 

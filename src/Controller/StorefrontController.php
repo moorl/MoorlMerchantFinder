@@ -6,6 +6,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\ParameterType;
 use GuzzleHttp\Client;
+use Moorl\MerchantFinder\Core\GeneralStruct;
 use Moorl\MerchantFinder\MoorlMerchantFinder;
 use Moorl\MerchantFinder\Service\MerchantService;
 use Shopware\Core\Content\Cms\Exception\PageNotFoundException;
@@ -75,6 +76,7 @@ class StorefrontController extends OriginController
     public function search(RequestDataBag $data, SalesChannelContext $context): JsonResponse
     {
         $response = new JsonResponse();
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
 
         if ($data->get('action') == 'pick' && $data->get('merchant')) {
             $response->setData($this->setCustomerSession($data, $context));
@@ -143,19 +145,39 @@ class StorefrontController extends OriginController
     {
         $merchants = $this->merchantService->getMerchants($context->getContext(), $data);
 
+        $popupItemTemplate = null;
+        $listItemTemplate = null;
+
         switch ($data->get('initiator')) {
             case 'merchant-picker':
                 $listItemTemplate = '@MoorlMerchantPicker/plugin/moorl-merchant-picker/component/result-item-static.html.twig';
                 break;
             default:
                 $listItemTemplate = '@MoorlMerchantFinder/plugin/moorl-merchant-finder/component/result-item-static.html.twig';
+                $popupItemTemplate = '@MoorlMerchantFinder/plugin/moorl-merchant-finder/component/popup-item-static.html.twig';
         }
 
         $html = '';
 
+        $markers = [];
+
         foreach ($merchants as $merchant) {
             $html .= $this->renderView($listItemTemplate, ['merchant' => $merchant]);
+
+            if ($popupItemTemplate) {
+                $markers[] = [
+                    'locationLat' => $merchant->getLocationLat(),
+                    'locationLon' => $merchant->getLocationLon(),
+                    'id' => $merchant->getId(),
+                    'markerSettings' => $merchant->getMarkerSettings(),
+                    'markerShadow' => $merchant->getMarkerShadow(),
+                    'marker' => $merchant->getMarker(),
+                    'popup' => $this->renderView($popupItemTemplate, ['merchant' => $merchant])
+                ];
+            }
         }
+
+        //dump($markers); exit;
 
         if ($data->get('term') || $data->get('zipcode')) {
             $searchInfo = $this->trans('moorl-merchant-finder.forTheSearch');
@@ -180,9 +202,9 @@ class StorefrontController extends OriginController
         ]);
 
         return [
-            'data' => $merchants,
+            'data' => $markers,
             'html' => $html,
-            'loc' => null,
+            'myLocation' => $this->merchantService->getMyLocation(),
             'searchInfo' => $searchInfo,
         ];
     }

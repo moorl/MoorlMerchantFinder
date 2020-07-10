@@ -58,6 +58,7 @@
          data-tile-layer-copy='{{ tileLayerCopy|raw }}'
          data-default-marker='{{ defaultMarker|json_encode|raw }}'
          data-search-params="{{ shopware.config.MoorlMerchantFinder.config.searchParams }}"
+         data-position-request="{{ shopware.config.MoorlMerchantFinder.config.positionRequest }}"
          style="
                  --style-height: {{ element.config.minHeight.value }};
                  --style-gutter: {{ element.config.borders.value }};

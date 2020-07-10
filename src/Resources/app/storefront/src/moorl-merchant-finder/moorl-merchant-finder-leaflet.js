@@ -7,12 +7,7 @@ import L from '../../../../node_modules/leaflet/dist/leaflet';
 
 export default class MoorlMerchantFinder extends Plugin {
 
-    static options = {
-        /*'coords': {
-            'latitude': 51.7335284,
-            'longitude': 8.6706804
-        }*/
-    };
+    static options = {};
 
     init() {
         const that = this;
@@ -37,6 +32,12 @@ export default class MoorlMerchantFinder extends Plugin {
             this._defaultMarker = JSON.parse(this.el.dataset.defaultMarker);
         } else {
             this._defaultMarker = null;
+        }
+
+        if (this.el.dataset.positionRequest) {
+            this._positionRequest = this.el.dataset.positionRequest;
+        } else {
+            this._positionRequest = null;
         }
 
         this._options = {
@@ -96,17 +97,20 @@ export default class MoorlMerchantFinder extends Plugin {
     _getLocation() {
         const that = this;
 
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position) {
-                console.log(position);
-                that._options.coords = {
-                    'latitude': position.coords.latitude,
-                    'longitude': position.coords.longitude
-                };
-                console.log(that._options);
-            });
-        } else {
-            console.log("Geolocation is not supported by this browser.");
+        if (this._positionRequest) {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    that._options.myLocation = [
+                        {
+                            'lat': position.coords.latitude,
+                            'lon': position.coords.longitude
+                        }
+                    ];
+                    console.log(that._options);
+                });
+            } else {
+                console.log("Geolocation is not supported by this browser.");
+            }
         }
     }
 
@@ -185,7 +189,6 @@ export default class MoorlMerchantFinder extends Plugin {
 
     _buildMapMarkers(response) {
         const that = this;
-        const te = new Te();
         const featureMarker = [];
         let minLon = 10000,
             minLat = 10000,
@@ -219,9 +222,11 @@ export default class MoorlMerchantFinder extends Plugin {
                 minLon = item.locationLon < minLon ? item.locationLon : minLon;
                 maxLon = item.locationLon > maxLon ? item.locationLon : maxLon;
 
+                //console.log(item.popup);
+
                 featureMarker.push(
                     L.marker([item.locationLat, item.locationLon], markerOptions)
-                        .bindPopup(te.render(that._popupTemplate, item), {
+                        .bindPopup(item.popup, {
                             autoPan: false,
                             autoClose: true
                         })
@@ -241,20 +246,25 @@ export default class MoorlMerchantFinder extends Plugin {
         this.ol.markers.clearLayers();
         this.ol.markers = L.layerGroup(featureMarker).addTo(that.ol.map);
 
-        if (response.data.length != 0) {
-            if (response.data.length == 1) {
-                minLat = minLat - 0.02;
-                maxLat = maxLat + 0.02;
-                minLon = minLon - 0.02;
-                maxLon = maxLon + 0.02;
-            }
-
-            // relocate bounding box
-            this.ol.map.fitBounds([
-                [minLat, minLon],
-                [maxLat, maxLon]
-            ])
+        if (response.data.length == 1) {
+            minLat = minLat - 0.02;
+            maxLat = maxLat + 0.02;
+            minLon = minLon - 0.02;
+            maxLon = maxLon + 0.02;
+        } else if (response.data.length == 0 && response.myLocation.length > 0) {
+            minLon = maxLon = response.myLocation[0].lon;
+            minLat = maxLat = response.myLocation[0].lat;
+            minLat = minLat - 0.02;
+            maxLat = maxLat + 0.02;
+            minLon = minLon - 0.02;
+            maxLon = maxLon + 0.02;
         }
+
+        // relocate bounding box
+        this.ol.map.fitBounds([
+            [minLat, minLon],
+            [maxLat, maxLon]
+        ])
     }
 
     _focusItem(id) {

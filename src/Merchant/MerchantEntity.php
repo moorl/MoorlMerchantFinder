@@ -76,6 +76,10 @@ class MerchantEntity extends Entity
      */
     protected $markerShadowId;
     /**
+     * @var MediaEntity|null
+     */
+    protected $markerShadow;
+    /**
      * @var string|null
      */
     protected $markerSettings;
@@ -227,6 +231,22 @@ class MerchantEntity extends Entity
      * @var null|string
      */
     protected $countryCode;
+
+    /**
+     * @return MediaEntity|null
+     */
+    public function getMarkerShadow(): ?MediaEntity
+    {
+        return $this->markerShadow;
+    }
+
+    /**
+     * @param MediaEntity|null $markerShadow
+     */
+    public function setMarkerShadow(?MediaEntity $markerShadow): void
+    {
+        $this->markerShadow = $markerShadow;
+    }
 
     /**
      * @return CmsPageEntity|null

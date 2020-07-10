@@ -97,13 +97,12 @@ class MerchantService
 
             $this->getLocationByTerm($data->get('zipcode'));
 
-            if (!$this->myLocation && $coords = $options->get('coords')) {
-                $this->myLocation = [
-                    [
-                        'lat' => $coords['latitude'],
-                        'lon' => $coords['longitude']
-                    ]
-                ];
+            if (!$this->myLocation && $options->get('myLocation')) {
+                $this->myLocation = $options->get('myLocation');
+
+                if ($this->systemConfigService->get('MoorlMerchantFinder.config.positionDistance')) {
+                    $data->set('distance', $this->systemConfigService->get('MoorlMerchantFinder.config.positionDistance'));
+                }
             }
 
             if ($this->myLocation) {
