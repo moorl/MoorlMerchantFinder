@@ -95,14 +95,10 @@ class MerchantService
             $data->set('distance', $data->get('distance') ?: '30');
             $data->set('items', (int)$data->get('items') ?: 500);
 
-            $this->getLocationByTerm($data->get('zipcode'));
-
-            if (!$this->myLocation && $options->get('myLocation')) {
+            if ($options->get('myLocation')) {
                 $this->myLocation = $options->get('myLocation');
-
-                if ($this->systemConfigService->get('MoorlMerchantFinder.config.positionDistance')) {
-                    $data->set('distance', $this->systemConfigService->get('MoorlMerchantFinder.config.positionDistance'));
-                }
+            } else {
+                $this->getLocationByTerm($data->get('zipcode'));
             }
 
             if ($this->myLocation) {

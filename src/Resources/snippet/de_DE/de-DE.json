@@ -42,7 +42,8 @@
             "isHighlighted": "Premium Fachhändler",
             "hasPriority": "Empfehlung",
             "hasLogo": "Fachhändler mit Logo"
-        }
+        },
+        "myLocation": "Meine aktuelle Position"
     },
     "error": {
         "merchant-not-selected": "Bitte wählen Sie einen Händler aus um die Bestellung abzuschließen"

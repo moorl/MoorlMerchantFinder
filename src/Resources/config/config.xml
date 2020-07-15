@@ -27,11 +27,10 @@
 
         <input-field>
             <name>positionDistance</name>
-            <label>Search distance if browser position is given</label>
-            <label lang="de-DE">Suchradius wenn Standortabfrage vorhanden</label>
-            <placeholder>Leave empty to use default</placeholder>
-            <placeholder lang="de-DE">Freilassen für Standard</placeholder>
-            <defaultValue>250</defaultValue>
+            <label>Search distance</label>
+            <label lang="de-DE">Suchradius</label>
+            <defaultValue>10,25,50,100,200,300</defaultValue>
+            <placeholder>10,25,50,100,200,300</placeholder>
         </input-field>
 
         <input-field type="bool">

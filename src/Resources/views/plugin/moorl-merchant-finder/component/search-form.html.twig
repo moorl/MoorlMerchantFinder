@@ -27,7 +27,21 @@
             {% endif %}
             {% block element_moorl_merchant_finder_form_inner_zipcode %}
                 <div class="form-group col-6 col-lg">
-                    <input name="zipcode" class="form-control" placeholder="{{ "moorl-merchant-finder.zipcodeCity"|trans }}">
+                    <div class="input-group">
+                        {% if shopware.config.MoorlMerchantFinder.config.positionRequest %}
+                            <div class="input-group-prepend">
+                                <button class="btn btn-primary"
+                                        type="button"
+                                        name="location"
+                                        data-toggle="tooltip"
+                                        data-placement="top"
+                                        title="{{ "moorl-merchant-finder.myLocation"|trans }}">
+                                    <i class="fas fa-crosshairs"></i>
+                                </button>
+                            </div>
+                        {% endif %}
+                        <input name="zipcode" class="form-control" placeholder="{{ "moorl-merchant-finder.zipcodeCity"|trans }}">
+                    </div>
                 </div>
             {% endblock %}
             {% block element_moorl_merchant_finder_form_inner_distance %}
@@ -37,12 +51,9 @@
                             <span class="input-group-text">{{ "moorl-merchant-finder.radius"|trans }}</span>
                         </div>
                         <select name="distance" class="form-control">
-                            <option value="10">10</option>
-                            <option value="25">25</option>
-                            <option value="50">50</option>
-                            <option value="100">100</option>
-                            <option value="200">200</option>
-                            <option value="300">300</option>
+                            {% for distance in shopware.config.MoorlMerchantFinder.config.positionDistance|split(',') %}
+                                <option value="{{ distance }}">{{ distance }}</option>
+                            {% endfor %}
                         </select>
                         <div class="input-group-append">
                             <span class="input-group-text">{{ "moorl-merchant-finder.km"|trans }}</span>

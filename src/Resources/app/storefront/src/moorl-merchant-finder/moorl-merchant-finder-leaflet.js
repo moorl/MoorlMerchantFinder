@@ -10,8 +10,6 @@ export default class MoorlMerchantFinder extends Plugin {
     static options = {};
 
     init() {
-        const that = this;
-
         this._client = new HttpClient(window.accessKey, window.contextToken);
         this._form = this.el.getElementsByTagName("form")[0];
         this._results = this.el.getElementsByClassName('moorl-merchant-finder-results')[0];
@@ -34,24 +32,13 @@ export default class MoorlMerchantFinder extends Plugin {
             this._defaultMarker = null;
         }
 
-        if (this.el.dataset.positionRequest) {
-            this._positionRequest = this.el.dataset.positionRequest;
-        } else {
-            this._positionRequest = null;
-        }
-
         this._options = {
             'foo': 'bar'
         };
 
         this._searchParams = this.el.dataset.searchParams;
-
         this._registerEvents();
-        this._getLocation();
-
-        setTimeout(function () {
-            that._formSubmit();
-        }, 1000)
+        this._formSubmit();
     }
 
     _refresh() {
@@ -63,6 +50,17 @@ export default class MoorlMerchantFinder extends Plugin {
         const that = this;
 
         this.el.addEventListener('submit', this._formSubmit.bind(this));
+
+        $(this.el).on('click', 'button[name=location]', function () {
+            $(this).toggleClass('active');
+            if ($(this).hasClass('active')) {
+                that._getLocation();
+                $(that.el).find('input[name=zipcode]').prop('disabled', true);
+            } else {
+                that._options.myLocation = null;
+                $(that.el).find('input[name=zipcode]').prop('disabled', false).focus();
+            }
+        });
 
         $(this.el).on('click', '[data-item]', function () {
             that._focusItem($(this).data('item'));
@@ -97,20 +95,18 @@ export default class MoorlMerchantFinder extends Plugin {
     _getLocation() {
         const that = this;
 
-        if (this._positionRequest) {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function (position) {
-                    that._options.myLocation = [
-                        {
-                            'lat': position.coords.latitude,
-                            'lon': position.coords.longitude
-                        }
-                    ];
-                    console.log(that._options);
-                });
-            } else {
-                console.log("Geolocation is not supported by this browser.");
-            }
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                that._options.myLocation = [
+                    {
+                        'lat': position.coords.latitude,
+                        'lon': position.coords.longitude
+                    }
+                ];
+                console.log(that._options);
+            });
+        } else {
+            console.log("Geolocation is not supported by this browser.");
         }
     }
 
@@ -172,7 +168,7 @@ export default class MoorlMerchantFinder extends Plugin {
         const that = this;
         const te = new Te();
         if (this._resultInfo) {
-            this._resultInfo.innerHTML = response.searchInfo ;
+            this._resultInfo.innerHTML = response.searchInfo;
         }
 
         if (typeof response.html != 'undefined') {

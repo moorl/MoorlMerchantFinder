@@ -42,7 +42,8 @@
             "isHighlighted": "Premium merchant",
             "hasPriority": "Priority merchant",
             "hasLogo": "Merchant with logo"
-        }
+        },
+        "myLocation": "Use my current location"
     },
     "error": {
         "merchant-not-selected": "Please chose your local merchant to proceed the checkout."

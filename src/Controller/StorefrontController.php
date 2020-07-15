@@ -108,7 +108,7 @@ class StorefrontController extends OriginController
             $merchant->setCmsPage($pages->first());
         }
 
-        return $this->renderStorefront('@MoorlMerchantFinder/plugin/moorl-merchant-finder/page/merchant-detail.html.twig', [
+        return $this->renderStorefront('plugin/moorl-merchant-finder/page/merchant-detail.html.twig', [
             'merchant' => $merchant
         ]);
     }
@@ -150,11 +150,11 @@ class StorefrontController extends OriginController
 
         switch ($data->get('initiator')) {
             case 'merchant-picker':
-                $listItemTemplate = '@MoorlMerchantPicker/plugin/moorl-merchant-picker/component/result-item-static.html.twig';
+                $listItemTemplate = 'plugin/moorl-merchant-picker/component/result-item-static.html.twig';
                 break;
             default:
-                $listItemTemplate = '@MoorlMerchantFinder/plugin/moorl-merchant-finder/component/result-item-static.html.twig';
-                $popupItemTemplate = '@MoorlMerchantFinder/plugin/moorl-merchant-finder/component/popup-item-static.html.twig';
+                $listItemTemplate = 'plugin/moorl-merchant-finder/component/result-item-static.html.twig';
+                $popupItemTemplate = 'plugin/moorl-merchant-finder/component/popup-item-static.html.twig';
         }
 
         $html = '';
