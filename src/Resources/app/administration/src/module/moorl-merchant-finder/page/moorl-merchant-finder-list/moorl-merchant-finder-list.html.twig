@@ -60,7 +60,7 @@
             </template>
 
             <template #preview-company="{ item }">
-                <sw-media-preview :source="item.mediaId"></sw-media-preview>
+                <sw-media-preview-v2 :source="item.media"></sw-media-preview-v2>
             </template>
         </sw-entity-listing>
 
@@ -76,6 +76,13 @@
                 <sw-field type="switch" bordered :label="$t('moorl-merchant-finder.buttons.getLocButtonText')" v-model="csv.options.getPosition"></sw-field>
 
                 <sw-field type="switch" bordered :label="$t('moorl-merchant-finder.buttons.overwriteText')" v-model="csv.options.overwrite"></sw-field>
+
+                <sw-entity-single-select
+                        :label="$tc('moorl-merchant-finder.buttons.mediaFolder')"
+                        v-model="csv.options.mediaFolderId"
+                        labelProperty="name"
+                        entity="media_folder">
+                </sw-entity-single-select>
 
                 <p class="info">{{ $t('moorl-merchant-finder.importAssistant.loadedText', { count: csv.data.length }) }}</p>
 

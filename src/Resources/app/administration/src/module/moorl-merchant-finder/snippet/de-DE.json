@@ -50,9 +50,11 @@
             "getLocButtonText": "Beschaffe Koordinaten",
             "selectLocButtonText": "Auswählen",
             "openMapButtonText": "Karte öffnen",
-            "overwriteText": "Bereits vorhandene Datensätze aktualisieren (originId muss gesetzt sein)."
+            "overwriteText": "Bereits vorhandene Datensätze aktualisieren (originId muss gesetzt sein).",
+            "mediaFolder": "In diesem Ordner Bilder speichern"
         },
         "properties": {
+            "cmsPageId": "CMS Seiten ID",
             "logo": "Logo",
             "markerId": "Marker",
             "markerShadowId": "Marker Shadow",

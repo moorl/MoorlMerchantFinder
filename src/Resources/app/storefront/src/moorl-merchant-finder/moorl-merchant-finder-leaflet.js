@@ -10,6 +10,7 @@ export default class MoorlMerchantFinder extends Plugin {
     static options = {};
 
     init() {
+        const that = this;
         this._client = new HttpClient(window.accessKey, window.contextToken);
         this._form = this.el.getElementsByTagName("form")[0];
         this._results = this.el.getElementsByClassName('moorl-merchant-finder-results')[0];

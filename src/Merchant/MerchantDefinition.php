@@ -91,7 +91,7 @@ class MerchantDefinition extends EntityDefinition
             new IntField('priority', 'priority'),
             new BoolField('highlight', 'highlight'),
             (new IntField('auto_increment', 'autoIncrement'))->addFlags(new WriteProtected()),
-            new ManyToOneAssociationField('media', 'media_id', MediaDefinition::class, 'id', false),
+            new ManyToOneAssociationField('media', 'media_id', MediaDefinition::class, 'id', true),
             new ManyToOneAssociationField('marker', 'marker_id', MediaDefinition::class, 'id', false),
             new ManyToOneAssociationField('markerShadow', 'marker_shadow_id', MediaDefinition::class, 'id', false),
             //new ManyToManyAssociationField('productManufacturer', 'product_manufacturer_id', ProductManufacturerDefinition::class, 'id', false),

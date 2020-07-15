@@ -50,9 +50,11 @@
             "getLocButtonText": "Get positions by OpenStreetMap",
             "selectLocButtonText": "Chose",
             "openMapButtonText": "Open Map",
-            "overwriteText": "Overwrite existing datarows (originId need to be set)."
+            "overwriteText": "Overwrite existing datarows (originId need to be set).",
+            "mediaFolder": "Save images in this folder"
         },
         "properties": {
+            "cmsPageId": "CMS page ID",
             "logo": "Logo",
             "markerId": "Marker",
             "markerShadowId": "Marker Shadow",
