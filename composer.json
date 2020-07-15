@@ -22,8 +22,20 @@
         "shopware-plugin-class": "Moorl\\MerchantFinder\\MoorlMerchantFinder",
         "copyright": "(c) by moori",
         "label": {
-            "de-DE": "Händler Suche für Shopware 6",
-            "en-GB": "Merchant finder for Shopware 6"
+            "de-DE": "Händlersuche für Shopware 6",
+            "en-GB": "Merchantfinder for Shopware 6"
+        },
+        "description": {
+            "de-DE": "Händlersuche für Shopware 6",
+            "en-GB": "Merchantfinder for Shopware 6"
+        },
+        "manufacturerLink": {
+            "de-DE": "https://docs.moori.net/",
+            "en-GB": "https://docs.moori.net/"
+        },
+        "supportLink": {
+            "de-DE": "https://docs.moori.net/",
+            "en-GB": "https://docs.moori.net/"
         }
     }
 }
