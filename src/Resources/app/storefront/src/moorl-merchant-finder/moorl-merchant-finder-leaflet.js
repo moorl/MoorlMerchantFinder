@@ -2,15 +2,16 @@ import Plugin from 'src/plugin-system/plugin.class';
 import FormSerializeUtil from 'src/utility/form/form-serialize.util';
 import DomAccess from 'src/helper/dom-access.helper';
 import HttpClient from 'src/service/http-client.service';
-import Te from '../template-engine';
-import L from '../../../../node_modules/leaflet/dist/leaflet';
+import Te from '../template-engine'; // Remove 1.3
+import L from 'leaflet';
+import 'url-search-params-polyfill';
 
 export default class MoorlMerchantFinder extends Plugin {
 
     static options = {};
 
     init() {
-        const that = this;
+        //const that = this;
         this._client = new HttpClient(window.accessKey, window.contextToken);
         this._form = this.el.getElementsByTagName("form")[0];
         this._results = this.el.getElementsByClassName('moorl-merchant-finder-results')[0];
