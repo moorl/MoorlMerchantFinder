@@ -146,7 +146,7 @@ class MerchantService
         }
 
         if ($data->get('tags')) {
-            $criteria->addFilter(new EqualsAnyFilter('tags.name', $data->get('tags')));
+            $criteria->addFilter(new EqualsFilter('tags.id', $data->get('tags')));
         }
 
         if ($data->get('search')) {
