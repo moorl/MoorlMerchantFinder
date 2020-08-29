@@ -11,6 +11,7 @@ use Moorl\MerchantFinder\MoorlMerchantFinder;
 use Moorl\MerchantFinder\Service\MerchantService;
 use Shopware\Core\Content\Cms\Exception\PageNotFoundException;
 use Shopware\Core\Content\Cms\SalesChannel\SalesChannelCmsPageLoaderInterface;
+use Shopware\Core\Framework\Adapter\Twig\TemplateFinder;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
@@ -150,15 +151,14 @@ class StorefrontController extends OriginController
 
         switch ($data->get('initiator')) {
             case 'merchant-picker':
-                $listItemTemplate = 'plugin/moorl-merchant-picker/component/result-item-static.html.twig';
+                $listItemTemplate = $this->get(TemplateFinder::class)->find('plugin/moorl-merchant-picker/component/result-item-static.html.twig', false, null);
                 break;
             default:
-                $listItemTemplate = 'plugin/moorl-merchant-finder/component/result-item-static.html.twig';
-                $popupItemTemplate = 'plugin/moorl-merchant-finder/component/popup-item-static.html.twig';
+                $listItemTemplate = $this->get(TemplateFinder::class)->find('plugin/moorl-merchant-finder/component/result-item-static.html.twig', false, null);
+                $popupItemTemplate = $this->get(TemplateFinder::class)->find('plugin/moorl-merchant-finder/component/popup-item-static.html.twig', false, null);
         }
 
         $html = '';
-
         $markers = [];
 
         foreach ($merchants as $merchant) {

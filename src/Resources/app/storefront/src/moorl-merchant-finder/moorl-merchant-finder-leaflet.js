@@ -76,8 +76,8 @@ export default class MoorlMerchantFinder extends Plugin {
             console.log(this);
         });
 
-        $(this.el).on('click', '[data-merchant]', function () {
-            const button = that._form.getElementsByTagName("button")[0];
+        $(this.el).on('click', 'button[data-merchant]', function () {
+            const button = that._form.querySelector("[type=submit]");
 
             button.dataset.merchant = this.dataset.merchant;
             button.value = 'pick';
