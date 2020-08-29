@@ -8,11 +8,13 @@
 
     {% block element_moorl_merchant_finder_form_inner %}
         <div class="row form-row">
-            {% block element_moorl_merchant_finder_form_inner_search %}
-                <div class="form-group col-6 col-lg">
-                    <input name="term" class="form-control" placeholder="{{ "moorl-merchant-finder.searchFor"|trans }}">
-                </div>
-            {% endblock %}
+            {% if shopware.config.MoorlMerchantFinder.config.enableTextSearch %}
+                {% block element_moorl_merchant_finder_form_inner_search %}
+                    <div class="form-group col-6 col-lg">
+                        <input name="term" class="form-control" placeholder="{{ "moorl-merchant-finder.searchFor"|trans }}">
+                    </div>
+                {% endblock %}
+            {% endif %}
             {% if element.data.countries %}
                 {% block element_moorl_merchant_finder_form_inner_countries %}
                     <div class="form-group col-6 col-lg">

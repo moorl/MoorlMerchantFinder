@@ -170,9 +170,20 @@ Component.register('moorl-merchant-finder-list', {
     methods: {
         async getMerchantById(repo, originId, id) {
             const criteria = new Criteria();
-            criteria.addFilter(Criteria.multi('OR', [
-                Criteria.equals('id', id),
-                Criteria.equals('originId', originId)]));
+
+            if (id && originId) {
+                criteria.addFilter(Criteria.multi('OR', [
+                    Criteria.equals('id', id),
+                    Criteria.equals('originId', originId)
+                ]));
+            } else if (id) {
+                criteria.addFilter(Criteria.equals('id', id));
+            } else if (originId) {
+                criteria.addFilter(Criteria.equals('originId', originId));
+            } else {
+                return null;
+            }
+
             let entity = null;
             await repo.search(criteria, Shopware.Context.api).then((result) => {
                 entity = result.first();

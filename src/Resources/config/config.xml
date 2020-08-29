@@ -19,6 +19,13 @@
         <title lang="de-DE">Suchlogig</title>
 
         <input-field type="bool">
+            <name>enableTextSearch</name>
+            <label>Enable text search</label>
+            <label lang="de-DE">Textsuche aktiv</label>
+            <defaultValue>true</defaultValue>
+        </input-field>
+
+        <input-field type="bool">
             <name>positionRequest</name>
             <label>Enable browser position request</label>
             <label lang="de-DE">Standort Abfrage des Browsers nutzen</label>
@@ -42,7 +49,8 @@
 
         <input-field type="bool">
             <name>resultInfo</name>
-            <label>Such Info anzeigen</label>
+            <label>Show search info</label>
+            <label lang="de-DE">Such Info anzeigen</label>
             <defaultValue>true</defaultValue>
         </input-field>
 
