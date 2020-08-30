@@ -10,6 +10,7 @@
             <argument type="service" id="moorl_merchant.repository"/>
             <argument type="service" id="Doctrine\DBAL\Connection"/>
             <argument type="service" id="session"/>
+            <argument type="service" id="event_dispatcher"/>
         </service>
 
         <!-- Controller -->

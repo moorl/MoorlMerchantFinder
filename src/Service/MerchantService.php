@@ -7,6 +7,7 @@ use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\ParameterType;
 use GuzzleHttp\Client;
 use Moorl\MerchantFinder\MoorlMerchantFinder;
+use Moorl\MerchantFinder\Core\MerchantsLoadedEvent;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
@@ -24,6 +25,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class MerchantService
 {
@@ -39,18 +41,24 @@ class MerchantService
      * @var array|null
      */
     private $myLocation;
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
 
     public function __construct(
         SystemConfigService $systemConfigService,
         EntityRepositoryInterface $repository,
         Connection $connection,
-        Session $session
+        Session $session,
+        EventDispatcherInterface $eventDispatcher
     )
     {
         $this->systemConfigService = $systemConfigService;
         $this->repository = $repository;
         $this->connection = $connection;
         $this->session = $session;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -193,7 +201,12 @@ class MerchantService
 
         $this->setMerchantsCount($resultData->count());
 
-        return $resultData->getEntities();
+        $merchants = $resultData->getEntities();
+
+        $event = new MerchantsLoadedEvent($context, $merchants);
+        $this->eventDispatcher->dispatch($event);
+
+        return $merchants;
     }
 
     public function getLocationByTerm($term): array
