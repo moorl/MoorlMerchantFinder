@@ -91,6 +91,16 @@ class StorefrontController extends OriginController
     }
 
     /**
+     * @Route("/moorl/merchant-finder/unset", name="moorl.merchant-finder.unset", methods={"POST"}, defaults={"XmlHttpRequest"=true})
+     */
+    public function unset(RequestDataBag $data, SalesChannelContext $context): Response
+    {
+        $this->setCustomerSession($data, $context);
+
+        return $this->redirectToRoute('frontend.home.page');
+    }
+
+    /**
      * @Route("/moorl/merchant-finder/merchant/{merchantId}", name="moorl.merchant-finder.merchant", methods={"GET"}, defaults={"XmlHttpRequest"=true})
      */
     public function merchant($merchantId, Request $request, SalesChannelContext $context): Response
