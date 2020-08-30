@@ -38,6 +38,10 @@ class MerchantEntity extends Entity
     /**
      * @var bool|null
      */
+    protected $allowMerchantCustomerContact;
+    /**
+     * @var bool|null
+     */
     protected $highlight;
     /**
      * @var int|null
@@ -231,6 +235,22 @@ class MerchantEntity extends Entity
      * @var null|string
      */
     protected $countryCode;
+
+    /**
+     * @return bool|null
+     */
+    public function getAllowMerchantCustomerContact(): ?bool
+    {
+        return $this->allowMerchantCustomerContact;
+    }
+
+    /**
+     * @param bool|null $allowMerchantCustomerContact
+     */
+    public function setAllowMerchantCustomerContact(?bool $allowMerchantCustomerContact): void
+    {
+        $this->allowMerchantCustomerContact = $allowMerchantCustomerContact;
+    }
 
     /**
      * @return MediaEntity|null

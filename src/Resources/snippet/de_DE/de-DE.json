@@ -1,5 +1,6 @@
 {
     "moorl-merchant-finder": {
+        "allowMerchantCustomerContact": "Ich erlaube meinem ausgewählten Fachhändler mich per Telefon oder E-Mail zu kontaktieren.",
         "forTheSearch": "für die Suche ",
         "forTheSearchZipcode": "in zipcode und distance km Umgebung ",
         "are": "wurden ",
