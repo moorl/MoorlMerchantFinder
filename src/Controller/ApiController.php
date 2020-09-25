@@ -8,6 +8,7 @@ use Doctrine\DBAL\ParameterType;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
+use Shopware\Core\System\SalesChannel\NoContentResponse;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Shopware\Storefront\Page\GenericPageLoader;
@@ -62,7 +63,7 @@ class ApiController extends AbstractController
     /**
      * @Route("/api/v{version}/moorl/merchant-finder/export", name="api.moorl.merchant-finder.export", methods={"GET"}, requirements={"version"="\d+"})
      */
-    public function export(Context $context): void
+    public function export(Context $context): NoContentResponse
     {
         $data = [];
 
@@ -157,6 +158,8 @@ class ApiController extends AbstractController
         }
 
         fclose($out);
-        die();
+        //die();
+
+        return new NoContentResponse();
     }
 }
