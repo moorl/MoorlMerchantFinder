@@ -63,9 +63,24 @@
                  --style-gutter: {{ element.config.borders.value }};
                  --style-results-width: {{ element.config.resultsWidth.value }};">
         <div class="element-content" id="{{ element.id }}">
-            <div class="search-box">
-                {% sw_include '@MoorlMerchantFinder/plugin/moorl-merchant-finder/component/search-form.html.twig' %}
-            </div>
+            {% if shopware.config.MoorlMerchantFinder.config.enableSearch %}
+                <div class="search-box">
+                    {% sw_include '@MoorlMerchantFinder/plugin/moorl-merchant-finder/component/search-form.html.twig' %}
+                </div>
+            {% else %}
+                <form data-moorl-merchant-finder="true"
+                      class="d-none"
+                      action="{{ path('moorl.merchant-finder.search') }}"
+                      method="post"
+                      data-form-csrf-handler="true">
+                    {{ sw_csrf('moorl.merchant-finder.search') }}
+                    <input type="hidden" name="items" value="{{ element.config.items.value }}">
+                    <button type="submit"></button>
+                    {% for rule in shopware.config.MoorlMerchantFinder.config.searchRules %}
+                        <input type="hidden" name="rules[]" value="{{ rule }}">
+                    {% endfor %}
+                </form>
+            {% endif %}
             <div class="map-box">
                 <div class="map-content">
                     {% sw_include '@MoorlMerchantFinder/plugin/moorl-merchant-finder/component/map.html.twig' %}

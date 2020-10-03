@@ -20,6 +20,10 @@ class MerchantEntity extends Entity
     use EntityIdTrait;
 
     /**
+     * @var OpeningHourCollection|null
+     */
+    protected $merchantOpeningHours;
+    /**
      * @var string|null
      */
     protected $cmsPageId;
@@ -235,6 +239,22 @@ class MerchantEntity extends Entity
      * @var null|string
      */
     protected $countryCode;
+
+    /**
+     * @return OpeningHourCollection|null
+     */
+    public function getMerchantOpeningHours(): ?OpeningHourCollection
+    {
+        return $this->merchantOpeningHours;
+    }
+
+    /**
+     * @param OpeningHourCollection|null $merchantOpeningHours
+     */
+    public function setMerchantOpeningHours(?OpeningHourCollection $merchantOpeningHours): void
+    {
+        $this->merchantOpeningHours = $merchantOpeningHours;
+    }
 
     /**
      * @return bool|null

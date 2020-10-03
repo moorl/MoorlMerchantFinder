@@ -2,6 +2,7 @@
 
 namespace Moorl\MerchantFinder\Merchant;
 
+use MoorlProductConsultant\Core\Content\Step\StepDefinition;
 use Shopware\Core\Checkout\Customer\Aggregate\CustomerGroup\CustomerGroupDefinition;
 use Shopware\Core\Content\Cms\CmsPageDefinition;
 use Shopware\Core\Content\Media\MediaDefinition;
@@ -21,6 +22,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\IntField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\JsonField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
+use Shopware\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\OneToOneAssociationField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\ManyToManyAssociationField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\StringField;
@@ -94,12 +96,10 @@ class MerchantDefinition extends EntityDefinition
             new ManyToOneAssociationField('media', 'media_id', MediaDefinition::class, 'id', true),
             new ManyToOneAssociationField('marker', 'marker_id', MediaDefinition::class, 'id', false),
             new ManyToOneAssociationField('markerShadow', 'marker_shadow_id', MediaDefinition::class, 'id', false),
-            //new ManyToManyAssociationField('productManufacturer', 'product_manufacturer_id', ProductManufacturerDefinition::class, 'id', false),
-            //new ManyToOneAssociationField('salutation', 'salutation_id', SalutationDefinition::class, 'id', false),
-            (new ManyToManyAssociationField('categories', CategoryDefinition::class, MerchantCategoryDefinition::class, 'moorl_merchant_id', 'category_id'))
-                ->addFlags(new CascadeDelete()),
+            (new ManyToManyAssociationField('categories', CategoryDefinition::class, MerchantCategoryDefinition::class, 'moorl_merchant_id', 'category_id'))->addFlags(new CascadeDelete()),
             new ManyToManyAssociationField('tags', TagDefinition::class, MerchantTagDefinition::class, 'moorl_merchant_id', 'tag_id'),
             new ManyToManyAssociationField('productManufacturers', ProductManufacturerDefinition::class, MerchantProductManufacturerDefinition::class, 'moorl_merchant_id', 'product_manufacturer_id'),
+            new OneToManyAssociationField('merchantOpeningHours', OpeningHourDefinition::class, 'moorl_merchant_id'),
         ]);
     }
 }

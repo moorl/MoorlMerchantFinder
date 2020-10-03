@@ -1,0 +1,365 @@
+<sw-page class="moorl-merchant-finder-detail">
+    <template slot="smart-bar-actions">
+        <sw-button :routerLink="{ name: 'moorl.merchant.finder.list' }">
+            {{ $t('moorl-merchant-finder.buttons.cancelButtonText') }}
+        </sw-button>
+
+        <sw-button-process
+                :isLoading="isLoading"
+                :processSuccess="processSuccess"
+                variant="primary"
+                @process-finish="saveFinish"
+                @click="onClickSave">
+            {{ $t('moorl-merchant-finder.buttons.saveButtonText') }}
+        </sw-button-process>
+    </template>
+
+    <template slot="content" v-if="!isLoading">
+        <sw-card-view>
+            <sw-card :isLoading="isLoading" :title="$t('moorl-foundation.label.accountCard')">
+                <sw-container columns="repeat(auto-fit, minmax(250px, 1fr)" gap="0 30px">
+                    <div>
+                        <sw-field type="switch" bordered :label="$t('moorl-foundation.properties.active')" v-model="merchant.active"></sw-field>
+
+                        <div class="sw-field">
+                            <sw-upload-store-listener
+                                :uploadTag="uploadTagMedia"
+                                autoUpload
+                                @media-upload-finish="setMediaItem">
+                            </sw-upload-store-listener>
+                            <sw-media-upload
+                                :uploadTag="uploadTagMedia"
+                                :source="merchant.mediaId"
+                                :allowMultiSelect="false"
+                                :label="$t('moorl-foundation.properties.logo')"
+                                variant="regular"
+                                @sw-media-upload-media-upload-success="setMediaItem"
+                                @media-drop="onDropMedia"
+                                @media-upload-remove-image="onUnlinkMedia">
+                            </sw-media-upload>
+                        </div>
+
+                        <sw-number-field :label="$t('moorl-foundation.properties.priority')" v-model="merchant.priority"></sw-number-field>
+
+                        <sw-field type="switch" bordered :label="$t('moorl-foundation.properties.highlight')" v-model="merchant.highlight"></sw-field>
+
+                        <sw-field type="textarea"
+                                  :label="$t('moorl-foundation.properties.description')"
+                                  :placeholder="$t('moorl-foundation.properties.description')"
+                                  name="description"
+                                  v-model="merchant.description">
+                        </sw-field>
+
+                        <sw-field type="textarea"
+                                  :label="$t('moorl-foundation.properties.openingHours')"
+                                  :placeholder="$t('moorl-foundation.properties.openingHours')"
+                                  name="openingHours"
+                                  v-model="merchant.openingHours">
+                        </sw-field>
+
+                        <sw-entity-single-select
+                            :label="$t('moorl-foundation.properties.cmsPage')"
+                            entity="cms_page"
+                            v-model="merchant.cmsPageId">
+                        </sw-entity-single-select>
+                    </div>
+
+                    <div>
+                        <sw-field :label="$t('moorl-foundation.properties.company')" v-model="merchant.company"></sw-field>
+                        <sw-field :label="$t('moorl-foundation.properties.title')" v-model="merchant.title"></sw-field>
+                        <sw-field :label="$t('moorl-foundation.properties.firstName')" v-model="merchant.firstName"></sw-field>
+                        <sw-field :label="$t('moorl-foundation.properties.lastName')" v-model="merchant.lastName"></sw-field>
+                        <sw-field :label="$t('moorl-foundation.properties.vatId')" v-model="merchant.vatId"></sw-field>
+                        <sw-field :label="$t('moorl-foundation.properties.email')" v-model="merchant.email"></sw-field>
+                        <sw-field :label="$t('moorl-foundation.properties.phoneNumber')" v-model="merchant.phoneNumber"></sw-field>
+                        <sw-field :label="$t('moorl-foundation.properties.shopUrl')" v-model="merchant.shopUrl"></sw-field>
+                        <sw-field :label="$t('moorl-foundation.properties.merchantUrl')" v-model="merchant.merchantUrl"></sw-field>
+                    </div>
+
+                </sw-container>
+            </sw-card>
+
+            <sw-card :isLoading="isLoading" :title="$t('moorl-foundation.label.relationsCard')">
+                <sw-container columns="repeat(auto-fit, minmax(250px, 1fr)" gap="0 30px">
+                    <div>
+                        <sw-select-field
+                            :label="$t('moorl-foundation.properties.salesChannelId')"
+                            v-model="merchant.salesChannelId">
+                            <option></option>
+                            <option v-for="salesChannel in salesChannels" :value="salesChannel.id">{{ salesChannel.name }}</option>
+                        </sw-select-field>
+                        <sw-inherit-wrapper v-model="merchant.categories"
+                                            isAssociation
+                                            :label="$tc('sw-product.categoryForm.labelCategory')">
+                            <template #content="{ currentValue }">
+                                <sw-category-tree-field :categoriesCollection="currentValue ? currentValue : []"
+                                                        :placeholder="$tc('sw-product.categoryForm.placeholderCategory')">
+                                </sw-category-tree-field>
+                            </template>
+                        </sw-inherit-wrapper>
+                    </div>
+                    <div>
+                        <sw-select-field
+                            :label="$t('moorl-foundation.properties.customerGroupId')"
+                            v-model="merchant.customerGroupId">
+                            <option></option>
+                            <option v-for="customerGroup in customerGroups" :value="customerGroup.id">{{ customerGroup.name }}</option>
+                        </sw-select-field>
+                        <sw-entity-tag-select
+                            :label="$t('sw-customer.baseForm.labelTags')"
+                            v-model="merchant.tags">
+                        </sw-entity-tag-select>
+                        <sw-entity-multi-select
+                            :label="$t('sw-product.basicForm.labelManufacturer')"
+                            v-model="merchant.productManufacturers">
+                        </sw-entity-multi-select>
+                    </div>
+                </sw-container>
+            </sw-card>
+
+            <sw-card :isLoading="isLoading" :title="$t('moorl-foundation.label.addressCard')">
+                <sw-container columns="repeat(auto-fit, minmax(250px, 1fr)" gap="0 30px">
+                    <sw-field :label="$t('moorl-foundation.properties.street')" v-model="merchant.street"></sw-field>
+                    <sw-field :label="$t('moorl-foundation.properties.streetNumber')" v-model="merchant.streetNumber"></sw-field>
+                    <sw-field :label="$t('moorl-foundation.properties.zipcode')" v-model="merchant.zipcode"></sw-field>
+                    <sw-field :label="$t('moorl-foundation.properties.city')" v-model="merchant.city"></sw-field>
+
+                    <sw-select-field :label="$t('moorl-foundation.properties.countryId')" v-model="merchant.countryId">
+                        <option v-for="country in countries" :value="country.id">{{ country.name }}</option>
+                    </sw-select-field>
+
+                    <sw-field :label="$t('moorl-foundation.properties.countryCode')" v-model="merchant.countryCode"></sw-field>
+
+                    <sw-field :label="$t('moorl-foundation.properties.country')" v-model="merchant.country"></sw-field>
+                </sw-container>
+            </sw-card>
+
+            <sw-card :isLoading="isLoading" :title="$t('moorl-foundation.properties.openingHours')">
+                <sw-button @click="getOpeningHour(null)">
+                    {{ $t('moorl-product-consultant.buttons.newButtonText') }}
+                </sw-button>
+
+                <sw-data-grid
+                        v-if="merchant.merchantOpeningHours"
+                        class="sw-product-stream-grid-preview__grid"
+                        :dataSource="openingHours"
+                        :columns="openingHourColumns"
+                        :showSelection="false"
+                        :showActions="false"
+                        :showPreviews="true"
+                        :plainAppearance="true"
+                        :isLoading="isLoading"
+                        :showActions="true">
+                    <template #column-date="{ item }">
+                        {{ item.date|date() }}
+                    </template>
+                    <template #column-showFrom="{ item }">
+                        {{ item.showFrom|date() }}
+                    </template>
+                    <template #column-showUntil="{ item }">
+                        {{ item.showUntil|date() }}
+                    </template>
+                    <template #column-merchantId="{ item }">
+                        {{ item.merchantId ? 'true' : 'false' }}
+                    </template>
+
+                    <slot name="additional-columns"></slot>
+
+                    <template #actions="{ item }">
+                        <sw-context-menu-item @click="getOpeningHour(item.id)">
+                            {{ $tc('global.default.edit') }}
+                        </sw-context-menu-item>
+
+                        <sw-context-menu-item variant="danger"
+                                              @click="deleteOpeningHour(item.id)">
+                            {{ $tc('global.default.delete') }}
+                        </sw-context-menu-item>
+                    </template>
+                </sw-data-grid>
+            </sw-card>
+
+            <sw-card :isLoading="isLoading" :title="$t('moorl-foundation.label.locationCard')">
+                <div class="sw-field">
+                    <sw-button @click="getPositionByAddress">
+                        {{ $t('moorl-foundation.buttons.getLocButtonText') }}
+                    </sw-button>
+                    <sw-button @click="drawMap">
+                        {{ $t('moorl-foundation.buttons.openMapButtonText') }}
+                    </sw-button>
+                </div>
+
+                <div class="sw-field">
+                    <div id="embedMap" ref="embedMap" style="height:400px;"></div>
+                </div>
+
+                <sw-container columns="repeat(auto-fit, minmax(250px, 1fr)" gap="0 30px">
+                    <sw-field type="text"
+                              :label="$t('moorl-foundation.properties.locationLat')"
+                              v-model="merchant.locationLat">
+                    </sw-field>
+                    <sw-field type="text"
+                              :label="$t('moorl-foundation.properties.locationLon')"
+                              v-model="merchant.locationLon">
+                    </sw-field>
+                </sw-container>
+            </sw-card>
+
+            <sw-card :isLoading="isLoading" :title="$t('moorl-foundation.label.markerCard')">
+                <sw-container columns="repeat(auto-fit, minmax(250px, 1fr)" gap="0 30px">
+                    <div>
+                        <div class="sw-field">
+                            <sw-upload-store-listener
+                                :uploadTag="uploadTagMarker"
+                                autoUpload
+                                @media-upload-finish="setMarkerItem">
+                            </sw-upload-store-listener>
+                            <sw-media-upload
+                                :uploadTag="uploadTagMarker"
+                                :source="merchant.markerId"
+                                :allowMultiSelect="false"
+                                :label="$t('moorl-foundation.properties.markerId')"
+                                variant="regular"
+                                @sw-media-upload-media-upload-success="setMarkerItem"
+                                @media-drop="onDropMarker"
+                                @media-upload-remove-image="onUnlinkMarker">
+                            </sw-media-upload>
+                        </div>
+                        <div class="sw-field">
+                            <sw-upload-store-listener
+                                :uploadTag="uploadTagMarkerShadow"
+                                autoUpload
+                                @media-upload-finish="setMarkerShadowItem">
+                            </sw-upload-store-listener>
+                            <sw-media-upload
+                                :uploadTag="uploadTagMarkerShadow"
+                                :source="merchant.markerShadowId"
+                                :allowMultiSelect="false"
+                                :label="$t('moorl-foundation.properties.markerShadowId')"
+                                variant="regular"
+                                @sw-media-upload-media-upload-success="setMarkerShadowItem"
+                                @media-drop="onDropMarkerShadow"
+                                @media-upload-remove-image="onUnlinkMarkerShadow">
+                            </sw-media-upload>
+                        </div>
+                    </div>
+                    <div>
+                        <sw-field type="textarea"
+                                  :label="$t('moorl-foundation.properties.markerSettings')"
+                                  :placeholder="$t('moorl-foundation.properties.markerSettings')"
+                                  name="markerSettings"
+                                  v-model="merchant.markerSettings">
+                        </sw-field>
+
+                        <div class="sw-field__label">
+                            <label for="markerSettings" class="">
+                                {{ $t('moorl-foundation.properties.markerSettingsExample') }}<br>
+                                <a href="https://leafletjs.com/examples/custom-icons/" target="_blank">{{ $t('moorl-foundation.properties.markerSettingsLink') }}</a>
+                            </label>
+                        </div>
+
+                        <pre style="font-size: 12px; background: #0b2e13; color: #ffffff; padding: 10px; margin-top: 10px">{
+   "iconSize":[
+      38,
+      95
+   ],
+   "shadowSize":[
+      50,
+      64
+   ],
+   "iconAnchor":[
+      22,
+      94
+   ],
+   "shadowAnchor":[
+      4,
+      62
+   ],
+   "popupAnchor":[
+      -3,
+      -76
+   ]
+}</pre>
+                    </div>
+                </sw-container>
+            </sw-card>
+        </sw-card-view>
+
+        <sw-modal v-if="showOpeningHourModal"
+                  :title="$t('moorl-foundation.properties.openingHours')"
+                  @modal-close="onCloseModal">
+            <sw-container columns="repeat(auto-fit, minmax(250px, 1fr)" gap="0 30px">
+                <sw-field type="switch" bordered :label="$t('moorl-foundation.properties.locked')" v-model="openingHour.merchantId"></sw-field>
+
+                <sw-field type="switch" bordered :label="$t('moorl-foundation.properties.repeat')" v-model="openingHour.repeat"></sw-field>
+
+                <sw-datepicker dateType="date" :label="$t('moorl-foundation.properties.date')" size="default" v-model="openingHour.date"></sw-datepicker>
+
+                <template v-if="!openingHour.date">
+                    <sw-datepicker dateType="date" :label="$t('moorl-foundation.properties.showFrom')" size="default" v-model="openingHour.showFrom"></sw-datepicker>
+
+                    <sw-datepicker dateType="date" :label="$t('moorl-foundation.properties.showUntil')" size="default" v-model="openingHour.showUntil"></sw-datepicker>
+                </template>
+
+                <sw-field :label="$t('moorl-foundation.properties.title')"
+                          v-model="openingHour.title">
+                </sw-field>
+            </sw-container>
+
+            <ul class="moorl-merchant-finder-timetable">
+                <li class="day" v-for="(openingHourItem, openingHourIndex) in openingHour.openingHours">
+                    <div class="sw-field">
+                        {{ $t('moorl-foundation.days.' + openingHourIndex) }}
+                    </div>
+
+                    <div class="sw-field">
+                        <sw-button @click="removeTimes(openingHourIndex)">
+                            <sw-icon name="default-action-trash" size="16px"></sw-icon>
+                        </sw-button>
+                        <sw-button @click="addTimes(openingHourIndex)">
+                            <sw-icon name="default-basic-plus-block" size="16px"></sw-icon>
+                        </sw-button>
+                    </div>
+
+                    <template v-if="openingHourItem.openingHours.length > 0">
+                        <ul class="times">
+                            <li v-for="times in openingHourItem.openingHours">
+                                <sw-datepicker dateType="time" size="small" v-model="times.from"></sw-datepicker>
+                                <sw-datepicker dateType="time" size="small" v-model="times.until"></sw-datepicker>
+                            </li>
+                        </ul>
+                    </template>
+
+                    <template v-else>
+                        <sw-field :placeholder="$t('moorl-foundation.properties.closed')"
+                                  v-model="openingHourItem.info">
+                        </sw-field>
+                    </template>
+                </li>
+            </ul>
+
+            <template #modal-footer>
+                <sw-button @click="onCloseModal" size="small">
+                    {{ $t('moorl-foundation.buttons.cancelButtonText') }}
+                </sw-button>
+                <sw-button @click="onOpeningHourSave"
+                           variant="primary"
+                           size="small">
+                    {{ $t('moorl-foundation.buttons.saveButtonText') }}
+                </sw-button>
+            </template>
+        </sw-modal>
+    </template>
+
+    <template slot="sidebar">
+        <sw-sidebar :propagateWidth="true">
+            <sw-sidebar-media-item ref="mediaSidebarItem">
+                <template slot="context-menu-items" slot-scope="media">
+                    <sw-context-menu-item @click="setMediaFromSidebar(media.mediaItem)">
+                        Logo
+                    </sw-context-menu-item>
+                </template>
+            </sw-sidebar-media-item>
+        </sw-sidebar>
+    </template>
+
+</sw-page>

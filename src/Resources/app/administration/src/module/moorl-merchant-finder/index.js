@@ -1,7 +1,7 @@
 const { Module, Application } = Shopware;
-import './page/moorl-merchant-finder-list';
-import './page/moorl-merchant-finder-detail';
-import './page/moorl-merchant-finder-create';
+import './page/list';
+import './page/detail';
+import './page/create';
 import './search-service';
 import './style/main.scss';
 

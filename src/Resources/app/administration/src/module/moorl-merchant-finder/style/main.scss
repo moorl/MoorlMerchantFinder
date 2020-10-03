@@ -1,42 +1,68 @@
 @import "leaflet";
 
-.moorl-merchant-finder-import-assistant {
-    .sw-field--switch,
-    .info {
-        margin-top: 0;
-        margin-bottom: 15px;
+.moorl-merchant-finder-timetable {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-gap: 10px;
+  grid-template-columns: 320px 320px 320px 320px 320px 320px 320px;
+  overflow-x: scroll;
+
+  > li {
+
+  }
+
+  .times {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    > li {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-gap: 5px;
     }
+  }
+}
+
+.moorl-merchant-finder-import-assistant {
+  .sw-field--switch,
+  .info {
+    margin-top: 0;
+    margin-bottom: 15px;
+  }
 }
 
 .moorl-merchant-finder-mapping-table {
+  width: 100%;
+  table-layout: fixed;
+
+  select {
     width: 100%;
-    table-layout: fixed;
+    border: 0;
+    background: none;
+  }
 
-    select {
-        width: 100%;
-        border: 0;
-        background: none;
-    }
-
-    tbody {
-        tr {
-            td {
-                > div {
-                    padding: 3px;
-                }
-
-                border-right: 1px solid #d1d9e0;
-
-                &:last-child {
-                    border-right: 0;
-                }
-            }
-
-            &:nth-child(2n) {
-                td {
-                    background-color: #f0f2f5;
-                }
-            }
+  tbody {
+    tr {
+      td {
+        > div {
+          padding: 3px;
         }
+
+        border-right: 1px solid #d1d9e0;
+
+        &:last-child {
+          border-right: 0;
+        }
+      }
+
+      &:nth-child(2n) {
+        td {
+          background-color: #f0f2f5;
+        }
+      }
     }
+  }
 }

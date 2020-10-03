@@ -19,6 +19,13 @@
         <title lang="de-DE">Suchlogig</title>
 
         <input-field type="bool">
+            <name>enableSearch</name>
+            <label>Enable search</label>
+            <label lang="de-DE">Suche aktiv</label>
+            <defaultValue>true</defaultValue>
+        </input-field>
+
+        <input-field type="bool">
             <name>enableTextSearch</name>
             <label>Enable text search</label>
             <label lang="de-DE">Textsuche aktiv</label>

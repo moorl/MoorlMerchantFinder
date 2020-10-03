@@ -2,7 +2,7 @@ const {Component, Mixin, Application} = Shopware;
 const {Criteria, EntityCollection} = Shopware.Data;
 const utils = Shopware.Utils;
 
-import template from './moorl-merchant-finder-detail.html.twig';
+import template from './index.html.twig';
 import L from 'leaflet';
 
 Component.register('moorl-merchant-finder-detail', {
@@ -51,7 +51,10 @@ Component.register('moorl-merchant-finder-detail', {
             uploadTagMarkerShadow: utils.createId(),
             customFieldSets: [],
             manufacturers: null,
-            manufacturerIds: []
+            manufacturerIds: [],
+            openingHours: null,
+            openingHour: null,
+            showOpeningHourModal: false
         };
     },
 
@@ -84,6 +87,44 @@ Component.register('moorl-merchant-finder-detail', {
             return this.repositoryFactory.create('custom_field_set');
         },
 
+        openingHourRepo() {
+            return this.repositoryFactory.create('moorl_merchant_oh');
+        },
+
+        openingHourColumns() {
+            return [
+                {
+                    property: 'title',
+                    label: this.$tc('moorl-foundation.properties.title'),
+                    sortable: false
+                }, {
+                    property: 'date',
+                    label: this.$tc('moorl-foundation.properties.date'),
+                    sortable: true
+                }, {
+                    property: 'showFrom',
+                    label: this.$tc('moorl-foundation.properties.showFrom'),
+                    dataIndex: 'showFrom',
+                    sortable: true
+                }, {
+                    property: 'showUntil',
+                    label: this.$tc('moorl-foundation.properties.showUntil'),
+                    dataIndex: 'showUntil',
+                    sortable: false
+                },
+                {
+                    property: 'repeat',
+                    label: this.$tc('moorl-foundation.properties.repeat'),
+                    sortable: false
+                },
+                {
+                    property: 'merchantId',
+                    label: this.$tc('moorl-foundation.properties.locked'),
+                    sortable: false
+                }
+            ];
+        },
+
         defaultCriteria() {
             const criteria = new Criteria();
             criteria
@@ -103,12 +144,117 @@ Component.register('moorl-merchant-finder-detail', {
 
     mounted() {
         const that = this;
-        setTimeout(function() {
+        setTimeout(function () {
             that.drawMap();
         }, 3000);
     },
 
     methods: {
+        getBaseOpeningHours() {
+            return [{from: '08:00', until: '12:00'}, {from: '14:00', until: '18:00'}]
+        },
+
+        getEmptyTimetable() {
+            return [
+                {info: 'Ruhetag', openingHours: []}, // Montag
+                {info: null, openingHours: this.getBaseOpeningHours()}, // Dienstag
+                {info: null, openingHours: this.getBaseOpeningHours()}, // Mittwoch
+                {info: null, openingHours: this.getBaseOpeningHours()}, // Donnerstag
+                {info: null, openingHours: this.getBaseOpeningHours()}, // Freitag
+                {info: null, openingHours: []}, // Samstag
+                {info: null, openingHours: []} // Sonntag
+            ];
+        },
+
+        sanitizeTimetable(item) {
+            console.log("sanitizeTimetable", item)
+
+            if (item) {
+                return item;
+            }
+
+            return this.getEmptyTimetable();
+        },
+
+        getOpeningHour(openingHourId) {
+            console.log(openingHourId);
+
+            if (openingHourId) {
+                console.log("getOpeningHour with ID", openingHourId);
+
+                this.openingHourRepo
+                    .get(openingHourId, Shopware.Context.api)
+                    .then((entity) => {
+                        this.openingHour = entity;
+                        this.openingHour.openingHours = this.sanitizeTimetable(this.openingHour.openingHours);
+                        this.showOpeningHourModal = true;
+                    });
+            } else {
+                console.log("getOpeningHour without ID");
+                this.openingHour = this.openingHourRepo.create(Shopware.Context.api);
+                this.openingHour.openingHours = this.sanitizeTimetable(this.openingHour.openingHours);
+                this.showOpeningHourModal = true;
+            }
+        },
+
+        deleteOpeningHour(openingHourId) {
+            this.openingHourRepo
+                .delete(openingHourId, Shopware.Context.api)
+                .then(() => {
+                    this.loadOpeningHours();
+                });
+        },
+
+        removeTimes(index) {
+            this.openingHour.openingHours[index].openingHours.pop();
+        },
+
+        addTimes(index) {
+            this.openingHour.openingHours[index].openingHours.push({from: null, until: null});
+        },
+
+        loadOpeningHours() {
+            let criteria = new Criteria(1, 100);
+            criteria.addFilter(Criteria.multi('OR', [
+                Criteria.equals('merchantId', this.merchant.id),
+                Criteria.equals('merchantId', null)
+            ]));
+            criteria.addSorting(Criteria.sort('date'));
+
+            return this.openingHourRepo.search(criteria, Shopware.Context.api).then((items) => {
+                this.openingHours = items;
+                this.isLoading = false;
+            });
+        },
+
+        onOpeningHourSave() {
+            this.isLoading = true;
+
+            if (this.openingHour.merchantId) {
+                this.openingHour.merchantId = this.merchant.id;
+            }
+
+            this.openingHourRepo
+                .save(this.openingHour, Shopware.Context.api)
+                .then(() => {
+                    this.onCloseModal();
+                    this.loadOpeningHours();
+                    this.isLoading = false;
+                    this.processSuccess = true;
+                }).catch((exception) => {
+                this.isLoading = false;
+                this.createNotificationError({
+                    title: this.$t('moorl-foundation.general.saveError'),
+                    message: exception
+                });
+            });
+        },
+
+        onCloseModal() {
+            this.showOpeningHourModal = false;
+            this.openingHour = null;
+        },
+
         initializeFurtherComponents() {
             this.manufacturers = new EntityCollection('/product-manufacturer', 'product_manufacturer', Shopware.Context.api);
 
@@ -137,6 +283,7 @@ Component.register('moorl-merchant-finder-detail', {
                 .then((entity) => {
                     this.merchant = entity;
                     this.isLoading = false;
+                    this.loadOpeningHours();
                 });
         },
 
@@ -186,8 +333,8 @@ Component.register('moorl-merchant-finder-detail', {
             httpClient.get(`//nominatim.openstreetmap.org/search?` + searchParams).then((response) => {
                 if (!response.data[0]) {
                     this.createNotificationError({
-                        title: this.$t('moorl-merchant-finder.notification.nominatimErrorTitle'),
-                        message: this.$t('moorl-merchant-finder.notification.nominatimErrorText', 0, this.merchant)
+                        title: this.$t('moorl-foundation.notification.nominatimErrorTitle'),
+                        message: this.$t('moorl-foundation.notification.nominatimErrorText', 0, this.merchant)
                     });
                 } else {
                     if (this.ol) {
@@ -208,7 +355,7 @@ Component.register('moorl-merchant-finder-detail', {
                 // console.log(exception);
                 //this.isLoading = false;
                 this.createNotificationError({
-                    title: this.$t('moorl-merchant-finder.detail.errorTitle'),
+                    title: this.$t('moorl-foundation.detail.errorTitle'),
                     message: exception
                 });
             });
@@ -225,7 +372,7 @@ Component.register('moorl-merchant-finder-detail', {
                 }).catch((exception) => {
                 this.isLoading = false;
                 this.createNotificationError({
-                    title: this.$t('moorl-merchant-finder.detail.errorTitle'),
+                    title: this.$t('moorl-foundation.detail.errorTitle'),
                     message: exception
                 });
             });

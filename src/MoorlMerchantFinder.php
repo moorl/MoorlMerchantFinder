@@ -3,10 +3,10 @@
 namespace Moorl\MerchantFinder;
 
 use Doctrine\DBAL\Connection;
+use MoorlFoundation\Core\PluginFoundation;
 use Shopware\Core\Framework\Plugin;
 use Shopware\Core\Framework\Plugin\Context\InstallContext;
 use Shopware\Core\Framework\Plugin\Context\UninstallContext;
-use MoorlFoundation\Core\PluginHelpers;
 
 class MoorlMerchantFinder extends Plugin
 {
@@ -33,14 +33,19 @@ class MoorlMerchantFinder extends Plugin
             return;
         }
 
-        PluginHelpers::dropTables($this->container, $context->getContext(), [
+        /* @var $foundation PluginFoundation */
+        $foundation = $this->container->get(PluginFoundation::class);
+        $foundation->setContext($context->getContext());
+
+        $foundation->dropTables([
             'moorl_merchant_tag',
             'moorl_merchant_category',
             'moorl_merchant_product_manufacturer',
             'moorl_merchant',
+            'moorl_merchant_oh',
             'moorl_zipcode'
         ]);
 
-        PluginHelpers::removeCmsBlocks($this->container, $context->getContext(), ['moorl-merchant-finder-basic']);
+        $foundation->removeCmsBlocks(['moorl-merchant-finder-basic']);
     }
 }

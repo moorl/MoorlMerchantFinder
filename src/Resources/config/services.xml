@@ -52,6 +52,10 @@
             <tag name="shopware.entity.definition" entity="moorl_merchant_product_manufacturer" />
         </service>
 
+        <service id="Moorl\MerchantFinder\Merchant\OpeningHourDefinition">
+            <tag name="shopware.entity.definition" entity="moorl_merchant_oh" />
+        </service>
+
         <!-- Snippet Files -->
         <service id="Moorl\MerchantFinder\Resources\snippet\de_DE\SnippetFile_de_DE" public="true">
             <tag name="shopware.snippet.file" priority="100"/>
