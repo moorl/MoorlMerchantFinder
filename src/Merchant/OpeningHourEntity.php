@@ -2,6 +2,7 @@
 
 namespace Moorl\MerchantFinder\Merchant;
 
+use DateTimeImmutable;
 use Shopware\Core\Framework\DataAbstractionLayer\Entity;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 

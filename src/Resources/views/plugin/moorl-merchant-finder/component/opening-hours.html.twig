@@ -1,0 +1,18 @@
+<div class="mb-3 opening-hours">
+    {% for dayIndex, dayItem in openingHour.openingHours %}
+        {% if (not openingHour.repeat and dayItem.day != 'today') or (openingHour.repeat and dayItem.day == 'today')  %}
+            <div>{{ "moorl-foundation.days.#{dayItem.day}"|trans }}:</div>
+            {% if dayItem.openingHours|length == 0 %}
+                {{ dayItem.info ? dayItem.info|trans : "moorl-foundation.properties.closed"|trans }}
+            {% else %}
+                <div>
+                    {% for times in dayItem.openingHours %}
+                        {% if times.from %}
+                            <span>{{ times.from|slice(0, 5) }}-{{ times.until|slice(0, 5) }}</span>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+</div>

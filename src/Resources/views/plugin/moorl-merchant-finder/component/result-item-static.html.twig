@@ -1,4 +1,5 @@
 {% set displayMode = displayMode ?: 'full' %}
+{% set openingHour = merchant.merchantOpeningHours.getForToday(merchant.id) %}
 
 {% block element_moorl_merchant_finder_result_item %}
     <li style="{% block element_moorl_merchant_finder_result_item_style %}{% endblock %}" id="{{ merchant.id }}" class="list-group-item moorl-merchant-finder-result-item display-mode-{{ displayMode }}">
@@ -50,8 +51,11 @@
                             {% endif %}
 
                             {% if merchant.openingHours %}
-                                <b>{{ "moorl-merchant-finder.openingHours"|trans }}</b>
+                                <i class="fa-fw fas fa-clock"></i> <b>{{ "moorl-merchant-finder.openingHours"|trans }}</b>
                                 <p style="white-space: pre-line">{{ merchant.openingHours }}</p>
+                            {% elseif openingHour %}
+                                <i class="fa-fw fas fa-clock"></i> <b>{{ "moorl-merchant-finder.openingHours"|trans }}</b>
+                                {% sw_include '@MoorlMerchantFinder/plugin/moorl-merchant-finder/component/opening-hours.html.twig' %}
                             {% endif %}
                         </div>
                     {% endblock %}
@@ -61,9 +65,9 @@
 
         <div class="row form-row">
             {% block element_moorl_merchant_finder_result_tags %}
-                {% if merchant.tags.length %}
+                {% if merchant.tags.count %}
                     <div class="col-6">
-                        <i class="fas fa-tags"></i> <b>{{ "moorl-merchant-finder.tags"|trans }}</b>
+                        <i class="fa-fw fas fa-tags"></i> <b>{{ "moorl-merchant-finder.tags"|trans }}</b>
                         <div class="tags">
                             {% for tag in merchant.tags %}
                                 <span>{{ tag.name }}</span>
@@ -74,9 +78,9 @@
             {% endblock %}
 
             {% block element_moorl_merchant_finder_result_categories %}
-                {% if merchant.categories.length %}
+                {% if merchant.categories.count %}
                     <div class="col-6">
-                        <i class="fas fa-tshirt"></i> <b>{{ "moorl-merchant-finder.categories"|trans }}</b>
+                        <i class="fa-fw fas fa-tshirt"></i> <b>{{ "moorl-merchant-finder.categories"|trans }}</b>
                         <div class="categories">
                             {% for category in merchant.categories %}
                                 <span>{{ category.name }}</span>
@@ -87,13 +91,13 @@
             {% endblock %}
         </div>
 
-        {% if merchant.productManufacturers.length %}
+        {% if merchant.productManufacturers.count %}
             <div class="row form-row">
                 {% block element_moorl_merchant_finder_result_manufacturers %}
                     <div class="col-12">
-                        <i class="fas fa-industry"></i> <b>{{ "moorl-merchant-finder.manufacturers"|trans }}</b>
+                        <i class="fa-fw fas fa-industry"></i> <b>{{ "moorl-merchant-finder.manufacturers"|trans }}</b>
                         <div class="manufacturers">
-                            {% for manufacturer in merchant.productManufacturers.length %}
+                            {% for manufacturer in merchant.productManufacturers %}
                                 {% if manufacturer.media %}
                                     <img src="{{ manufacturer.media.url }}" title="{{ manufacturer.name }}">
                                 {% else %}

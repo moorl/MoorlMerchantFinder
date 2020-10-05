@@ -44,7 +44,7 @@ class OpeningHourDefinition extends EntityDefinition
             new DateField('show_from', 'showFrom'),
             new DateField('show_until', 'showUntil'),
             new StringField('title', 'title'),
-            new ManyToOneAssociationField('merchant', 'moorl_merchant_id', MerchantDefinition::class, 'id', true),
+            new ManyToOneAssociationField('merchant', 'moorl_merchant_id', MerchantDefinition::class, 'id'),
         ]);
     }
 }

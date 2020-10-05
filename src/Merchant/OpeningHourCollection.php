@@ -23,4 +23,49 @@ class OpeningHourCollection extends EntityCollection
     {
         return OpeningHourEntity::class;
     }
+
+    public function getForToday(?string $merchantId = null): ?OpeningHourEntity
+    {
+        $time = new \DateTimeImmutable();
+
+        /* @var $element OpeningHourEntity */
+        /* Fixed Date & Fixed Merchant */
+        foreach ($this->elements as $element) {
+            if ($element->getDate() && $element->getDate()->format("m-d") == $time->format("m-d") && $element->getMerchantId() == $merchantId) {
+                return $element;
+            }
+        }
+        /* In Date Range & Fixed Merchant */
+        foreach ($this->elements as $element) {
+            if ($element->getShowFrom() <= $time && $element->getShowUntil() >= $time && $element->getMerchantId() == $merchantId) {
+                return $element;
+            }
+        }
+        /* Fixed Date */
+        foreach ($this->elements as $element) {
+            if ($element->getDate() && $element->getDate()->format("m-d") == $time->format("m-d")) {
+                return $element;
+            }
+        }
+        /* In Date Range */
+        foreach ($this->elements as $element) {
+            if ($element->getShowFrom() <= $time && $element->getShowUntil() >= $time) {
+                return $element;
+            }
+        }
+        /* Fixed Merchant */
+        foreach ($this->elements as $element) {
+            if ($element->getMerchantId() == $merchantId) {
+                return $element;
+            }
+        }
+        /* Default */
+        foreach ($this->elements as $element) {
+            if (!$element->getMerchantId()) {
+                return $element;
+            }
+        }
+
+        return null;
+    }
 }

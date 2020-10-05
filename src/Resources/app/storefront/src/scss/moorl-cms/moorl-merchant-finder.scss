@@ -46,9 +46,11 @@ img.moorl-mf-logo {
             z-index: 100;
         }
 
+        .opening-hours,
         .tags,
         .categories,
         .manufacturers {
+            font-size: 0.8em;
             span {
                 &:after {
                     content: ",";
@@ -60,17 +62,17 @@ img.moorl-mf-logo {
             }
         }
 
-        .manufacturers {
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            margin: 8px 0;
+        .opening-hours {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            grid-gap: 3px;
+        }
 
-            img, span {
+        .manufacturers {
+            img {
                 height: 50px;
                 width: auto;
                 line-height: 50px;
-                font-weight: 600;
                 margin-right: 8px;
             }
         }
@@ -160,9 +162,7 @@ img.moorl-mf-logo {
 }
 
 @include media-breakpoint-up(lg) {
-
     .cms-element-moorl-merchant-finder {
-
         min-height: 200px;
         width: 100%;
 
@@ -202,7 +202,6 @@ img.moorl-mf-logo {
                     .form-control {
                         background-color: rgba($input-bg, 80%);
                     }
-
                 }
 
                 .results-box {
@@ -220,13 +219,10 @@ img.moorl-mf-logo {
                         background-color: rgba($body-bg, 80%);
                     }
                 }
-
             }
-
         }
 
         .element-content {
-
             display: flex;
             flex-wrap: wrap;
             margin-right: -10px;
@@ -293,22 +289,6 @@ img.moorl-mf-logo {
                     li {
                         position: relative;
                         border-radius: 0 !important;
-
-                        .manufacturers {
-                            display: flex;
-                            align-items: center;
-                            flex-wrap: wrap;
-                            margin: 8px 0;
-
-                            img, span {
-                                height: 50px;
-                                width: auto;
-                                line-height: 50px;
-                                font-weight: 600;
-                                margin-right: 8px;
-                            }
-                        }
-
                     }
                 }
             }
@@ -326,14 +306,10 @@ img.moorl-mf-logo {
                     height: 100%;
                     width: 100%;
                 }
-
             }
-
         }
 
-
         .moorl-merchant-finder-results {
-
             &::-webkit-scrollbar {
                 width: 5px;
             }
@@ -349,24 +325,6 @@ img.moorl-mf-logo {
             &::-webkit-scrollbar-thumb:hover {
                 background: $primary;
             }
-
-            .manufacturers {
-                display: flex;
-                align-items: center;
-                flex-wrap: wrap;
-                margin: 8px 0;
-
-                img, span {
-                    height: 50px;
-                    width: auto;
-                    line-height: 50px;
-                    font-weight: 600;
-                    margin-right: 8px;
-                }
-            }
-
         }
-
     }
-
 }

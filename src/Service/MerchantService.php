@@ -6,6 +6,8 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\ParameterType;
 use GuzzleHttp\Client;
+use Moorl\MerchantFinder\Merchant\MerchantEntity;
+use Moorl\MerchantFinder\Merchant\OpeningHourCollection;
 use Moorl\MerchantFinder\MoorlMerchantFinder;
 use Moorl\MerchantFinder\Core\MerchantsLoadedEvent;
 use Shopware\Core\Framework\Context;
@@ -14,7 +16,9 @@ use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\NotFilter;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\RangeFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Shopware\Core\Framework\Uuid\Uuid;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
@@ -45,10 +49,19 @@ class MerchantService
      * @var EventDispatcherInterface
      */
     private $eventDispatcher;
+    /**
+     * @var OpeningHourCollection
+     */
+    private $openingHours;
+    /**
+     * @var EntityRepositoryInterface
+     */
+    private $openingHourRepo;
 
     public function __construct(
         SystemConfigService $systemConfigService,
         EntityRepositoryInterface $repository,
+        EntityRepositoryInterface $openingHourRepo,
         Connection $connection,
         Session $session,
         EventDispatcherInterface $eventDispatcher
@@ -56,6 +69,7 @@ class MerchantService
     {
         $this->systemConfigService = $systemConfigService;
         $this->repository = $repository;
+        $this->openingHourRepo = $openingHourRepo;
         $this->connection = $connection;
         $this->session = $session;
         $this->eventDispatcher = $eventDispatcher;
@@ -93,9 +107,45 @@ class MerchantService
         $this->merchantsCount = $merchantsCount;
     }
 
+    public function initGlobalOpeningHours(Context $context) {
+        $criteria = new Criteria();
+
+        $time = new \DateTimeImmutable();
+
+        $criteria->addFilter(new EqualsFilter('merchantId', null));
+        $criteria->addFilter(
+            new MultiFilter(
+                MultiFilter::CONNECTION_OR, [
+                    new EqualsFilter('showFrom', null),
+                    new RangeFilter('showFrom', ['lte' => $time->format(DATE_ATOM)])
+                ]
+            )
+        );
+        $criteria->addFilter(
+            new MultiFilter(
+                MultiFilter::CONNECTION_OR, [
+                    new EqualsFilter('showUntil', null),
+                    new RangeFilter('showUntil', ['gte' => $time->format(DATE_ATOM)])
+                ]
+            )
+        );
+        $criteria->addFilter(
+            new MultiFilter(
+                MultiFilter::CONNECTION_OR, [
+                    new EqualsFilter('date', null),
+                    new EqualsFilter('date', $time->format("Y-m-d"))
+                ]
+            )
+        );
+
+        $this->openingHours = $this->openingHourRepo->search($criteria, $context)->getEntities();
+    }
+
     public function getMerchants(Context $context, ?ParameterBag $data): EntityCollection
     {
         $options = new ParameterBag(json_decode($data->get('options'), true) ?: []);
+
+        $this->initGlobalOpeningHours($context);
 
         if ($data->get('id')) {
             $criteria = new Criteria([$data->get('id')]);
@@ -137,6 +187,7 @@ class MerchantService
         }
 
         $criteria->addAssociation('tags');
+        $criteria->addAssociation('merchantOpeningHours');
         $criteria->addAssociation('productManufacturers');
         $criteria->addAssociation('productManufacturers.media');
         $criteria->addAssociation('categories');
@@ -147,6 +198,10 @@ class MerchantService
 
         if ($data->get('categoryId')) {
             $criteria->addFilter(new EqualsFilter('categories.id', $data->get('categoryId')));
+        }
+
+        if ($data->get('productManufacturerId')) {
+            $criteria->addFilter(new EqualsFilter('productManufacturers.id', $data->get('productManufacturerId')));
         }
 
         if ($data->get('productId')) {
@@ -187,6 +242,7 @@ class MerchantService
 
         $resultData = $this->repository->search($criteria, $context);
 
+        /* @var $entity MerchantEntity */
         foreach ($resultData->getEntities() as $entity) {
             if (isset($distance) && count($distance) > 0) {
                 $entity->setDistance($distance[$entity->getId()]);
@@ -197,6 +253,8 @@ class MerchantService
                     $this->seoUrlReplacer->generate('moorl.merchant-finder.merchant', ['merchantId' => $entity->getId()])
                 );
             }
+
+            $entity->getMerchantOpeningHours()->merge($this->openingHours);
         }
 
         $this->setMerchantsCount($resultData->count());

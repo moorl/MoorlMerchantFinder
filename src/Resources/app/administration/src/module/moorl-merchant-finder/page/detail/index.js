@@ -156,13 +156,14 @@ Component.register('moorl-merchant-finder-detail', {
 
         getEmptyTimetable() {
             return [
-                {info: 'Ruhetag', openingHours: []}, // Montag
-                {info: null, openingHours: this.getBaseOpeningHours()}, // Dienstag
-                {info: null, openingHours: this.getBaseOpeningHours()}, // Mittwoch
-                {info: null, openingHours: this.getBaseOpeningHours()}, // Donnerstag
-                {info: null, openingHours: this.getBaseOpeningHours()}, // Freitag
-                {info: null, openingHours: []}, // Samstag
-                {info: null, openingHours: []} // Sonntag
+                {day: 'today', info: null, openingHours: []},
+                {day: 'monday', info: null, openingHours: this.getBaseOpeningHours()},
+                {day: 'tuesday', info: null, openingHours: this.getBaseOpeningHours()},
+                {day: 'wednesday', info: null, openingHours: this.getBaseOpeningHours()},
+                {day: 'thursday', info: null, openingHours: this.getBaseOpeningHours()},
+                {day: 'friday', info: null, openingHours: this.getBaseOpeningHours()},
+                {day: 'saturday', info: null, openingHours: []},
+                {day: 'sunday', info: null, openingHours: []}
             ];
         },
 
