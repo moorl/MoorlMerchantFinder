@@ -16,12 +16,14 @@
                 {% endblock %}
             {% endif %}
             {% if element.data.countries %}
+                {% set countryCode = app.request.locale|slice(3, 2) %}
+
                 {% block element_moorl_merchant_finder_form_inner_countries %}
                     <div class="form-group col-6 col-lg">
                         <select name="countryCode" class="form-control">
                             <option value="">{{ "moorl-merchant-finder.allCountries"|trans }}</option>
                             {% for item in element.data.countries %}
-                                <option {% if item.value == 'DE' %}selected{% endif %} value="{{ item.value }}">{{ item.label }} ({{ item.count }})</option>
+                                <option {% if item.value == countryCode %}selected{% endif %} value="{{ item.value }}">{{ item.label }} ({{ item.count }})</option>
                             {% endfor %}
                         </select>
                     </div>
