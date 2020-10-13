@@ -196,6 +196,10 @@ class MerchantService
         $criteria->addAssociation('markerShadow');
         $criteria->addFilter(new EqualsFilter('active', true));
 
+        if ($data->get('countryCode')) {
+            $criteria->addFilter(new EqualsFilter('countryCode', $data->get('countryCode')));
+        }
+
         if ($data->get('categoryId')) {
             $criteria->addFilter(new EqualsFilter('categories.id', $data->get('categoryId')));
         }
