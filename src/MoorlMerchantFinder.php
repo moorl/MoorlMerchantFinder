@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace MoorlMerchantFinder;
+namespace Moorl\MerchantFinder;
 
 use Doctrine\DBAL\Connection;
 use MoorlFoundation\Core\PluginFoundation;
