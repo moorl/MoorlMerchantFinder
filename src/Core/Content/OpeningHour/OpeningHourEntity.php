@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace MoorlMerchantFinder\Core\Content\OpeningHour;
+namespace Moorl\MerchantFinder\Core\Content\OpeningHour;
 
 use DateTimeImmutable;
 use Shopware\Core\Framework\DataAbstractionLayer\Entity;

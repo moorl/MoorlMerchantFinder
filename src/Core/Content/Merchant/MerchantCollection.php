@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace MoorlMerchantFinder\Core\Content\Merchant;
+namespace Moorl\MerchantFinder\Core\Content\Merchant;
 
 use Shopware\Core\Checkout\Customer\CustomerEntity;
 use Shopware\Core\Framework\DataAbstractionLayer\Entity;

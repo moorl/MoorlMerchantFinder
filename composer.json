@@ -15,11 +15,11 @@
     "type": "shopware-platform-plugin",
     "autoload": {
         "psr-4": {
-            "MoorlMerchantFinder\\": "src/"
+            "Moorl\\MerchantFinder\\": "src/"
         }
     },
     "extra": {
-        "shopware-plugin-class": "MoorlMerchantFinder\\MoorlMerchantFinder",
+        "shopware-plugin-class": "Moorl\\MerchantFinder\\MoorlMerchantFinder",
         "copyright": "(c) by moori",
         "label": {
             "de-DE": "Händlersuche für Shopware 6",

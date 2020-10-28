@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace MoorlMerchantFinder\Subscriber;
+namespace Moorl\MerchantFinder\Subscriber;
 
 use Composer\IO\NullIO;
 use Doctrine\DBAL\Connection;
@@ -18,7 +18,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\Event\EntityLoadedEvent;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\Filter;
 use Shopware\Core\Content\Cms\CmsPageEvents;
-use MoorlMerchantFinder\Core\GeneralStruct;
+use Moorl\MerchantFinder\Core\GeneralStruct;
 
 class StorefrontSubscriber implements EventSubscriberInterface
 {

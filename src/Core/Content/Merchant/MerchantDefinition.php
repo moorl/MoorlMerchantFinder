@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace MoorlMerchantFinder\Core\Content\Merchant;
+namespace Moorl\MerchantFinder\Core\Content\Merchant;
 
 use MoorlFoundation\Core\Framework\DataAbstractionLayer\Field\DistanceField;
-use MoorlMerchantFinder\Core\Content\Aggregate\MerchantCategory\MerchantCategoryDefinition;
-use MoorlMerchantFinder\Core\Content\Aggregate\MerchantProductManufacturer\MerchantProductManufacturerDefinition;
-use MoorlMerchantFinder\Core\Content\Aggregate\MerchantTag\MerchantTagDefinition;
-use MoorlMerchantFinder\Core\Content\OpeningHour\OpeningHourDefinition;
+use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantCategory\MerchantCategoryDefinition;
+use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantProductManufacturer\MerchantProductManufacturerDefinition;
+use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantTag\MerchantTagDefinition;
+use Moorl\MerchantFinder\Core\Content\OpeningHour\OpeningHourDefinition;
 use Shopware\Core\Checkout\Customer\Aggregate\CustomerGroup\CustomerGroupDefinition;
 use Shopware\Core\Content\Category\CategoryDefinition;
 use Shopware\Core\Content\Cms\CmsPageDefinition;

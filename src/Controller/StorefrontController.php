@@ -1,14 +1,14 @@
 <?php
 
-namespace MoorlMerchantFinder\Controller;
+namespace Moorl\MerchantFinder\Controller;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\ParameterType;
 use GuzzleHttp\Client;
-use MoorlMerchantFinder\Core\GeneralStruct;
-use MoorlMerchantFinder\MoorlMerchantFinder;
-use MoorlMerchantFinder\Core\Service\MerchantService;
+use Moorl\MerchantFinder\Core\GeneralStruct;
+use Moorl\MerchantFinder\MoorlMerchantFinder;
+use Moorl\MerchantFinder\Core\Service\MerchantService;
 use Shopware\Core\Content\Cms\Exception\PageNotFoundException;
 use Shopware\Core\Content\Cms\SalesChannel\SalesChannelCmsPageLoaderInterface;
 use Shopware\Core\Framework\Adapter\Twig\TemplateFinder;

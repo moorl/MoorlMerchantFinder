@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace MoorlMerchantFinder\Core\Content\Merchant;
+namespace Moorl\MerchantFinder\Core\Content\Merchant;
 
-use MoorlMerchantFinder\Core\Content\OpeningHour\OpeningHourCollection;
+use Moorl\MerchantFinder\Core\Content\OpeningHour\OpeningHourCollection;
 use Shopware\Core\Checkout\Customer\CustomerEntity;
 use Shopware\Core\Content\Cms\CmsPageEntity;
 use Shopware\Core\Content\Media\MediaEntity;

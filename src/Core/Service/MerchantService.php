@@ -1,16 +1,16 @@
 <?php
 
-namespace MoorlMerchantFinder\Core\Service;
+namespace Moorl\MerchantFinder\Core\Service;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\ParameterType;
 use GuzzleHttp\Client;
 use MoorlFoundation\Core\Framework\DataAbstractionLayer\Search\Sorting\DistanceFieldSorting;
-use MoorlMerchantFinder\Core\Content\Merchant\MerchantEntity;
-use MoorlMerchantFinder\Core\Content\OpeningHourCollection;
-use MoorlMerchantFinder\MoorlMerchantFinder;
-use MoorlMerchantFinder\Core\Event\MerchantsLoadedEvent;
+use Moorl\MerchantFinder\Core\Content\Merchant\MerchantEntity;
+use Moorl\MerchantFinder\Core\Content\OpeningHourCollection;
+use Moorl\MerchantFinder\MoorlMerchantFinder;
+use Moorl\MerchantFinder\Core\Event\MerchantsLoadedEvent;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
