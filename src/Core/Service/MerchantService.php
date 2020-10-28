@@ -21,6 +21,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\NotFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\RangeFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Shopware\Core\Framework\Struct\ArrayStruct;
+use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -57,6 +58,10 @@ class MerchantService
      * @var EntityRepositoryInterface
      */
     private $openingHourRepo;
+    /**
+     * @var SalesChannelContext|null
+     */
+    private $salesChannelContext;
 
     public function __construct(
         SystemConfigService $systemConfigService,
@@ -73,6 +78,22 @@ class MerchantService
         $this->connection = $connection;
         $this->session = $session;
         $this->eventDispatcher = $eventDispatcher;
+    }
+
+    /**
+     * @return SalesChannelContext
+     */
+    public function getSalesChannelContext(): ?SalesChannelContext
+    {
+        return $this->salesChannelContext;
+    }
+
+    /**
+     * @param SalesChannelContext $salesChannelContext
+     */
+    public function setSalesChannelContext(SalesChannelContext $salesChannelContext): void
+    {
+        $this->salesChannelContext = $salesChannelContext;
     }
 
     /**
@@ -107,40 +128,6 @@ class MerchantService
         $this->merchantsCount = $merchantsCount;
     }
 
-    public function initGlobalOpeningHours(Context $context) {
-        $criteria = new Criteria();
-
-        $time = new \DateTimeImmutable();
-
-        $criteria->addFilter(new EqualsFilter('merchantId', null));
-        $criteria->addFilter(
-            new MultiFilter(
-                MultiFilter::CONNECTION_OR, [
-                    new EqualsFilter('showFrom', null),
-                    new RangeFilter('showFrom', ['lte' => $time->format(DATE_ATOM)])
-                ]
-            )
-        );
-        $criteria->addFilter(
-            new MultiFilter(
-                MultiFilter::CONNECTION_OR, [
-                    new EqualsFilter('showUntil', null),
-                    new RangeFilter('showUntil', ['gte' => $time->format(DATE_ATOM)])
-                ]
-            )
-        );
-        $criteria->addFilter(
-            new MultiFilter(
-                MultiFilter::CONNECTION_OR, [
-                    new EqualsFilter('date', null),
-                    new EqualsFilter('date', $time->format("Y-m-d"))
-                ]
-            )
-        );
-
-        $this->openingHours = $this->openingHourRepo->search($criteria, $context)->getEntities();
-    }
-
     public function getMerchants(Context $context, ?ParameterBag $data): EntityCollection
     {
         $options = new ParameterBag(json_decode($data->get('options'), true) ?: []);
@@ -159,16 +146,14 @@ class MerchantService
                 $this->getLocationByTerm($data->get('zipcode'));
             }
 
-            if ($this->myLocation) {
+            if ($this->myLocation && count($this->myLocation) > 0) {
                 $context->addExtension('DistanceField', new ArrayStruct($this->myLocation[0]));
 
                 $criteria = new Criteria();
-
                 $criteria->addSorting(new FieldSorting('distance'));
                 $criteria->addFilter(new RangeFilter('distance', ['lte' => $data->get('distance')]));
             } else {
                 $criteria = new Criteria();
-
                 $criteria->addSorting(new FieldSorting('priority', FieldSorting::DESCENDING));
                 $criteria->addSorting(new FieldSorting('highlight', FieldSorting::DESCENDING));
                 $criteria->addSorting(new FieldSorting('company', FieldSorting::ASCENDING));
@@ -179,7 +164,6 @@ class MerchantService
 
         $criteria->addAssociation('tags');
         $criteria->addAssociation('merchantOpeningHours');
-        $criteria->addAssociation('productManufacturers');
         $criteria->addAssociation('productManufacturers.media');
         $criteria->addAssociation('categories');
         $criteria->addAssociation('media');
@@ -235,6 +219,34 @@ class MerchantService
             }
         }
 
+        $salesChannelContext = $this->getSalesChannelContext();
+
+        if ($salesChannelContext) {
+            $criteria->addFilter(
+                new MultiFilter(
+                    MultiFilter::CONNECTION_OR, [
+                        new EqualsFilter('salesChannelId', null),
+                        new EqualsFilter('salesChannelId', $salesChannelContext->getSalesChannel()->getId())
+                    ]
+                )
+            );
+
+            $customer = $salesChannelContext->getCustomer();
+
+            if ($customer) {
+                $criteria->addFilter(
+                    new MultiFilter(
+                        MultiFilter::CONNECTION_OR, [
+                            new EqualsFilter('customerGroupId', null),
+                            new EqualsFilter('customerGroupId', $customer->getGroupId())
+                        ]
+                    )
+                );
+            } else {
+                $criteria->addFilter(new EqualsFilter('customerGroupId', null));
+            }
+        }
+
         $resultData = $this->repository->search($criteria, $context);
 
         /* @var $entity MerchantEntity */
@@ -265,6 +277,40 @@ class MerchantService
         $this->eventDispatcher->dispatch($event);
 
         return $merchants;
+    }
+
+    public function initGlobalOpeningHours(Context $context) {
+        $criteria = new Criteria();
+
+        $time = new \DateTimeImmutable();
+
+        $criteria->addFilter(new EqualsFilter('merchantId', null));
+        $criteria->addFilter(
+            new MultiFilter(
+                MultiFilter::CONNECTION_OR, [
+                    new EqualsFilter('showFrom', null),
+                    new RangeFilter('showFrom', ['lte' => $time->format(DATE_ATOM)])
+                ]
+            )
+        );
+        $criteria->addFilter(
+            new MultiFilter(
+                MultiFilter::CONNECTION_OR, [
+                    new EqualsFilter('showUntil', null),
+                    new RangeFilter('showUntil', ['gte' => $time->format(DATE_ATOM)])
+                ]
+            )
+        );
+        $criteria->addFilter(
+            new MultiFilter(
+                MultiFilter::CONNECTION_OR, [
+                    new EqualsFilter('date', null),
+                    new EqualsFilter('date', $time->format("Y-m-d"))
+                ]
+            )
+        );
+
+        $this->openingHours = $this->openingHourRepo->search($criteria, $context)->getEntities();
     }
 
     public function getLocationByTerm($term): array

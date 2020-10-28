@@ -2,6 +2,7 @@
 
 namespace Moorl\MerchantFinder\Core\Content\Merchant;
 
+use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantTranslation\MerchantTranslationDefinition;
 use MoorlFoundation\Core\Framework\DataAbstractionLayer\Field\DistanceField;
 use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantCategory\MerchantCategoryDefinition;
 use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantProductManufacturer\MerchantProductManufacturerDefinition;
@@ -29,6 +30,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField
 use Shopware\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\TranslatedField;
+use Shopware\Core\Framework\DataAbstractionLayer\Field\TranslationsAssociationField;
 use Shopware\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Shopware\Core\System\Country\CountryDefinition;
 use Shopware\Core\System\SalesChannel\SalesChannelDefinition;
@@ -55,7 +57,6 @@ class MerchantDefinition extends EntityDefinition
 
     protected function defineFields(): FieldCollection
     {
-        // TODO: Add Media & Brand manufacturerId
         return new FieldCollection([
             (new IdField('id', 'id'))->addFlags(new PrimaryKey(), new Required()),
             new StringField('origin_id', 'originId'),
@@ -90,10 +91,17 @@ class MerchantDefinition extends EntityDefinition
             new StringField('additional_address_line2', 'additionalAddressLine2'),
             new StringField('shop_url', 'shopUrl'),
             new StringField('merchant_url', 'merchantUrl'),
-            new CustomFields(),
             new IntField('priority', 'priority'),
             new BoolField('highlight', 'highlight'),
             (new IntField('auto_increment', 'autoIncrement'))->addFlags(new WriteProtected()),
+
+            new CustomFields(),
+
+            new TranslatedField('name'),
+            new TranslatedField('description'),
+            new TranslatedField('openingHours'),
+            new TranslationsAssociationField(MerchantTranslationDefinition::class, 'moorl_merchant_id'),
+
             new ManyToOneAssociationField('media', 'media_id', MediaDefinition::class, 'id', true),
             new ManyToOneAssociationField('marker', 'marker_id', MediaDefinition::class, 'id', false),
             new ManyToOneAssociationField('markerShadow', 'marker_shadow_id', MediaDefinition::class, 'id', false),

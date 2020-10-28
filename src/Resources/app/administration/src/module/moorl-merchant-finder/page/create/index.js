@@ -5,7 +5,7 @@ import template from '../detail/index.html.twig';
 Component.extend('moorl-merchant-finder-create', 'moorl-merchant-finder-detail', {
     template,
     methods: {
-        getMerchant() {
+        getItem() {
             this.merchant = this.repository.create(Shopware.Context.api);
             this.isLoading = false;
         },

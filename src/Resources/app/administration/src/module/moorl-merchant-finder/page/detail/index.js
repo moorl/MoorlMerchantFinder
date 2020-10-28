@@ -32,7 +32,7 @@ Component.register('moorl-merchant-finder-detail', {
 
     data() {
         return {
-            merchant: null,
+            item: null,
             salesChannels: null,
             countries: null,
             customerGroups: null,
@@ -137,9 +137,10 @@ Component.register('moorl-merchant-finder-detail', {
     },
 
     created() {
+        console.log("1");
         this.repository = this.moorlMerchantRepository;
         this.initializeFurtherComponents();
-        this.getMerchant();
+        this.getItem();
     },
 
     mounted() {
@@ -217,13 +218,14 @@ Component.register('moorl-merchant-finder-detail', {
         loadOpeningHours() {
             let criteria = new Criteria(1, 100);
             criteria.addFilter(Criteria.multi('OR', [
-                Criteria.equals('merchantId', this.merchant.id),
+                Criteria.equals('merchantId', this.item.id),
                 Criteria.equals('merchantId', null)
             ]));
             criteria.addSorting(Criteria.sort('date'));
 
             return this.openingHourRepo.search(criteria, Shopware.Context.api).then((items) => {
                 this.openingHours = items;
+                console.log("4");
                 this.isLoading = false;
             });
         },
@@ -232,7 +234,7 @@ Component.register('moorl-merchant-finder-detail', {
             this.isLoading = true;
 
             if (this.openingHour.merchantId) {
-                this.openingHour.merchantId = this.merchant.id;
+                this.openingHour.merchantId = this.item.id;
             }
 
             this.openingHourRepo
@@ -278,18 +280,24 @@ Component.register('moorl-merchant-finder-detail', {
             });
         },
 
-        getMerchant() {
+        onChangeLanguage() {
+            this.getItem();
+        },
+
+        getItem() {
+            console.log("2");
             this.repository
                 .get(this.$route.params.id, Shopware.Context.api, this.defaultCriteria)
                 .then((entity) => {
-                    this.merchant = entity;
+                    this.item = entity;
                     this.isLoading = false;
                     this.loadOpeningHours();
+                    console.log("3");
                 });
         },
 
         onManufacturersChange() {
-            this.merchant.manufacturers = this.manufacturers;
+            this.item.manufacturers = this.manufacturers;
             this.manufacturerIds = this.manufacturers.getIds();
         },
 
@@ -297,12 +305,12 @@ Component.register('moorl-merchant-finder-detail', {
             const that = this;
             this.ol = {};
             this.ol.center = [
-                this.merchant.locationLat ? this.merchant.locationLat : 52.5173,
-                this.merchant.locationLon ? this.merchant.locationLon : 13.4020,
+                this.item.locationLat ? this.item.locationLat : 52.5173,
+                this.item.locationLon ? this.item.locationLon : 13.4020,
             ];
             this.ol.map = L.map(this.$refs['embedMap'], {
                 center: this.ol.center,
-                zoom: this.merchant.locationLat ? 16 : 5
+                zoom: this.item.locationLat ? 16 : 5
             });
             L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'}).addTo(this.ol.map);
             this.ol.marker = L.marker(this.ol.center, {draggable: true})
@@ -320,22 +328,22 @@ Component.register('moorl-merchant-finder-detail', {
             //this.isLoading = true;
             const initContainer = Application.getContainer('init');
             const httpClient = initContainer.httpClient;
-            let street = this.merchant.street;
-            if (this.merchant.streetNumber !== null) {
-                street += " " + this.merchant.streetNumber;
+            let street = this.item.street;
+            if (this.item.streetNumber !== null) {
+                street += " " + this.item.streetNumber;
             }
             const searchParams = new URLSearchParams({
                 "format": "json",
-                "zipcode": this.merchant.zipcode,
-                "city": this.merchant.city,
+                "zipcode": this.item.zipcode,
+                "city": this.item.city,
                 "street": street,
-                "country": this.merchant.countryCode
+                "country": this.item.countryCode
             });
             httpClient.get(`//nominatim.openstreetmap.org/search?` + searchParams).then((response) => {
                 if (!response.data[0]) {
                     this.createNotificationError({
                         title: this.$t('moorl-foundation.notification.nominatimErrorTitle'),
-                        message: this.$t('moorl-foundation.notification.nominatimErrorText', 0, this.merchant)
+                        message: this.$t('moorl-foundation.notification.nominatimErrorText', 0, this.item)
                     });
                 } else {
                     if (this.ol) {
@@ -347,8 +355,8 @@ Component.register('moorl-merchant-finder-detail', {
                         this.ol.map.flyTo(this.ol.center, 16, {animate: true, duration: 1});
                         this.ol.marker.setLatLng(this.ol.center);
                     }
-                    this.merchant.locationLat = parseFloat(response.data[0].lat);
-                    this.merchant.locationLon = parseFloat(response.data[0].lon);
+                    this.item.locationLat = parseFloat(response.data[0].lat);
+                    this.item.locationLon = parseFloat(response.data[0].lon);
                     this.$forceUpdate();
                 }
                 //this.isLoading = false;
@@ -366,9 +374,9 @@ Component.register('moorl-merchant-finder-detail', {
             this.isLoading = true;
 
             this.repository
-                .save(this.merchant, Shopware.Context.api)
+                .save(this.item, Shopware.Context.api)
                 .then(() => {
-                    this.getMerchant();
+                    this.getItem();
                     this.processSuccess = true;
                 }).catch((exception) => {
                 this.isLoading = false;
@@ -390,52 +398,52 @@ Component.register('moorl-merchant-finder-detail', {
         // Logo
         setMediaItem({targetId}) {
             this.mediaRepository.get(targetId, Shopware.Context.api).then((updatedMedia) => {
-                this.merchant.mediaId = targetId;
-                this.merchant.media = updatedMedia;
+                this.item.mediaId = targetId;
+                this.item.media = updatedMedia;
             });
         },
         onDropMedia(dragData) {
             this.setMediaItem({targetId: dragData.id});
         },
         setMediaFromSidebar(mediaEntity) {
-            this.merchant.mediaId = mediaEntity.id;
+            this.item.mediaId = mediaEntity.id;
         },
         onUnlinkMedia() {
-            this.merchant.mediaId = null;
+            this.item.mediaId = null;
         },
 
         // Marker
         setMarkerItem({targetId}) {
             this.mediaRepository.get(targetId, Shopware.Context.api).then((updatedMedia) => {
-                this.merchant.markerId = targetId;
-                this.merchant.marker = updatedMedia;
+                this.item.markerId = targetId;
+                this.item.marker = updatedMedia;
             });
         },
         onDropMarker(dragData) {
             this.setMarkerItem({targetId: dragData.id});
         },
         setMarkerFromSidebar(mediaEntity) {
-            this.merchant.markerId = mediaEntity.id;
+            this.item.markerId = mediaEntity.id;
         },
         onUnlinkMarker() {
-            this.merchant.markerId = null;
+            this.item.markerId = null;
         },
 
         // Marker Shadow
         setMarkerShadowItem({targetId}) {
             this.mediaRepository.get(targetId, Shopware.Context.api).then((updatedMedia) => {
-                this.merchant.markerShadowId = targetId;
-                this.merchant.markerShadow = updatedMedia;
+                this.item.markerShadowId = targetId;
+                this.item.markerShadow = updatedMedia;
             });
         },
         onDropMarkerShadow(dragData) {
             this.setMarkerShadowItem({targetId: dragData.id});
         },
         setMarkerShadowFromSidebar(mediaEntity) {
-            this.merchant.markerShadowId = mediaEntity.id;
+            this.item.markerShadowId = mediaEntity.id;
         },
         onUnlinkMarkerShadow() {
-            this.merchant.markerShadowId = null;
+            this.item.markerShadowId = null;
         }
     }
 });

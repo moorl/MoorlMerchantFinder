@@ -41,6 +41,10 @@
             <tag name="shopware.entity.definition" entity="moorl_merchant" />
         </service>
 
+        <service id="Moorl\MerchantFinder\Core\Content\Aggregate\MerchantTranslation\MerchantTranslationDefinition">
+            <tag name="shopware.entity.definition" entity="moorl_merchant_translation" />
+        </service>
+
         <service id="Moorl\MerchantFinder\Core\Content\Aggregate\MerchantCategory\MerchantCategoryDefinition">
             <tag name="shopware.entity.definition" entity="moorl_merchant_category" />
         </service>

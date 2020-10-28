@@ -3,7 +3,7 @@ const {Criteria} = Shopware.Data;
 
 const Papa = require('papaparse');
 
-import template from './moorl-merchant-finder-list.html.twig';
+import template from './index.html.twig';
 
 Component.register('moorl-merchant-finder-list', {
     template,
@@ -168,7 +168,7 @@ Component.register('moorl-merchant-finder-list', {
     },
 
     methods: {
-        async getMerchantById(repo, originId, id) {
+        async getItemById(repo, originId, id) {
             const criteria = new Criteria();
 
             if (id && originId) {
@@ -444,7 +444,7 @@ Component.register('moorl-merchant-finder-list', {
 
         async prepareSaveItem(item) {
             console.log("prepareSaveItem()", item);
-            let merchant = await this.getMerchantById(this.moorlMerchantRepository, item.originId, item.id);
+            let merchant = await this.getItemById(this.moorlMerchantRepository, item.originId, item.id);
             if (!merchant || !this.csv.options.overwrite) {
                 merchant = this.moorlMerchantRepository.create(Shopware.Context.api);
             }
