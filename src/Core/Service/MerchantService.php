@@ -1,26 +1,26 @@
 <?php
 
-namespace Moorl\MerchantFinder\Service;
+namespace MoorlMerchantFinder\Core\Service;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\ParameterType;
 use GuzzleHttp\Client;
-use Moorl\MerchantFinder\Merchant\MerchantEntity;
-use Moorl\MerchantFinder\Merchant\OpeningHourCollection;
-use Moorl\MerchantFinder\MoorlMerchantFinder;
-use Moorl\MerchantFinder\Core\MerchantsLoadedEvent;
+use MoorlFoundation\Core\Framework\DataAbstractionLayer\Search\Sorting\DistanceFieldSorting;
+use MoorlMerchantFinder\Core\Content\Merchant\MerchantEntity;
+use MoorlMerchantFinder\Core\Content\OpeningHourCollection;
+use MoorlMerchantFinder\MoorlMerchantFinder;
+use MoorlMerchantFinder\Core\Event\MerchantsLoadedEvent;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\NotFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\RangeFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
-use Shopware\Core\Framework\Uuid\Uuid;
+use Shopware\Core\Framework\Struct\ArrayStruct;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -160,21 +160,12 @@ class MerchantService
             }
 
             if ($this->myLocation) {
-                $resultData = $this->getMerchantsByDistance(
-                    $this->myLocation[0]['lat'],
-                    $this->myLocation[0]['lon'],
-                    $data->get('distance')
-                );
+                $context->addExtension('DistanceField', new ArrayStruct($this->myLocation[0]));
 
-                $merchantIds = [Uuid::randomHex()];
-                $distance = [];
+                $criteria = new Criteria();
 
-                foreach ($resultData as $item) {
-                    $merchantIds[] = $item['id'];
-                    $distance[$item['id']] = $item['distance'];
-                }
-
-                $criteria = new Criteria($merchantIds);
+                $criteria->addSorting(new FieldSorting('distance'));
+                $criteria->addFilter(new RangeFilter('distance', ['lte' => $data->get('distance')]));
             } else {
                 $criteria = new Criteria();
 
@@ -248,8 +239,13 @@ class MerchantService
 
         /* @var $entity MerchantEntity */
         foreach ($resultData->getEntities() as $entity) {
-            if (isset($distance) && count($distance) > 0) {
-                $entity->setDistance($distance[$entity->getId()]);
+            if ($context->hasExtension('DistanceField')) {
+                $entity->setDistance($this->distance(
+                    (float) $context->getExtension('DistanceField')['lat'],
+                    (float) $context->getExtension('DistanceField')['lon'],
+                    $entity->getLocationLat(),
+                    $entity->getLocationLon()
+                ));
             }
 
             if ($data->get('seoUrl')) {
@@ -365,30 +361,25 @@ SQL;
         return $myLocation;
     }
 
-    public function getMerchantsByDistance($lat, $lon, $distance): array
-    {
-        $sql = <<<SQL
-SELECT 
-    LOWER(HEX(`id`)) AS `id`,
-    ACOS(
-         SIN(RADIANS(:lat)) * SIN(RADIANS(`location_lat`)) 
-         + COS(RADIANS(:lat)) * COS(RADIANS(`location_lat`))
-         * COS(RADIANS(:lon) - RADIANS(`location_lon`))
-    ) * 6380 AS distance
-FROM `moorl_merchant`
-WHERE `active` IS TRUE
-HAVING `distance` < :distance
-ORDER BY `distance`
-LIMIT 500;
-SQL;
+    private function distance(float $lat1, float $lon1, float $lat2, float $lon2, string $unit = "K") {
+        if (($lat1 == $lat2) && ($lon1 == $lon2)) {
+            return 0;
+        }
+        else {
+            $theta = $lon1 - $lon2;
+            $dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta));
+            $dist = acos($dist);
+            $dist = rad2deg($dist);
+            $miles = $dist * 60 * 1.1515;
+            $unit = strtoupper($unit);
 
-        $resultData = $this->connection->executeQuery($sql, [
-                'lat' => $lat,
-                'lon' => $lon,
-                'distance' => $distance,
-            ]
-        )->fetchAll(FetchMode::ASSOCIATIVE);
-
-        return $resultData;
+            if ($unit == "K") {
+                return ($miles * 1.609344);
+            } else if ($unit == "N") {
+                return ($miles * 0.8684);
+            } else {
+                return $miles;
+            }
+        }
     }
 }

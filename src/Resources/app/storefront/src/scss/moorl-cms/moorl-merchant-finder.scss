@@ -37,7 +37,19 @@ img.moorl-mf-logo {
         }
 
         img {
-            width: 100px;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        h4 {
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+
+            span {
+                margin-right: 15px;
+            }
         }
 
         &:hover {

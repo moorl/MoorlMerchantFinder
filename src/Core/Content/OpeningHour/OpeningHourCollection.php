@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Moorl\MerchantFinder\Merchant;
+namespace MoorlMerchantFinder\Core\Content\OpeningHour;
 
 use Shopware\Core\Checkout\Customer\CustomerEntity;
 use Shopware\Core\Framework\DataAbstractionLayer\Entity;

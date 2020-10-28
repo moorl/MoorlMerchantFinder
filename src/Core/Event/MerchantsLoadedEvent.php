@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Moorl\MerchantFinder\Core;
+namespace MoorlMerchantFinder\Core\Event;
 
-use Moorl\MerchantFinder\Merchant\MerchantCollection;
+use MoorlMerchantFinder\Core\Content\Merchant\MerchantCollection;
 use Shopware\Core\Framework\Context;
 use Symfony\Contracts\EventDispatcher\Event;
 

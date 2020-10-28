@@ -1,7 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Moorl\MerchantFinder\Merchant;
+namespace MoorlMerchantFinder\Core\Content\Aggregate\MerchantTag;
 
+use MoorlMerchantFinder\Core\Content\Merchant\MerchantDefinition;
 use Shopware\Core\Content\Product\ProductDefinition;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;

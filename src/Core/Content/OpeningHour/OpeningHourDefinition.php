@@ -1,7 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Moorl\MerchantFinder\Merchant;
+namespace MoorlMerchantFinder\Core\Content\OpeningHour;
 
+use MoorlMerchantFinder\Core\Content\Merchant\MerchantDefinition;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\BoolField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\DateField;

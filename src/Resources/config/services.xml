@@ -5,7 +5,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <!-- Service -->
-        <service id="Moorl\MerchantFinder\Service\MerchantService" public="true">
+        <service id="MoorlMerchantFinder\Core\Service\MerchantService" public="true">
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
             <argument type="service" id="moorl_merchant.repository"/>
             <argument type="service" id="moorl_merchant_oh.repository"/>
@@ -15,21 +15,21 @@
         </service>
 
         <!-- Controller -->
-        <service id="Moorl\MerchantFinder\Controller\ApiController" public="true">
+        <service id="MoorlMerchantFinder\Controller\ApiController" public="true">
             <argument type="service" id="Shopware\Storefront\Page\GenericPageLoader"/>
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
             <argument type="service" id="session"/>
         </service>
 
-        <service id="Moorl\MerchantFinder\Controller\StorefrontController" public="true">
+        <service id="MoorlMerchantFinder\Controller\StorefrontController" public="true">
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
             <argument type="service" id="moorl_merchant.repository"/>
-            <argument type="service" id="Moorl\MerchantFinder\Service\MerchantService"/>
+            <argument type="service" id="MoorlMerchantFinder\Core\Service\MerchantService"/>
             <argument type="service" id="Shopware\Core\Content\Cms\SalesChannel\SalesChannelCmsPageLoader"/>
         </service>
 
         <!-- Subscriber -->
-        <service id="Moorl\MerchantFinder\Subscriber\StorefrontSubscriber">
+        <service id="MoorlMerchantFinder\Subscriber\StorefrontSubscriber">
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
             <argument type="service" id="media.repository"/>
             <argument type="service" id="Doctrine\DBAL\Connection"/>
@@ -37,32 +37,32 @@
         </service>
 
         <!-- Entity -->
-        <service id="Moorl\MerchantFinder\Merchant\MerchantDefinition">
+        <service id="MoorlMerchantFinder\Core\Content\Merchant\MerchantDefinition">
             <tag name="shopware.entity.definition" entity="moorl_merchant" />
         </service>
 
-        <service id="Moorl\MerchantFinder\Merchant\MerchantCategoryDefinition">
+        <service id="MoorlMerchantFinder\Core\Content\Aggregate\MerchantCategory\MerchantCategoryDefinition">
             <tag name="shopware.entity.definition" entity="moorl_merchant_category" />
         </service>
 
-        <service id="Moorl\MerchantFinder\Merchant\MerchantTagDefinition">
+        <service id="MoorlMerchantFinder\Core\Content\Aggregate\MerchantTag\MerchantTagDefinition">
             <tag name="shopware.entity.definition" entity="moorl_merchant_tag" />
         </service>
 
-        <service id="Moorl\MerchantFinder\Merchant\MerchantProductManufacturerDefinition">
+        <service id="MoorlMerchantFinder\Core\Content\Aggregate\MerchantProductManufacturer\MerchantProductManufacturerDefinition">
             <tag name="shopware.entity.definition" entity="moorl_merchant_product_manufacturer" />
         </service>
 
-        <service id="Moorl\MerchantFinder\Merchant\OpeningHourDefinition">
+        <service id="MoorlMerchantFinder\Core\Content\OpeningHour\OpeningHourDefinition">
             <tag name="shopware.entity.definition" entity="moorl_merchant_oh" />
         </service>
 
         <!-- Snippet Files -->
-        <service id="Moorl\MerchantFinder\Resources\snippet\de_DE\SnippetFile_de_DE" public="true">
+        <service id="MoorlMerchantFinder\Resources\snippet\de_DE\SnippetFile_de_DE" public="true">
             <tag name="shopware.snippet.file" priority="100"/>
         </service>
 
-        <service id="Moorl\MerchantFinder\Resources\snippet\en_GB\SnippetFile_en_GB" public="true">
+        <service id="MoorlMerchantFinder\Resources\snippet\en_GB\SnippetFile_en_GB" public="true">
             <tag name="shopware.snippet.file" priority="100"/>
         </service>
     </services>

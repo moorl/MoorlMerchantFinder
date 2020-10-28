@@ -1,6 +1,6 @@
 <?php
 
-namespace Moorl\MerchantFinder\Controller;
+namespace MoorlMerchantFinder\Controller;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\FetchMode;

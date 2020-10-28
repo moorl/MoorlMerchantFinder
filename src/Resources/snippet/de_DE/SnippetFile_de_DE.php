@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Moorl\MerchantFinder\Resources\snippet\de_DE;
+namespace MoorlMerchantFinder\Resources\snippet\de_DE;
 
 use Shopware\Core\System\Snippet\Files\SnippetFileInterface;
 
