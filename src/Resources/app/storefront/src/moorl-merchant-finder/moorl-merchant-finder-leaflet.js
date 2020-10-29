@@ -249,7 +249,7 @@ export default class MoorlMerchantFinder extends Plugin {
             maxLat = maxLat + 0.02;
             minLon = minLon - 0.02;
             maxLon = maxLon + 0.02;
-        } else if (response.data.length == 0 && response.myLocation.length > 0) {
+        } else if (response.data.length == 0 && response.myLocation && response.myLocation.length > 0) {
             minLon = maxLon = response.myLocation[0].lon;
             minLat = maxLat = response.myLocation[0].lat;
             minLat = minLat - 0.02;

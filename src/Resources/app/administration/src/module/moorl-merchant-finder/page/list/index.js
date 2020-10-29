@@ -1,9 +1,11 @@
 const {Application, Component, Mixin} = Shopware;
 const {Criteria} = Shopware.Data;
-
 const Papa = require('papaparse');
 
 import template from './index.html.twig';
+
+const initContainer = Application.getContainer('init');
+const httpClient = initContainer.httpClient;
 
 Component.register('moorl-merchant-finder-list', {
     template,
@@ -29,6 +31,14 @@ Component.register('moorl-merchant-finder-list', {
             isLoading: true,
             selectedFile: null,
             isImporting: false,
+            showLocModal: false,
+            getLocation: {
+                overwrite: false,
+                skipError: true,
+                criteria: null,
+                data: [],
+                total: 0,
+            },
             csv: {
                 data: [],
                 matches: 0,
@@ -40,7 +50,13 @@ Component.register('moorl-merchant-finder-list', {
                     'autoIncrement',
                     'data',
                     'createdAt',
-                    'updatedAt'
+                    'updatedAt',
+                    'translated',
+                    'distance',
+                    'merchantOpeningHours',
+                    'country',
+                    'countryId',
+                    'translations'
                 ],
                 csvProperties: [],
                 propertyMapping: {},
@@ -61,17 +77,6 @@ Component.register('moorl-merchant-finder-list', {
     },
 
     computed: {
-        // TODO: rebuild all repositories by entity name
-        /*repositories() {
-            return [
-                'moorl_merchant',
-                'media',
-                'product_manufacturer'
-            ].map(function(entityName) {
-                return this.repositoryFactory.create(entityName);
-            });
-        },*/
-
         moorlMerchantRepository() {
             return this.repositoryFactory.create('moorl_merchant');
         },
@@ -110,51 +115,59 @@ Component.register('moorl-merchant-finder-list', {
 
         columns() {
             return [{
-                property: 'priority',
-                dataIndex: 'priority',
-                label: this.$t('moorl-merchant-finder.properties.priority'),
-                inlineEdit: 'number',
-                allowResize: true,
-                align: 'right'
-            }, {
                 property: 'active',
                 dataIndex: 'active',
-                label: this.$t('moorl-merchant-finder.properties.active'),
+                label: this.$t('moorl-foundation.properties.active'),
                 inlineEdit: 'boolean',
                 allowResize: true,
                 align: 'center'
             }, {
+                property: 'name',
+                dataIndex: 'name',
+                label: this.$t('moorl-foundation.properties.name'),
+                routerLink: 'moorl.merchant.finder.detail',
+                inlineEdit: 'string',
+                allowResize: true,
+                primary: true
+            },{
                 property: 'company',
                 dataIndex: 'company',
-                label: this.$t('moorl-merchant-finder.properties.company'),
+                label: this.$t('moorl-foundation.properties.company'),
                 routerLink: 'moorl.merchant.finder.detail',
                 inlineEdit: 'string',
                 allowResize: true,
                 primary: true
             }, {
-                property: 'zipcode',
-                dataIndex: 'zipcode',
-                label: this.$t('moorl-merchant-finder.properties.zipcode'),
+                property: 'countryCode',
+                dataIndex: 'countryCode',
+                label: this.$t('moorl-foundation.properties.zipcode'),
                 inlineEdit: 'string',
                 allowResize: true
             }, {
                 property: 'city',
                 dataIndex: 'city',
-                label: this.$t('moorl-merchant-finder.properties.city'),
+                label: this.$t('moorl-foundation.properties.city'),
                 inlineEdit: 'string',
                 allowResize: true
             }, {
                 property: 'email',
                 dataIndex: 'email',
-                label: this.$t('moorl-merchant-finder.properties.email'),
+                label: this.$t('moorl-foundation.properties.email'),
                 inlineEdit: 'string',
                 allowResize: true
             }, {
                 property: 'locationLon',
                 dataIndex: 'locationLon',
-                label: this.$t('moorl-merchant-finder.properties.location'),
+                label: this.$t('moorl-foundation.properties.location'),
                 allowResize: true,
                 align: 'center'
+            }, {
+                property: 'priority',
+                dataIndex: 'priority',
+                label: this.$t('moorl-foundation.properties.priority'),
+                inlineEdit: 'number',
+                allowResize: true,
+                align: 'right'
             }];
         }
     },
@@ -242,7 +255,6 @@ Component.register('moorl-merchant-finder-list', {
 
             this.moorlMerchantRepository.search(criteria, Shopware.Context.api).then((items) => {
                 this.total = items.total;
-                this.tax = items;
                 this.isLoading = false;
                 this.merchants = items;
                 return items;
@@ -313,7 +325,8 @@ Component.register('moorl-merchant-finder-list', {
             console.log(item);
 
             if (this.csv.options.getPosition) {
-                this.getPositionByAddress(item);
+                this.getLocationFromNominatim(item, (item) => this.prepareSaveItem(item))
+                //this.getPositionByAddress(item);
             } else {
                 this.prepareSaveItem(item);
             }
@@ -327,7 +340,7 @@ Component.register('moorl-merchant-finder-list', {
             let newItem = {};
 
             for (let index = 0; index < this.csv.schemaProperties.length; index++) {
-                let schemaProperty =  this.csv.schemaProperties[index];
+                let schemaProperty = this.csv.schemaProperties[index];
 
                 if (typeof that.csv.propertyMapping[schemaProperty] == 'string') {
                     let property = that.moorlMerchantRepository.schema.properties[schemaProperty];
@@ -501,8 +514,6 @@ Component.register('moorl-merchant-finder-list', {
                 item.street = item.street + " " + item.streetNumber;
             }
 
-            const initContainer = Application.getContainer('init');
-            const httpClient = initContainer.httpClient;
             const searchParams = new URLSearchParams({
                 "format": "json",
                 "zipcode": item.zipcode,
@@ -534,6 +545,7 @@ Component.register('moorl-merchant-finder-list', {
 
         onCloseModal() {
             this.showImportModal = false;
+            this.showLocModal = false;
             this.showModal = false;
         },
 
@@ -541,11 +553,137 @@ Component.register('moorl-merchant-finder-list', {
             this.getList();
         },
 
+        onClickGetLocation() {
+            console.log("onClickGetLocation()");
+
+            this.showLocModal = true;
+        },
+
+        onStartGetLocation() {
+            console.log("onStartGetLocation()");
+
+            const criteria = new Criteria();
+
+            criteria.addFilter(Criteria.not('OR', [
+                Criteria.equals('street', null),
+                Criteria.equals('city', null),
+                Criteria.equals('zipcode', null),
+                Criteria.equals('countryCode', null),
+            ]));
+
+            if (!this.getLocation.overwrite) {
+                criteria.addFilter(Criteria.multi('OR', [
+                    Criteria.equals('locationLat', null),
+                    Criteria.equals('locationLon', null)
+                ]));
+            }
+
+            criteria.addSorting(Criteria.sort(this.sortBy, this.sortDirection, this.naturalSorting));
+
+            this.getLocation.criteria = criteria;
+
+            this.getListForGetLocation();
+        },
+
+        getListForGetLocation() {
+            console.log("getListForGetLocation()");
+
+            this.moorlMerchantRepository.search(this.getLocation.criteria, Shopware.Context.api).then((items) => {
+                this.getLocation.data = [...this.getLocation.data, ...items];
+                console.log(this.getLocation.data);
+
+                if (this.getLocation.data.length < items.total) {
+                    this.getListForGetLocation();
+                } else {
+                    this.getLocation.total = items.total;
+                    this.proccessGetLocation();
+                }
+            }).catch(() => {
+                this.isLoading = false;
+            });
+        },
+
+        getLocationFromNominatim(item, callback) {
+            console.log("getLocationFromNominatim()");
+
+            for (let checkMe of ['zipcode', 'city', 'street', 'countryCode']) {
+                if (!item[checkMe]) {
+                    console.log("missing parameters for nominatim", checkMe);
+
+                    item.locationLon = null;
+                    item.locationLat = null;
+
+                    this.createNotificationError({
+                        title: this.$t('moorl-merchant-finder.notification.nominatimErrorTitle'),
+                        message: this.$t('moorl-merchant-finder.notification.nominatimErrorText', 0, item)
+                    });
+
+                    callback(item);
+                    return;
+                }
+            }
+
+            if (item.streetNumber) {
+                item.street = item.street + " " + item.streetNumber;
+            }
+
+            const searchParams = new URLSearchParams({
+                "format": "json",
+                "zipcode": item.zipcode,
+                "city": item.city,
+                "street": item.street,
+                "country": item.countryCode
+            });
+
+            httpClient.get(`//nominatim.openstreetmap.org/search?` + searchParams).then((response) => {
+                if (response.data.length > 0) {
+                    item.locationLon = parseFloat(response.data[0].lon);
+                    item.locationLat = parseFloat(response.data[0].lat);
+                } else {
+                    item.locationLon = null;
+                    item.locationLat = null;
+
+                    this.createNotificationError({
+                        title: this.$t('moorl-merchant-finder.notification.nominatimErrorTitle'),
+                        message: this.$t('moorl-merchant-finder.notification.nominatimErrorText', 0, item)
+                    });
+                }
+
+                callback(item);
+            }).catch((exception) => {
+                console.log(exception);
+                that.isLoading = false;
+                throw exception;
+            });
+        },
+
+        proccessGetLocation() {
+            console.log("proccessGetLocation()");
+
+            if (this.getLocation.data.length === 0) {
+                return;
+            }
+
+            let item = this.getLocation.data.shift();
+            console.log(item);
+
+            this.getLocationFromNominatim(item, (item) => {
+                this.moorlMerchantRepository
+                    .save(item, Shopware.Context.api)
+                    .then(() => {
+                        this.proccessGetLocation();
+                    }).catch((exception) => {
+                    this.isLoading = false;
+                    this.createNotificationError({
+                        title: that.$t('moorl-foundation.detail.errorTitle'),
+                        message: exception
+                    });
+                });
+            });
+        },
+
         onClickDownload() {
             console.log("onClickDownload()");
-
-            const initContainer = Application.getContainer('init');
-            const httpClient = initContainer.httpClient;
 
             httpClient.get("/moorl/merchant-finder/export").then((response) => {
                 let a = document.createElement('a');
@@ -556,5 +694,9 @@ Component.register('moorl-merchant-finder-list', {
                 a.click();
             });
         },
+
+        onChangeLanguage() {
+            this.getList();
+        }
     }
 });

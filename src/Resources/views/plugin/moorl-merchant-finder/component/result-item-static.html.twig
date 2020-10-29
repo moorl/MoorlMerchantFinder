@@ -41,9 +41,9 @@
                         <div class="manufacturers">
                             {% for manufacturer in merchant.productManufacturers %}
                                 {% if manufacturer.media %}
-                                    <img src="{{ manufacturer.media.url }}" title="{{ manufacturer.name }}">
+                                    <img src="{{ manufacturer.media.url }}" title="{{ manufacturer.translated.name }}">
                                 {% else %}
-                                    <span>{{ manufacturer.name }}</span>
+                                    <span>{{ manufacturer.translated.name }}</span>
                                 {% endif %}
                             {% endfor %}
                         </div>

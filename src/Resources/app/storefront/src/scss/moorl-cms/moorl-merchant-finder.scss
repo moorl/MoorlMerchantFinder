@@ -282,15 +282,23 @@ img.moorl-mf-logo {
                 }
 
                 &::-webkit-scrollbar-track {
-                    background: $border-color;
+                    background: transparent;
+                    transition: all .3s;
                 }
 
                 &::-webkit-scrollbar-thumb {
-                    background: $secondary;
+                    background: transparent;
+                    transition: all .3s;
                 }
 
-                &::-webkit-scrollbar-thumb:hover {
-                    background: $primary;
+                &:hover {
+                    &::-webkit-scrollbar-track {
+                        background: $light;
+                    }
+
+                    &::-webkit-scrollbar-thumb {
+                        background: $border-color;
+                    }
                 }
 
                 ul {
@@ -322,7 +330,7 @@ img.moorl-mf-logo {
         }
 
         .moorl-merchant-finder-results {
-            &::-webkit-scrollbar {
+            /*&::-webkit-scrollbar {
                 width: 5px;
             }
 
@@ -336,7 +344,7 @@ img.moorl-mf-logo {
 
             &::-webkit-scrollbar-thumb:hover {
                 background: $primary;
-            }
+            }*/
         }
     }
 }

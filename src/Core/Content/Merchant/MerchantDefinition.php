@@ -60,6 +60,18 @@ class MerchantDefinition extends EntityDefinition
         return new FieldCollection([
             (new IdField('id', 'id'))->addFlags(new PrimaryKey(), new Required()),
             new StringField('origin_id', 'originId'),
+
+            new IntField('priority', 'priority'),
+            new BoolField('highlight', 'highlight'),
+
+            new TranslatedField('name'),
+            new TranslatedField('description'),
+            new TranslatedField('descriptionHtml'),
+            new TranslatedField('openingHours'),
+
+            new StringField('email', 'email'),
+            new StringField('company', 'company'),
+
             new FkField('sales_channel_id', 'salesChannelId', SalesChannelDefinition::class),
             new FkField('country_id', 'countryId', CountryDefinition::class),
             new FkField('customer_group_id', 'customerGroupId', CustomerGroupDefinition::class),
@@ -67,18 +79,21 @@ class MerchantDefinition extends EntityDefinition
             new FkField('marker_id', 'markerId', MediaDefinition::class),
             new FkField('marker_shadow_id', 'markerShadowId', MediaDefinition::class),
             new FkField('cms_page_id', 'cmsPageId', CmsPageDefinition::class),
+
             new StringField('marker_settings', 'markerSettings'),
             new StringField('first_name', 'firstName'),
             new StringField('last_name', 'lastName'),
-            new StringField('company', 'company'),
-            new StringField('email', 'email'),
+
             new StringField('title', 'title'),
             new BoolField('active', 'active'),
-            new StringField('zipcode', 'zipcode'),
-            new StringField('city', 'city'),
+
             new StringField('street', 'street'),
             new StringField('street_number', 'streetNumber'),
+
+            new StringField('zipcode', 'zipcode'),
+            new StringField('city', 'city'),
             new StringField('country_code', 'countryCode'),
+
             new FloatField('location_lat','locationLat'),
             new FloatField('location_lon','locationLon'),
             new StringField('department', 'department'),
@@ -91,15 +106,11 @@ class MerchantDefinition extends EntityDefinition
             new StringField('additional_address_line2', 'additionalAddressLine2'),
             new StringField('shop_url', 'shopUrl'),
             new StringField('merchant_url', 'merchantUrl'),
-            new IntField('priority', 'priority'),
-            new BoolField('highlight', 'highlight'),
+
             (new IntField('auto_increment', 'autoIncrement'))->addFlags(new WriteProtected()),
 
             new CustomFields(),
 
-            new TranslatedField('name'),
-            new TranslatedField('description'),
-            new TranslatedField('openingHours'),
             new TranslationsAssociationField(MerchantTranslationDefinition::class, 'moorl_merchant_id'),
 
             new ManyToOneAssociationField('media', 'media_id', MediaDefinition::class, 'id', true),
