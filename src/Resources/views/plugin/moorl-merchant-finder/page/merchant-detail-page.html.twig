@@ -1,7 +1,6 @@
-{% sw_extends 'storefront/base.html.twig' %}
+{% sw_extends '@Storefront/storefront/base.html.twig' %}
 
 {% block base_main_inner %}
-
     {% if merchant.cmsPage %}
         <div class="container-main">
             {% sw_include '@Storefront/plugin/moorl-merchant-finder/page/merchant-detail.html.twig' %}
