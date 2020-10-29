@@ -12,6 +12,7 @@
             <argument type="service" id="Doctrine\DBAL\Connection"/>
             <argument type="service" id="session"/>
             <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="Shopware\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface" />
         </service>
 
         <!-- Controller -->
@@ -60,6 +61,41 @@
 
         <service id="Moorl\MerchantFinder\Core\Content\OpeningHour\OpeningHourDefinition">
             <tag name="shopware.entity.definition" entity="moorl_merchant_oh" />
+        </service>
+
+        <!-- SEO Urls -->
+        <service id="Moorl\MerchantFinder\Core\Seo\MerchantSeoUrlRoute">
+            <argument type="service" id="Moorl\MerchantFinder\Core\Content\Merchant\MerchantDefinition"/>
+            <argument type="service" id="moorl_merchant.repository"/>
+
+            <tag name="shopware.seo_url.route"/>
+        </service>
+
+        <service id="Moorl\MerchantFinder\Core\Seo\SeoUrlUpdateListener">
+            <argument type="service" id="Shopware\Core\Content\Seo\SeoUrlUpdater"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexerRegistry"/>
+
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service id="Moorl\MerchantFinder\Core\Content\Merchant\MerchantIndexer">
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory"/>
+            <argument type="service" id="moorl_merchant.repository"/>
+            <argument type="service" id="Shopware\Core\Framework\Adapter\Cache\CacheClearer"/>
+            <argument type="service" id="event_dispatcher"/>
+
+            <tag name="shopware.entity_indexer"/>
+        </service>
+
+        <!-- UrlProviders / Sitemap -->
+        <service id="Moorl\MerchantFinder\Core\Seo\MerchantUrlProvider">
+            <argument type="service" id="moorl_merchant.repository"/>
+            <argument type="service" id="Shopware\Core\Content\Sitemap\Service\ConfigHandler"/>
+            <argument type="service" id="Shopware\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface"/>
+
+            <tag name="shopware.sitemap_url_provider"/>
         </service>
 
         <!-- Snippet Files -->

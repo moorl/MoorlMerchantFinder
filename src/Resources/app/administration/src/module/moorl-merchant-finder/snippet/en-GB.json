@@ -1,4 +1,9 @@
 {
+    "sw-seo-url-template-card": {
+        "routeNames": {
+            "moorl-merchant-finder-merchant-page": "Merchant page"
+        }
+    },
     "global": {
         "entities": {
             "moorl_merchant": "Merchantfinder"

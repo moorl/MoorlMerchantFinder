@@ -9,12 +9,14 @@ use Moorl\MerchantFinder\Core\Content\Merchant\MerchantEntity;
 use Moorl\MerchantFinder\Core\Service\MerchantService;
 use Shopware\Core\Content\Cms\Exception\PageNotFoundException;
 use Shopware\Core\Content\Cms\SalesChannel\SalesChannelCmsPageLoaderInterface;
+use Shopware\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
 use Shopware\Core\Framework\Adapter\Twig\TemplateFinder;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
+use Shopware\Storefront\Framework\Routing\RequestTransformer;
 use Shopware\Storefront\Page\GenericPageLoader;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -74,7 +76,7 @@ class StorefrontController extends OriginController
     /**
      * @Route("/moorl/merchant-finder/search", name="moorl.merchant-finder.search", methods={"POST"}, defaults={"XmlHttpRequest"=true})
      */
-    public function search(RequestDataBag $data, SalesChannelContext $context): JsonResponse
+    public function search(Request $request, RequestDataBag $data, SalesChannelContext $context): JsonResponse
     {
         $response = new JsonResponse();
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
@@ -84,7 +86,7 @@ class StorefrontController extends OriginController
         } else if ($data->get('action') == 'unset') {
             $response->setData($this->setCustomerSession($data, $context));
         } else {
-            $response->setData($this->searchProcess($data, $context));
+            $response->setData($this->searchProcess($request, $data, $context));
         }
 
         return $response;
@@ -178,7 +180,7 @@ class StorefrontController extends OriginController
         ];
     }
 
-    protected function searchProcess(RequestDataBag $data, SalesChannelContext $context): array
+    protected function searchProcess(Request $request, RequestDataBag $data, SalesChannelContext $context): array
     {
         $merchants = $this->merchantService->getMerchants($context->getContext(), $data);
 
@@ -236,6 +238,11 @@ class StorefrontController extends OriginController
         $searchInfo .= $this->trans('moorl-merchant-finder.resultsFound', [
             'count' => ($this->merchantService->getMerchantsCount() !== 0 ? $this->merchantService->getMerchantsCount() : $this->trans('moorl-merchant-finder.none')),
         ]);
+
+        $host = $request->attributes->get(RequestTransformer::SALES_CHANNEL_ABSOLUTE_BASE_URL) . $request->attributes->get(RequestTransformer::SALES_CHANNEL_BASE_URL);
+
+        $seoUrlReplacer = $this->container->get(SeoUrlPlaceholderHandlerInterface::class);
+        $html = $seoUrlReplacer->replace($html, $host, $context);
 
         return [
             'data' => $markers,

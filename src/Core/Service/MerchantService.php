@@ -11,6 +11,7 @@ use Moorl\MerchantFinder\Core\Content\Merchant\MerchantEntity;
 use Moorl\MerchantFinder\Core\Content\OpeningHourCollection;
 use Moorl\MerchantFinder\MoorlMerchantFinder;
 use Moorl\MerchantFinder\Core\Event\MerchantsLoadedEvent;
+use Shopware\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
@@ -62,6 +63,10 @@ class MerchantService
      * @var SalesChannelContext|null
      */
     private $salesChannelContext;
+    /**
+     * @var SeoUrlPlaceholderHandlerInterface
+     */
+    private $seoUrlReplacer;
 
     public function __construct(
         SystemConfigService $systemConfigService,
@@ -69,7 +74,8 @@ class MerchantService
         EntityRepositoryInterface $openingHourRepo,
         Connection $connection,
         Session $session,
-        EventDispatcherInterface $eventDispatcher
+        EventDispatcherInterface $eventDispatcher,
+        SeoUrlPlaceholderHandlerInterface $seoUrlReplacer
     )
     {
         $this->systemConfigService = $systemConfigService;
@@ -78,6 +84,7 @@ class MerchantService
         $this->connection = $connection;
         $this->session = $session;
         $this->eventDispatcher = $eventDispatcher;
+        $this->seoUrlReplacer = $seoUrlReplacer;
     }
 
     /**
@@ -260,11 +267,9 @@ class MerchantService
                 ));
             }
 
-            if ($data->get('seoUrl')) {
-                $entity->setSeoUrl(
-                    $this->seoUrlReplacer->generate('moorl.merchant-finder.merchant', ['merchantId' => $entity->getId()])
-                );
-            }
+            $entity->setSeoUrl(
+                $this->seoUrlReplacer->generate('moorl.merchant-finder.merchant.page', ['merchantId' => $entity->getId()])
+            );
 
             $entity->getMerchantOpeningHours()->merge($this->openingHours);
         }
