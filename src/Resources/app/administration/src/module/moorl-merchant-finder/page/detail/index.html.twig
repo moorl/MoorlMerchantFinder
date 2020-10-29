@@ -88,10 +88,11 @@
                 <sw-field :label="$t('moorl-foundation.properties.zipcode')" v-model="item.zipcode"></sw-field>
                 <sw-field :label="$t('moorl-foundation.properties.city')" v-model="item.city"></sw-field>
 
-                <sw-entity-single-select :label="$t('moorl-foundation.properties.country')"
-                                         entity="country"
-                                         valueProperty="iso"
-                                         v-model="item.countryCode"></sw-entity-single-select>
+                <sw-single-select :label="$t('moorl-foundation.properties.country')"
+                                  :options="countries"
+                                  valueProperty="iso"
+                                  labelProperty="name"
+                                  v-model="item.countryCode"></sw-single-select>
             </sw-card>
 
             <sw-card :isLoading="isLoading" :title="$t('moorl-foundation.label.contactPersonCard')">

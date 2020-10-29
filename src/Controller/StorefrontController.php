@@ -5,19 +5,13 @@ namespace Moorl\MerchantFinder\Controller;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\ParameterType;
-use GuzzleHttp\Client;
-use Moorl\MerchantFinder\Core\GeneralStruct;
-use Moorl\MerchantFinder\MoorlMerchantFinder;
+use Moorl\MerchantFinder\Core\Content\Merchant\MerchantEntity;
 use Moorl\MerchantFinder\Core\Service\MerchantService;
 use Shopware\Core\Content\Cms\Exception\PageNotFoundException;
 use Shopware\Core\Content\Cms\SalesChannel\SalesChannelCmsPageLoaderInterface;
 use Shopware\Core\Framework\Adapter\Twig\TemplateFinder;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\NotFilter;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
-use Shopware\Core\Framework\Uuid\Uuid;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
@@ -48,18 +42,24 @@ class StorefrontController extends OriginController
      * @var SalesChannelCmsPageLoaderInterface
      */
     private $cmsPageLoader;
+    /**
+     * @var GenericPageLoader
+     */
+    private $genericLoader;
 
     public function __construct(
         SystemConfigService $systemConfigService,
         EntityRepositoryInterface $repository,
         MerchantService $merchantService,
-        SalesChannelCmsPageLoaderInterface $cmsPageLoader
+        SalesChannelCmsPageLoaderInterface $cmsPageLoader,
+        GenericPageLoader $genericLoader
     )
     {
         $this->systemConfigService = $systemConfigService;
         $this->repository = $repository;
         $this->merchantService = $merchantService;
         $this->cmsPageLoader = $cmsPageLoader;
+        $this->genericLoader = $genericLoader;
     }
 
     /**
@@ -101,10 +101,38 @@ class StorefrontController extends OriginController
     }
 
     /**
-     * @Route("/moorl/merchant-finder/merchant/{merchantId}", name="moorl.merchant-finder.merchant", methods={"GET"}, defaults={"XmlHttpRequest"=true})
+     * @Route("/moorl/merchant-finder/merchant/modal/{merchantId}", name="moorl.merchant-finder.merchant.modal", methods={"GET"}, defaults={"XmlHttpRequest"=true})
      */
-    public function merchant($merchantId, Request $request, SalesChannelContext $context): Response
+    public function merchantModal($merchantId, Request $request, SalesChannelContext $context): Response
     {
+        $merchant = $this->getMerchant($merchantId, $request, $context);
+
+        $body = $this->renderView('plugin/moorl-merchant-finder/page/merchant-detail.html.twig', ['merchant' => $merchant]);
+
+        return $this->renderStorefront('plugin/moorl-foundation/modal.html.twig', [
+            'modal' => [
+                'title' => $merchant->getTranslated()['name'] ?: $merchant->getCompany(),
+                'size' => 'xl',
+                'body' => $body
+            ]
+        ]);
+    }
+
+    /**
+     * @Route("/moorl/merchant-finder/merchant/page/{merchantId}", name="moorl.merchant-finder.merchant.page", methods={"GET"}, defaults={"XmlHttpRequest"=true})
+     */
+    public function merchantPage($merchantId, Request $request, SalesChannelContext $context): Response
+    {
+        $page = $this->genericLoader->load($request, $context);
+
+        return $this->renderStorefront('plugin/moorl-merchant-finder/page/merchant-detail-page.html.twig', [
+            'merchant' => $this->getMerchant($merchantId, $request, $context),
+            'page' => $page,
+        ]);
+    }
+
+    protected function getMerchant(string $merchantId, Request $request, SalesChannelContext $context): MerchantEntity {
+        /* @var $merchant MerchantEntity */
         $merchant = $this->merchantService->getMerchants($context->getContext(), new ParameterBag([
             'id' => $merchantId
         ]))->first();
@@ -119,9 +147,7 @@ class StorefrontController extends OriginController
             $merchant->setCmsPage($pages->first());
         }
 
-        return $this->renderStorefront('plugin/moorl-merchant-finder/page/merchant-detail.html.twig', [
-            'merchant' => $merchant
-        ]);
+        return $merchant;
     }
 
     protected function setCustomerSession($data, $context): array

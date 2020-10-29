@@ -20,7 +20,6 @@ export default class MoorlMerchantFinder extends Plugin {
     static options = {};
 
     init() {
-
         this._form = this.el;
 
         this._client = new HttpClient(window.accessKey, window.contextToken);
