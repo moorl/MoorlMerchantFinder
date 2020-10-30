@@ -7,7 +7,7 @@
     <input type="hidden" name="items" value="{{ element.config.items.value }}">
 
     {% block element_moorl_merchant_finder_form_inner %}
-        <div class="row form-row">
+        <div class="row form-row {% if shopware.config.MoorlMerchantFinder.config.hideSearchLabels %}is-hide-label{% endif %}">
             {% if shopware.config.MoorlMerchantFinder.config.enableTextSearch %}
                 {% block element_moorl_merchant_finder_form_inner_search %}
                     <div class="form-group col-6 col-lg">

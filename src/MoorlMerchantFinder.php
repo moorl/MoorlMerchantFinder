@@ -60,6 +60,8 @@ class MoorlMerchantFinder extends Plugin
             'moorl_zipcode'
         ]);
 
+        $foundation->removePluginSnippets('moorl-merchant-finder');
+        $foundation->removePluginConfig('MoorlMerchantFinder');
         $foundation->removeSeoUrlTemplate('moorl_merchant');
         $foundation->removeCmsBlocks(['moorl-merchant-finder-basic']);
     }

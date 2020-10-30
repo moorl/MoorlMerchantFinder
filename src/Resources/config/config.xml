@@ -19,6 +19,13 @@
         <title lang="de-DE">Suchlogig</title>
 
         <input-field type="bool">
+            <name>hideSearchLabels</name>
+            <label>Hide the labels in searchbar</label>
+            <label lang="de-DE">Bezeichnungen in der Suchleiste verstecken</label>
+            <defaultValue>false</defaultValue>
+        </input-field>
+
+        <input-field type="bool">
             <name>enableSearch</name>
             <label>Enable search</label>
             <label lang="de-DE">Suche aktiv</label>

@@ -11,6 +11,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\Struct\ArrayEntity;
+use Shopware\Core\Framework\Struct\ArrayStruct;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Shopware\Storefront\Pagelet\Header\HeaderPageletLoadedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -18,7 +19,6 @@ use Shopware\Core\Framework\DataAbstractionLayer\Event\EntityLoadedEvent;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\Filter;
 use Shopware\Core\Content\Cms\CmsPageEvents;
-use Moorl\MerchantFinder\Core\GeneralStruct;
 
 class StorefrontSubscriber implements EventSubscriberInterface
 {
@@ -120,7 +120,7 @@ SQL;
 
                 $categories = $this->connection->executeQuery($sql, ['languageId' => $languageId])->fetchAll(FetchMode::ASSOCIATIVE);
 
-                $entity->setData(new GeneralStruct([
+                $entity->setData(new ArrayStruct([
                     'countries' => $countries ?: null,
                     'tags' => $tags ?: null,
                     'categories' => $categories ?: null,

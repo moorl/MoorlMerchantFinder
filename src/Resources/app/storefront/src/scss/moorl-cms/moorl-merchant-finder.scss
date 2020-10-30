@@ -7,6 +7,10 @@ img.moorl-mf-logo {
         cursor: pointer;
     }
 
+    .is-hide-label > .form-group > label {
+        display: none;
+    }
+
     .moorl-merchant-finder-result-item {
         border-radius: 0 !important;
         transition: all .3s;
@@ -106,11 +110,7 @@ img.moorl-mf-logo {
     }
 
     .element-content {
-
-
-
-        .search-box {
-        }
+        .search-box {}
 
         .results-box {}
 
@@ -119,8 +119,7 @@ img.moorl-mf-logo {
             height: 600px;
         }
 
-        .results-content {
-        }
+        .results-content {}
 
         .map-content {
             height: 100%;
@@ -146,14 +145,10 @@ img.moorl-mf-logo {
             .leaflet-popup-tip {
                 background-color: rgba($body-bg, 80%);
             }
-
         }
-
     }
 
-
     .moorl-merchant-finder-results {
-
         &::-webkit-scrollbar {
             width: 5px;
         }
@@ -170,7 +165,6 @@ img.moorl-mf-logo {
             background: $primary;
         }
     }
-
 }
 
 @include media-breakpoint-up(lg) {
@@ -327,24 +321,6 @@ img.moorl-mf-logo {
                     width: 100%;
                 }
             }
-        }
-
-        .moorl-merchant-finder-results {
-            /*&::-webkit-scrollbar {
-                width: 5px;
-            }
-
-            &::-webkit-scrollbar-track {
-                background: $border-color;
-            }
-
-            &::-webkit-scrollbar-thumb {
-                background: $secondary;
-            }
-
-            &::-webkit-scrollbar-thumb:hover {
-                background: $primary;
-            }*/
         }
     }
 }
