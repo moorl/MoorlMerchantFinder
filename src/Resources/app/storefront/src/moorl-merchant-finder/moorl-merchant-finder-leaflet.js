@@ -31,7 +31,7 @@ export default class MoorlMerchantFinder extends Plugin {
         if (this.el.dataset.defaultMarker) {
             this._defaultMarker = JSON.parse(this.el.dataset.defaultMarker);
         } else {
-            this._defaultMarker = null;
+            this._defaultMarker = {};
         }
 
         this._options = {
