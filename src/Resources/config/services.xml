@@ -6,6 +6,7 @@
     <services>
         <!-- Service -->
         <service id="Moorl\MerchantFinder\Core\Service\MerchantService" public="true">
+            <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry"/>
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
             <argument type="service" id="moorl_merchant.repository"/>
             <argument type="service" id="moorl_merchant_oh.repository"/>
@@ -62,6 +63,15 @@
         <service id="Moorl\MerchantFinder\Core\Content\OpeningHour\OpeningHourDefinition">
             <tag name="shopware.entity.definition" entity="moorl_merchant_oh" />
         </service>
+
+        <service id="Moorl\MerchantFinder\Core\Content\Aggregate\MerchantStock\MerchantStockDefinition">
+            <tag name="shopware.entity.definition" entity="moorl_merchant_stock" />
+        </service>
+
+        <service id="Moorl\MerchantFinder\Core\Content\Product\ProductExtension">
+            <tag name="shopware.entity.extension" />
+        </service>
+
 
         <!-- SEO Urls -->
         <service id="Moorl\MerchantFinder\Core\Seo\MerchantSeoUrlRoute">

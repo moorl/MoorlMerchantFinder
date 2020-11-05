@@ -51,6 +51,7 @@ class MoorlMerchantFinder extends Plugin
         $foundation->setContext($context->getContext());
 
         $foundation->dropTables([
+            'moorl_merchant_stock',
             'moorl_merchant_tag',
             'moorl_merchant_category',
             'moorl_merchant_product_manufacturer',
@@ -60,6 +61,7 @@ class MoorlMerchantFinder extends Plugin
             'moorl_zipcode'
         ]);
 
+        $foundation->executeQuery('ALTER TABLE `product` DROP COLUMN `merchants`');
         $foundation->removePluginSnippets('moorl-merchant-finder');
         $foundation->removePluginConfig('MoorlMerchantFinder');
         $foundation->removeSeoUrlTemplate('moorl_merchant');

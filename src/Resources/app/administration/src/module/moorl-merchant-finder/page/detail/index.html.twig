@@ -21,6 +21,7 @@
 
     <template slot="content">
         <sw-card-view>
+            {% block moorl_merchant_detail_general_card %}
             <sw-card :isLoading="isLoading" :title="$t('moorl-foundation.label.generalCard')">
                 <sw-field type="switch" bordered :label="$t('moorl-foundation.properties.active')"
                           v-model="item.active"></sw-field>
@@ -79,6 +80,7 @@
                 <sw-field :label="$t('moorl-foundation.properties.shopUrl')" v-model="item.shopUrl"></sw-field>
                 <sw-field :label="$t('moorl-foundation.properties.merchantUrl')" v-model="item.merchantUrl"></sw-field>
             </sw-card>
+            {% endblock %}
 
             <sw-card :isLoading="isLoading" :title="$t('moorl-foundation.label.addressCard')">
                 <sw-field :label="$t('moorl-foundation.properties.company')" v-model="item.company"></sw-field>

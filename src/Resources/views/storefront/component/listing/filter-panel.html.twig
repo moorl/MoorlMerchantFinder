@@ -1,0 +1,17 @@
+{% sw_extends '@Storefront/storefront/component/listing/filter-panel.html.twig' %}
+
+{% block component_filter_panel_item_manufacturer %}
+    {% set merchants = listing.aggregations.get('merchants') %}
+    {% if not merchants.entities is empty %}
+        {% set merchantsSorted = merchants.entities|sort((a, b) => a.translated.name|lower > b.translated.name|lower) %}
+
+        {% sw_include '@Storefront/storefront/component/listing/filter/filter-multi-select.html.twig' with {
+            elements: merchantsSorted,
+            sidebar: sidebar,
+            name: 'merchant',
+            displayName: 'Merchant'
+        } %}
+    {% endif %}
+
+    {{ parent() }}
+{% endblock %}

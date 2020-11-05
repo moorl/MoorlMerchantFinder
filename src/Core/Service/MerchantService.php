@@ -13,6 +13,7 @@ use Moorl\MerchantFinder\MoorlMerchantFinder;
 use Moorl\MerchantFinder\Core\Event\MerchantsLoadedEvent;
 use Shopware\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
 use Shopware\Core\Framework\Context;
+use Shopware\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -67,8 +68,17 @@ class MerchantService
      * @var SeoUrlPlaceholderHandlerInterface
      */
     private $seoUrlReplacer;
+    /**
+     * @var DefinitionInstanceRegistry
+     */
+    private $definitionInstanceRegistry;
+    /**
+     * @var Context
+     */
+    private $context;
 
     public function __construct(
+        DefinitionInstanceRegistry $definitionInstanceRegistry,
         SystemConfigService $systemConfigService,
         EntityRepositoryInterface $repository,
         EntityRepositoryInterface $openingHourRepo,
@@ -78,6 +88,7 @@ class MerchantService
         SeoUrlPlaceholderHandlerInterface $seoUrlReplacer
     )
     {
+        $this->definitionInstanceRegistry = $definitionInstanceRegistry;
         $this->systemConfigService = $systemConfigService;
         $this->repository = $repository;
         $this->openingHourRepo = $openingHourRepo;
@@ -88,19 +99,19 @@ class MerchantService
     }
 
     /**
-     * @return SalesChannelContext
+     * @return Context
      */
-    public function getSalesChannelContext(): ?SalesChannelContext
+    public function getContext(): Context
     {
-        return $this->salesChannelContext;
+        return $this->context;
     }
 
     /**
-     * @param SalesChannelContext $salesChannelContext
+     * @param Context $context
      */
-    public function setSalesChannelContext(SalesChannelContext $salesChannelContext): void
+    public function setContext(Context $context): void
     {
-        $this->salesChannelContext = $salesChannelContext;
+        $this->context = $context;
     }
 
     /**
@@ -133,6 +144,34 @@ class MerchantService
     public function setMerchantsCount(?int $merchantsCount): void
     {
         $this->merchantsCount = $merchantsCount;
+    }
+
+    public function getMerchantsByProductId(string $productId): EntityCollection
+    {
+        // merchant stock extension
+        $repo = $this->definitionInstanceRegistry->getRepository('moorl_merchant_stock');
+
+        $criteria = new Criteria();
+        $criteria->addAssociation('merchant');
+        $criteria->addAssociation('deliveryTime');
+        $criteria->addFilter(new EqualsFilter('productId', $productId));
+        $criteria->addFilter(new MultiFilter('OR', [
+            new EqualsFilter('merchant.salesChannelId', null),
+            new EqualsFilter('merchant.salesChannelId', $this->getSalesChannelContext()->getSalesChannel()->getId())
+        ]));
+
+        return $repo->search($criteria, $this->getContext())->getEntities();
+    }
+
+    public function getProductsByMerchantId(string $merchantId): EntityCollection
+    {
+        // merchant stock extension
+        $repo = $this->definitionInstanceRegistry->getRepository('moorl_merchant_stock');
+
+        $criteria = new Criteria();
+        $criteria->addFilter('merchantId', $merchantId);
+
+        return $repo->search($criteria, $this->getContext())->getEntities();
     }
 
     public function getMerchants(Context $context, ?ParameterBag $data): EntityCollection
@@ -410,6 +449,23 @@ SQL;
         $this->setMyLocation($myLocation);
 
         return $myLocation;
+    }
+
+    /**
+     * @return SalesChannelContext
+     */
+    public function getSalesChannelContext(): ?SalesChannelContext
+    {
+        return $this->salesChannelContext;
+    }
+
+    /**
+     * @param SalesChannelContext $salesChannelContext
+     */
+    public function setSalesChannelContext(SalesChannelContext $salesChannelContext): void
+    {
+        $this->salesChannelContext = $salesChannelContext;
+        $this->context = $salesChannelContext->getContext();
     }
 
     private function distance(float $lat1, float $lon1, float $lat2, float $lon2, string $unit = "K") {

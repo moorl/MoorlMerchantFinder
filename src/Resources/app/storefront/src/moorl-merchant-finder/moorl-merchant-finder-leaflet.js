@@ -12,8 +12,14 @@ export default class MoorlMerchantFinder extends Plugin {
 
     init() {
         //const that = this;
-        this._client = new HttpClient(window.accessKey, window.contextToken);
         this._form = this.el.getElementsByTagName("form")[0];
+
+        if (!this._form) {
+            // prevent errors if CSS selector is just used for styling
+            return;
+        }
+
+        this._client = new HttpClient(window.accessKey, window.contextToken);
         this._results = this.el.getElementsByClassName('moorl-merchant-finder-results')[0];
         this._resultsContent = this.el.getElementsByClassName('results-content')[0];
         this._loadingIndicator = this.el.getElementsByClassName('moorl-merchant-finder-loading')[0];
