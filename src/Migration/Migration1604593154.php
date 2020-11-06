@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `moorl_merchant_stock` (
 SQL;
         $connection->executeUpdate($sql);
 
-        $this->updateInheritance($connection, 'product', 'merchants'); // TODO: check ob notwendig
+        $this->updateInheritance($connection, 'product', 'MoorlMerchants'); // TODO: check ob notwendig
     }
 
     public function updateDestructive(Connection $connection): void

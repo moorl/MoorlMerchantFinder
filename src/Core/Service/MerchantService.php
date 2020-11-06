@@ -13,6 +13,8 @@ use Moorl\MerchantFinder\Core\Content\OpeningHourCollection;
 use Moorl\MerchantFinder\MoorlMerchantFinder;
 use Moorl\MerchantFinder\Core\Event\MerchantsLoadedEvent;
 use Shopware\Core\Checkout\Cart\LineItem\LineItem;
+use Shopware\Core\Checkout\Cart\LineItem\LineItemCollection;
+use Shopware\Core\Content\Product\ProductEntity;
 use Shopware\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
@@ -155,6 +157,17 @@ class MerchantService
         $this->merchantsCount = $merchantsCount;
     }
 
+    public function patchProductEntity(ProductEntity $product): void
+    {
+        $merchantStocks = $this->getMerchantsByProductId($product->getId());
+
+        if (!$merchantStocks) {
+            return;
+        }
+
+        $product->addExtension('MoorlMerchantStocks', $merchantStocks);
+    }
+
     public function getMerchantsByProductId(string $productId): EntityCollection
     {
         // merchant stock extension
@@ -191,6 +204,28 @@ class MerchantService
             ->first();
     }
 
+    public function patchLineItems($lineItems): void
+    {
+        if (!$lineItems || $lineItems->count() == 0) {
+            return;
+        }
+
+        $ids = $lineItems->getKeys();
+
+        $merchantStocks = $this->definitionInstanceRegistry
+            ->getRepository('moorl_merchant_stock')
+            ->search((new Criteria($ids))->addAssociation('merchant'), $this->getContext())
+            ->getEntities();
+
+        foreach ($lineItems as $lineItem) {
+            $merchantStock = $merchantStocks->get($lineItem->getId());
+
+            if ($merchantStock) {
+                $lineItem->addExtension('MoorlMerchantStock', $merchantStock);
+            }
+        }
+    }
+
     public function patchLineItem(LineItem $lineItem): void
     {
         if ($lineItem->getType() != 'product') {
@@ -212,7 +247,8 @@ class MerchantService
         $lineItem->setId($merchantStock->getId());
 
         $lineItem->setPayloadValue('MoorlMerchantStock', [
-            'merchantId' => $merchantStock->getMerchantId(),
+            'merchantStockId' => $merchantStock->getId(),
+            'merchantId' => $merchantStock->getMerchant()->getId(),
             'merchantOriginId' => $merchantStock->getMerchant()->getOriginId(),
             'merchantName' => $merchantStock->getMerchant()->getTranslated()['name'],
             'merchantCompany' => $merchantStock->getMerchant()->getCompany()

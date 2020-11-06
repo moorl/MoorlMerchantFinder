@@ -1,0 +1,11 @@
+{% sw_extends '@Storefront/storefront/component/checkout/offcanvas-item.html.twig' %}
+
+{% block component_offcanvas_product_remove %}
+    {{ parent() }}
+
+    {% if lineItem.extensions.MoorlMerchantStock %}
+        <div class="col-12">
+            {{ dump(lineItem.extensions.MoorlMerchantStock) }}
+        </div>
+    {% endif %}
+{% endblock %}

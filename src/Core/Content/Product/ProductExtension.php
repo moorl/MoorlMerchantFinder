@@ -22,20 +22,20 @@ class ProductExtension extends EntityExtension
     {
         $collection->add(
             new OneToManyAssociationField(
-                'merchantStocks',
+                'MoorlMerchantStocks',
                 MerchantStockDefinition::class,
                 'product_id'
             )
         );
 
         $collection->add(
-            new ManyToManyAssociationField(
-                'merchants',
+            (new ManyToManyAssociationField(
+                'MoorlMerchants',
                 MerchantDefinition::class,
                 MerchantStockDefinition::class,
                 'product_id',
                 'moorl_merchant_id'
-            )
+            ))
         );
     }
 }

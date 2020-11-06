@@ -1,0 +1,27 @@
+{% sw_extends '@Storefront/storefront/page/product-detail/buy-widget-form.html.twig' %}
+
+{% block page_product_detail_buy_container %}
+    {% if page.product.extensions.MoorlMerchantStocks %}
+        <h4>{{ "moorl-merchant-finder.choseMerchant"|trans }}</h4>
+
+        <div class="cms-element-moorl-merchant-finder">
+            <ul class="list-group mb-3">
+                {% for merchantStock in page.product.extensions.MoorlMerchantStocks %}
+                    <input id="radio-{{ merchantStock.merchantId }}" class="d-none" type="radio" name="merchantStockId"
+                           value="{{ merchantStock.id }}">
+
+                    <label for="radio-{{ merchantStock.merchantId }}"
+                           class="list-group-item moorl-merchant-finder-result-item">
+                        {% sw_include '@Storefront/plugin/moorl-merchant-finder/component/result-item-static-main.html.twig' with {
+                            merchant: merchantStock.merchant
+                        } %}
+
+                        <div class="small">In Stock: {{ merchantStock.isStock ? merchantStock.stock : 'available' }} | delivery time {{ merchantStock.deliveryTime.name }}</div>
+                    </label>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    {{ parent() }}
+{% endblock %}
