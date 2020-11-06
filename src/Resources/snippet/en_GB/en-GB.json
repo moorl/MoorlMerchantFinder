@@ -1,5 +1,6 @@
 {
     "moorl-merchant-finder": {
+        "merchant": "Merchant",
         "country": "Country",
         "allowMerchantCustomerContact": "I allow my selected merchant to contact me by phone or e-mail.",
         "forTheSearch": "for the search ",
@@ -45,10 +46,7 @@
             "hasPriority": "Priority merchant",
             "hasLogo": "Merchant with logo"
         },
-        "myLocation": "Use my current location",
-        "days": [
-            "Mo"
-        ]
+        "myLocation": "Use my current location"
     },
     "error": {
         "merchant-not-selected": "Please chose your local merchant to proceed the checkout."

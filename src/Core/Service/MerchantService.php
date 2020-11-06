@@ -6,11 +6,13 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\ParameterType;
 use GuzzleHttp\Client;
+use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantStock\MerchantStockEntity;
 use MoorlFoundation\Core\Framework\DataAbstractionLayer\Search\Sorting\DistanceFieldSorting;
 use Moorl\MerchantFinder\Core\Content\Merchant\MerchantEntity;
 use Moorl\MerchantFinder\Core\Content\OpeningHourCollection;
 use Moorl\MerchantFinder\MoorlMerchantFinder;
 use Moorl\MerchantFinder\Core\Event\MerchantsLoadedEvent;
+use Shopware\Core\Checkout\Cart\LineItem\LineItem;
 use Shopware\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
@@ -30,6 +32,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -76,8 +79,13 @@ class MerchantService
      * @var Context
      */
     private $context;
+    /**
+     * @var RequestStack
+     */
+    private $requestStack;
 
     public function __construct(
+        RequestStack $requestStack,
         DefinitionInstanceRegistry $definitionInstanceRegistry,
         SystemConfigService $systemConfigService,
         EntityRepositoryInterface $repository,
@@ -88,6 +96,7 @@ class MerchantService
         SeoUrlPlaceholderHandlerInterface $seoUrlReplacer
     )
     {
+        $this->requestStack = $requestStack;
         $this->definitionInstanceRegistry = $definitionInstanceRegistry;
         $this->systemConfigService = $systemConfigService;
         $this->repository = $repository;
@@ -174,11 +183,48 @@ class MerchantService
         return $repo->search($criteria, $this->getContext())->getEntities();
     }
 
-    public function getMerchants(Context $context, ?ParameterBag $data): EntityCollection
+    public function getMerchantStock(string $merchantStockId): ?MerchantStockEntity
     {
+        return $this->definitionInstanceRegistry
+            ->getRepository('moorl_merchant_stock')
+            ->search((new Criteria([$merchantStockId]))->addAssociation('merchant'), $this->getContext())
+            ->first();
+    }
+
+    public function patchLineItem(LineItem $lineItem): void
+    {
+        if ($lineItem->getType() != 'product') {
+            return;
+        }
+
+        $merchantStockId = $this->requestStack->getCurrentRequest()->get('merchantStockId');
+
+        if (!$merchantStockId) {
+            return;
+        }
+
+        $merchantStock = $this->getMerchantStock($merchantStockId);
+
+        if (!$merchantStock) {
+            return;
+        }
+
+        $lineItem->setId($merchantStock->getId());
+
+        $lineItem->setPayloadValue('MoorlMerchantStock', [
+            'merchantId' => $merchantStock->getMerchantId(),
+            'merchantOriginId' => $merchantStock->getMerchant()->getOriginId(),
+            'merchantName' => $merchantStock->getMerchant()->getTranslated()['name'],
+            'merchantCompany' => $merchantStock->getMerchant()->getCompany()
+        ]);
+    }
+
+    public function getMerchants(?ParameterBag $data = null): EntityCollection
+    {
+        $context = $this->getContext();
         $options = new ParameterBag(json_decode($data->get('options'), true) ?: []);
 
-        $this->initGlobalOpeningHours($context);
+        $this->initGlobalOpeningHours();
 
         if ($data->get('id')) {
             $criteria = new Criteria([$data->get('id')]);
@@ -230,6 +276,7 @@ class MerchantService
         }
 
         if ($data->get('productId')) {
+            $criteria->addAssociation('products');
             $criteria->addFilter(new EqualsFilter('products.id', $data->get('productId')));
         }
 
@@ -323,7 +370,8 @@ class MerchantService
         return $merchants;
     }
 
-    public function initGlobalOpeningHours(Context $context) {
+    public function initGlobalOpeningHours(): void
+    {
         $criteria = new Criteria();
 
         $time = new \DateTimeImmutable();
@@ -354,7 +402,7 @@ class MerchantService
             )
         );
 
-        $this->openingHours = $this->openingHourRepo->search($criteria, $context)->getEntities();
+        $this->openingHours = $this->openingHourRepo->search($criteria, $this->getContext())->getEntities();
     }
 
     public function getLocationByTerm($term): array

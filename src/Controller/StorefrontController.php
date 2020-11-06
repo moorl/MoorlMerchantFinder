@@ -134,8 +134,10 @@ class StorefrontController extends OriginController
     }
 
     protected function getMerchant(string $merchantId, Request $request, SalesChannelContext $context): MerchantEntity {
+        $this->merchantService->setSalesChannelContext($context);
+
         /* @var $merchant MerchantEntity */
-        $merchant = $this->merchantService->getMerchants($context->getContext(), new ParameterBag([
+        $merchant = $this->merchantService->getMerchants(new ParameterBag([
             'id' => $merchantId
         ]))->first();
 
@@ -182,7 +184,9 @@ class StorefrontController extends OriginController
 
     protected function searchProcess(Request $request, RequestDataBag $data, SalesChannelContext $context): array
     {
-        $merchants = $this->merchantService->getMerchants($context->getContext(), $data);
+        $this->merchantService->setSalesChannelContext($context);
+
+        $merchants = $this->merchantService->getMerchants($data);
 
         $popupItemTemplate = null;
         $listItemTemplate = null;
