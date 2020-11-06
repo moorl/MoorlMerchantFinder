@@ -14,6 +14,8 @@ use Moorl\MerchantFinder\MoorlMerchantFinder;
 use Moorl\MerchantFinder\Core\Event\MerchantsLoadedEvent;
 use Shopware\Core\Checkout\Cart\LineItem\LineItem;
 use Shopware\Core\Checkout\Cart\LineItem\LineItemCollection;
+use Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemEntity;
+use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Content\Product\ProductEntity;
 use Shopware\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
 use Shopware\Core\Framework\Context;
@@ -204,17 +206,87 @@ class MerchantService
             ->first();
     }
 
+    public function updateOrderLineItems(OrderEntity $order): void
+    {
+        $update = [];
+        $lineItems = $order->getLineItems();
+
+        if ($lineItems->count() == 0) {
+            return;
+        }
+
+        foreach ($lineItems as $lineItem) {
+            $pl = $lineItem->getPayload();
+            if (!$pl || !isset($pl['MoorlMerchantStock'])) {
+                continue;
+            }
+            $pl = $pl['MoorlMerchantStock'];
+
+            $customFields = $lineItem->getCustomFields() ?: [];
+
+            if (isset($pl)) {
+                $customFields = array_merge($customFields, $pl);
+
+                $this->updateOrderMerchantStock($pl, $lineItem);
+            }
+            $update[] = [
+                'id' => $lineItem->getId(),
+                'customFields' => $customFields
+            ];
+        }
+
+        if (count($update) != 0) {
+            $this->definitionInstanceRegistry->getRepository('order_line_item')->update($update, $this->getContext());
+        }
+    }
+
+    public function updateOrderMerchantStock(array $pl, OrderLineItemEntity $lineItem): void
+    {
+        $merchantStock = $this->getMerchantStock($pl['merchantStockId']);
+
+        if (!$merchantStock || !$merchantStock->getIsStock()) {
+            return;
+        }
+
+        $stock = $merchantStock->getStock() - $lineItem->getQuantity();
+
+        $this->definitionInstanceRegistry->getRepository('moorl_merchant_stock')->update([
+            [
+                'id' => $merchantStock->getId(),
+                'stock' => $stock
+            ]
+        ], $this->getContext());
+    }
+
+    public function getLineItemMerchantStockIds($lineItems): array
+    {
+        $ids = [];
+        foreach ($lineItems as $lineItem) {
+            $pl = $lineItem->getPayload();
+            if (!$pl || !isset($pl['MoorlMerchantStock'])) {
+                continue;
+            }
+            $ids[] = $pl['MoorlMerchantStock']['merchantStockId'];
+        }
+        return $ids;
+    }
+
     public function patchLineItems($lineItems): void
     {
         if (!$lineItems || $lineItems->count() == 0) {
             return;
         }
 
-        $ids = $lineItems->getKeys();
+        //$ids = $lineItems->getKeys();
+        $ids = $this->getLineItemMerchantStockIds($lineItems);
+
+        if (count($ids) == 0) {
+            return;
+        }
 
         $merchantStocks = $this->definitionInstanceRegistry
             ->getRepository('moorl_merchant_stock')
-            ->search((new Criteria($ids))->addAssociation('merchant'), $this->getContext())
+            ->search((new Criteria($ids))->addAssociation('merchant')->addAssociation('deliveryTime'), $this->getContext())
             ->getEntities();
 
         foreach ($lineItems as $lineItem) {

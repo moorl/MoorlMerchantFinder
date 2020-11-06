@@ -4,8 +4,9 @@
     {{ parent() }}
 
     {% if lineItem.extensions.MoorlMerchantStock %}
+        {% set merchantStock = lineItem.extensions.MoorlMerchantStock %}
         <div class="col-12">
-            {{ dump(lineItem.extensions.MoorlMerchantStock) }}
+            {% sw_include '@Storefront/plugin/moorl-merchant-finder/component/line-item-summary.html.twig' %}
         </div>
     {% endif %}
 {% endblock %}

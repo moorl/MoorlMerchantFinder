@@ -4,15 +4,14 @@
     {{ parent() }}
 
     {% if lineItem.extensions.MoorlMerchantStock %}
-        <div class="col-12 mt-2">
-            {{ dump(lineItem.extensions.MoorlMerchantStock) }}
+        {% set merchantStock = lineItem.extensions.MoorlMerchantStock %}
+        <div class="col-12">
+            {% sw_include '@Storefront/plugin/moorl-merchant-finder/component/line-item-summary.html.twig' %}
         </div>
     {% endif %}
 {% endblock %}
 
 {% block page_checkout_item_delivery_date %}
+    {# TODO: add change possibility #}
     {{ parent() }}
-    {% if lineItem.extensions.MoorlMerchantStock and controllerAction != 'finishPage' %}
-        <button type="button" class="btn btn-light">Dummy Button</button>
-    {% endif %}
 {% endblock %}
