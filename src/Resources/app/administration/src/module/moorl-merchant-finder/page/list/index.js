@@ -208,8 +208,10 @@ Component.register('moorl-merchant-finder-list', {
         },
 
         updateSelection(selection) {
+            console.log(selection);
             this.selectedItems = selection;
         },
+
         updateTotal({total}) {
             this.total = total;
         },
