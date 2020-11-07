@@ -22,7 +22,7 @@
     <template slot="content">
         <sw-card-view>
             {% block moorl_merchant_detail_general_card %}
-            <sw-card :isLoading="isLoading" :title="$t('moorl-foundation.label.generalCard')">
+            <sw-card v-if="item" :isLoading="isLoading" :title="$t('moorl-foundation.label.generalCard')">
                 <sw-field type="switch" bordered :label="$t('moorl-foundation.properties.active')"
                           v-model="item.active"></sw-field>
                 <sw-field type="switch" bordered :label="$t('moorl-foundation.properties.highlight')"

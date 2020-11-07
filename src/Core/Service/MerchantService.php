@@ -13,7 +13,6 @@ use Moorl\MerchantFinder\Core\Content\OpeningHourCollection;
 use Moorl\MerchantFinder\MoorlMerchantFinder;
 use Moorl\MerchantFinder\Core\Event\MerchantsLoadedEvent;
 use Shopware\Core\Checkout\Cart\LineItem\LineItem;
-use Shopware\Core\Checkout\Cart\LineItem\LineItemCollection;
 use Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemEntity;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Content\Product\ProductEntity;
@@ -162,11 +161,9 @@ class MerchantService
     public function patchProductEntity(ProductEntity $product): void
     {
         $merchantStocks = $this->getMerchantsByProductId($product->getId());
-
         if (!$merchantStocks) {
             return;
         }
-
         $product->addExtension('MoorlMerchantStocks', $merchantStocks);
     }
 
@@ -174,7 +171,6 @@ class MerchantService
     {
         // merchant stock extension
         $repo = $this->definitionInstanceRegistry->getRepository('moorl_merchant_stock');
-
         $criteria = new Criteria();
         $criteria->addAssociation('merchant');
         $criteria->addAssociation('deliveryTime');
@@ -183,18 +179,6 @@ class MerchantService
             new EqualsFilter('merchant.salesChannelId', null),
             new EqualsFilter('merchant.salesChannelId', $this->getSalesChannelContext()->getSalesChannel()->getId())
         ]));
-
-        return $repo->search($criteria, $this->getContext())->getEntities();
-    }
-
-    public function getProductsByMerchantId(string $merchantId): EntityCollection
-    {
-        // merchant stock extension
-        $repo = $this->definitionInstanceRegistry->getRepository('moorl_merchant_stock');
-
-        $criteria = new Criteria();
-        $criteria->addFilter('merchantId', $merchantId);
-
         return $repo->search($criteria, $this->getContext())->getEntities();
     }
 
@@ -258,15 +242,23 @@ class MerchantService
         ], $this->getContext());
     }
 
+    public function getLineItemMerchantStockId($lineItem): ?string
+    {
+        $pl = $lineItem->getPayload();
+        if (!$pl || !isset($pl['MoorlMerchantStock'])) {
+            return null;
+        }
+        return $pl['MoorlMerchantStock']['merchantStockId'];
+    }
+
     public function getLineItemMerchantStockIds($lineItems): array
     {
         $ids = [];
         foreach ($lineItems as $lineItem) {
-            $pl = $lineItem->getPayload();
-            if (!$pl || !isset($pl['MoorlMerchantStock'])) {
-                continue;
+            $merchantStockId = $this->getLineItemMerchantStockId($lineItem);
+            if ($merchantStockId) {
+                $ids[] = $merchantStockId;
             }
-            $ids[] = $pl['MoorlMerchantStock']['merchantStockId'];
         }
         return $ids;
     }
@@ -277,7 +269,6 @@ class MerchantService
             return;
         }
 
-        //$ids = $lineItems->getKeys();
         $ids = $this->getLineItemMerchantStockIds($lineItems);
 
         if (count($ids) == 0) {
@@ -290,8 +281,11 @@ class MerchantService
             ->getEntities();
 
         foreach ($lineItems as $lineItem) {
-            $merchantStock = $merchantStocks->get($lineItem->getId());
-
+            $merchantStockId = $this->getLineItemMerchantStockId($lineItem);
+            if (!$merchantStockId) {
+                continue;
+            }
+            $merchantStock = $merchantStocks->get($merchantStockId);
             if ($merchantStock) {
                 $lineItem->addExtension('MoorlMerchantStock', $merchantStock);
             }
@@ -316,7 +310,7 @@ class MerchantService
             return;
         }
 
-        $lineItem->setId($merchantStock->getId());
+        $lineItem->setId($merchantStock->getId()); // stack similar line items by stock id
 
         $lineItem->setPayloadValue('MoorlMerchantStock', [
             'merchantStockId' => $merchantStock->getId(),
@@ -327,19 +321,25 @@ class MerchantService
         ]);
     }
 
-    public function getMerchants(?ParameterBag $data = null): EntityCollection
+    public function getMerchants(?ArrayStruct $data = null): EntityCollection
     {
+        // TODO: Remove ParameterBag
+        if (!$data) {
+            $data = $this->requestStack->getCurrentRequest();
+        }
+
+        $distance = (int)$data->get('distance') ?: 30;
+        $limit = (int)$data->get('items') ?: 500;
+        $offset = (int)$data->get('offset') ?: 0;
+
         $context = $this->getContext();
-        $options = new ParameterBag(json_decode($data->get('options'), true) ?: []);
+        $options = new ArrayStruct(json_decode($data->get('options'), true) ?: []);
 
         $this->initGlobalOpeningHours();
 
         if ($data->get('id')) {
             $criteria = new Criteria([$data->get('id')]);
         } else {
-            $data->set('distance', $data->get('distance') ?: '30');
-            $data->set('items', (int)$data->get('items') ?: 500);
-
             if ($options->get('myLocation')) {
                 $this->myLocation = $options->get('myLocation');
             } else {
@@ -351,7 +351,7 @@ class MerchantService
 
                 $criteria = new Criteria();
                 $criteria->addSorting(new FieldSorting('distance'));
-                $criteria->addFilter(new RangeFilter('distance', ['lte' => $data->get('distance')]));
+                $criteria->addFilter(new RangeFilter('distance', ['lte' => $distance]));
             } else {
                 $criteria = new Criteria();
                 $criteria->addSorting(new FieldSorting('priority', FieldSorting::DESCENDING));
@@ -359,7 +359,9 @@ class MerchantService
                 $criteria->addSorting(new FieldSorting('company', FieldSorting::ASCENDING));
             }
 
-            $criteria->setLimit($data->get('items'));
+            $criteria->setLimit($limit);
+            $criteria->setOffset($offset);
+            $criteria->setTotalCountMode(1);
         }
 
         $criteria->addAssociation('tags');
@@ -468,7 +470,7 @@ class MerchantService
             $entity->getMerchantOpeningHours()->merge($this->openingHours);
         }
 
-        $this->setMerchantsCount($resultData->count());
+        $this->setMerchantsCount($resultData->getTotal());
 
         $merchants = $resultData->getEntities();
 

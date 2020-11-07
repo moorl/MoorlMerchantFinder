@@ -11,6 +11,7 @@ use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantTag\MerchantTagDefinitio
 use Moorl\MerchantFinder\Core\Content\OpeningHour\OpeningHourDefinition;
 use MoorlFoundation\Core\Framework\DataAbstractionLayer\Field\Flags\EditField;
 use MoorlFoundation\Core\Framework\DataAbstractionLayer\Field\Flags\LabelProperty;
+use MoorlFoundation\Core\Framework\DataAbstractionLayer\Field\Flags\Unique;
 use Shopware\Core\Checkout\Customer\Aggregate\CustomerGroup\CustomerGroupDefinition;
 use Shopware\Core\Content\Category\CategoryDefinition;
 use Shopware\Core\Content\Cms\CmsPageDefinition;
@@ -65,10 +66,10 @@ class MerchantDefinition extends EntityDefinition
         return new FieldCollection([
             (new IdField('id', 'id'))->addFlags(new PrimaryKey(), new Required()),
 
-            (new StringField('origin_id', 'originId')),
-            (new BoolField('active', 'active')),
-            (new IntField('priority', 'priority')),
-            (new BoolField('highlight', 'highlight')),
+            (new StringField('origin_id', 'originId'))->addFlags(new EditField('text'), new Unique()),
+            (new BoolField('active', 'active'))->addFlags(new EditField('switch')),
+            (new IntField('priority', 'priority'))->addFlags(new EditField('number')),
+            (new BoolField('highlight', 'highlight'))->addFlags(new EditField('switch')),
 
             (new TranslatedField('name'))->addFlags(new EditField('text')),
             (new TranslatedField('description'))->addFlags(new EditField('textarea')),
@@ -111,16 +112,16 @@ class MerchantDefinition extends EntityDefinition
             new CustomFields(),
             new JsonField('data', 'data'),
 
-            (new ManyToOneAssociationField('media', 'media_id', MediaDefinition::class, 'id', true))->addFlags(new EditField(), new LabelProperty('name')),
-            (new ManyToOneAssociationField('marker', 'marker_id', MediaDefinition::class, 'id', false))->addFlags(new EditField(), new LabelProperty('name')),
-            (new ManyToOneAssociationField('markerShadow', 'marker_shadow_id', MediaDefinition::class, 'id', false))->addFlags(new EditField(), new LabelProperty('name')),
+            (new ManyToOneAssociationField('media', 'media_id', MediaDefinition::class, 'id', true))->addFlags(new EditField(), new LabelProperty('fileName')),
+            (new ManyToOneAssociationField('marker', 'marker_id', MediaDefinition::class, 'id', false))->addFlags(new EditField(), new LabelProperty('fileName')),
+            (new ManyToOneAssociationField('markerShadow', 'marker_shadow_id', MediaDefinition::class, 'id', false))->addFlags(new EditField(), new LabelProperty('fileName')),
             (new ManyToOneAssociationField('salesChannel', 'sales_channel_id', SalesChannelDefinition::class, 'id', false))->addFlags(new EditField(), new LabelProperty('name')),
             (new ManyToOneAssociationField('customerGroup', 'customer_group_id', CustomerGroupDefinition::class, 'id', false))->addFlags(new EditField(), new LabelProperty('name')),
             (new ManyToOneAssociationField('cmsPage', 'cms_page_id', CmsPageDefinition::class, 'id', false))->addFlags(new EditField(), new LabelProperty('name')),
 
-            new ManyToManyAssociationField('categories', CategoryDefinition::class, MerchantCategoryDefinition::class, 'moorl_merchant_id', 'category_id'),
-            new ManyToManyAssociationField('tags', TagDefinition::class, MerchantTagDefinition::class, 'moorl_merchant_id', 'tag_id'),
-            new ManyToManyAssociationField('productManufacturers', ProductManufacturerDefinition::class, MerchantProductManufacturerDefinition::class, 'moorl_merchant_id', 'product_manufacturer_id'),
+            (new ManyToManyAssociationField('categories', CategoryDefinition::class, MerchantCategoryDefinition::class, 'moorl_merchant_id', 'category_id'))->addFlags(new EditField(), new LabelProperty('name')),
+            (new ManyToManyAssociationField('tags', TagDefinition::class, MerchantTagDefinition::class, 'moorl_merchant_id', 'tag_id'))->addFlags(new EditField(), new LabelProperty('name')),
+            (new ManyToManyAssociationField('productManufacturers', ProductManufacturerDefinition::class, MerchantProductManufacturerDefinition::class, 'moorl_merchant_id', 'product_manufacturer_id'))->addFlags(new EditField(), new LabelProperty('name')),
 
             // Test
             new ManyToManyAssociationField('products', ProductDefinition::class, MerchantStockDefinition::class, 'moorl_merchant_id', 'product_id'),

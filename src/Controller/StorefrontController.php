@@ -13,6 +13,7 @@ use Shopware\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
 use Shopware\Core\Framework\Adapter\Twig\TemplateFinder;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Shopware\Core\Framework\Struct\ArrayStruct;
 use Shopware\Core\Framework\Validation\DataBag\RequestDataBag;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
@@ -137,7 +138,7 @@ class StorefrontController extends OriginController
         $this->merchantService->setSalesChannelContext($context);
 
         /* @var $merchant MerchantEntity */
-        $merchant = $this->merchantService->getMerchants(new ParameterBag([
+        $merchant = $this->merchantService->getMerchants(new ArrayStruct([
             'id' => $merchantId
         ]))->first();
 
@@ -186,7 +187,7 @@ class StorefrontController extends OriginController
     {
         $this->merchantService->setSalesChannelContext($context);
 
-        $merchants = $this->merchantService->getMerchants($data);
+        $merchants = $this->merchantService->getMerchants();
 
         $popupItemTemplate = null;
         $listItemTemplate = null;
@@ -218,8 +219,6 @@ class StorefrontController extends OriginController
                 ];
             }
         }
-
-        //dump($markers); exit;
 
         if ($data->get('term') || $data->get('zipcode')) {
             $searchInfo = $this->trans('moorl-merchant-finder.forTheSearch');

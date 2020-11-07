@@ -3,6 +3,8 @@
 namespace Moorl\MerchantFinder\Core\Content\OpeningHour;
 
 use Moorl\MerchantFinder\Core\Content\Merchant\MerchantDefinition;
+use MoorlFoundation\Core\Framework\DataAbstractionLayer\Field\Flags\EditField;
+use MoorlFoundation\Core\Framework\DataAbstractionLayer\Field\Flags\LabelProperty;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\BoolField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\DateField;
@@ -39,13 +41,14 @@ class OpeningHourDefinition extends EntityDefinition
         return new FieldCollection([
             (new IdField('id', 'id'))->addFlags(new PrimaryKey(), new Required()),
             new FkField('moorl_merchant_id', 'merchantId', MerchantDefinition::class),
-            new BoolField('repeat', 'repeat'),
-            new JsonField('opening_hours', 'openingHours'),
-            new DateField('date', 'date'),
-            new DateField('show_from', 'showFrom'),
-            new DateField('show_until', 'showUntil'),
-            new StringField('title', 'title'),
-            new ManyToOneAssociationField('merchant', 'moorl_merchant_id', MerchantDefinition::class, 'id'),
+            (new BoolField('repeat', 'repeat'))->addFlags(new EditField('switch')),
+            (new JsonField('opening_hours', 'openingHours'))->addFlags(new EditField('opening-hours')),
+            (new DateField('date', 'date'))->addFlags(new EditField('date')),
+            (new DateField('show_from', 'showFrom'))->addFlags(new EditField('date')),
+            (new DateField('show_until', 'showUntil'))->addFlags(new EditField('date')),
+            (new StringField('title', 'title'))->addFlags(new EditField('text')),
+
+            (new ManyToOneAssociationField('merchant', 'moorl_merchant_id', MerchantDefinition::class, 'id'))->addFlags(new EditField(), new LabelProperty('name')),
         ]);
     }
 }
