@@ -15,6 +15,9 @@ class Migration1604593154 extends MigrationStep
         return 1604593154;
     }
 
+    /*    KEY `idx.moorl_merchant_stock.product_id` (`product_id`),
+    KEY `idx.moorl_merchant_stock.moorl_merchant_id` (`moorl_merchant_id`),*/
+
     public function update(Connection $connection): void
     {
         $sql = <<<SQL
@@ -22,15 +25,20 @@ CREATE TABLE IF NOT EXISTS `moorl_merchant_stock` (
     `id` BINARY(16) NOT NULL,
     `moorl_merchant_id` BINARY(16) NOT NULL,
     `product_id` BINARY(16) NOT NULL,
+    
     `delivery_time_id` BINARY(16),
     `is_stock` TINYINT NOT NULL DEFAULT 0,
     `stock` INT(11),
     `info` varchar(255),
     `created_at` DATETIME(3) NOT NULL,
     `updated_at` DATETIME(3),
+    
     PRIMARY KEY (`id`),
+    UNIQUE KEY `uniq.moorl_merchant_stock.moorl_merchant_stock_id` (`moorl_merchant_id`, `product_id`),
+    
     KEY `idx.moorl_merchant_stock.product_id` (`product_id`),
     KEY `idx.moorl_merchant_stock.moorl_merchant_id` (`moorl_merchant_id`),
+    
     CONSTRAINT `fk.moorl_merchant_stock.product_id` FOREIGN KEY (`product_id`)
         REFERENCES `product` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `fk.moorl_merchant_stock.moorl_merchant_id` FOREIGN KEY (`moorl_merchant_id`)
@@ -39,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `moorl_merchant_stock` (
 SQL;
         $connection->executeUpdate($sql);
 
-        $this->updateInheritance($connection, 'product', 'MoorlMerchants'); // TODO: check ob notwendig
+        //$this->updateInheritance($connection, 'product', 'MoorlMerchants'); // TODO: check ob notwendig
     }
 
     public function updateDestructive(Connection $connection): void

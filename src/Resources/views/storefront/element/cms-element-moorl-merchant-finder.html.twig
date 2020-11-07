@@ -70,7 +70,7 @@
             {% else %}
                 <form data-moorl-merchant-finder="true"
                       class="d-none"
-                      action="{{ path('moorl.merchant-finder.search') }}"
+                      action="{{ seoUrl('moorl.merchant-finder.search') }}"
                       method="post"
                       data-form-csrf-handler="true">
                     {{ sw_csrf('moorl.merchant-finder.search') }}

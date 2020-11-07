@@ -12,6 +12,7 @@ use Moorl\MerchantFinder\Core\Content\Merchant\MerchantEntity;
 use Moorl\MerchantFinder\Core\Content\OpeningHourCollection;
 use Moorl\MerchantFinder\MoorlMerchantFinder;
 use Moorl\MerchantFinder\Core\Event\MerchantsLoadedEvent;
+use Shopware\Core\Checkout\Cart\Cart;
 use Shopware\Core\Checkout\Cart\LineItem\LineItem;
 use Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemEntity;
 use Shopware\Core\Checkout\Order\OrderEntity;
@@ -292,33 +293,60 @@ class MerchantService
         }
     }
 
-    public function patchLineItem(LineItem $lineItem): void
+    public function patchLineItem(LineItem $lineItem, Cart $cart): void
     {
         if ($lineItem->getType() != 'product') {
             return;
         }
 
-        $merchantStockId = $this->requestStack->getCurrentRequest()->get('merchantStockId');
+        // line item has stock information?
+        $productId = $lineItem->getReferencedId();
+        $salesChannelContext = $this->getSalesChannelContext();
 
-        if (!$merchantStockId) {
-            return;
+        $criteria = (new Criteria())
+            ->addAssociation('merchant')
+            ->addFilter(new EqualsFilter('productId', $productId))
+            ->addFilter(
+                new MultiFilter(
+                    MultiFilter::CONNECTION_OR, [
+                        new EqualsFilter('merchant.salesChannelId', null),
+                        new EqualsFilter('merchant.salesChannelId', $salesChannelContext->getSalesChannel()->getId())
+                    ]
+                )
+            );
+
+        $merchantStocks = $this->definitionInstanceRegistry
+            ->getRepository('moorl_merchant_stock')
+            ->search($criteria, $this->getContext())
+            ->getEntities();
+
+        // yes
+        if ($merchantStocks->count() > 0) {
+            $merchantStockId = $this->requestStack->getCurrentRequest()->get('merchantStockId');
+
+            $merchantStock = $merchantStocks->get($merchantStockId);
+
+            // stock infos are valid?
+            if (!$merchantStock) {
+                // no
+                $cart->remove($lineItem->getId());
+                $this->session->getFlashBag()->add('danger', 'Please select a merchant');
+                return;
+            }
+
+            // yes
+            $lineItem->setId($merchantStock->getId()); // stack similar line items by stock id
+
+            $lineItem->setPayloadValue('MoorlMerchantStock', [
+                'merchantStockId' => $merchantStock->getId(),
+                'merchantId' => $merchantStock->getMerchant()->getId(),
+                'merchantOriginId' => $merchantStock->getMerchant()->getOriginId(),
+                'merchantName' => $merchantStock->getMerchant()->getTranslated()['name'],
+                'merchantCompany' => $merchantStock->getMerchant()->getCompany()
+            ]);
         }
 
-        $merchantStock = $this->getMerchantStock($merchantStockId);
-
-        if (!$merchantStock) {
-            return;
-        }
-
-        $lineItem->setId($merchantStock->getId()); // stack similar line items by stock id
-
-        $lineItem->setPayloadValue('MoorlMerchantStock', [
-            'merchantStockId' => $merchantStock->getId(),
-            'merchantId' => $merchantStock->getMerchant()->getId(),
-            'merchantOriginId' => $merchantStock->getMerchant()->getOriginId(),
-            'merchantName' => $merchantStock->getMerchant()->getTranslated()['name'],
-            'merchantCompany' => $merchantStock->getMerchant()->getCompany()
-        ]);
+        return;
     }
 
     public function getMerchants(?ArrayStruct $data = null): EntityCollection
