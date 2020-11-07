@@ -10,12 +10,7 @@
 
         <sw-sidebar-item icon="default-action-cloud-download"
                          :title="$t('moorl-foundation.buttons.exportButtonText')"
-                         @click="onClickDownload"></sw-sidebar-item>
-        <form id="exportCSV"
-              style="display: none;"
-              method="get"
-              action="api.moorl.merchant-finder.export">
-        </form>
+                         @click="onExportModal"></sw-sidebar-item>
 
         <sw-sidebar-item icon="default-object-globe"
                          :title="$t('moorl-foundation.getLocation.title')"
@@ -100,5 +95,11 @@
                 entity="moorl_merchant"
                 :onCloseModal="onCloseModal"
                 :onFinishImport="getItems"></moorl-csv-import>
+
+        <moorl-csv-export
+                v-if="showExportModal"
+                entity="moorl_merchant"
+                :onCloseModal="onCloseModal"
+                :selectedItems="selectedItems"></moorl-csv-export>
     </template>
 </sw-page>

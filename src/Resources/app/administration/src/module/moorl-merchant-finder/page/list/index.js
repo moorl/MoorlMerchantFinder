@@ -26,8 +26,10 @@ Component.register('moorl-merchant-finder-list', {
         return {
             repository: null,
             merchants: null,
+            selectedItems: null,
             sortBy: 'company',
             showImportModal: false,
+            showExportModal: false,
             isLoading: true,
             selectedFile: null,
             isImporting: false,
@@ -205,8 +207,8 @@ Component.register('moorl-merchant-finder-list', {
             });
         },
 
-        updateSelection() {
-            console.log("ok");
+        updateSelection(selection) {
+            this.selectedItems = selection;
         },
         updateTotal({total}) {
             this.total = total;
@@ -245,6 +247,7 @@ Component.register('moorl-merchant-finder-list', {
 
         onCloseModal() {
             this.showImportModal = false;
+            this.showExportModal = false;
             this.showLocModal = false;
             this.showModal = false;
         },
@@ -400,6 +403,10 @@ Component.register('moorl-merchant-finder-list', {
 
         onImportModal() {
             this.showImportModal = true;
+        },
+
+        onExportModal() {
+            this.showExportModal = true;
         }
     }
 });
