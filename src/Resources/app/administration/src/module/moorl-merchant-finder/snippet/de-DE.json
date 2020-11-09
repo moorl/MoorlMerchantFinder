@@ -54,6 +54,8 @@
             "mediaFolder": "In diesem Ordner Bilder speichern"
         },
         "properties": {
+            "oneDayYearlyLoop": "Einzelner Tag mit jährlicher Wiederholung",
+            "localMerchant": "Nur dieser Händler",
             "cmsPageId": "CMS Seiten ID",
             "logo": "Logo",
             "markerId": "Marker",

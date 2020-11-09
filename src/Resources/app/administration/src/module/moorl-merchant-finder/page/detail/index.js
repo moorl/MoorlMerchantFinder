@@ -105,7 +105,7 @@ Component.register('moorl-merchant-finder-detail', {
                     property: 'showFrom',
                     label: this.$tc('moorl-foundation.properties.showFrom'),
                     dataIndex: 'showFrom',
-                    sortable: true
+                    sortable: false
                 }, {
                     property: 'showUntil',
                     label: this.$tc('moorl-foundation.properties.showUntil'),
@@ -114,12 +114,12 @@ Component.register('moorl-merchant-finder-detail', {
                 },
                 {
                     property: 'repeat',
-                    label: this.$tc('moorl-foundation.properties.repeat'),
+                    label: this.$tc('moorl-merchant-finder.properties.oneDayYearlyLoop'),
                     sortable: false
                 },
                 {
                     property: 'merchantId',
-                    label: this.$tc('moorl-foundation.properties.locked'),
+                    label: this.$tc('moorl-merchant-finder.properties.localMerchant'),
                     sortable: false
                 }
             ];

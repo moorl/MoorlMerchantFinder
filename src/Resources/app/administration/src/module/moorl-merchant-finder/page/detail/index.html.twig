@@ -288,10 +288,10 @@
                   :title="$t('moorl-foundation.properties.openingHours')"
                   @modal-close="onCloseModal">
             <sw-container columns="repeat(auto-fit, minmax(250px, 1fr)" gap="0 30px">
-                <sw-field type="switch" bordered :label="$t('moorl-foundation.properties.locked')"
+                <sw-field type="switch" bordered :label="$t('moorl-merchant-finder.properties.localMerchant')"
                           v-model="openingHour.merchantId"></sw-field>
 
-                <sw-field type="switch" bordered :label="$t('moorl-foundation.properties.repeat')"
+                <sw-field type="switch" bordered :label="$t('moorl-merchant-finder.properties.oneDayYearlyLoop')"
                           v-model="openingHour.repeat"></sw-field>
 
                 <template v-if="openingHour.repeat">

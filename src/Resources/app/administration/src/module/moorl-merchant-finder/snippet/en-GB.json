@@ -59,6 +59,8 @@
             "mediaFolder": "Save images in this folder"
         },
         "properties": {
+            "oneDayYearlyLoop": "Single day with yearly loop",
+            "localMerchant": "Just local Merchant",
             "merchant": "Merchant",
             "cmsPageId": "CMS page ID",
             "logo": "Logo",
