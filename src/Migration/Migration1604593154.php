@@ -15,9 +15,6 @@ class Migration1604593154 extends MigrationStep
         return 1604593154;
     }
 
-    /*    KEY `idx.moorl_merchant_stock.product_id` (`product_id`),
-    KEY `idx.moorl_merchant_stock.moorl_merchant_id` (`moorl_merchant_id`),*/
-
     public function update(Connection $connection): void
     {
         $sql = <<<SQL

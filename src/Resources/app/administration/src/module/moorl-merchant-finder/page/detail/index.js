@@ -273,7 +273,7 @@ Component.register('moorl-merchant-finder-detail', {
                 this.categories = searchResult;
             });
 
-            const countryCriteria = new Criteria(1, 100);
+            const countryCriteria = new Criteria(1, 500);
             countryCriteria.addSorting(Criteria.sort('name'));
             this.countryRepository.search(countryCriteria, Shopware.Context.api).then((searchResult) => {
                 this.countries = searchResult;
