@@ -180,6 +180,12 @@
                         :label="$t('sw-product.basicForm.labelManufacturer')"
                         v-model="item.productManufacturers">
                 </sw-entity-multi-select>
+
+                <sw-entity-multi-select
+                        :label="$t('global.entities.customer')"
+                        labelProperty="customerNumber"
+                        v-model="item.customers">
+                </sw-entity-multi-select>
             </sw-card>
 
             <sw-card :isLoading="isLoading" :title="$t('moorl-foundation.label.locationCard')">

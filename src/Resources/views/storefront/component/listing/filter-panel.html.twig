@@ -1,16 +1,18 @@
 {% sw_extends '@Storefront/storefront/component/listing/filter-panel.html.twig' %}
 
 {% block component_filter_panel_item_manufacturer %}
-    {% set merchants = listing.aggregations.get('merchants') %}
-    {% if merchants and not merchants.entities is empty %}
-        {% set merchantsSorted = merchants.entities|sort((a, b) => a.translated.name|lower > b.translated.name|lower) %}
+    {% if shopware.config.MoorlMerchantStock.config.showMerchantFilter %}
+        {% set merchants = listing.aggregations.get('merchants') %}
+        {% if merchants and not merchants.entities is empty %}
+            {% set merchantsSorted = merchants.entities|sort((a, b) => a.translated.name|lower > b.translated.name|lower) %}
 
-        {% sw_include '@Storefront/storefront/component/listing/filter/filter-multi-select.html.twig' with {
-            elements: merchantsSorted,
-            sidebar: sidebar,
-            name: 'merchant',
-            displayName: 'moorl-merchant-finder.merchant'|trans
-        } %}
+            {% sw_include '@Storefront/storefront/component/listing/filter/filter-multi-select.html.twig' with {
+                elements: merchantsSorted,
+                sidebar: sidebar,
+                name: 'merchant',
+                displayName: 'moorl-merchant-finder.merchant'|trans
+            } %}
+        {% endif %}
     {% endif %}
 
     {{ parent() }}

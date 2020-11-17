@@ -130,7 +130,8 @@ Component.register('moorl-merchant-finder-detail', {
             criteria
                 .addAssociation('tags')
                 .addAssociation('productManufacturers')
-                .addAssociation('categories');
+                .addAssociation('categories')
+                .addAssociation('customers');
 
             return criteria;
         }

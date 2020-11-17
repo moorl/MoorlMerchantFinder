@@ -162,9 +162,10 @@ class MerchantService
     public function patchProductEntity(ProductEntity $product): void
     {
         $merchantStocks = $this->getMerchantsByProductId($product->getId());
-        if (!$merchantStocks) {
+        if (!$merchantStocks || $merchantStocks->count() == 0) {
             return;
         }
+
         $product->addExtension('MoorlMerchantStocks', $merchantStocks);
     }
 
@@ -176,10 +177,8 @@ class MerchantService
         $criteria->addAssociation('merchant');
         $criteria->addAssociation('deliveryTime');
         $criteria->addFilter(new EqualsFilter('productId', $productId));
-        $criteria->addFilter(new MultiFilter('OR', [
-            new EqualsFilter('merchant.salesChannelId', null),
-            new EqualsFilter('merchant.salesChannelId', $this->getSalesChannelContext()->getSalesChannel()->getId())
-        ]));
+        $this->addSalesChannelCriteria($criteria, 'merchant.');
+
         return $repo->search($criteria, $this->getContext())->getEntities();
     }
 
@@ -349,6 +348,47 @@ class MerchantService
         return;
     }
 
+    public function addSalesChannelCriteria(Criteria $criteria, string $domain = ''): void
+    {
+        $salesChannelContext = $this->getSalesChannelContext();
+
+        if ($salesChannelContext) {
+            $criteria->addFilter(
+                new MultiFilter(
+                    MultiFilter::CONNECTION_OR, [
+                        new EqualsFilter($domain . 'salesChannelId', null),
+                        new EqualsFilter($domain . 'salesChannelId', $salesChannelContext->getSalesChannel()->getId())
+                    ]
+                )
+            );
+
+            $customer = $salesChannelContext->getCustomer();
+
+            if ($customer) {
+                $criteria->addFilter(
+                    new MultiFilter(
+                        MultiFilter::CONNECTION_OR, [
+                            new EqualsFilter($domain . 'customerGroupId', null),
+                            new EqualsFilter($domain . 'customerGroupId', $customer->getGroupId())
+                        ]
+                    )
+                );
+
+                $criteria->addFilter(
+                    new MultiFilter(
+                        MultiFilter::CONNECTION_OR, [
+                            new EqualsFilter($domain . 'customers.id', null),
+                            new EqualsFilter($domain . 'customers.id', $customer->getId())
+                        ]
+                    )
+                );
+            } else {
+                $criteria->addFilter(new EqualsFilter($domain . 'customers.id', null));
+                $criteria->addFilter(new EqualsFilter($domain . 'customerGroupId', null));
+            }
+        }
+    }
+
     public function getMerchants(?ArrayStruct $data = null): EntityCollection
     {
         // TODO: Remove ParameterBag
@@ -396,6 +436,7 @@ class MerchantService
         $criteria->addAssociation('merchantOpeningHours');
         $criteria->addAssociation('productManufacturers.media');
         $criteria->addAssociation('categories');
+        $criteria->addAssociation('customers');
         $criteria->addAssociation('media');
         $criteria->addAssociation('marker');
         $criteria->addAssociation('markerShadow');
@@ -450,33 +491,7 @@ class MerchantService
             }
         }
 
-        $salesChannelContext = $this->getSalesChannelContext();
-
-        if ($salesChannelContext) {
-            $criteria->addFilter(
-                new MultiFilter(
-                    MultiFilter::CONNECTION_OR, [
-                        new EqualsFilter('salesChannelId', null),
-                        new EqualsFilter('salesChannelId', $salesChannelContext->getSalesChannel()->getId())
-                    ]
-                )
-            );
-
-            $customer = $salesChannelContext->getCustomer();
-
-            if ($customer) {
-                $criteria->addFilter(
-                    new MultiFilter(
-                        MultiFilter::CONNECTION_OR, [
-                            new EqualsFilter('customerGroupId', null),
-                            new EqualsFilter('customerGroupId', $customer->getGroupId())
-                        ]
-                    )
-                );
-            } else {
-                $criteria->addFilter(new EqualsFilter('customerGroupId', null));
-            }
-        }
+        $this->addSalesChannelCriteria($criteria);
 
         $resultData = $this->repository->search($criteria, $context);
 

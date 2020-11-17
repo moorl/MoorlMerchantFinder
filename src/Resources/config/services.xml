@@ -73,6 +73,14 @@
             <tag name="shopware.entity.extension" />
         </service>
 
+        <service id="Moorl\MerchantFinder\Core\Content\Aggregate\MerchantCustomer\MerchantCustomerDefinition">
+            <tag name="shopware.entity.definition" entity="moorl_merchant_customer" />
+        </service>
+
+        <service id="Moorl\MerchantFinder\Core\Content\Customer\CustomerExtension">
+            <tag name="shopware.entity.extension" />
+        </service>
+
 
         <!-- SEO Urls -->
         <service id="Moorl\MerchantFinder\Core\Seo\MerchantSeoUrlRoute">
