@@ -2,6 +2,7 @@
 
 namespace Moorl\MerchantFinder\Core\Content\Aggregate\MerchantStock;
 
+use Shopware\Core\Checkout\Customer\Aggregate\CustomerAddress\CustomerAddressEntity;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
 
 /**
@@ -18,5 +19,16 @@ class MerchantStockCollection extends EntityCollection
     protected function getExpectedClass(): string
     {
         return MerchantStockEntity::class;
+    }
+
+    public function filterByMerchantCustomerId(string $customerId): self
+    {
+        return $this->filter(function (MerchantStockEntity $merchantStock) use ($customerId) {
+            $merchant = $merchantStock->getMerchant();
+            if (!$merchant || !$merchant->getCustomers()) {
+                return false;
+            }
+            return $merchant->getCustomers()->has($customerId);
+        });
     }
 }

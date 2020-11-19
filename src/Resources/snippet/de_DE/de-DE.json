@@ -1,5 +1,10 @@
 {
     "moorl-merchant-finder": {
+        "available": "Verfügbar",
+        "stockInfo": "Lagerbestand",
+        "deliveryTime": "Lieferzeit",
+        "mySelection": "Meine Auswahl",
+        "merchant": "Händler",
         "country": "Land",
         "allowMerchantCustomerContact": "Ich erlaube meinem ausgewählten Fachhändler mich per Telefon oder E-Mail zu kontaktieren.",
         "forTheSearch": "für die Suche ",

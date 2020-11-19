@@ -13,7 +13,7 @@
                             <option value="{{ merchantStock.id }}" {% if shopware.config.MoorlMerchantStock.config.disableOnNoStock and merchantStock.isStock and merchantStock.stock < 1 %}disabled{% endif %}>
                                 {{ merchantStock.merchant.translated.name ?: merchantStock.merchant.company }},
                                 {{ "moorl-merchant-finder.stockInfo"|trans }}:
-                                {{ merchantStock.isStock ? merchantStock.stock : "moorl-merchant-finder.stockInfo"|trans }},
+                                {{ merchantStock.isStock ? merchantStock.stock : "moorl-merchant-finder.available"|trans }},
                                 {{ "moorl-merchant-finder.deliveryTime"|trans }}:
                                 {{ merchantStock.deliveryTime.name }}
                             </option>
@@ -35,7 +35,7 @@
                                 } %}
                                 <div class="small">
                                     {{ "moorl-merchant-finder.stockInfo"|trans }}:
-                                    {{ merchantStock.isStock ? merchantStock.stock : "moorl-merchant-finder.stockInfo"|trans }} |
+                                    {{ merchantStock.isStock ? merchantStock.stock : "moorl-merchant-finder.available"|trans }} |
                                     {{ "moorl-merchant-finder.deliveryTime"|trans }}:
                                     {{ merchantStock.deliveryTime.name }}
                                 </div>

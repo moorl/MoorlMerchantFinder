@@ -4,6 +4,7 @@ namespace Moorl\MerchantFinder\Core\Content\Merchant;
 
 use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantStock\MerchantStockCollection;
 use Moorl\MerchantFinder\Core\Content\OpeningHour\OpeningHourCollection;
+use Shopware\Core\Checkout\Customer\CustomerCollection;
 use Shopware\Core\Checkout\Customer\CustomerEntity;
 use Shopware\Core\Content\Cms\CmsPageEntity;
 use Shopware\Core\Content\Media\MediaEntity;
@@ -22,6 +23,10 @@ class MerchantEntity extends Entity
 {
     use EntityIdTrait;
 
+    /**
+     * @var CustomerCollection|null
+     */
+    protected $customers;
     /**
      * @var MerchantStockCollection|null
      */
@@ -246,6 +251,22 @@ class MerchantEntity extends Entity
      * @var null|string
      */
     protected $countryCode;
+
+    /**
+     * @return CustomerCollection|null
+     */
+    public function getCustomers(): ?CustomerCollection
+    {
+        return $this->customers;
+    }
+
+    /**
+     * @param CustomerCollection|null $customers
+     */
+    public function setCustomers(?CustomerCollection $customers): void
+    {
+        $this->customers = $customers;
+    }
 
     /**
      * @return MerchantStockCollection|null
