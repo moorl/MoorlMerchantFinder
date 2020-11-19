@@ -26,6 +26,10 @@
                     </a>
                 </div>
             </div>
+        {% else %}
+            {{ parent() }}
         {% endif %}
+    {% else %}
+        {{ parent() }}
     {% endif %}
 {% endblock %}
