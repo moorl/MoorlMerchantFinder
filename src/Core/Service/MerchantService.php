@@ -292,35 +292,28 @@ class MerchantService
         }
     }
 
-    public function patchLineItem(LineItem $lineItem, Cart $cart): void
+    public function patchLineItem(LineItem $lineItem, Cart $cart, Criteria $criteria): void
     {
-        if ($lineItem->getType() != 'product') {
+        // line item has stock information?
+        $productId = $lineItem->getReferencedId();
+
+        $criteria->addFilter(new EqualsFilter('id', $productId));
+
+        $productRepo = $this->definitionInstanceRegistry->getRepository('product');
+
+        /* @var $product ProductEntity */
+        $product = $productRepo->search($criteria, $this->getContext())->get($productId);
+
+        if (!$product) {
+            $cart->remove($lineItem->getId());
+            $this->session->getFlashBag()->add('danger', 'Product not available. Please contact support.');
             return;
         }
 
-        // line item has stock information?
-        $productId = $lineItem->getReferencedId();
-        $salesChannelContext = $this->getSalesChannelContext();
-
-        $criteria = (new Criteria())
-            ->addAssociation('merchant')
-            ->addFilter(new EqualsFilter('productId', $productId))
-            ->addFilter(
-                new MultiFilter(
-                    MultiFilter::CONNECTION_OR, [
-                        new EqualsFilter('merchant.salesChannelId', null),
-                        new EqualsFilter('merchant.salesChannelId', $salesChannelContext->getSalesChannel()->getId())
-                    ]
-                )
-            );
-
-        $merchantStocks = $this->definitionInstanceRegistry
-            ->getRepository('moorl_merchant_stock')
-            ->search($criteria, $this->getContext())
-            ->getEntities();
+        $merchantStocks = $product->getExtension('MoorlMerchantStocks');
 
         // yes
-        if ($merchantStocks->count() > 0) {
+        if ($merchantStocks && $merchantStocks->count() > 0) {
             $merchantStockId = $this->requestStack->getCurrentRequest()->get('merchantStockId');
 
             $merchantStock = $merchantStocks->get($merchantStockId);
@@ -344,8 +337,6 @@ class MerchantService
                 'merchantCompany' => $merchantStock->getMerchant()->getCompany()
             ]);
         }
-
-        return;
     }
 
     public function addSalesChannelCriteria(Criteria $criteria, string $domain = ''): void
