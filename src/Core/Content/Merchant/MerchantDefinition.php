@@ -24,10 +24,10 @@ use Shopware\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\BoolField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\CustomFields;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\FkField;
-use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\Inherited;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\Runtime;
+use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\SearchRanking;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\WriteProtected;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\FloatField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\IdField;
@@ -73,7 +73,7 @@ class MerchantDefinition extends EntityDefinition
             (new IntField('priority', 'priority'))->addFlags(new EditField('number')),
             (new BoolField('highlight', 'highlight'))->addFlags(new EditField('switch')),
 
-            (new TranslatedField('name'))->addFlags(new EditField('text')),
+            (new TranslatedField('name'))->addFlags(new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING), new EditField('text')),
             (new TranslatedField('description'))->addFlags(new EditField('textarea')),
             (new TranslatedField('descriptionHtml'))->addFlags(new EditField('code')),
             (new TranslatedField('openingHours'))->addFlags(new EditField('textarea')),
@@ -90,12 +90,12 @@ class MerchantDefinition extends EntityDefinition
             (new StringField('first_name', 'firstName'))->addFlags(new EditField('text')),
             (new StringField('last_name', 'lastName'))->addFlags(new EditField('text')),
             (new StringField('title', 'title'))->addFlags(new EditField('text')),
-            (new StringField('street', 'street'))->addFlags(new EditField('text')),
+            (new StringField('street', 'street'))->addFlags(new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING), new EditField('text')),
             (new StringField('street_number', 'streetNumber'))->addFlags(new EditField('text')),
-            (new StringField('email', 'email'))->addFlags(new EditField('text')),
-            (new StringField('company', 'company'))->addFlags(new EditField('text')),
-            (new StringField('zipcode', 'zipcode'))->addFlags(new EditField('text')),
-            (new StringField('city', 'city'))->addFlags(new EditField('text')),
+            (new StringField('email', 'email'))->addFlags(new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING), new EditField('text')),
+            (new StringField('company', 'company'))->addFlags(new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING),new EditField('text')),
+            (new StringField('zipcode', 'zipcode'))->addFlags(new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING), new EditField('text')),
+            (new StringField('city', 'city'))->addFlags(new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING), new EditField('text')),
             (new StringField('country_code', 'countryCode'))->addFlags(new EditField('text')),
             (new FloatField('location_lat','locationLat'))->addFlags(new EditField('number')),
             (new FloatField('location_lon','locationLon'))->addFlags(new EditField('number')),

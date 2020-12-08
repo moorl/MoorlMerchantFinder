@@ -116,14 +116,5 @@
 
             <tag name="shopware.sitemap_url_provider"/>
         </service>
-
-        <!-- Snippet Files -->
-        <service id="Moorl\MerchantFinder\Resources\snippet\de_DE\SnippetFile_de_DE" public="true">
-            <tag name="shopware.snippet.file" priority="100"/>
-        </service>
-
-        <service id="Moorl\MerchantFinder\Resources\snippet\en_GB\SnippetFile_en_GB" public="true">
-            <tag name="shopware.snippet.file" priority="100"/>
-        </service>
     </services>
 </container>

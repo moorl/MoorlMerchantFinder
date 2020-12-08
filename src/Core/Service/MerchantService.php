@@ -486,6 +486,8 @@ class MerchantService
 
         $resultData = $this->repository->search($criteria, $context);
 
+        //dump($resultData);exit;
+
         /* @var $entity MerchantEntity */
         foreach ($resultData->getEntities() as $entity) {
             if ($context->hasExtension('DistanceField')) {
