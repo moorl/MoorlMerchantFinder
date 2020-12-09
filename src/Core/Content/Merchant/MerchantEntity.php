@@ -2,9 +2,9 @@
 
 namespace Moorl\MerchantFinder\Core\Content\Merchant;
 
+use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantCustomer\MerchantCustomerCollection;
 use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantStock\MerchantStockCollection;
 use Moorl\MerchantFinder\Core\Content\OpeningHour\OpeningHourCollection;
-use Shopware\Core\Checkout\Customer\CustomerCollection;
 use Shopware\Core\Checkout\Customer\CustomerEntity;
 use Shopware\Core\Content\Cms\CmsPageEntity;
 use Shopware\Core\Content\Media\MediaEntity;
@@ -18,13 +18,14 @@ use Shopware\Core\System\SalesChannel\SalesChannelEntity;
 use Shopware\Core\System\Salutation\SalutationEntity;
 use Shopware\Core\Content\Category\CategoryCollection;
 use Shopware\Core\System\Tag\TagCollection;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
 
 class MerchantEntity extends Entity
 {
     use EntityIdTrait;
 
     /**
-     * @var CustomerCollection|null
+     * @var MerchantCustomerCollection|null
      */
     protected $customers;
     /**
@@ -253,17 +254,17 @@ class MerchantEntity extends Entity
     protected $countryCode;
 
     /**
-     * @return CustomerCollection|null
+     * @return MerchantCustomerCollection|null
      */
-    public function getCustomers(): ?CustomerCollection
+    public function getCustomers(): ?EntityCollection
     {
         return $this->customers;
     }
 
     /**
-     * @param CustomerCollection|null $customers
+     * @param MerchantCustomerCollection|null $customers
      */
-    public function setCustomers(?CustomerCollection $customers): void
+    public function setCustomers(?MerchantCustomerCollection $customers): void
     {
         $this->customers = $customers;
     }

@@ -59,6 +59,25 @@ Component.register('moorl-merchant-finder-detail', {
     },
 
     computed: {
+        merchantCustomerFilterColumns() {
+            return [
+                'customer.customerNumber',
+                'customer.email',
+                'customer.lastName',
+                'customerNumber',
+                'info'
+            ];
+        },
+
+        merchantCustomerCriteria() {
+            const criteria = new Criteria();
+
+            criteria.addAssociation('customer');
+            criteria.addAssociation('merchant');
+
+            return criteria;
+        },
+
         mediaRepository() {
             return this.repositoryFactory.create('media');
         },

@@ -124,11 +124,11 @@ class MerchantDefinition extends EntityDefinition
             (new ManyToManyAssociationField('categories', CategoryDefinition::class, MerchantCategoryDefinition::class, 'moorl_merchant_id', 'category_id'))->addFlags(new EditField(), new LabelProperty('name')),
             (new ManyToManyAssociationField('tags', TagDefinition::class, MerchantTagDefinition::class, 'moorl_merchant_id', 'tag_id'))->addFlags(new EditField(), new LabelProperty('name')),
             (new ManyToManyAssociationField('productManufacturers', ProductManufacturerDefinition::class, MerchantProductManufacturerDefinition::class, 'moorl_merchant_id', 'product_manufacturer_id'))->addFlags(new EditField(), new LabelProperty('name')),
-            (new ManyToManyAssociationField('customers', CustomerDefinition::class, MerchantCustomerDefinition::class, 'moorl_merchant_id', 'customer_id'))->addFlags(new EditField(), new LabelProperty('customerNumber')),
             (new ManyToManyAssociationField('products', ProductDefinition::class, MerchantStockDefinition::class, 'moorl_merchant_id', 'product_id'))->addFlags(new EditField(), new LabelProperty('productNumber')),
 
             new OneToManyAssociationField('merchantOpeningHours', OpeningHourDefinition::class, 'moorl_merchant_id'),
             new OneToManyAssociationField('merchantStocks', MerchantStockDefinition::class, 'moorl_merchant_id'),
+            new OneToManyAssociationField('customers', MerchantCustomerDefinition::class, 'moorl_merchant_id'),
 
             new TranslationsAssociationField(MerchantTranslationDefinition::class, 'moorl_merchant_id'),
 

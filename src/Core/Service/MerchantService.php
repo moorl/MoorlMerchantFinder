@@ -368,15 +368,17 @@ class MerchantService
                 $criteria->addFilter(
                     new MultiFilter(
                         MultiFilter::CONNECTION_OR, [
-                            new EqualsFilter($domain . 'customers.id', null),
-                            new EqualsFilter($domain . 'customers.id', $customer->getId())
+                            new EqualsFilter($domain . 'customers.customerId', null),
+                            new EqualsFilter($domain . 'customers.customerId', $customer->getId())
                         ]
                     )
                 );
             } else {
-                $criteria->addFilter(new EqualsFilter($domain . 'customers.id', null));
+                $criteria->addFilter(new EqualsFilter($domain . 'customers.customerId', null));
                 $criteria->addFilter(new EqualsFilter($domain . 'customerGroupId', null));
             }
+        } else {
+            die("NO SALES CHANNEL CONTEXT SET");
         }
     }
 

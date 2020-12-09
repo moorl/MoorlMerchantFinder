@@ -181,11 +181,22 @@
                         v-model="item.productManufacturers">
                 </sw-entity-multi-select>
 
-                <sw-entity-multi-select
+                <!--sw-entity-multi-select
                         :label="$t('global.entities.customer')"
                         labelProperty="customerNumber"
                         v-model="item.customers">
-                </sw-entity-multi-select>
+                </sw-entity-multi-select-->
+            </sw-card>
+
+            <sw-card :isLoading="isLoading"
+                     :title="$t('global.entities.customer')"
+                     class="moorl-entity-grid">
+                <moorl-entity-grid entity="moorl_merchant_customer"
+                                   :isLoading="isLoading"
+                                   :criteria="merchantCustomerCriteria"
+                                   :filterColumns="merchantCustomerFilterColumns"
+                                   :defaultItem="{ merchantId: item.id }">
+                </moorl-entity-grid>
             </sw-card>
 
             <sw-card :isLoading="isLoading" :title="$t('moorl-foundation.label.locationCard')">
