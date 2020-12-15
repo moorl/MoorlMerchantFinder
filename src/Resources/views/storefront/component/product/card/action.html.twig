@@ -4,26 +4,32 @@
     {% if product.extensions.MoorlMerchantStocks %}
         {% if shopware.config.MoorlMerchantStock.config.listingEnableSelection %}
             <div class="input-group">
-                <select class="custom-select" name="merchantStockId">
-                    {% for key, merchantStock in product.extensions.MoorlMerchantStocks %}
-                        <option value="{{ merchantStock.id }}"
-                                {% if shopware.config.MoorlMerchantStock.config.disableOnNoStock and merchantStock.isStock and merchantStock.stock < 1 %}disabled{% endif %}>
-                            {{ merchantStock.merchant.translated.name ?: merchantStock.merchant.company }}:
-                            {{ merchantStock.isStock ? merchantStock.stock : "moorl-merchant-finder.available"|trans }}
-                        </option>
-                    {% endfor %}
-                </select>
+                {% block moorl_page_product_detail_product_buy_button_select %}
+                    <select class="custom-select" name="merchantStockId">
+                        {% for key, merchantStock in product.extensions.MoorlMerchantStocks %}
+                            <option value="{{ merchantStock.id }}"
+                                    {% if shopware.config.MoorlMerchantStock.config.disableOnNoStock and merchantStock.isStock and merchantStock.stock < 1 %}disabled{% endif %}>
+                                {{ merchantStock.merchant.translated.name ?: merchantStock.merchant.company }}:
+                                {{ merchantStock.isStock ? merchantStock.stock : "moorl-merchant-finder.available"|trans }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                {% endblock %}
 
                 <div class="input-group-append">
-                    <button class="btn btn-primary"
-                            aria-label="{{ "listing.boxAddProduct"|trans }}"
-                            title="{{ "listing.boxAddProduct"|trans }}">
-                        {% sw_icon 'cart' %}
-                    </button>
+                    {% block moorl_page_product_detail_product_buy_button_add_product %}
+                        <button class="btn btn-primary"
+                                aria-label="{{ "listing.boxAddProduct"|trans }}"
+                                title="{{ "listing.boxAddProduct"|trans }}">
+                            {% sw_icon 'cart' %}
+                        </button>
+                    {% endblock %}
 
-                    <a href="{{ seoUrl('frontend.detail.page', {'productId': id}) }}" title="{{ "listing.boxProductDetails"|trans }}" class="btn btn-light">
-                        {% sw_icon 'help' %}
-                    </a>
+                    {% block moorl_page_product_detail_product_buy_button_detail_page %}
+                        <a href="{{ seoUrl('frontend.detail.page', {'productId': id}) }}" title="{{ "listing.boxProductDetails"|trans }}" class="btn btn-light">
+                            {% sw_icon 'help' %}
+                        </a>
+                    {% endblock %}
                 </div>
             </div>
         {% else %}
