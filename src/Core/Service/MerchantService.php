@@ -314,8 +314,15 @@ class MerchantService
 
         // yes
         if ($merchantStocks && $merchantStocks->count() > 0) {
-            $merchantStockId = $this->requestStack->getCurrentRequest()->get('merchantStockId');
+            // lineItems[$lineItemId]['merchantStockId']
+            $lineItems = $this->requestStack->getCurrentRequest()->get('lineItems');
 
+            if ($lineItems) {
+                $currentItem = $lineItems[$lineItem->getId()];
+                if ($currentItem) {
+                    $merchantStockId = $currentItem['merchantStockId'];
+                }
+            }
             $merchantStock = $merchantStocks->get($merchantStockId);
 
             // stock infos are valid?
@@ -566,7 +573,7 @@ class MerchantService
         $sql = <<<SQL
 SELECT * FROM `moorl_zipcode`
 WHERE `city` LIKE :city OR `zipcode` LIKE :zipcode AND country_code IN (:countries)
-LIMIT 10; 
+LIMIT 10;
 SQL;
 
         $myLocation = $this->connection->executeQuery($sql, [
