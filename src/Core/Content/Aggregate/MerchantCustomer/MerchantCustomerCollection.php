@@ -27,7 +27,9 @@ class MerchantCustomerCollection extends EntityCollection
             if (!$merchant || !$merchant->getCustomers()) {
                 return false;
             }
-            return $merchant->getCustomers()->has($customerId);
+
+            return $merchant->getCustomers()->filterByProperty('customerId', $customerId)->count() > 0;
+            //return $merchant->getCustomers()->has($customerId);
         });
     }
 }
