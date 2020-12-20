@@ -1,7 +1,7 @@
 {% block sw_product_detail_deliverability_info_card %}
     {% parent() %}
 
-    <sw-card v-if="!product._isNew && !isLoading"
+    <sw-card v-if="!isLoading"
              :title="$tc('moorl-foundation.label.stockCard')"
              :isLoading="isLoading"
              class="moorl-entity-grid">

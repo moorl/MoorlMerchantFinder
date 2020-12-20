@@ -345,7 +345,6 @@ Component.register('moorl-merchant-finder-detail', {
         },
 
         getPositionByAddress() {
-            //this.isLoading = true;
             const initContainer = Application.getContainer('init');
             const httpClient = initContainer.httpClient;
             let street = this.item.street;
@@ -379,14 +378,13 @@ Component.register('moorl-merchant-finder-detail', {
                     this.item.locationLon = parseFloat(response.data[0].lon);
                     this.$forceUpdate();
                 }
-                //this.isLoading = false;
             }).catch((exception) => {
-                // console.log(exception);
-                //this.isLoading = false;
                 this.createNotificationError({
-                    title: this.$t('moorl-foundation.detail.errorTitle'),
+                    title: this.$t('moorl-foundation.notification.errorTitle'),
                     message: exception
                 });
+                console.log(exception);
+                console.log(`//nominatim.openstreetmap.org/search?` + searchParams);
             });
         },
 
@@ -401,7 +399,7 @@ Component.register('moorl-merchant-finder-detail', {
                 }).catch((exception) => {
                 this.isLoading = false;
                 this.createNotificationError({
-                    title: this.$t('moorl-foundation.detail.errorTitle'),
+                    title: this.$t('moorl-foundation.notification.errorTitle'),
                     message: exception
                 });
             });

@@ -379,7 +379,7 @@ Component.register('moorl-merchant-finder-list', {
                     }).catch((exception) => {
                     this.isLoading = false;
                     this.createNotificationError({
-                        title: that.$t('moorl-foundation.detail.errorTitle'),
+                        title: that.$t('moorl-foundation.notification.errorTitle'),
                         message: exception
                     });
                 });

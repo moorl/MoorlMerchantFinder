@@ -15,7 +15,7 @@
     </template>
 
     <template #language-switch>
-        <sw-language-switch slot="language-switch" :disabled="item && item.isNew()"
+        <sw-language-switch slot="language-switch" :disabled="item && item._isNew"
                             @on-change="onChangeLanguage"></sw-language-switch>
     </template>
 
@@ -83,7 +83,7 @@
             </sw-card>
             {% endblock %}
 
-            <sw-card :isLoading="isLoading" :title="$t('moorl-foundation.label.addressCard')">
+            <sw-card v-if="item" :isLoading="isLoading" :title="$t('moorl-foundation.label.addressCard')">
                 <sw-field :label="$t('moorl-foundation.properties.company')" v-model="item.company"></sw-field>
                 <sw-field :label="$t('moorl-foundation.properties.street')" v-model="item.street"></sw-field>
                 <sw-field :label="$t('moorl-foundation.properties.streetNumber')"
@@ -272,7 +272,7 @@
                 <div class="sw-field">
                     <label for="markerSettings" class="">
                         {{ $t('moorl-foundation.properties.markerSettingsExample') }}<br>
-                        <a href="https://leafletjs.com/examples/custom-icons/" target="_blank">{{ $t('moorl-foundation.properties.markerSettingsLink') }}</a>
+                        <a href="https://leafletjs.com/examples/custom-icons/" target="_blank" rel="noopener">{{ $t('moorl-foundation.properties.markerSettingsLink') }}</a>
                     </label>
                 </div>
 
