@@ -9,38 +9,47 @@
             {% if shopware.config.MoorlMerchantStock.config.productEnableSelection == 'select' %}
                 <div class="form-group">
                     <select class="custom-select" name="lineItems[{{ page.product.id }}][merchantStockId]">
-                        {% for key, merchantStock in page.product.extensions.MoorlMerchantStocks %}
-                            <option value="{{ merchantStock.id }}" {% if shopware.config.MoorlMerchantStock.config.disableOnNoStock and merchantStock.isStock and merchantStock.stock < 1 %}disabled{% endif %}>
-                                {{ merchantStock.merchant.translated.name ?: merchantStock.merchant.company }},
-                                {{ "moorl-merchant-finder.stockInfo"|trans }}:
-                                {{ merchantStock.isStock ? merchantStock.stock : "moorl-merchant-finder.available"|trans }},
-                                {{ "moorl-merchant-finder.deliveryTime"|trans }}:
-                                {{ merchantStock.deliveryTime.name }}
-                            </option>
-                        {% endfor %}
+                        {% block page_product_detail_buy_container_select %}
+                            {% for key, merchantStock in page.product.extensions.MoorlMerchantStocks %}
+                                <option value="{{ merchantStock.id }}" {% if shopware.config.MoorlMerchantStock.config.disableOnNoStock and merchantStock.isStock and merchantStock.stock < 1 %}disabled{% endif %}>
+                                    {{ merchantStock.merchant.translated.name ?: merchantStock.merchant.company }},
+                                    {{ "moorl-merchant-finder.stockInfo"|trans }}:
+                                    {{ merchantStock.isStock ? merchantStock.stock : "moorl-merchant-finder.available"|trans }},
+                                    {{ "moorl-merchant-finder.deliveryTime"|trans }}:
+                                    {{ merchantStock.deliveryTime.name }}
+                                </option>
+                            {% endfor %}
+                        {% endblock %}
                     </select>
                 </div>
             {% else %}
                 <div class="cms-element-moorl-merchant-finder">
                     <ul class="list-group mb-3">
-                        {% for key, merchantStock in page.product.extensions.MoorlMerchantStocks %}
-                            <input id="radio-{{ merchantStock.merchantId }}" class="d-none" type="radio" name="lineItems[{{ page.product.id }}][merchantStockId]"
-                                   value="{{ merchantStock.id }}"
-                                   {% if shopware.config.MoorlMerchantStock.config.disableOnNoStock and merchantStock.isStock and merchantStock.stock < 1 %}disabled {% else %}{% if key == 0 %}checked{% endif %}{% endif %}>
-
-                            <label for="radio-{{ merchantStock.merchantId }}"
-                                   class="list-group-item moorl-merchant-finder-result-item">
-                                {% sw_include '@Storefront/plugin/moorl-merchant-finder/component/result-item-static-main.html.twig' with {
-                                    merchant: merchantStock.merchant
-                                } %}
-                                <div class="small">
-                                    {{ "moorl-merchant-finder.stockInfo"|trans }}:
-                                    {{ merchantStock.isStock ? merchantStock.stock : "moorl-merchant-finder.available"|trans }} |
-                                    {{ "moorl-merchant-finder.deliveryTime"|trans }}:
-                                    {{ merchantStock.deliveryTime.name }}
-                                </div>
-                            </label>
-                        {% endfor %}
+                        {% block page_product_detail_buy_container_radio %}
+                            {% for key, merchantStock in page.product.extensions.MoorlMerchantStocks %}
+                                {% block page_product_detail_buy_container_radio_input %}
+                                    <input id="radio-{{ merchantStock.merchantId }}" class="d-none" type="radio" name="lineItems[{{ page.product.id }}][merchantStockId]"
+                                        value="{{ merchantStock.id }}"
+                                        {% if shopware.config.MoorlMerchantStock.config.disableOnNoStock and merchantStock.isStock and merchantStock.stock < 1 %}disabled {% else %}{% if loop.first %}checked{% endif %}{% endif %}>
+                                {% endblock %}
+                                {% block page_product_detail_buy_container_radio_label %}
+                                    <label for="radio-{{ merchantStock.merchantId }}"
+                                        class="list-group-item moorl-merchant-finder-result-item">
+                                        {% sw_include '@Storefront/plugin/moorl-merchant-finder/component/result-item-static-main.html.twig' with {
+                                            merchant: merchantStock.merchant
+                                        } %}
+                                        {% block page_product_detail_buy_container_radio_delivery %}
+                                            <div class="small">
+                                                {{ "moorl-merchant-finder.stockInfo"|trans }}:
+                                                {{ merchantStock.isStock ? merchantStock.stock : "moorl-merchant-finder.available"|trans }} |
+                                                {{ "moorl-merchant-finder.deliveryTime"|trans }}:
+                                                {{ merchantStock.deliveryTime.name }}
+                                            </div>
+                                        {% endblock %}
+                                    </label>
+                                {% endblock %}
+                            {% endfor %}
+                        {% endblock %}
                     </ul>
                 </div>
             {% endif %}
