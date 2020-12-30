@@ -72,6 +72,11 @@ class MerchantDefinition extends EntityDefinition
             (new BoolField('active', 'active'))->addFlags(new EditField('switch')),
             (new IntField('priority', 'priority'))->addFlags(new EditField('number')),
             (new BoolField('highlight', 'highlight'))->addFlags(new EditField('switch')),
+            (new StringField('type', 'type'))->addFlags(new EditField('text')),
+            (new StringField('custom1', 'custom1'))->addFlags(new EditField('text')),
+            (new StringField('custom2', 'custom2'))->addFlags(new EditField('text')),
+            (new StringField('custom3', 'custom3'))->addFlags(new EditField('text')),
+            (new StringField('custom4', 'custom4'))->addFlags(new EditField('text')),
 
             (new TranslatedField('name'))->addFlags(new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING), new EditField('text')),
             (new TranslatedField('description'))->addFlags(new EditField('textarea')),

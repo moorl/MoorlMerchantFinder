@@ -15,6 +15,9 @@
             "descriptionTextModule": "Manage your Merchants here",
             "placeholderSearchBar": "Search for merchants"
         },
+        "tooltips": {
+            "type": "Use this type variable to use different places on different category pages. You can set the type-filter at the CMS element."
+        },
         "importAssistant": {
             "title": "Import Assistant",
             "loadedText": "There are {count} datarows in your file. Please configure datamapping in the next step.",

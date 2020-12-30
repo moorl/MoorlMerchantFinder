@@ -26,6 +26,11 @@
               :label="$tc('moorl-cms.elements.general.config.label.maxItems')">
     </sw-field>
 
+    <sw-field v-model="element.config.type.value"
+              type="text"
+              :label="$tc('moorl-foundation.properties.type')">
+    </sw-field>
+
     <sw-field v-model="element.config.categoryFilter.value"
               bordered
               type="switch"

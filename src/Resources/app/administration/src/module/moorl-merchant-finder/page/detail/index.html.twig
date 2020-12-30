@@ -29,6 +29,9 @@
                           v-model="item.highlight"></sw-field>
                 <sw-number-field :label="$t('moorl-foundation.properties.priority')"
                                  v-model="item.priority"></sw-number-field>
+                <sw-field :label="$t('moorl-foundation.properties.type')"
+                          :helpText="$t('moorl-merchant-finder.tooltips.type')"
+                          v-model="item.type"></sw-field>
                 <sw-field :label="$t('moorl-foundation.properties.originId')" v-model="item.originId"></sw-field>
                 <sw-field :label="$t('moorl-foundation.properties.name')" v-model="item.name"></sw-field>
                 <sw-field :label="$t('moorl-foundation.properties.email')" v-model="item.email"></sw-field>
@@ -298,6 +301,13 @@
       -76
    ]
 }</pre>
+            </sw-card>
+
+            <sw-card v-if="item" :isLoading="isLoading" :title="$t('moorl-foundation.label.customCard')">
+                <sw-field :label="$t('moorl-foundation.properties.custom1')" v-model="item.custom1"></sw-field>
+                <sw-field :label="$t('moorl-foundation.properties.custom2')" v-model="item.custom2"></sw-field>
+                <sw-field :label="$t('moorl-foundation.properties.custom3')" v-model="item.custom3"></sw-field>
+                <sw-field :label="$t('moorl-foundation.properties.custom4')" v-model="item.custom4"></sw-field>
             </sw-card>
         </sw-card-view>
 

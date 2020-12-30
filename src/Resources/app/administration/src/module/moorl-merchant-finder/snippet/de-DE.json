@@ -10,6 +10,9 @@
             "descriptionTextModule": "Verwalte die Händler hier",
             "placeholderSearchBar": "Search for merchants"
         },
+        "tooltips": {
+            "type": "Use this type variable to use different places on different category pages. You can set the type-filter at the CMS element."
+        },
         "importAssistant": {
             "title": "Import Assistent",
             "loadedText": "Es wurden {count} Datensätze in deinem Import gefunden. Bitte wähle im nächsten Schritt die Zuweisungen aus",

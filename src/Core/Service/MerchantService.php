@@ -463,6 +463,10 @@ class MerchantService
             $criteria->addFilter(new EqualsFilter('tags.id', $data->get('tags')));
         }
 
+        if ($data->get('type')) {
+            $criteria->addFilter(new EqualsFilter('type', $data->get('type')));
+        }
+
         if ($data->get('search')) {
             $criteria->setTerm($data->get('search'));
         }
@@ -476,7 +480,17 @@ class MerchantService
 
             if (is_array($rules)) {
                 if (in_array('isHighlighted', $rules)) {
-                    $criteria->addFilter(new EqualsFilter('highlight', 1));
+                    if (!in_array('isNotHighlighted', $rules)) {
+                        $criteria->addFilter(new EqualsFilter('highlight', 1));
+                    }
+                }
+                if (in_array('isNotHighlighted', $rules)) {
+                    if (!in_array('isHighlighted', $rules)) {
+                        $criteria->addFilter(new MultiFilter('OR', [
+                            new EqualsFilter('highlight', null),
+                            new EqualsFilter('highlight', 0)
+                        ]));
+                    }
                 }
                 if (in_array('hasPriority', $rules)) {
                     $criteria->addFilter(new NotFilter(NotFilter::CONNECTION_AND, [

@@ -252,6 +252,106 @@ class MerchantEntity extends Entity
      * @var null|string
      */
     protected $countryCode;
+    /**
+     * @var null|string
+     */
+    protected $type;
+    /**
+     * @var null|string
+     */
+    protected $custom1;
+    /**
+     * @var null|string
+     */
+    protected $custom2;
+    /**
+     * @var null|string
+     */
+    protected $custom3;
+    /**
+     * @var null|string
+     */
+    protected $custom4;
+
+    /**
+     * @return string|null
+     */
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string|null $type
+     */
+    public function setType(?string $type): void
+    {
+        $this->type = $type;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCustom1(): ?string
+    {
+        return $this->custom1;
+    }
+
+    /**
+     * @param string|null $custom1
+     */
+    public function setCustom1(?string $custom1): void
+    {
+        $this->custom1 = $custom1;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCustom2(): ?string
+    {
+        return $this->custom2;
+    }
+
+    /**
+     * @param string|null $custom2
+     */
+    public function setCustom2(?string $custom2): void
+    {
+        $this->custom2 = $custom2;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCustom3(): ?string
+    {
+        return $this->custom3;
+    }
+
+    /**
+     * @param string|null $custom3
+     */
+    public function setCustom3(?string $custom3): void
+    {
+        $this->custom3 = $custom3;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCustom4(): ?string
+    {
+        return $this->custom4;
+    }
+
+    /**
+     * @param string|null $custom4
+     */
+    public function setCustom4(?string $custom4): void
+    {
+        $this->custom4 = $custom4;
+    }
 
     /**
      * @return MerchantCustomerCollection|null

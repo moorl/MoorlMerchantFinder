@@ -79,6 +79,11 @@
                     <name lang="de-DE">Hervorgehoben</name>
                 </option>
                 <option>
+                    <id>isNotHighlighted</id>
+                    <name>Not Highlighted</name>
+                    <name lang="de-DE">Nicht Hervorgehoben</name>
+                </option>
+                <option>
                     <id>hasPriority</id>
                     <name>Priority added</name>
                     <name lang="de-DE">Priorität hinzugefügt</name>

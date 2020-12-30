@@ -47,6 +47,7 @@
         "resetSelection": "Reset selection",
         "searchRules": {
             "isHighlighted": "Premium merchant",
+            "isNotHighlighted": "Normal merchant",
             "hasPriority": "Priority merchant",
             "hasLogo": "Merchant with logo"
         },

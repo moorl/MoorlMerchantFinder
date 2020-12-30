@@ -59,6 +59,11 @@ export default class MoorlMerchantFinder extends Plugin {
 
         this.el.addEventListener('submit', this._formSubmit.bind(this));
 
+        $(this.el).on('change', 'input[type=checkbox]', function () {
+            const button = that._form.querySelector("[type=submit]");
+            button.click();
+        });
+
         $(this.el).on('click', 'button[name=location]', function () {
             $(this).toggleClass('active');
             if ($(this).hasClass('active')) {

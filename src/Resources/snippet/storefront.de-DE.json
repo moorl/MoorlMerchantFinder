@@ -47,6 +47,7 @@
         "resetSelection": "Auswahl zurücksetzen",
         "searchRules": {
             "isHighlighted": "Premium Fachhändler",
+            "isNotHighlighted": "Normaler Fachhändler",
             "hasPriority": "Empfehlung",
             "hasLogo": "Fachhändler mit Logo"
         },

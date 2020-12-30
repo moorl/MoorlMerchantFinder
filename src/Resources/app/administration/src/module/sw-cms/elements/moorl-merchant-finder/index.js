@@ -10,6 +10,10 @@ Application.getContainer('service').cmsService.registerCmsElement({
     configComponent: 'sw-cms-el-config-moorl-merchant-finder',
     previewComponent: 'sw-cms-el-preview-moorl-merchant-finder',
     defaultConfig: {
+        type: {
+            source: 'static',
+            value: null
+        },
         style: {
             source: 'static',
             value: 'results-map'
