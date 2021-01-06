@@ -1,0 +1,87 @@
+{% sw_extends '@Storefront/storefront/page/product-detail/index.html.twig' %}
+
+{% block page_product_detail %}
+    {{ parent() }}
+
+    {#% if not context.customer.groupId or shopware.config.MoorlMerchantPicker.config.customerGroupId != context.customer.groupId %}
+        <div class="modal fade" id="merchantStockModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog cms-element-moorl-merchant-finder"
+                 role="document"
+                 data-position-request="{{ shopware.config.MoorlMerchantFinder.config.positionRequest }}">
+                <form data-moorl-merchant-finder="true"
+                      action="{{ seoUrl('moorl.merchant-finder.search') }}"
+                      class="modal-content"
+                      method="post"
+                      data-form-csrf-handler="true">
+                    {{ sw_csrf('moorl.merchant-finder.search') }}
+
+                    <input type="hidden" name="initiator" value="merchant-stock">
+                    <input type="hidden" name="productId" value="{{ page.product.id }}">
+                    <input type="hidden" name="items" value="10">
+                    <input type="hidden" name="distance" value="1000">
+
+                    {% if shopware.config.MoorlMerchantStock.config.searchRules %}
+                        {% for rule in shopware.config.MoorlMerchantStock.config.searchRules %}
+                            <input type="hidden" name="rules[]" value="{{ rule }}">
+                        {% endfor %}
+                    {% endif %}
+
+                    <div class="modal-header">
+                        <h3 class="modal-title">
+                            {{ "moorl-merchant-finder.choseMerchant"|trans }}
+                        </h3>
+                        <button type="button" class="modal-close close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">{% sw_icon 'x' %}</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <div class="input-group">
+                                {% if shopware.config.MoorlMerchantFinder.config.positionRequest %}
+                                    <div class="input-group-prepend">
+                                        <button class="btn btn-primary"
+                                                type="button"
+                                                name="location"
+                                                data-toggle="tooltip"
+                                                data-placement="top"
+                                                title="{{ "moorl-merchant-finder.myLocation"|trans }}">
+                                            <i class="fas fa-crosshairs"></i>
+                                        </button>
+                                    </div>
+                                {% endif %}
+                                <input name="zipcode"
+                                       class="form-control"
+                                       value="{{ context.shippingLocation.address.zipcode }}"
+                                       placeholder="{{ "moorl-merchant-finder.zipcodeCityEnter"|trans }}">
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" type="submit">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="moorl-merchant-finder-results list-group d-none"></div>
+                    </div>
+
+                    <div class="modal-footer text-right">
+                        <button type="button" class="btn btn-light" data-dismiss="modal" aria-label="Close">
+                            {{ 'moorl-merchant-finder.cancel'|trans }}
+                        </button>
+
+                        <button class="btn btn-primary" type="submit" name="action" value="pick">
+                            {{ "moorl-merchant-finder.save"|trans }}
+                        </button>
+
+                        {% if shopware.config.MoorlMerchantPicker.config.resetSelection %}
+                            <button class="btn btn-primary" type="submit" name="action" value="unset">
+                                {{ "moorl-merchant-finder.resetSelection"|trans }}
+                            </button>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    {% endif %#}
+{% endblock %}

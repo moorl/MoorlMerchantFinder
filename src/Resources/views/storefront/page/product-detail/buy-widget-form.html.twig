@@ -22,6 +22,16 @@
                         {% endblock %}
                     </select>
                 </div>
+            {% elseif shopware.config.MoorlMerchantStock.config.productEnableSelection == 'popup' %}
+                <div class="form-group">
+                    <a href="javascript:"
+                       data-toggle="modal"
+                       data-target="#merchantPickerModal"
+                       class="btn btn-primary">
+                        <i class="fas fa-map-pin fa-fw"></i>
+                        {{ "moorl-merchant-finder.choseMerchant"|trans }}
+                    </a>
+                </div>
             {% else %}
                 <div class="cms-element-moorl-merchant-finder">
                     <ul class="list-group mb-3">

@@ -126,7 +126,7 @@ Component.register('moorl-merchant-finder-list', {
             }, {
                 property: 'type',
                 dataIndex: 'type',
-                label: this.$t('moorl-form-builder.properties.type'),
+                label: this.$t('moorl-foundation.properties.type'),
                 inlineEdit: 'string',
                 align: 'center',
                 allowResize: true,

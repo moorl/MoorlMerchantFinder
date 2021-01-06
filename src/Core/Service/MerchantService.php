@@ -456,8 +456,8 @@ class MerchantService
         }
 
         if ($data->get('productId')) {
-            $criteria->addAssociation('products');
-            $criteria->addFilter(new EqualsFilter('products.id', $data->get('productId')));
+            $criteria->addAssociation('merchantStocks');
+            $criteria->addFilter(new EqualsFilter('merchantStocks.productId', $data->get('productId')));
         }
 
         if ($data->get('tags')) {
