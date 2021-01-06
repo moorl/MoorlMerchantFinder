@@ -2,7 +2,7 @@
 
 {% block component_filter_panel_item_manufacturer %}
     {% if shopware.config.MoorlMerchantStock.config.showMerchantFilter %}
-        {% set merchants = listing.aggregations.get('merchants') %}
+        {% set merchants = listing.aggregations.get('merchant') %}
         {% if merchants and not merchants.entities is empty %}
             {% set merchantsSorted = merchants.entities|sort((a, b) => a.translated.name|lower > b.translated.name|lower) %}
 
