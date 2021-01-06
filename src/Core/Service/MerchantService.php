@@ -317,13 +317,14 @@ class MerchantService
             // lineItems[$lineItemId]['merchantStockId']
             $lineItems = $this->requestStack->getCurrentRequest()->get('lineItems');
 
+            $merchantStock = null;
             if ($lineItems) {
                 $currentItem = $lineItems[$lineItem->getId()];
-                if ($currentItem) {
+                if ($currentItem && isset($currentItem['merchantStockId'])) {
                     $merchantStockId = $currentItem['merchantStockId'];
+                    $merchantStock = $merchantStocks->get($merchantStockId);
                 }
             }
-            $merchantStock = $merchantStocks->get($merchantStockId);
 
             // stock infos are valid?
             if (!$merchantStock) {
