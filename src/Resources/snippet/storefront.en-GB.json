@@ -3,6 +3,7 @@
         "available": "Available",
         "stockInfo": "Stock information",
         "deliveryTime": "Delivery time",
+        "deliveryTimeUnknown": "Unknown - Products will be requested on order",
         "mySelection": "My selection",
         "merchant": "Merchant",
         "country": "Country",

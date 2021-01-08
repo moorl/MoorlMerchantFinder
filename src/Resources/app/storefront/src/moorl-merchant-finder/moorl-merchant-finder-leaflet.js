@@ -32,6 +32,7 @@ export default class MoorlMerchantFinder extends Plugin {
             this._popupElement = document.createElement('div');
             this._mapElement.innerHTML = '';
             this._buildMap();
+            this._resizeMap = true;
         }
 
         if (this.el.dataset.defaultMarker) {
@@ -77,13 +78,7 @@ export default class MoorlMerchantFinder extends Plugin {
 
         $(this.el).on('click', '[data-item]', function () {
             that._focusItem(this.dataset.item);
-
-            if (this.dataset.merchantStockId !== false) {
-                that._updateMerchantStockSelection(
-                    this.dataset.item,
-                    this.dataset.merchantStockId
-                )
-            }
+            that._updateMerchantStockSelection(this.dataset.item);
         });
 
         $(this.el).on('click', '[data-trigger]', function () {
@@ -103,9 +98,10 @@ export default class MoorlMerchantFinder extends Plugin {
         });
 
         $(window).on('shown.bs.modal', function() {
-            if (that._mapElement) {
+            if (that._mapElement && that._resizeMap) {
                 // Reload because the map has problems with the modal
                 that._formSubmit();
+                that._resizeMap = false;
             }
         });
 
@@ -291,10 +287,10 @@ export default class MoorlMerchantFinder extends Plugin {
         ])
     }
 
-    _updateMerchantStockSelection(id, merchantStockId) {
+    _updateMerchantStockSelection(id) {
         const merchantStockModalValue = document.getElementById("merchantStockModalValue");
         if (merchantStockModalValue !== false) {
-            merchantStockModalValue.value = merchantStockId;
+            merchantStockModalValue.value = id;
         }
 
         const merchantStockModalLabel = document.getElementById("merchantStockModalLabel");

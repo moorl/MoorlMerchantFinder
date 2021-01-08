@@ -51,7 +51,11 @@
                                 </button>
                             </div>
                         {% endif %}
-                        <input id="{{ element.id }}zipcode" name="zipcode" class="form-control" placeholder="{{ "moorl-merchant-finder.zipcodeCity"|trans }}">
+                        <input id="{{ element.id }}zipcode"
+                               name="zipcode"
+                               value="{{ context.shippingLocation.address.zipcode }}"
+                               class="form-control"
+                               placeholder="{{ "moorl-merchant-finder.zipcodeCity"|trans }}">
                     </div>
                 </div>
             {% endblock %}

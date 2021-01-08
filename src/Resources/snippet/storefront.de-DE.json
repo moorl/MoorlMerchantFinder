@@ -3,6 +3,7 @@
         "available": "Verfügbar",
         "stockInfo": "Lagerbestand",
         "deliveryTime": "Lieferzeit",
+        "deliveryTimeUnknown": "Unbekannt - Produkte werden bei Bestellung angefragt",
         "mySelection": "Meine Auswahl",
         "merchant": "Händler",
         "country": "Land",

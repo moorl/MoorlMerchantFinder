@@ -29,7 +29,6 @@ class MerchantStockCollection extends EntityCollection
             }
 
             return $merchant->getCustomers()->filterByProperty('customerId', $customerId)->count() > 0;
-            //return $merchant->getCustomers()->has($customerId);
         });
     }
 
@@ -37,6 +36,13 @@ class MerchantStockCollection extends EntityCollection
     {
         return $this->filter(function (MerchantStockEntity $merchantStockEntity) use ($productId) {
             return $merchantStockEntity->getProductId() == $productId;
+        })->first();
+    }
+
+    public function getByMerchantId(string $merchantId): ?MerchantStockEntity
+    {
+        return $this->filter(function (MerchantStockEntity $merchantStockEntity) use ($merchantId) {
+            return $merchantStockEntity->getMerchantId() == $merchantId;
         })->first();
     }
 }

@@ -29,6 +29,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\NotFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\RangeFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Shopware\Core\Framework\Struct\ArrayStruct;
+use Shopware\Core\Framework\Uuid\Uuid;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -292,14 +293,17 @@ class MerchantService
         }
     }
 
-    public function patchLineItem(LineItem $lineItem, Cart $cart, Criteria $criteria): void
+    public function patchLineItem(LineItem $lineItem, Cart $cart, Criteria $criteria, bool $retry = true): void
     {
-        // line item has stock information?
-        $productId = $lineItem->getReferencedId();
-
-        $criteria->addFilter(new EqualsFilter('id', $productId));
-
         $productRepo = $this->definitionInstanceRegistry->getRepository('product');
+
+        $productId = $lineItem->getReferencedId();
+        $lineItems = $this->requestStack->getCurrentRequest()->get('lineItems');
+        $currentItem = $lineItems[$lineItem->getId()];
+
+        if ($retry) {
+            $criteria->addFilter(new EqualsFilter('id', $productId));
+        }
 
         /* @var $product ProductEntity */
         $product = $productRepo->search($criteria, $this->getContext())->get($productId);
@@ -312,17 +316,43 @@ class MerchantService
 
         $merchantStocks = $product->getExtension('MoorlMerchantStocks');
 
+        if ($retry && $this->systemConfigService->get('MoorlMerchantStock.config.autoGenerateStocks')) {
+            if ($currentItem && isset($currentItem['merchantId'])) {
+                if (!$merchantStocks || !$merchantStocks->getByMerchantId($currentItem['merchantId'])) {
+                    $merchantId = $currentItem['merchantId'];
+
+                    if (empty($merchantId)) {
+                        return;
+                    }
+
+                    $data = [
+                        'id' => Uuid::randomHex(),
+                        'productId' => $productId,
+                        'isStock' => $this->systemConfigService->get('MoorlMerchantStock.config.isStock'),
+                        'stock' => $this->systemConfigService->get('MoorlMerchantStock.config.stock'),
+                        'deliveryTimeId' => $this->systemConfigService->get('MoorlMerchantStock.config.deliveryTimeId'),
+                        'merchantId' => $merchantId
+                    ];
+
+                    $merchantStockRepo = $this->definitionInstanceRegistry->getRepository('moorl_merchant_stock');
+                    $merchantStockRepo->create([$data], $this->getContext());
+
+                    $this->patchLineItem($lineItem, $cart, $criteria, false);
+                    return;
+                }
+            }
+        }
+
         // yes
         if ($merchantStocks && $merchantStocks->count() > 0) {
-            // lineItems[$lineItemId]['merchantStockId']
-            $lineItems = $this->requestStack->getCurrentRequest()->get('lineItems');
-
             $merchantStock = null;
+
+            /* @var $merchantStock MerchantStockEntity */
             if ($lineItems) {
-                $currentItem = $lineItems[$lineItem->getId()];
                 if ($currentItem && isset($currentItem['merchantStockId'])) {
-                    $merchantStockId = $currentItem['merchantStockId'];
-                    $merchantStock = $merchantStocks->get($merchantStockId);
+                    $merchantStock = $merchantStocks->get($currentItem['merchantStockId']);
+                } else if ($currentItem && isset($currentItem['merchantId'])) {
+                    $merchantStock = $merchantStocks->getByMerchantId($currentItem['merchantId']);
                 }
             }
 
@@ -457,7 +487,7 @@ class MerchantService
 
         if ($data->get('productId')) {
             $criteria->addAssociation('merchantStocks.deliveryTime');
-            if ($this->systemConfigService->get('MoorlMerchantStock.config.disableOnNoStock')) {
+            if (!$this->systemConfigService->get('MoorlMerchantStock.config.autoGenerateStocks')) {
                 $criteria->addFilter(new EqualsFilter('merchantStocks.productId', $data->get('productId')));
             }
         }

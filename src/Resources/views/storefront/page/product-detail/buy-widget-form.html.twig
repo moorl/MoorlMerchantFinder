@@ -1,8 +1,7 @@
 {% sw_extends '@Storefront/storefront/page/product-detail/buy-widget-form.html.twig' %}
 
 {% block page_product_detail_buy_container %}
-    {% if page.product.extensions.MoorlMerchantStocks %}
-
+    {% if page.product.extensions.MoorlMerchantStocks or shopware.config.MoorlMerchantStock.config.autoGenerateStocks %}
         {% if shopware.config.MoorlMerchantStock.config.productEnableSelection and shopware.config.MoorlMerchantStock.config.productEnableSelection != 'none' %}
             <h4>{{ "moorl-merchant-finder.choseMerchant"|trans }}</h4>
 
@@ -24,7 +23,7 @@
                 </div>
             {% elseif shopware.config.MoorlMerchantStock.config.productEnableSelection == 'popup' %}
                 <input value="{{ merchantStock.id }}"
-                       name="lineItems[{{ page.product.id }}][merchantStockId]"
+                       name="lineItems[{{ page.product.id }}][merchantId]"
                        id="merchantStockModalValue"
                        type="hidden">
 
