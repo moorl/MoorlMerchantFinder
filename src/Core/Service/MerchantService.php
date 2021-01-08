@@ -456,8 +456,10 @@ class MerchantService
         }
 
         if ($data->get('productId')) {
-            $criteria->addAssociation('merchantStocks');
-            $criteria->addFilter(new EqualsFilter('merchantStocks.productId', $data->get('productId')));
+            $criteria->addAssociation('merchantStocks.deliveryTime');
+            if ($this->systemConfigService->get('MoorlMerchantStock.config.disableOnNoStock')) {
+                $criteria->addFilter(new EqualsFilter('merchantStocks.productId', $data->get('productId')));
+            }
         }
 
         if ($data->get('tags')) {
@@ -521,6 +523,10 @@ class MerchantService
                     $entity->getLocationLat(),
                     $entity->getLocationLon()
                 ));
+            }
+
+            if ($data->get('productId')) {
+                $entity->setMerchantStock($entity->getMerchantStocks()->getByProductId($data->get('productId')));
             }
 
             $entity->setSeoUrl(

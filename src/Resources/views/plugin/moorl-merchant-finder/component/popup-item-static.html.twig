@@ -1,5 +1,5 @@
 {% block element_moorl_merchant_finder_popup %}
-    <b>{{ merchant.company }}</b>
+    <b>{{ merchant.translated.name ?: merchant.company }}</b>
     <p>{{ merchant.street }} {{ merchant.streetNumber }}
         <br>{{ merchant.zipcode }} {{ merchant.city }}
         {% if merchant.country %}

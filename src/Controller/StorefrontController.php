@@ -196,6 +196,10 @@ class StorefrontController extends OriginController
             case 'merchant-picker':
                 $listItemTemplate = $this->get(TemplateFinder::class)->find('plugin/moorl-merchant-picker/component/result-item-static.html.twig', false, null);
                 break;
+            case 'merchant-stock':
+                $listItemTemplate = $this->get(TemplateFinder::class)->find('plugin/moorl-merchant-stock/component/result-item-static.html.twig', false, null);
+                $popupItemTemplate = $this->get(TemplateFinder::class)->find('plugin/moorl-merchant-stock/component/popup-item-static.html.twig', false, null);
+                break;
             default:
                 $listItemTemplate = $this->get(TemplateFinder::class)->find('plugin/moorl-merchant-finder/component/result-item-static.html.twig', false, null);
                 $popupItemTemplate = $this->get(TemplateFinder::class)->find('plugin/moorl-merchant-finder/component/popup-item-static.html.twig', false, null);

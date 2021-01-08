@@ -5,8 +5,9 @@
     {{ sw_csrf('moorl.merchant-finder.search') }}
 
     <input type="hidden" name="type" value="{{ element.config.type.value }}">
-
+    <input type="hidden" name="initiator" value="{{ element.config.initiator.value }}">
     <input type="hidden" name="items" value="{{ element.config.items.value }}">
+    <input type="hidden" name="productId" value="{{ element.config.productId.value }}">
 
     {% block element_moorl_merchant_finder_form_inner %}
         <div class="row form-row {% if shopware.config.MoorlMerchantFinder.config.hideSearchLabels %}is-hide-label{% endif %}">

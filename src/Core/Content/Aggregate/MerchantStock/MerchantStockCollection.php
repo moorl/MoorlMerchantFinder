@@ -32,4 +32,11 @@ class MerchantStockCollection extends EntityCollection
             //return $merchant->getCustomers()->has($customerId);
         });
     }
+
+    public function getByProductId(string $productId): ?MerchantStockEntity
+    {
+        return $this->filter(function (MerchantStockEntity $merchantStockEntity) use ($productId) {
+            return $merchantStockEntity->getProductId() == $productId;
+        })->first();
+    }
 }

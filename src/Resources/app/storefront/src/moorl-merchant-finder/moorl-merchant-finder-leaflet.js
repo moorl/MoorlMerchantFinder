@@ -76,7 +76,14 @@ export default class MoorlMerchantFinder extends Plugin {
         });
 
         $(this.el).on('click', '[data-item]', function () {
-            that._focusItem($(this).data('item'));
+            that._focusItem(this.dataset.item);
+
+            if (this.dataset.merchantStockId !== false) {
+                that._updateMerchantStockSelection(
+                    this.dataset.item,
+                    this.dataset.merchantStockId
+                )
+            }
         });
 
         $(this.el).on('click', '[data-trigger]', function () {
@@ -93,6 +100,13 @@ export default class MoorlMerchantFinder extends Plugin {
             button.dataset.merchant = this.dataset.merchant;
             button.value = 'pick';
             button.click();
+        });
+
+        $(window).on('shown.bs.modal', function() {
+            if (that._mapElement) {
+                // Reload because the map has problems with the modal
+                that._formSubmit();
+            }
         });
 
         const urlParams = new URLSearchParams(window.location.search);
@@ -172,6 +186,7 @@ export default class MoorlMerchantFinder extends Plugin {
             this._buildSearchResults(response);
 
             if (this._mapElement) {
+                this.ol.map.invalidateSize();
                 this._buildMapMarkers(response);
             }
         }
@@ -276,9 +291,31 @@ export default class MoorlMerchantFinder extends Plugin {
         ])
     }
 
+    _updateMerchantStockSelection(id, merchantStockId) {
+        const merchantStockModalValue = document.getElementById("merchantStockModalValue");
+        if (merchantStockModalValue !== false) {
+            merchantStockModalValue.value = merchantStockId;
+        }
+
+        const merchantStockModalLabel = document.getElementById("merchantStockModalLabel");
+        if (merchantStockModalLabel === false) {
+            return;
+        }
+
+        this.ol.markers.eachLayer(function (layer) {
+            if (layer.options.data.id === id) {
+                merchantStockModalLabel.innerHTML = layer.getPopup()._content;
+            }
+        });
+    }
+
     _focusItem(id) {
         const that = this;
         const myElement = document.getElementById(id);
+        if (myElement === false) {
+            return;
+        }
+
         const topPos = myElement.offsetTop;
 
         this._resultsContent.scrollTo({
@@ -290,7 +327,7 @@ export default class MoorlMerchantFinder extends Plugin {
         $('#' + id).addClass('active');
 
         this.ol.markers.eachLayer(function (layer) {
-            if (layer.options.data.id == id) {
+            if (layer.options.data.id === id) {
                 let position = layer.getLatLng();
                 if (!layer.getPopup().isOpen()) {
                     layer.openPopup();
@@ -301,6 +338,10 @@ export default class MoorlMerchantFinder extends Plugin {
                 }
                 that.ol.map.flyTo(position, 16, {animate: true, duration: 1});
                 console.log(layer);
+
+                if (merchantStockModalLabel !== false) {
+                    merchantStockModalLabel.innerHTML = layer.getPopup()._content;
+                }
             }
         });
     }

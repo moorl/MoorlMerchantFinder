@@ -23,14 +23,26 @@
                     </select>
                 </div>
             {% elseif shopware.config.MoorlMerchantStock.config.productEnableSelection == 'popup' %}
+                <input value="{{ merchantStock.id }}"
+                       name="lineItems[{{ page.product.id }}][merchantStockId]"
+                       id="merchantStockModalValue"
+                       type="hidden">
+
                 <div class="form-group">
-                    <a href="javascript:"
-                       data-toggle="modal"
-                       data-target="#merchantPickerModal"
-                       class="btn btn-primary">
-                        <i class="fas fa-map-pin fa-fw"></i>
-                        {{ "moorl-merchant-finder.choseMerchant"|trans }}
-                    </a>
+                    <div class="row">
+                        <div class="col-6">
+                            <div id="merchantStockModalLabel"></div>
+                        </div>
+                        <div class="col-6">
+                            <a href="javascript:"
+                               data-toggle="modal"
+                               data-target="#merchantStockModal"
+                               class="btn btn-light btn-block">
+                                <i class="fas fa-map-pin fa-fw"></i>
+                                {{ "moorl-merchant-finder.choseMerchant"|trans }}
+                            </a>
+                        </div>
+                    </div>
                 </div>
             {% else %}
                 <div class="cms-element-moorl-merchant-finder">

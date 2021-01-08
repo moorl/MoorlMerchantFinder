@@ -1,0 +1,6 @@
+<div class="mt-2">
+    {{ "moorl-merchant-finder.stockInfo"|trans }}:
+    {{ merchant.merchantStock.isStock ? merchant.merchantStock.stock : "moorl-merchant-finder.available"|trans }} |
+    {{ "moorl-merchant-finder.deliveryTime"|trans }}:
+    {{ merchant.merchantStock.deliveryTime.name }}
+</div>
