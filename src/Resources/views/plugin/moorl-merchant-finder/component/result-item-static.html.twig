@@ -2,7 +2,9 @@
 {% set openingHour = merchant.merchantOpeningHours.getForToday(merchant.id) %}
 
 {% block element_moorl_merchant_finder_result_item %}
-    <li style="{% block element_moorl_merchant_finder_result_item_style %}{% endblock %}" id="{{ merchant.id }}" class="list-group-item moorl-merchant-finder-result-item display-mode-{{ displayMode }}">
+    <li style="{% block element_moorl_merchant_finder_result_item_style %}{% endblock %}"
+        id=""
+        class="merchant-{{ merchant.id }} list-group-item moorl-merchant-finder-result-item display-mode-{{ displayMode }}">
         {% sw_include '@Storefront/plugin/moorl-merchant-finder/component/result-item-static-main.html.twig' %}
 
         {% sw_include '@Storefront/plugin/moorl-merchant-finder/component/result-item-static-relations.html.twig' %}

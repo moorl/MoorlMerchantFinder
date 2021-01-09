@@ -2,7 +2,6 @@ import Plugin from 'src/plugin-system/plugin.class';
 import FormSerializeUtil from 'src/utility/form/form-serialize.util';
 import DomAccess from 'src/helper/dom-access.helper';
 import HttpClient from 'src/service/http-client.service';
-import Te from '../template-engine'; // Remove 1.3
 import L from 'leaflet';
 import 'url-search-params-polyfill';
 
@@ -44,6 +43,7 @@ export default class MoorlMerchantFinder extends Plugin {
         this._options = {
             'foo': 'bar'
         };
+        this._reponse = null;
 
         this._searchParams = this.el.dataset.searchParams;
         this._registerEvents();
@@ -58,7 +58,7 @@ export default class MoorlMerchantFinder extends Plugin {
     _registerEvents() {
         const that = this;
 
-        this.el.addEventListener('submit', this._formSubmit.bind(this));
+        this._form.addEventListener('submit', this._formSubmit.bind(this));
 
         $(this.el).on('change', 'input[type=checkbox]', function () {
             const button = that._form.querySelector("[type=submit]");
@@ -83,7 +83,6 @@ export default class MoorlMerchantFinder extends Plugin {
 
         $(this.el).on('click', '[data-item]', function () {
             that._focusItem(this.dataset.item);
-            that._updateMerchantStockSelection(this.dataset.item);
         });
 
         $(this.el).on('click', '[data-trigger]', function () {
@@ -118,6 +117,10 @@ export default class MoorlMerchantFinder extends Plugin {
                 that._form.querySelector('[name=' + name + ']').value = value;
             }
         });
+    }
+
+    _getItem(id) {
+        return this._reponse.data.find(o => o.id === id);
     }
 
     _getLocation() {
@@ -172,47 +175,47 @@ export default class MoorlMerchantFinder extends Plugin {
             }
         }
 
+        const button = this._form.querySelector("[type=submit]");
+        button.disabled = true;
+
         this._client.post(requestUrl, formData, this._onLoaded.bind(this))
     }
 
     _onLoaded(response) {
-        response = JSON.parse(response);
+        const button = this._form.querySelector("[type=submit]");
+        button.disabled = false;
 
-        if (response.reload) {
+        this._reponse = JSON.parse(response);
+
+        if (this._reponse.reload) {
             location.reload();
         }
 
-        if (response.data) {
+        if (this._reponse.data) {
             this._refresh();
-            this._buildSearchResults(response);
+            this._buildSearchResults();
 
             if (this._mapElement) {
                 this.ol.map.invalidateSize();
-                this._buildMapMarkers(response);
+                this._buildMapMarkers();
             }
         }
     }
 
-    _buildSearchResults(response) {
-        const that = this;
-        const te = new Te();
+    _buildSearchResults() {
         if (this._resultInfo) {
-            this._resultInfo.innerHTML = response.searchInfo;
+            this._resultInfo.innerHTML = this._reponse.searchInfo;
         }
 
-        if (typeof response.html != 'undefined') {
-            this._results.innerHTML = response.html;
-        } else {
-            response.data.forEach(function (item) {
-                that._results.insertAdjacentHTML('beforeend', te.render(that._resultTemplate, item));
-            });
+        if (typeof this._reponse.html != 'undefined') {
+            this._results.innerHTML = this._reponse.html;
         }
 
         $(this._results).removeClass('d-none');
         $(this._loadingIndicator).addClass('d-none');
     }
 
-    _buildMapMarkers(response) {
+    _buildMapMarkers() {
         const that = this;
         const featureMarker = [];
         let minLon = 10000,
@@ -221,7 +224,7 @@ export default class MoorlMerchantFinder extends Plugin {
             maxLat = 0;
 
         // add features
-        response.data.forEach(function (item) {
+        this._reponse.data.forEach(function (item) {
             if (item.locationLon != null) {
                 let iconOptions = that._defaultMarker;
                 let markerOptions = {data: item};
@@ -271,14 +274,14 @@ export default class MoorlMerchantFinder extends Plugin {
         this.ol.markers.clearLayers();
         this.ol.markers = L.layerGroup(featureMarker).addTo(that.ol.map);
 
-        if (response.data.length == 1) {
+        if (this._reponse.data.length == 1) {
             minLat = minLat - 0.02;
             maxLat = maxLat + 0.02;
             minLon = minLon - 0.02;
             maxLon = maxLon + 0.02;
-        } else if (response.data.length == 0 && response.myLocation && response.myLocation.length > 0) {
-            minLon = maxLon = response.myLocation[0].lon;
-            minLat = maxLat = response.myLocation[0].lat;
+        } else if (this._reponse.data.length == 0 && this._reponse.myLocation && this._reponse.myLocation.length > 0) {
+            minLon = maxLon = this._reponse.myLocation[0].lon;
+            minLat = maxLat = this._reponse.myLocation[0].lat;
             minLat = minLat - 0.02;
             maxLat = maxLat + 0.02;
             minLon = minLon - 0.02;
@@ -292,27 +295,18 @@ export default class MoorlMerchantFinder extends Plugin {
         ])
     }
 
-    _updateMerchantStockSelection(id) {
-        const merchantStockModalValue = document.getElementById("merchantStockModalValue");
-        if (merchantStockModalValue !== false) {
-            merchantStockModalValue.value = id;
-        }
-
-        const merchantStockModalLabel = document.getElementById("merchantStockModalLabel");
-        if (merchantStockModalLabel === false) {
-            return;
-        }
-
-        this.ol.markers.eachLayer(function (layer) {
-            if (layer.options.data.id === id) {
-                merchantStockModalLabel.innerHTML = layer.getPopup()._content;
-            }
-        });
+    _updateMerchantId(id) {
+        $('.input-moorl-merchant-id').val(id);
+        const item = this._getItem(id);
+        $('.label-moorl-merchant-id').html(item.popup);
     }
 
     _focusItem(id) {
+        this._updateMerchantId(id);
+
         const that = this;
-        const myElement = document.getElementById(id);
+        const myElement = this.el.getElementsByClassName('merchant-' + id)[0];
+
         if (myElement === false) {
             return;
         }
@@ -324,8 +318,8 @@ export default class MoorlMerchantFinder extends Plugin {
             behavior: 'smooth',
         });
 
-        $('.moorl-merchant-finder-results li').removeClass('active');
-        $('#' + id).addClass('active');
+        $(this.el).find('.moorl-merchant-finder-results li').removeClass('active');
+        $(this.el).find('.merchant-' + id).addClass('active');
 
         this.ol.markers.eachLayer(function (layer) {
             if (layer.options.data.id === id) {
@@ -338,11 +332,6 @@ export default class MoorlMerchantFinder extends Plugin {
                     that.ol.zoom = that.ol.map.getZoom();
                 }
                 that.ol.map.flyTo(position, 16, {animate: true, duration: 1});
-                console.log(layer);
-
-                if (merchantStockModalLabel !== false) {
-                    merchantStockModalLabel.innerHTML = layer.getPopup()._content;
-                }
             }
         });
     }

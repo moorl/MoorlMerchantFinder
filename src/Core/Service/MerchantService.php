@@ -295,6 +295,10 @@ class MerchantService
 
     public function patchLineItem(LineItem $lineItem, Cart $cart, Criteria $criteria, bool $retry = true): void
     {
+        if ($this->systemConfigService->get('MoorlMerchantStock.config.onlyAvailability')) {
+            return;
+        }
+
         $productRepo = $this->definitionInstanceRegistry->getRepository('product');
 
         $productId = $lineItem->getReferencedId();

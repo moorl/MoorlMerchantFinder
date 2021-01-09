@@ -1,5 +1,8 @@
 {
     "moorl-merchant-finder": {
+        "productAvailability": "Product availability",
+        "checkAvailability": "Check availability",
+        "close": "Close",
         "available": "Available",
         "stockInfo": "Stock information",
         "deliveryTime": "Delivery time",
