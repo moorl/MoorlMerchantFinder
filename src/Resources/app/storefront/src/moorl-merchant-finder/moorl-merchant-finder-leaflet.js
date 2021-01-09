@@ -34,12 +34,6 @@ export default class MoorlMerchantFinder extends Plugin {
             this._resizeMap = true;
         }
 
-        if (this.el.dataset.defaultMarker) {
-            this._defaultMarker = JSON.parse(this.el.dataset.defaultMarker);
-        } else {
-            this._defaultMarker = {};
-        }
-
         this._options = {
             'foo': 'bar'
         };
@@ -226,23 +220,35 @@ export default class MoorlMerchantFinder extends Plugin {
         // add features
         this._reponse.data.forEach(function (item) {
             if (item.locationLon != null) {
-                let iconOptions = that._defaultMarker;
-                let markerOptions = {data: item};
+                let iconOptions = {};
+                let markerOptions = { data: item };
 
-                if (item.markerSettings != null) {
-                    iconOptions = JSON.parse(item.markerSettings);
-                }
+                if (item.marker != null) {
+                    if (item.marker.markerSettings != null) {
+                        iconOptions = {
+                            iconSize: [item.marker.markerSettings.iconSizeX, item.marker.markerSettings.iconSizeY],
+                            shadowSize: [item.marker.markerSettings.shadowSizeX, item.marker.markerSettings.shadowSizeY],
+                            iconAnchor: [item.marker.markerSettings.iconAnchorX, item.marker.markerSettings.iconAnchorY],
+                            shadowAnchor: [item.marker.markerSettings.shadowAnchorX, item.marker.markerSettings.shadowAnchorY],
+                            popupAnchor: [item.marker.markerSettings.popupAnchorX, item.marker.markerSettings.popupAnchorY]
+                        }
+                    }
 
-                if (item.markerShadow) {
-                    iconOptions.shadowUrl = item.markerShadow.url;
-                }
+                    if (item.marker.markerShadow) {
+                        iconOptions.shadowUrl = item.marker.markerShadow.url;
+                    }
 
-                if (item.marker) {
-                    iconOptions.iconUrl = item.marker.url;
-                }
+                    if (item.marker.markerRetina) {
+                        iconOptions.iconRetinaUrl = item.marker.markerRetina.url;
+                    }
 
-                if (iconOptions) {
-                    markerOptions.icon = L.icon(iconOptions);
+                    if (item.marker.marker) {
+                        iconOptions.iconUrl = item.marker.marker.url;
+                    }
+
+                    if (iconOptions) {
+                        markerOptions.icon = L.icon(iconOptions);
+                    }
                 }
 
                 minLat = item.locationLat < minLat ? item.locationLat : minLat;

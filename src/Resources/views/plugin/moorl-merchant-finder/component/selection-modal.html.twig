@@ -10,55 +10,11 @@
     {% set tileLayerCopy = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>' %}
 {% endif %}
 
-{% if shopware.config.MoorlMerchantFinder.config.markerCustom %}
-    {# Gathering media #}
-    {% set defaultMarkerMediaIds = [] %}
-    {% if shopware.config.MoorlMerchantFinder.config.iconUrl %}
-        {% set defaultMarkerMediaIds = defaultMarkerMediaIds|merge([shopware.config.MoorlMerchantFinder.config.iconUrl]) %}
-    {% endif %}
-    {% if shopware.config.MoorlMerchantFinder.config.iconRetinaUrl %}
-        {% set defaultMarkerMediaIds = defaultMarkerMediaIds|merge([shopware.config.MoorlMerchantFinder.config.iconRetinaUrl]) %}
-    {% endif %}
-    {% if shopware.config.MoorlMerchantFinder.config.shadowUrl %}
-        {% set defaultMarkerMediaIds = defaultMarkerMediaIds|merge([shopware.config.MoorlMerchantFinder.config.shadowUrl]) %}
-    {% endif %}
-    {% set mediaCollection = searchMedia(defaultMarkerMediaIds, context.context) %}
-
-    {% set defaultMarker = {
-        iconUrl: mediaCollection.get(shopware.config.MoorlMerchantFinder.config.iconUrl).url,
-        iconRetinaUrl: mediaCollection.get(shopware.config.MoorlMerchantFinder.config.iconRetinaUrl).url,
-        shadowUrl: mediaCollection.get(shopware.config.MoorlMerchantFinder.config.shadowUrl).url,
-        iconSize: [
-            shopware.config.MoorlMerchantFinder.config.iconSizeX,
-            shopware.config.MoorlMerchantFinder.config.iconSizeY
-        ],
-        shadowSize: [
-            shopware.config.MoorlMerchantFinder.config.shadowSizeX,
-            shopware.config.MoorlMerchantFinder.config.shadowSizeY
-        ],
-        iconAnchor: [
-            shopware.config.MoorlMerchantFinder.config.iconAnchorX,
-            shopware.config.MoorlMerchantFinder.config.iconAnchorY
-        ],
-        shadowAnchor: [
-            shopware.config.MoorlMerchantFinder.config.shadowAnchorX,
-            shopware.config.MoorlMerchantFinder.config.shadowAnchorY
-        ],
-        popupAnchor: [
-            shopware.config.MoorlMerchantFinder.config.popupAnchorX,
-            shopware.config.MoorlMerchantFinder.config.popupAnchorY
-        ]
-    } %}
-{% else %}
-    {% set defaultMarker = null %}
-{% endif %}
-
 <div class="modal fade" id="{{ element.config.id.value }}" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-xl cms-element-moorl-merchant-finder"
          role="document"
          data-tile-layer-url="{{ tileLayerUrl|raw }}"
          data-tile-layer-copy='{{ tileLayerCopy|raw }}'
-         data-default-marker='{{ defaultMarker|json_encode|raw }}'
          data-search-params="{{ shopware.config.MoorlMerchantFinder.config.searchParams }}"
          data-position-request="{{ shopware.config.MoorlMerchantFinder.config.positionRequest }}"
          style="--style-height: 60vh;--style-gutter: 10px;--style-results-width: 400px;">

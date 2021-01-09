@@ -51,6 +51,7 @@ class MoorlMerchantFinder extends Plugin
         $foundation->setContext($context->getContext());
 
         $foundation->dropTables([
+            'moorl_merchant_marker',
             'moorl_merchant_customer',
             'moorl_merchant_stock',
             'moorl_merchant_tag',

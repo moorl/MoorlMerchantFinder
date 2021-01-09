@@ -4,6 +4,7 @@ namespace Moorl\MerchantFinder\Core\Content\Merchant;
 
 use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantStock\MerchantStockDefinition;
 use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantTranslation\MerchantTranslationDefinition;
+use Moorl\MerchantFinder\Core\Content\Marker\MarkerDefinition;
 use MoorlFoundation\Core\Framework\DataAbstractionLayer\Field\DistanceField;
 use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantCategory\MerchantCategoryDefinition;
 use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantProductManufacturer\MerchantProductManufacturerDefinition;
@@ -87,11 +88,9 @@ class MerchantDefinition extends EntityDefinition
             new FkField('country_id', 'countryId', CountryDefinition::class),
             new FkField('customer_group_id', 'customerGroupId', CustomerGroupDefinition::class),
             new FkField('media_id', 'mediaId', MediaDefinition::class),
-            new FkField('marker_id', 'markerId', MediaDefinition::class),
-            new FkField('marker_shadow_id', 'markerShadowId', MediaDefinition::class),
+            new FkField('moorl_merchant_marker_id', 'markerId', MarkerDefinition::class),
             new FkField('cms_page_id', 'cmsPageId', CmsPageDefinition::class),
 
-            (new StringField('marker_settings', 'markerSettings')),
             (new StringField('first_name', 'firstName'))->addFlags(new EditField('text')),
             (new StringField('last_name', 'lastName'))->addFlags(new EditField('text')),
             (new StringField('title', 'title'))->addFlags(new EditField('text')),
@@ -120,8 +119,7 @@ class MerchantDefinition extends EntityDefinition
             new JsonField('data', 'data'),
 
             (new ManyToOneAssociationField('media', 'media_id', MediaDefinition::class, 'id', true))->addFlags(new EditField(), new LabelProperty('fileName')),
-            (new ManyToOneAssociationField('marker', 'marker_id', MediaDefinition::class, 'id', false))->addFlags(new EditField(), new LabelProperty('fileName')),
-            (new ManyToOneAssociationField('markerShadow', 'marker_shadow_id', MediaDefinition::class, 'id', false))->addFlags(new EditField(), new LabelProperty('fileName')),
+            (new ManyToOneAssociationField('marker', 'moorl_merchant_marker_id', MarkerDefinition::class, 'id', true)),
             (new ManyToOneAssociationField('salesChannel', 'sales_channel_id', SalesChannelDefinition::class, 'id', false))->addFlags(new EditField(), new LabelProperty('name')),
             (new ManyToOneAssociationField('customerGroup', 'customer_group_id', CustomerGroupDefinition::class, 'id', false))->addFlags(new EditField(), new LabelProperty('name')),
             (new ManyToOneAssociationField('cmsPage', 'cms_page_id', CmsPageDefinition::class, 'id', false))->addFlags(new EditField(), new LabelProperty('name')),

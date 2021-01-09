@@ -5,6 +5,7 @@ namespace Moorl\MerchantFinder\Core\Content\Merchant;
 use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantCustomer\MerchantCustomerCollection;
 use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantStock\MerchantStockCollection;
 use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantStock\MerchantStockEntity;
+use Moorl\MerchantFinder\Core\Content\Marker\MarkerEntity;
 use Moorl\MerchantFinder\Core\Content\OpeningHour\OpeningHourCollection;
 use Shopware\Core\Checkout\Customer\CustomerEntity;
 use Shopware\Core\Content\Cms\CmsPageEntity;
@@ -94,7 +95,7 @@ class MerchantEntity extends Entity
      */
     protected $markerId;
     /**
-     * @var MediaEntity|null
+     * @var MarkerEntity|null
      */
     protected $marker;
     /**
@@ -647,17 +648,17 @@ class MerchantEntity extends Entity
     }
 
     /**
-     * @return MediaEntity|null
+     * @return MarkerEntity|null
      */
-    public function getMarker(): ?MediaEntity
+    public function getMarker(): ?MarkerEntity
     {
         return $this->marker;
     }
 
     /**
-     * @param MediaEntity|null $marker
+     * @param MarkerEntity|null $marker
      */
-    public function setMarker(?MediaEntity $marker): void
+    public function setMarker(?MarkerEntity $marker): void
     {
         $this->marker = $marker;
     }

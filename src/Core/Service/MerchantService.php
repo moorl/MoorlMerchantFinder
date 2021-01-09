@@ -7,6 +7,7 @@ use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\ParameterType;
 use GuzzleHttp\Client;
 use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantStock\MerchantStockEntity;
+use Moorl\MerchantFinder\Core\Content\Marker\MarkerCollection;
 use MoorlFoundation\Core\Framework\DataAbstractionLayer\Search\Sorting\DistanceFieldSorting;
 use Moorl\MerchantFinder\Core\Content\Merchant\MerchantEntity;
 use Moorl\MerchantFinder\Core\Content\OpeningHourCollection;
@@ -88,6 +89,10 @@ class MerchantService
      * @var RequestStack
      */
     private $requestStack;
+    /**
+     * @var MarkerCollection
+     */
+    private $markers;
 
     public function __construct(
         RequestStack $requestStack,
@@ -168,6 +173,12 @@ class MerchantService
         }
 
         $product->addExtension('MoorlMerchantStocks', $merchantStocks);
+    }
+
+    public function initMarkers(): void
+    {
+        $repo = $this->definitionInstanceRegistry->getRepository('moorl_merchant_marker');
+        $this->markers = $repo->search(new Criteria(), $this->getContext())->getEntities();
     }
 
     public function getMerchantsByProductId(string $productId): EntityCollection
@@ -424,6 +435,40 @@ class MerchantService
         }
     }
 
+    public function addMarker(MerchantEntity $merchant, bool $stockmode = false): void
+    {
+        if (!$this->markers) {
+            $this->initMarkers();
+        }
+
+        if ($stockmode) {
+            $greenStock = $this->systemConfigService->get('MoorlMerchantStock.config.greenStock');
+            $yellowStock = $this->systemConfigService->get('MoorlMerchantStock.config.yellowStock');
+
+            if (!$merchant->getMerchantStock()) {
+                $marker = $this->systemConfigService->get('MoorlMerchantStock.config.redMarker');
+            } else if (!$merchant->getMerchantStock()->getIsStock() || $merchant->getMerchantStock()->getStock() > $greenStock) {
+                $marker = $this->systemConfigService->get('MoorlMerchantStock.config.greenMarker');
+            } else if ($merchant->getMerchantStock()->getStock() > $yellowStock) {
+                $marker = $this->systemConfigService->get('MoorlMerchantStock.config.yellowMarker');
+            } else {
+                $marker = $this->systemConfigService->get('MoorlMerchantStock.config.redMarker');
+            }
+
+            $merchant->setMarker($this->markers->get($marker));
+        } else if (!$merchant->getMarker()) {
+            if ($merchant->getType() && $marker = $this->markers->getByType($merchant->getType())) {
+                $merchant->setMarker($marker);
+            } else if ($merchant->getHighlight()) {
+                $marker = $this->systemConfigService->get('MoorlMerchantFinder.config.highlightMarker');
+                $merchant->setMarker($this->markers->get($marker));
+            } else {
+                $marker = $this->systemConfigService->get('MoorlMerchantFinder.config.defaultMarker');
+                $merchant->setMarker($this->markers->get($marker));
+            }
+        }
+    }
+
     public function getMerchants(?ArrayStruct $data = null): EntityCollection
     {
         // TODO: Remove ParameterBag
@@ -561,6 +606,10 @@ class MerchantService
 
             if ($data->get('productId')) {
                 $entity->setMerchantStock($entity->getMerchantStocks()->getByProductId($data->get('productId')));
+
+                $this->addMarker($entity, true);
+            } else {
+                $this->addMarker($entity);
             }
 
             $entity->setSeoUrl(

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/platform/master/src/Core/System/SystemConfig/Schema/config.xsd">
-
     <card>
         <title>General</title>
         <title lang="de-DE">Einstellungen</title>
@@ -162,87 +161,21 @@
     </card>
 
     <card>
-        <title>Default Marker</title>
-        <title lang="de-DE">Standard Marker</title>
+        <title>Marker settings</title>
+        <title lang="de-DE">Marker Einstellungen</title>
 
-        <input-field type="bool">
-            <name>markerCustom</name>
-            <label>Use custom marker</label>
-            <defaultValue>false</defaultValue>
-        </input-field>
-        <input-field type="int">
-            <name>iconSizeX</name>
-            <label>Icon size X</label>
-            <defaultValue>25</defaultValue>
-            <placeholder>25</placeholder>
-        </input-field>
-        <input-field type="int">
-            <name>iconSizeY</name>
-            <label>Icon size Y</label>
-            <defaultValue>41</defaultValue>
-            <placeholder>41</placeholder>
-        </input-field>
-        <input-field type="int">
-            <name>shadowSizeX</name>
-            <label>Shadow size X</label>
-            <defaultValue>41</defaultValue>
-            <placeholder>41</placeholder>
-        </input-field>
-        <input-field type="int">
-            <name>shadowSizeY</name>
-            <label>Shadow size Y</label>
-            <defaultValue>41</defaultValue>
-            <placeholder>41</placeholder>
-        </input-field>
-        <input-field type="int">
-            <name>iconAnchorX</name>
-            <label>Icon anchor X</label>
-            <defaultValue>12</defaultValue>
-            <placeholder>12</placeholder>
-        </input-field>
-        <input-field type="int">
-            <name>iconAnchorY</name>
-            <label>Icon anchor Y</label>
-            <defaultValue>41</defaultValue>
-            <placeholder>41</placeholder>
-        </input-field>
-        <input-field type="int">
-            <name>shadowAnchorX</name>
-            <label>Shadow anchor X</label>
-            <defaultValue>6</defaultValue>
-            <placeholder>6</placeholder>
-        </input-field>
-        <input-field type="int">
-            <name>shadowAnchorY</name>
-            <label>Shadow anchor Y</label>
-            <defaultValue>21</defaultValue>
-            <placeholder>21</placeholder>
-        </input-field>
-        <input-field type="int">
-            <name>popupAnchorX</name>
-            <label>Popup anchor X</label>
-            <defaultValue>1</defaultValue>
-            <placeholder>1</placeholder>
-        </input-field>
-        <input-field type="int">
-            <name>popupAnchorY</name>
-            <label>Popup anchor Y</label>
-            <defaultValue>-34</defaultValue>
-            <placeholder>-34</placeholder>
-        </input-field>
+        <component name="sw-entity-single-select">
+            <name>defaultMarker</name>
+            <entity>moorl_merchant_marker</entity>
+            <label>Default</label>
+            <label lang="de-DE">Standard</label>
+        </component>
 
-        <component name="sw-media-field">
-            <name>iconUrl</name>
-            <label>Icon</label>
-        </component>
-        <component name="sw-media-field">
-            <name>iconRetinaUrl</name>
-            <label>Icon retina</label>
-        </component>
-        <component name="sw-media-field">
-            <name>shadowUrl</name>
-            <label>Shadow</label>
+        <component name="sw-entity-single-select">
+            <name>highlightMarker</name>
+            <entity>moorl_merchant_marker</entity>
+            <label>Highlight</label>
+            <label lang="de-DE">Hervorgehoben</label>
         </component>
     </card>
-
 </config>

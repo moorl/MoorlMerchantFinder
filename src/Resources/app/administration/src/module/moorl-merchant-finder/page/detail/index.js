@@ -157,7 +157,6 @@ Component.register('moorl-merchant-finder-detail', {
     },
 
     created() {
-        console.log("1");
         this.repository = this.moorlMerchantRepository;
         this.initializeFurtherComponents();
         this.getItem();
@@ -305,14 +304,12 @@ Component.register('moorl-merchant-finder-detail', {
         },
 
         getItem() {
-            console.log("2");
             this.repository
                 .get(this.$route.params.id, Shopware.Context.api, this.defaultCriteria)
                 .then((entity) => {
                     this.item = entity;
                     this.isLoading = false;
                     this.loadOpeningHours();
-                    console.log("3");
                 });
         },
 
