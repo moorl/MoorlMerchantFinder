@@ -1,7 +1,9 @@
 import template from './index.html.twig';
+import L from "leaflet";
 
 const { Component, Mixin, StateDeprecated, Context } = Shopware;
 const { Criteria, EntityCollection } = Shopware.Data;
+const { mapApiErrors } = Shopware.Component.getComponentHelper();
 const utils = Shopware.Utils;
 
 Component.register('moorl-merchant-marker-detail', {
@@ -26,6 +28,10 @@ Component.register('moorl-merchant-marker-detail', {
     data() {
         return {
             item: null,
+            mapItem: null,
+            markerItem: null,
+            markerItems: null,
+            coord: [52.5173, 13.4020],
             isLoading: false,
             processSuccess: false,
             uploadTagMarker: utils.createId(),
@@ -35,6 +41,8 @@ Component.register('moorl-merchant-marker-detail', {
     },
 
     computed: {
+        ...mapApiErrors('item', ['name']),
+
         repository() {
             return this.repositoryFactory.create('moorl_merchant_marker');
         },
@@ -78,6 +86,13 @@ Component.register('moorl-merchant-marker-detail', {
 
     created() {
         this.getItem();
+    },
+
+    mounted() {
+        const that = this;
+        setTimeout(function () {
+            that.drawMap();
+        }, 3000);
     },
 
     methods: {
@@ -163,6 +178,73 @@ Component.register('moorl-merchant-marker-detail', {
         },
         onUnlinkMarkerShadow() {
             this.item.markerShadowId = null;
+        },
+
+        drawMap() {
+            const that = this;
+            let coord = [52.5173, 13.4020];
+
+            this.mapItem = L.map(this.$refs['embedMap'], {
+                center: this.coord,
+                zoom: 16
+            });
+
+            L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
+            }).addTo(this.mapItem);
+        },
+
+        markerPreview() {
+            let iconOptions = {
+                shadowUrl: this.item.markerShadow ? this.item.markerShadow.url : null,
+                iconRetinaUrl: this.item.markerRetina ? this.item.markerRetina.url : null,
+                iconUrl: this.item.marker ? this.item.marker.url : null,
+                iconSize: [
+                    this.item.markerSettings.iconSizeX,
+                    this.item.markerSettings.iconSizeY
+                ],
+                shadowSize: [
+                    this.item.markerSettings.shadowSizeX,
+                    this.item.markerSettings.shadowSizeY
+                ],
+                iconAnchor: [
+                    this.item.markerSettings.iconAnchorX,
+                    this.item.markerSettings.iconAnchorY
+                ],
+                shadowAnchor: [
+                    this.item.markerSettings.shadowAnchorX,
+                    this.item.markerSettings.shadowAnchorY
+                ],
+                popupAnchor: [
+                    this.item.markerSettings.popupAnchorX,
+                    this.item.markerSettings.popupAnchorY
+                ]
+            };
+
+            console.log(iconOptions);
+
+            const featureMarker = [];
+
+            featureMarker.push(
+                L.marker(this.coord, { icon: L.icon(iconOptions) })
+                    .bindPopup('<p><b>Lorem Ipsum GmbH</b><br>123 Musterstraße<br>12345 Musterstadt</p>', {
+                        autoPan: false,
+                        autoClose: true
+                    })
+                    .on('click', function () {
+                        this.markerItems.eachLayer(function (layer) {
+                            if (!layer.getPopup().isOpen()) {
+                                layer.openPopup();
+                            }
+                        });
+                    })
+            );
+
+            if (this.markerItems) {
+                this.markerItems.clearLayers();
+            }
+
+            this.markerItems = L.layerGroup(featureMarker).addTo(this.mapItem);
         }
     }
 });

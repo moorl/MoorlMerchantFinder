@@ -18,7 +18,10 @@
         <sw-card-view>
             <sw-card v-if="item" :isLoading="isLoading" :title="$t('moorl-foundation.label.generalCard')">
                 <sw-field :label="$t('moorl-foundation.properties.name')"
-                          v-model="item.name"></sw-field>
+                          v-model="item.name"
+                          required
+                          validation="required"
+                          :error="itemNameError"></sw-field>
 
                 <sw-field :label="$t('moorl-foundation.properties.type')"
                           :helpText="$t('moorl-merchant-finder.tooltips.type')"
@@ -95,16 +98,30 @@
                     </label>
                 </div>
 
-                <sw-field type="number" label="iconSizeX" v-model="item.markerSettings.iconSizeX"></sw-field>
-                <sw-field type="number" label="iconSizeY" v-model="item.markerSettings.iconSizeY"></sw-field>
-                <sw-field type="number" label="shadowSizeX" v-model="item.markerSettings.shadowSizeX"></sw-field>
-                <sw-field type="number" label="shadowSizeY" v-model="item.markerSettings.shadowSizeY"></sw-field>
-                <sw-field type="number" label="iconAnchorX" v-model="item.markerSettings.iconAnchorX"></sw-field>
-                <sw-field type="number" label="iconAnchorY" v-model="item.markerSettings.iconAnchorY"></sw-field>
-                <sw-field type="number" label="shadowAnchorX" v-model="item.markerSettings.shadowAnchorX"></sw-field>
-                <sw-field type="number" label="shadowAnchorY" v-model="item.markerSettings.shadowAnchorY"></sw-field>
-                <sw-field type="number" label="popupAnchorX" v-model="item.markerSettings.popupAnchorX"></sw-field>
-                <sw-field type="number" label="popupAnchorY" v-model="item.markerSettings.popupAnchorY"></sw-field>
+                <sw-container columns="1fr 1fr" gap="0 20px">
+                    <sw-field type="number" label="iconSizeX" v-model="item.markerSettings.iconSizeX"></sw-field>
+                    <sw-field type="number" label="iconSizeY" v-model="item.markerSettings.iconSizeY"></sw-field>
+                    <sw-field type="number" label="shadowSizeX" v-model="item.markerSettings.shadowSizeX"></sw-field>
+                    <sw-field type="number" label="shadowSizeY" v-model="item.markerSettings.shadowSizeY"></sw-field>
+                    <sw-field type="number" label="iconAnchorX" v-model="item.markerSettings.iconAnchorX"></sw-field>
+                    <sw-field type="number" label="iconAnchorY" v-model="item.markerSettings.iconAnchorY"></sw-field>
+                    <sw-field type="number" label="shadowAnchorX" v-model="item.markerSettings.shadowAnchorX"></sw-field>
+                    <sw-field type="number" label="shadowAnchorY" v-model="item.markerSettings.shadowAnchorY"></sw-field>
+                    <sw-field type="number" label="popupAnchorX" v-model="item.markerSettings.popupAnchorX"></sw-field>
+                    <sw-field type="number" label="popupAnchorY" v-model="item.markerSettings.popupAnchorY"></sw-field>
+                </sw-container>
+            </sw-card>
+
+            <sw-card v-if="item" :isLoading="isLoading" :title="$t('moorl-foundation.properties.preview')">
+                <div class="sw-field">
+                    <sw-button @click="markerPreview">
+                        {{ $t('moorl-foundation.buttons.refreshPreview') }}
+                    </sw-button>
+                </div>
+
+                <div class="sw-field">
+                    <div id="embedMap" ref="embedMap" style="height:400px;"></div>
+                </div>
             </sw-card>
         </sw-card-view>
     </template>

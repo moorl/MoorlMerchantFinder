@@ -32,6 +32,10 @@
                 detailRoute="moorl.merchant.marker.detail"
                 @select-item="updateSelection"
                 @update-records="updateTotal">
+            <template #preview-name="{ item }">
+                <sw-media-preview-v2 :source="item.marker"></sw-media-preview-v2>
+            </template>
+
             <template #more-actions="{ item }">
                 <sw-context-menu-item @click="onDuplicate(item)">
                     {{ $tc('sw-product.list.buttonDuplicate') }}
