@@ -24,6 +24,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\NotFilter;
@@ -196,6 +197,8 @@ class MerchantService
 
     public function getMerchantStock(string $merchantStockId): ?MerchantStockEntity
     {
+        // TODO: Add event to ERP interface to live-update stock information by product and merchant
+
         return $this->definitionInstanceRegistry
             ->getRepository('moorl_merchant_stock')
             ->search((new Criteria([$merchantStockId]))->addAssociation('merchant'), $this->getContext())
@@ -519,7 +522,6 @@ class MerchantService
         $criteria->addAssociation('customers');
         $criteria->addAssociation('media');
         $criteria->addAssociation('marker');
-        $criteria->addAssociation('markerShadow');
         $criteria->addFilter(new EqualsFilter('active', true));
 
         if ($data->get('countryCode')) {
@@ -546,7 +548,8 @@ class MerchantService
         }
 
         if ($data->get('type')) {
-            $criteria->addFilter(new EqualsFilter('type', $data->get('type')));
+            $types = explode(',', $data->get('type'));
+            $criteria->addFilter(new EqualsAnyFilter('type', $types));
         }
 
         if ($data->get('search')) {
@@ -590,8 +593,6 @@ class MerchantService
         $this->addSalesChannelCriteria($criteria);
 
         $resultData = $this->repository->search($criteria, $context);
-
-        //dump($resultData);exit;
 
         /* @var $entity MerchantEntity */
         foreach ($resultData->getEntities() as $entity) {
