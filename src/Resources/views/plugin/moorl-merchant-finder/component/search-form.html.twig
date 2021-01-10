@@ -137,6 +137,16 @@
                         {% endfor %}
                     {% endif %}
                 {% endblock %}
+            {% elseif element.config.initiator.value == 'merchant-stock' %}
+                {% block element_moorl_merchant_finder_form_inner_additional_stock %}
+                    {% if shopware.config.MoorlMerchantStock.config.searchRules %}
+                        {% for rule in shopware.config.MoorlMerchantStock.config.searchRules %}
+                            <input type="hidden"
+                                   name="rules[]"
+                                   value="{{ rule }}">
+                        {% endfor %}
+                    {% endif %}
+                {% endblock %}
             {% else %}
                 {% block element_moorl_merchant_finder_form_inner_additional_default %}
                     {% if shopware.config.MoorlMerchantFinder.config.searchRules %}
