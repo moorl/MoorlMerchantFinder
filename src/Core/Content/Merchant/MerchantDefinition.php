@@ -25,6 +25,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\BoolField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\CustomFields;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\FkField;
+use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\Computed;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\Runtime;
@@ -135,7 +136,7 @@ class MerchantDefinition extends EntityDefinition
 
             new TranslationsAssociationField(MerchantTranslationDefinition::class, 'moorl_merchant_id'),
 
-            (new DistanceField('distance', 'location_lat', 'location_lon'))->addFlags(new Runtime()),
+            (new DistanceField('distance', 'location_lat', 'location_lon'))->addFlags(new Computed()),
         ]);
     }
 }

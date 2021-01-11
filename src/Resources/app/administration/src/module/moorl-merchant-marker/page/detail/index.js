@@ -76,8 +76,8 @@ Component.register('moorl-merchant-marker-detail', {
                 shadowSizeY: 41,
                 iconAnchorX: 12,
                 iconAnchorY: 41,
-                shadowAnchorX: 6,
-                shadowAnchorY: 21,
+                shadowAnchorX: 11,
+                shadowAnchorY: 41,
                 popupAnchorX: 1,
                 popupAnchorY: -34
             };
@@ -115,7 +115,7 @@ Component.register('moorl-merchant-marker-detail', {
                 }).catch((exception) => {
                 this.isLoading = false;
                 this.createNotificationError({
-                    title: this.$t('moorl-foundation.notification.saveError'),
+                    title: this.$t('moorl-foundation.notification.errorTitle'),
                     message: exception
                 });
             });
@@ -227,7 +227,7 @@ Component.register('moorl-merchant-marker-detail', {
 
             featureMarker.push(
                 L.marker(this.coord, { icon: L.icon(iconOptions) })
-                    .bindPopup('<p><b>Lorem Ipsum GmbH</b><br>123 Musterstraße<br>12345 Musterstadt</p>', {
+                    .bindPopup('<p><b>Lorem Ipsum GmbH</b><br>Musterstraße 1<br>12345 Musterstadt</p>', {
                         autoPan: false,
                         autoClose: true
                     })
