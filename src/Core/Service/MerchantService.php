@@ -13,6 +13,8 @@ use Moorl\MerchantFinder\Core\Content\Merchant\MerchantEntity;
 use Moorl\MerchantFinder\Core\Content\OpeningHourCollection;
 use Moorl\MerchantFinder\MoorlMerchantFinder;
 use Moorl\MerchantFinder\Core\Event\MerchantsLoadedEvent;
+use Moorl\MerchantFinder\GeoLocation\BoundingBox;
+use Moorl\MerchantFinder\GeoLocation\GeoPoint;
 use Shopware\Core\Checkout\Cart\Cart;
 use Shopware\Core\Checkout\Cart\LineItem\LineItem;
 use Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemEntity;
@@ -498,11 +500,34 @@ class MerchantService
             }
 
             if ($this->myLocation && count($this->myLocation) > 0) {
+
                 $context->addExtension('DistanceField', new ArrayStruct($this->myLocation[0]));
 
                 $criteria = new Criteria();
                 $criteria->addSorting(new FieldSorting('distance'));
+
                 $criteria->addFilter(new RangeFilter('distance', ['lte' => $distance]));
+
+                $geopoint = new GeoPoint(
+                    (float) $this->myLocation[0]['lat'],
+                    (float) $this->myLocation[0]['lon']
+                );
+
+                /* @var $boundingBox BoundingBox */
+                $boundingBox = $geopoint->boundingBox($distance, 'km');
+
+                $criteria->addFilter(
+                    new RangeFilter('locationLat', [
+                        'gte' => $boundingBox->getMinLatitude(),
+                        'lte' => $boundingBox->getMaxLatitude()
+                    ])
+                );
+                $criteria->addFilter(
+                    new RangeFilter('locationLon', [
+                        'lte' => $boundingBox->getMaxLongitude(),
+                        'gte' => $boundingBox->getMinLongitude()
+                    ])
+                );
             } else {
                 $criteria = new Criteria();
                 $criteria->addSorting(new FieldSorting('priority', FieldSorting::DESCENDING));
