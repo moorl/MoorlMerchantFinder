@@ -2,8 +2,11 @@
 
 namespace Moorl\MerchantFinder\GeoLocation\Interfaces;
 
-interface Polygon {
-  public $coordinates = array();
-  __construct(array $array) {}
-  surroundsGeoPoint(GeoPoint) {}
+use Moorl\MerchantFinder\GeoLocation\GeoPoint;
+
+interface Polygon
+{
+    public function __construct($array);
+
+    public function surroundsGeoPoint();
 }
