@@ -1,5 +1,8 @@
 {
     "moorl-merchant-finder": {
+        "productNotAvailable": "Product not available. Please contact the shop support for more information.",
+        "noMerchantSelected": "Product not available. No merchant selected.",
+        "outOfStock": "Product not available. Your selected merchant do not have this product in stock.",
         "productAvailability": "Product availability",
         "checkAvailability": "Check availability",
         "close": "Close",

@@ -21,6 +21,7 @@ use Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemEntity;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Content\Product\ProductEntity;
 use Shopware\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
+use Shopware\Core\Framework\Adapter\Translation\Translator;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
@@ -96,6 +97,10 @@ class MerchantService
      * @var MarkerCollection
      */
     private $markers;
+    /*
+     * @var Translator
+     */
+    private $translator;
 
     public function __construct(
         RequestStack $requestStack,
@@ -106,7 +111,8 @@ class MerchantService
         Connection $connection,
         Session $session,
         EventDispatcherInterface $eventDispatcher,
-        SeoUrlPlaceholderHandlerInterface $seoUrlReplacer
+        SeoUrlPlaceholderHandlerInterface $seoUrlReplacer,
+        Translator $translator
     )
     {
         $this->requestStack = $requestStack;
@@ -118,6 +124,7 @@ class MerchantService
         $this->session = $session;
         $this->eventDispatcher = $eventDispatcher;
         $this->seoUrlReplacer = $seoUrlReplacer;
+        $this->translator = $translator;
     }
 
     /**
@@ -330,7 +337,7 @@ class MerchantService
 
         if (!$product) {
             $cart->remove($lineItem->getId());
-            $this->session->getFlashBag()->add('danger', 'Product not available. Please contact support.');
+            $this->session->getFlashBag()->add('danger', $this->translator->trans('moorl-merchant-finder.productNotAvailable'));
             return;
         }
 
@@ -380,7 +387,14 @@ class MerchantService
             if (!$merchantStock) {
                 // no
                 $cart->remove($lineItem->getId());
-                $this->session->getFlashBag()->add('danger', 'Please select a merchant');
+                $this->session->getFlashBag()->add('danger', $this->translator->trans('moorl-merchant-finder.noMerchantSelected'));
+                return;
+            }
+
+            // Product out of Stock?
+            if ($merchantStock->getIsStock() && $merchantStock->getStock() < 1 && $this->systemConfigService->get('MoorlMerchantStock.config.disableOnNoStock')) {
+                $cart->remove($lineItem->getId());
+                $this->session->getFlashBag()->add('danger', $this->translator->trans('moorl-merchant-finder.outOfStock'));
                 return;
             }
 
