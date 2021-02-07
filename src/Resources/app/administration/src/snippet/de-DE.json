@@ -12,7 +12,7 @@
             "placeholderSearchBar": "Search for merchants"
         },
         "tooltips": {
-            "type": "Use this type variable to use different places on different category pages. You can set the type-filter at the CMS element."
+            "type": "Nutze den Typ um unterschieldiche Händler in mehrere Kategorien zu unterteilen. Der Filter lässt sich im Einkaufswelten Element definieren."
         },
         "importAssistant": {
             "title": "Import Assistent",

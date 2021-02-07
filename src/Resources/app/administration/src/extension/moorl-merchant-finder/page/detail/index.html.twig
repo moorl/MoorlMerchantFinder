@@ -3,11 +3,6 @@
              :title="$tc('moorl-foundation.label.stockCard')"
              :isLoading="isLoading"
              class="moorl-entity-grid">
-        <sw-alert variant="warning"
-                  style="margin: 0; border-bottom-left-radius: 0; border-bottom-right-radius: 0">
-            {{ $t('moorl-foundation.pluginBetaInfo', { plugin: 'moori Merchant Warehouse'}) }}
-        </sw-alert>
-
         <moorl-entity-grid entity="moorl_merchant_stock"
                            :isLoading="isLoading"
                            :criteria="merchantStockCriteria"
