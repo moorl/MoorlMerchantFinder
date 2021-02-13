@@ -98,7 +98,7 @@ SELECT
 FROM `moorl_merchant`
 RIGHT JOIN `moorl_merchant_product_manufacturer` ON `moorl_merchant`.`id` = `moorl_merchant_product_manufacturer`.`moorl_merchant_id`
 RIGHT JOIN `product_manufacturer_translation` ON `moorl_merchant_product_manufacturer`.`product_manufacturer_id` = `product_manufacturer_translation`.`product_manufacturer_id`
-WHERE `moorl_merchant`.`active` IS TRUE 
+WHERE `moorl_merchant`.`active` IS TRUE AND LOWER(HEX(`product_manufacturer_translation`.`language_id`)) = :languageId
 GROUP BY `product_manufacturer_translation`.`product_manufacturer_id`
 ORDER BY `product_manufacturer_translation`.`name` ASC;
 SQL;
