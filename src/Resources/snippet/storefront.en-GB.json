@@ -1,5 +1,6 @@
 {
     "moorl-merchant-finder": {
+        "pickupDateSet": "Pick up time has been set",
         "desiredDate": "Desired pick up date",
         "desiredTime": "Desired pick up time",
         "commentToMerchant": "Send a comment to the merchant",

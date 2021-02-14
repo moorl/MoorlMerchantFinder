@@ -1,7 +1,8 @@
 {
     "moorl-merchant-finder": {
+        "pickupDateSet": "Abholzeit wurde gespeichert",
         "desiredDate": "Wunsch Abholdatum",
-        "desiredTime": "Wunsch-Abholzeit",
+        "desiredTime": "Wunsch Abholzeit",
         "commentToMerchant": "Verfassen Sie einen Kommentar an den Fachhändler",
         "productNotAvailable": "Produkt nicht verfügbar. Bitte kontaktieren Sie den Shop-Support für weitere Informationen.",
         "noMerchantSelected": "Produkt nicht verfügbar. Kein Händler ausgewählt.",
