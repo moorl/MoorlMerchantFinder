@@ -94,11 +94,13 @@
                 <sw-field :label="$t('moorl-foundation.properties.zipcode')" v-model="item.zipcode"></sw-field>
                 <sw-field :label="$t('moorl-foundation.properties.city')" v-model="item.city"></sw-field>
 
-                <sw-single-select :label="$t('moorl-foundation.properties.country')"
-                                  :options="countries"
-                                  valueProperty="iso"
-                                  labelProperty="name"
-                                  v-model="item.countryCode"></sw-single-select>
+                <sw-single-select
+                        v-if="countries"
+                        :label="$t('moorl-foundation.properties.country')"
+                        :options="countries"
+                        valueProperty="iso"
+                        labelProperty="name"
+                        v-model="item.countryCode"></sw-single-select>
             </sw-card>
 
             <sw-card v-if="item" :isLoading="isLoading" :title="$t('moorl-foundation.label.contactPersonCard')">
@@ -151,7 +153,7 @@
                 </sw-data-grid>
             </sw-card>
 
-            <sw-card :isLoading="isLoading" :title="$t('moorl-foundation.label.relationsCard')">
+            <sw-card v-if="item" :isLoading="isLoading" :title="$t('moorl-foundation.label.relationsCard')">
                 <sw-entity-single-select
                         :label="$t('moorl-foundation.properties.salesChannelId')"
                         entity="sales_channel"
@@ -191,7 +193,7 @@
                 </sw-entity-multi-select-->
             </sw-card>
 
-            <sw-card :isLoading="isLoading"
+            <sw-card v-if="item" :isLoading="isLoading"
                      :title="$t('global.entities.customer')"
                      class="moorl-entity-grid">
                 <moorl-entity-grid entity="moorl_merchant_customer"
@@ -202,7 +204,7 @@
                 </moorl-entity-grid>
             </sw-card>
 
-            <sw-card :isLoading="isLoading" :title="$t('moorl-foundation.label.locationCard')">
+            <sw-card v-if="item" :isLoading="isLoading" :title="$t('moorl-foundation.label.locationCard')">
                 <div class="sw-field">
                     <sw-button @click="getPositionByAddress">
                         {{ $t('moorl-foundation.buttons.getLocButtonText') }}
@@ -228,7 +230,7 @@
                 </sw-container>
             </sw-card>
 
-            <sw-card :isLoading="isLoading" :title="$t('moorl-foundation.label.markerCard')">
+            <sw-card v-if="item" :isLoading="isLoading" :title="$t('moorl-foundation.label.markerCard')">
                 <sw-entity-single-select
                         :label="$t('moorl-foundation.properties.markerId')"
                         entity="moorl_merchant_marker"

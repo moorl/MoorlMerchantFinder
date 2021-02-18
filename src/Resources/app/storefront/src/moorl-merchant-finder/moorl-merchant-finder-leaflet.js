@@ -54,6 +54,18 @@ export default class MoorlMerchantFinder extends Plugin {
 
         this._form.addEventListener('submit', this._formSubmit.bind(this));
 
+        if (this.ol && this.ol.map) {
+            const map = this.ol.map;
+
+            map.on('click', function () {
+                if (map.scrollWheelZoom.enabled()) {
+                    map.scrollWheelZoom.disable();
+                } else {
+                    map.scrollWheelZoom.enable();
+                }
+            });
+        }
+
         $(this.el).on('change', 'input[type=checkbox]', function () {
             const button = that._form.querySelector("[type=submit]");
             button.click();
@@ -136,8 +148,6 @@ export default class MoorlMerchantFinder extends Plugin {
     }
 
     _formSubmit(event) {
-        console.log(event);
-
         if (typeof event != 'undefined') {
             event.preventDefault();
         }
@@ -345,7 +355,9 @@ export default class MoorlMerchantFinder extends Plugin {
     _buildMap() {
         this.ol = {};
         this.ol.markers = L.layerGroup([]);
-        this.ol.map = L.map(this._mapElement, {});
+        this.ol.map = L.map(this._mapElement, {
+            scrollWheelZoom: false
+        });
         L.tileLayer(this.el.dataset.tileLayerUrl, {attribution: this.el.dataset.tileLayerCopy}).addTo(this.ol.map);
     }
 }
