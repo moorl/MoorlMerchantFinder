@@ -1286,4 +1286,30 @@ class MerchantEntity extends Entity
     {
         $this->countryCode = $countryCode;
     }
+
+    public function getAddressPlain(): ?string
+    {
+        if ($this->company) {
+            return sprintf(
+                "%s\n%s %s\n%s-%s %s",
+                $this->company,
+                $this->street,
+                $this->streetNumber,
+                $this->countryCode,
+                $this->zipcode,
+                $this->city
+            );
+        }
+
+        return null;
+    }
+
+    public function getAddressHTML(): ?string
+    {
+        if ($this->company) {
+            return sprintf('<p>%s</p>', nl2br($this->getAddressPlain()));
+        }
+
+        return null;
+    }
 }
