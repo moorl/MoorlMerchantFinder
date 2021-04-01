@@ -231,14 +231,6 @@ class MerchantEntity extends Entity
      */
     protected $merchantUrl;
     /**
-     * @var string|null
-     */
-    protected $description;
-    /**
-     * @var string|null
-     */
-    protected $openingHours;
-    /**
      * @var float|null
      */
     protected $locationLat;
@@ -1173,38 +1165,6 @@ class MerchantEntity extends Entity
     public function setMerchantUrl(?string $merchantUrl): void
     {
         $this->merchantUrl = $merchantUrl;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    /**
-     * @param string|null $description
-     */
-    public function setDescription(?string $description): void
-    {
-        $this->description = $description;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getOpeningHours(): ?string
-    {
-        return $this->openingHours;
-    }
-
-    /**
-     * @param string|null $openingHours
-     */
-    public function setOpeningHours(?string $openingHours): void
-    {
-        $this->openingHours = $openingHours;
     }
 
     /**

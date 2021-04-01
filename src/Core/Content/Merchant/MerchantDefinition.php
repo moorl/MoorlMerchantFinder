@@ -2,20 +2,19 @@
 
 namespace Moorl\MerchantFinder\Core\Content\Merchant;
 
+use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantCategory\MerchantCategoryDefinition;
+use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantCustomer\MerchantCustomerDefinition;
+use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantProductManufacturer\MerchantProductManufacturerDefinition;
 use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantStock\MerchantStockDefinition;
+use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantTag\MerchantTagDefinition;
 use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantTranslation\MerchantTranslationDefinition;
 use Moorl\MerchantFinder\Core\Content\Marker\MarkerDefinition;
-use MoorlFoundation\Core\Framework\DataAbstractionLayer\Field\DistanceField;
-use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantCategory\MerchantCategoryDefinition;
-use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantProductManufacturer\MerchantProductManufacturerDefinition;
-use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantTag\MerchantTagDefinition;
 use Moorl\MerchantFinder\Core\Content\OpeningHour\OpeningHourDefinition;
+use MoorlFoundation\Core\Framework\DataAbstractionLayer\Field\DistanceField;
 use MoorlFoundation\Core\Framework\DataAbstractionLayer\Field\Flags\EditField;
 use MoorlFoundation\Core\Framework\DataAbstractionLayer\Field\Flags\LabelProperty;
 use MoorlFoundation\Core\Framework\DataAbstractionLayer\Field\Flags\Unique;
-use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantCustomer\MerchantCustomerDefinition;
 use Shopware\Core\Checkout\Customer\Aggregate\CustomerGroup\CustomerGroupDefinition;
-use Shopware\Core\Checkout\Customer\CustomerDefinition;
 use Shopware\Core\Content\Category\CategoryDefinition;
 use Shopware\Core\Content\Cms\CmsPageDefinition;
 use Shopware\Core\Content\Media\MediaDefinition;
@@ -28,7 +27,6 @@ use Shopware\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\Computed;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
-use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\Runtime;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\SearchRanking;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\WriteProtected;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\FloatField;
@@ -107,8 +105,7 @@ class MerchantDefinition extends EntityDefinition
             (new StringField('department', 'department'))->addFlags(new EditField('text')),
             (new StringField('vat_id', 'vatId'))->addFlags(new EditField('text')),
             (new StringField('phone_number', 'phoneNumber'))->addFlags(new EditField('text')),
-            (new StringField('description', 'description')),
-            (new StringField('opening_hours', 'openingHours')),
+
             (new StringField('additional_address_line1', 'additionalAddressLine1'))->addFlags(new EditField('text')),
             (new StringField('additional_address_line2', 'additionalAddressLine2'))->addFlags(new EditField('text')),
             (new StringField('shop_url', 'shopUrl'))->addFlags(new EditField('text')),
