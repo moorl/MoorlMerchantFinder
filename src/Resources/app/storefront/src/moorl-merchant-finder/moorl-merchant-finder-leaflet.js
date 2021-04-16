@@ -37,7 +37,8 @@ export default class MoorlMerchantFinder extends Plugin {
         this._options = {
             'foo': 'bar'
         };
-        this._reponse = null;
+        this._reponse = null
+        this._isFocusing = false;
 
         this._searchParams = this.el.dataset.searchParams;
         this._registerEvents();
@@ -45,7 +46,6 @@ export default class MoorlMerchantFinder extends Plugin {
     }
 
     _refresh() {
-        // Remove Search Results
         this._results.innerHTML = '';
     }
 
@@ -96,7 +96,6 @@ export default class MoorlMerchantFinder extends Plugin {
 
             button.dataset.url = this.dataset.url;
             button.click();
-            console.log(this);
         });
 
         $(this.el).on('click', 'button[data-merchant]', function () {
@@ -118,7 +117,6 @@ export default class MoorlMerchantFinder extends Plugin {
         const urlParams = new URLSearchParams(window.location.search);
 
         urlParams.forEach(function (value, name) {
-            //console.log(name, value);
             if (that._form.querySelector('[name=' + name + ']')) {
                 that._form.querySelector('[name=' + name + ']').value = value;
             }
@@ -140,7 +138,6 @@ export default class MoorlMerchantFinder extends Plugin {
                         'lon': position.coords.longitude
                     }
                 ];
-                console.log(that._options);
             });
         } else {
             console.log("Geolocation is not supported by this browser.");
@@ -171,7 +168,6 @@ export default class MoorlMerchantFinder extends Plugin {
         formData.set("options", JSON.stringify(this._options));
 
         if (event && event.submitter && event.submitter.value) {
-            //console.log(formData);
             formData.set("action", event.submitter.value);
 
             if (event.submitter.dataset.merchant) {
@@ -231,12 +227,14 @@ export default class MoorlMerchantFinder extends Plugin {
 
                 if (item.marker != null) {
                     if (item.marker.markerSettings != null) {
+                        const ms = item.marker.markerSettings;
+
                         iconOptions = {
-                            iconSize: [item.marker.markerSettings.iconSizeX, item.marker.markerSettings.iconSizeY],
-                            shadowSize: [item.marker.markerSettings.shadowSizeX, item.marker.markerSettings.shadowSizeY],
-                            iconAnchor: [item.marker.markerSettings.iconAnchorX, item.marker.markerSettings.iconAnchorY],
-                            shadowAnchor: [item.marker.markerSettings.shadowAnchorX, item.marker.markerSettings.shadowAnchorY],
-                            popupAnchor: [item.marker.markerSettings.popupAnchorX, item.marker.markerSettings.popupAnchorY]
+                            iconSize: [ms.iconSizeX, ms.iconSizeY],
+                            shadowSize: [ms.shadowSizeX, ms.shadowSizeY],
+                            iconAnchor: [ms.iconAnchorX, ms.iconAnchorY],
+                            shadowAnchor: [ms.shadowAnchorX, ms.shadowAnchorY],
+                            popupAnchor: [ms.popupAnchorX, ms.popupAnchorY]
                         }
                     }
 
@@ -267,9 +265,8 @@ export default class MoorlMerchantFinder extends Plugin {
                             that._focusItem(item.id)
                         })
                         .on('popupclose', function () {
-                            if (that.ol.center) {
-                                that.ol.map.flyTo(that.ol.center, that.ol.zoom, {animate: true, duration: 1});
-                                that.ol.center = that.ol.zoom = null;
+                            if (!that._isFocusing) {
+                                that.ol.map.fitBounds(that.ol.markers.getBounds(), {padding: [1, 1]});
                             }
                         })
                 );
@@ -277,11 +274,14 @@ export default class MoorlMerchantFinder extends Plugin {
         });
 
         this.ol.markers.clearLayers();
+
+        if (featureMarker.length === 0) {
+            return;
+        }
+
         this.ol.markers = L.featureGroup(featureMarker).addTo(that.ol.map);
 
-        this.ol.map.fitBounds(this.ol.markers.getBounds(), {
-            padding: [5, 5]
-        });
+        this.ol.map.fitBounds(this.ol.markers.getBounds(), {padding: [1, 1]});
     }
 
     _updateMerchantId(id) {
@@ -291,6 +291,8 @@ export default class MoorlMerchantFinder extends Plugin {
     }
 
     _focusItem(id) {
+        this._isFocusing = true;
+
         this._updateMerchantId(id);
 
         const that = this;
@@ -316,11 +318,8 @@ export default class MoorlMerchantFinder extends Plugin {
                 if (!layer.getPopup().isOpen()) {
                     layer.openPopup();
                 }
-                if (that.ol.center == null) {
-                    that.ol.center = that.ol.map.getCenter();
-                    that.ol.zoom = that.ol.map.getZoom();
-                }
                 that.ol.map.flyTo(position, 16, {animate: true, duration: 1});
+                that._isFocusing = false;
             }
         });
     }
