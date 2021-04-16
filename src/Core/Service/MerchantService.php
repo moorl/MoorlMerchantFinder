@@ -10,7 +10,6 @@ use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantStock\MerchantStockEntit
 use Moorl\MerchantFinder\Core\Content\Marker\MarkerCollection;
 use Moorl\MerchantFinder\Core\Content\Merchant\MerchantCollection;
 use Moorl\MerchantFinder\Core\Content\Merchant\MerchantEntity;
-use Moorl\MerchantFinder\Core\Content\OpeningHourCollection;
 use Moorl\MerchantFinder\Core\Event\MerchantsLoadedEvent;
 use Moorl\MerchantFinder\GeoLocation\BoundingBox;
 use Moorl\MerchantFinder\GeoLocation\GeoPoint;
@@ -67,14 +66,6 @@ class MerchantService
      */
     private $eventDispatcher;
     /**
-     * @var OpeningHourCollection
-     */
-    private $openingHours;
-    /**
-     * @var EntityRepositoryInterface
-     */
-    private $openingHourRepo;
-    /**
      * @var SalesChannelContext|null
      */
     private $salesChannelContext;
@@ -108,7 +99,6 @@ class MerchantService
         DefinitionInstanceRegistry $definitionInstanceRegistry,
         SystemConfigService $systemConfigService,
         EntityRepositoryInterface $repository,
-        EntityRepositoryInterface $openingHourRepo,
         Connection $connection,
         Session $session,
         EventDispatcherInterface $eventDispatcher,
@@ -120,7 +110,6 @@ class MerchantService
         $this->definitionInstanceRegistry = $definitionInstanceRegistry;
         $this->systemConfigService = $systemConfigService;
         $this->repository = $repository;
-        $this->openingHourRepo = $openingHourRepo;
         $this->connection = $connection;
         $this->session = $session;
         $this->eventDispatcher = $eventDispatcher;
@@ -491,7 +480,6 @@ class MerchantService
 
     public function getMerchants(?ArrayStruct $data = null): EntityCollection
     {
-        // TODO: Remove ParameterBag
         if (!$data) {
             $data = $this->requestStack->getCurrentRequest();
         }
@@ -502,8 +490,6 @@ class MerchantService
 
         $context = $this->getContext();
         $options = new ArrayStruct(json_decode($data->get('options'), true) ?: []);
-
-        $this->initGlobalOpeningHours();
 
         if ($data->get('id')) {
             $criteria = new Criteria([$data->get('id')]);
@@ -658,46 +644,12 @@ class MerchantService
 
         /** @var MerchantCollection $merchants */
         $merchants = $resultData->getEntities();
+        $merchants = $merchants->sortByDistance();
 
         $event = new MerchantsLoadedEvent($context, $merchants);
         $this->eventDispatcher->dispatch($event);
 
-        return $merchants->sortByDistance();
-    }
-
-    public function initGlobalOpeningHours(): void
-    {
-        $criteria = new Criteria();
-
-        $time = new \DateTimeImmutable();
-
-        $criteria->addFilter(new EqualsFilter('merchantId', null));
-        $criteria->addFilter(
-            new MultiFilter(
-                MultiFilter::CONNECTION_OR, [
-                    new EqualsFilter('showFrom', null),
-                    new RangeFilter('showFrom', ['lte' => $time->format(DATE_ATOM)])
-                ]
-            )
-        );
-        $criteria->addFilter(
-            new MultiFilter(
-                MultiFilter::CONNECTION_OR, [
-                    new EqualsFilter('showUntil', null),
-                    new RangeFilter('showUntil', ['gte' => $time->format(DATE_ATOM)])
-                ]
-            )
-        );
-        $criteria->addFilter(
-            new MultiFilter(
-                MultiFilter::CONNECTION_OR, [
-                    new EqualsFilter('date', null),
-                    new EqualsFilter('date', $time->format("Y-m-d"))
-                ]
-            )
-        );
-
-        $this->openingHours = $this->openingHourRepo->search($criteria, $this->getContext())->getEntities();
+        return $merchants;
     }
 
     public function getLocationByTerm($term): array

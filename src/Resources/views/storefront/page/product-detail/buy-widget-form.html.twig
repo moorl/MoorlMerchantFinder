@@ -9,6 +9,7 @@
                 <div class="col-6">
                     <div data-moorl-merchant-picker-widget='{"productId":"{{ page.product.id }}"}'></div>
                 </div>
+
                 <div class="col-6">
                     <a href="javascript:"
                        data-toggle="modal"
@@ -28,6 +29,7 @@
                 <div class="col-6">
                     <div class="label-moorl-merchant-id"></div>
                 </div>
+
                 <div class="col-6">
                     <a href="javascript:"
                        data-toggle="modal"
@@ -91,12 +93,14 @@
                                         value="{{ merchantStock.id }}"
                                         {% if config('MoorlMerchantStock.config.disableOnNoStock') and merchantStock.isStock and merchantStock.stock < 1 %}disabled {% else %}{% if loop.first %}checked{% endif %}{% endif %}>
                                 {% endblock %}
+
                                 {% block page_product_detail_buy_container_radio_label %}
                                     <label for="radio-{{ merchantStock.merchantId }}"
                                         class="list-group-item moorl-merchant-finder-result-item">
                                         {% sw_include '@Storefront/plugin/moorl-merchant-finder/component/result-item-static-main.html.twig' with {
                                             merchant: merchantStock.merchant
                                         } %}
+
                                         {% block page_product_detail_buy_container_radio_delivery %}
                                             <div class="small">
                                                 {{ "moorl-merchant-finder.stockInfo"|trans }}:
