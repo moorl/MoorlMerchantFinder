@@ -10,8 +10,8 @@
     <input type="hidden" name="productId" value="{{ element.config.productId.value }}">
 
     {% block element_moorl_merchant_finder_form_inner %}
-        <div class="row form-row {% if shopware.config.MoorlMerchantFinder.config.hideSearchLabels %}is-hide-label{% endif %}">
-            {% if shopware.config.MoorlMerchantFinder.config.enableTextSearch %}
+        <div class="row form-row {% if config('MoorlMerchantFinder.config.hideSearchLabels') %}is-hide-label{% endif %}">
+            {% if config('MoorlMerchantFinder.config.enableTextSearch') %}
                 {% block element_moorl_merchant_finder_form_inner_search %}
                     <div class="form-group col-6 col-lg">
                         <label for="{{ element.id }}term">{{ "moorl-merchant-finder.searchFor"|trans }}</label>
@@ -38,7 +38,7 @@
                 <div class="form-group col-6 col-lg">
                     <label for="{{ element.id }}zipcode">{{ "moorl-merchant-finder.zipcodeCity"|trans }}</label>
                     <div class="input-group">
-                        {% if shopware.config.MoorlMerchantFinder.config.positionRequest %}
+                        {% if config('MoorlMerchantFinder.config.positionRequest') %}
                             <div class="input-group-prepend">
                                 <button class="btn btn-primary"
                                         type="button"
@@ -67,7 +67,7 @@
                             <span class="input-group-text">{{ "moorl-merchant-finder.radius"|trans }}</span>
                         </div>
                         <select id="{{ element.id }}distance" name="distance" class="custom-select form-control">
-                            {% for distance in shopware.config.MoorlMerchantFinder.config.positionDistance|split(',') %}
+                            {% for distance in config('MoorlMerchantFinder.config.positionDistance') | split(',') %}
                                 <option value="{{ distance }}">{{ distance }}</option>
                             {% endfor %}
                         </select>
@@ -129,8 +129,8 @@
         {% block element_moorl_merchant_finder_form_inner_additional %}
             {% if element.config.initiator.value == 'merchant-picker' %}
                 {% block element_moorl_merchant_finder_form_inner_additional_picker %}
-                    {% if shopware.config.MoorlMerchantPicker.config.searchRules %}
-                        {% for rule in shopware.config.MoorlMerchantPicker.config.searchRules %}
+                    {% if config('MoorlMerchantPicker.config.searchRules') %}
+                        {% for rule in config('MoorlMerchantPicker.config.searchRules') %}
                             <input type="hidden"
                                    name="rules[]"
                                    value="{{ rule }}">
@@ -139,8 +139,8 @@
                 {% endblock %}
             {% elseif element.config.initiator.value == 'merchant-stock' %}
                 {% block element_moorl_merchant_finder_form_inner_additional_stock %}
-                    {% if shopware.config.MoorlMerchantStock.config.searchRules %}
-                        {% for rule in shopware.config.MoorlMerchantStock.config.searchRules %}
+                    {% if config('MoorlMerchantStock.config.searchRules') %}
+                        {% for rule in config('MoorlMerchantStock.config.searchRules') %}
                             <input type="hidden"
                                    name="rules[]"
                                    value="{{ rule }}">
@@ -149,9 +149,9 @@
                 {% endblock %}
             {% else %}
                 {% block element_moorl_merchant_finder_form_inner_additional_default %}
-                    {% if shopware.config.MoorlMerchantFinder.config.searchRules %}
+                    {% if config('MoorlMerchantFinder.config.searchRules') %}
                         <div class="row form-row">
-                            {% for rule in shopware.config.MoorlMerchantFinder.config.searchRules %}
+                            {% for rule in config('MoorlMerchantFinder.config.searchRules') %}
                                 <div class="form-group col-6 col-lg">
                                     <div class="custom-control custom-checkbox">
                                         <input type="checkbox" class="custom-control-input" id="{{ rule }}Check" name="rules[]" value="{{ rule }}" checked>
@@ -165,7 +165,7 @@
             {% endif %}
         {% endblock %}
         {% block element_moorl_merchant_finder_form_result_info %}
-            {% if shopware.config.MoorlMerchantFinder.config.resultInfo %}
+            {% if config('MoorlMerchantFinder.config.resultInfo') %}
                 <div class="mb-3 text-muted text-center moorl-merchant-finder-result-info">&nbsp;</div>
             {% endif %}
         {% endblock %}

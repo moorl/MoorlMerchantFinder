@@ -70,22 +70,21 @@ Component.register('moorl-merchant-marker-list', {
     },
 
     methods: {
-        getList() {
+        async getList() {
             const criteria = new Criteria(this.page, this.limit, this.term);
-            const params = this.getListingParams();
-            this.naturalSorting = this.sortBy === 'name';
-            this.sortDirection = params.sortDirection || 'ASC';
-            criteria.addSorting(Criteria.sort(this.sortBy, this.sortDirection, this.naturalSorting));
 
             this.isLoading = true;
-            this.repository.search(criteria, this.searchContext).then((searchResult) => {
-                this.items = searchResult;
-                this.total = searchResult.total;
 
+            try {
+                const items = await this.repository.search(criteria, Shopware.Context.api);
+
+                this.total = items.total;
                 this.isLoading = false;
-            }).catch(() => {
+                this.items = items;
+                this.selection = {};
+            } catch {
                 this.isLoading = false;
-            });
+            }
         },
 
         changeLanguage() {

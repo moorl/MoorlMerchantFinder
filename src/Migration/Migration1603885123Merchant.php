@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `moorl_merchant_translation` (
     CONSTRAINT `fk.moorl_merchant_translation.moorl_merchant_id` FOREIGN KEY (`moorl_merchant_id`) REFERENCES `moorl_merchant` (`id`) ON DELETE CASCADE ON UPDATE CASCADE     
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 SQL;
-        $connection->executeQuery($sql);
+        $connection->executeUpdate($sql);
     }
 
     public function updateDestructive(Connection $connection): void

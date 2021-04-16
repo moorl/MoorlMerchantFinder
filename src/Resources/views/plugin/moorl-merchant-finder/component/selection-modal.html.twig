@@ -1,11 +1,11 @@
-{% if shopware.config.MoorlMerchantFinder.config.tileLayerUrl %}
-    {% set tileLayerUrl = shopware.config.MoorlMerchantFinder.config.tileLayerUrl %}
+{% if config('MoorlMerchantFinder.config.tileLayerUrl') %}
+    {% set tileLayerUrl = config('MoorlMerchantFinder.config.tileLayerUrl') %}
 {% else %}
     {% set tileLayerUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' %}
 {% endif %}
 
-{% if shopware.config.MoorlMerchantFinder.config.tileLayerCopy %}
-    {% set tileLayerCopy = shopware.config.MoorlMerchantFinder.config.tileLayerCopy %}
+{% if config('MoorlMerchantFinder.config.tileLayerCopy') %}
+    {% set tileLayerCopy = config('MoorlMerchantFinder.config.tileLayerCopy') %}
 {% else %}
     {% set tileLayerCopy = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>' %}
 {% endif %}
@@ -15,8 +15,8 @@
          role="document"
          data-tile-layer-url="{{ tileLayerUrl|raw }}"
          data-tile-layer-copy='{{ tileLayerCopy|raw }}'
-         data-search-params="{{ shopware.config.MoorlMerchantFinder.config.searchParams }}"
-         data-position-request="{{ shopware.config.MoorlMerchantFinder.config.positionRequest }}"
+         data-search-params="{{ config('MoorlMerchantFinder.config.searchParams') }}"
+         data-position-request="{{ config('MoorlMerchantFinder.config.positionRequest') }}"
          style="--style-height: 60vh;--style-gutter: 10px;--style-results-width: 400px;">
         <div class="modal-content">
             <div class="modal-header">
@@ -63,7 +63,7 @@
                             {{ "moorl-merchant-finder.save"|trans }}
                         </button>
 
-                        {% if shopware.config.MoorlMerchantPicker.config.resetSelection %}
+                        {% if config('MoorlMerchantPicker.config.resetSelection') %}
                             <button class="btn btn-primary" type="submit" name="action" value="unset">
                                 {{ "moorl-merchant-finder.resetSelection"|trans }}
                             </button>

@@ -1,8 +1,6 @@
 <?php
 namespace Moorl\MerchantFinder\GeoLocation;
 
-use Moorl\MerchantFinder\GeoLocation\GeoPoint;
-
 class Polygon {
 
   protected $GeoPoints = array();

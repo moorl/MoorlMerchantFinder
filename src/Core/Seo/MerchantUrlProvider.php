@@ -8,14 +8,13 @@ use Doctrine\DBAL\ParameterType;
 use Moorl\MerchantFinder\Core\Content\Merchant\MerchantCollection;
 use Moorl\MerchantFinder\Core\Content\Merchant\MerchantEntity;
 use Shopware\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
+use Shopware\Core\Content\Sitemap\Provider\UrlProviderInterface;
 use Shopware\Core\Content\Sitemap\Service\ConfigHandler;
 use Shopware\Core\Content\Sitemap\Struct\Url;
 use Shopware\Core\Content\Sitemap\Struct\UrlResult;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
-
-use Shopware\Core\Content\Sitemap\Provider\UrlProviderInterface;
 
 class MerchantUrlProvider implements UrlProviderInterface
 {

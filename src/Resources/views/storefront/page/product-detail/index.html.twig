@@ -3,20 +3,20 @@
 {% block page_product_detail %}
     {{ parent() }}
 
-    {% if shopware.config.MoorlMerchantStock.config.onlyAvailability or page.product.extensions.MoorlMerchantStocks or shopware.config.MoorlMerchantStock.config.autoGenerateStocks %}
+    {% if config('MoorlMerchantStock.config.onlyAvailability') or page.product.extensions.MoorlMerchantStocks or config('MoorlMerchantStock.config.autoGenerateStocks') %}
         {%  set element = {
             id: page.product.id,
             config: {
                 id: { value: 'merchantStockModal' },
                 initiator: { value: 'merchant-stock' },
                 productId: { value: page.product.id },
-                type: { value: shopware.config.MoorlMerchantStock.config.type }
+                type: { value: config('MoorlMerchantStock.config.type') }
             }
         } %}
 
         {% set modalTitle %}
             {{ page.product.translated.name }} |
-            {% if shopware.config.MoorlMerchantStock.config.onlyAvailability %}
+            {% if config('MoorlMerchantStock.config.onlyAvailability') %}
                 {{ "moorl-merchant-finder.productAvailability"|trans }}
             {% else %}
                 {{ "moorl-merchant-finder.choseMerchant"|trans }}

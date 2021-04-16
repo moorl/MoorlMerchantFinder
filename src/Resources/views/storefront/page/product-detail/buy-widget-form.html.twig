@@ -1,7 +1,7 @@
 {% sw_extends '@Storefront/storefront/page/product-detail/buy-widget-form.html.twig' %}
 
 {% block page_product_detail_buy_container %}
-    {% if shopware.config.MoorlMerchantStock.config.merchantPicker %}
+    {% if config('MoorlMerchantStock.config.merchantPicker')%}
         <h4>{{ "moorl-merchant-finder.choseMerchant"|trans }}</h4>
 
         <div class="form-group">
@@ -20,7 +20,7 @@
                 </div>
             </div>
         </div>
-    {% elseif shopware.config.MoorlMerchantStock.config.onlyAvailability %}
+    {% elseif config('MoorlMerchantStock.config.onlyAvailability')%}
         <h4>{{ "moorl-merchant-finder.productAvailability"|trans }}</h4>
 
         <div class="form-group">
@@ -39,16 +39,16 @@
                 </div>
             </div>
         </div>
-    {% elseif page.product.extensions.MoorlMerchantStocks or shopware.config.MoorlMerchantStock.config.autoGenerateStocks %}
-        {% if shopware.config.MoorlMerchantStock.config.productEnableSelection and shopware.config.MoorlMerchantStock.config.productEnableSelection != 'none' %}
+    {% elseif page.product.extensions.MoorlMerchantStocks or config('MoorlMerchantStock.config.autoGenerateStocks')%}
+        {% if config('MoorlMerchantStock.config.productEnableSelection') and config('MoorlMerchantStock.config.productEnableSelection') != 'none' %}
             <h4>{{ "moorl-merchant-finder.choseMerchant"|trans }}</h4>
 
-            {% if shopware.config.MoorlMerchantStock.config.productEnableSelection == 'select' %}
+            {% if config('MoorlMerchantStock.config.productEnableSelection') == 'select' %}
                 <div class="form-group">
                     <select class="custom-select" name="lineItems[{{ page.product.id }}][merchantStockId]">
                         {% block page_product_detail_buy_container_select %}
                             {% for key, merchantStock in page.product.extensions.MoorlMerchantStocks %}
-                                <option value="{{ merchantStock.id }}" {% if shopware.config.MoorlMerchantStock.config.disableOnNoStock and merchantStock.isStock and merchantStock.stock < 1 %}disabled{% endif %}>
+                                <option value="{{ merchantStock.id }}" {% if config('MoorlMerchantStock.config.disableOnNoStock') and merchantStock.isStock and merchantStock.stock < 1 %}disabled{% endif %}>
                                     {{ merchantStock.merchant.translated.name ?: merchantStock.merchant.company }},
                                     {{ "moorl-merchant-finder.stockInfo"|trans }}:
                                     {{ merchantStock.isStock ? merchantStock.stock : "moorl-merchant-finder.available"|trans }},
@@ -59,7 +59,7 @@
                         {% endblock %}
                     </select>
                 </div>
-            {% elseif shopware.config.MoorlMerchantStock.config.productEnableSelection == 'popup' %}
+            {% elseif config('MoorlMerchantStock.config.productEnableSelection') == 'popup' %}
                 <input value=""
                        name="lineItems[{{ page.product.id }}][merchantId]"
                        class="input-moorl-merchant-id"
@@ -89,7 +89,7 @@
                                 {% block page_product_detail_buy_container_radio_input %}
                                     <input id="radio-{{ merchantStock.merchantId }}" class="d-none" type="radio" name="lineItems[{{ page.product.id }}][merchantStockId]"
                                         value="{{ merchantStock.id }}"
-                                        {% if shopware.config.MoorlMerchantStock.config.disableOnNoStock and merchantStock.isStock and merchantStock.stock < 1 %}disabled {% else %}{% if loop.first %}checked{% endif %}{% endif %}>
+                                        {% if config('MoorlMerchantStock.config.disableOnNoStock') and merchantStock.isStock and merchantStock.stock < 1 %}disabled {% else %}{% if loop.first %}checked{% endif %}{% endif %}>
                                 {% endblock %}
                                 {% block page_product_detail_buy_container_radio_label %}
                                     <label for="radio-{{ merchantStock.merchantId }}"

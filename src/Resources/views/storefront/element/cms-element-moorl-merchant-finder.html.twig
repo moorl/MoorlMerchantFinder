@@ -1,10 +1,10 @@
-{% if shopware.config.MoorlMerchantFinder.config.tileLayerUrl %}
-    {% set tileLayerUrl = shopware.config.MoorlMerchantFinder.config.tileLayerUrl %}
+{% if config('MoorlMerchantFinder.config.tileLayerUrl') %}
+    {% set tileLayerUrl = config('MoorlMerchantFinder.config.tileLayerUrl') %}
 {% else %}
     {% set tileLayerUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' %}
 {% endif %}
-{% if shopware.config.MoorlMerchantFinder.config.tileLayerCopy %}
-    {% set tileLayerCopy = shopware.config.MoorlMerchantFinder.config.tileLayerCopy %}
+{% if config('MoorlMerchantFinder.config.tileLayerCopy') %}
+    {% set tileLayerCopy = config('MoorlMerchantFinder.config.tileLayerCopy') %}
 {% else %}
     {% set tileLayerCopy = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>' %}
 {% endif %}
@@ -13,13 +13,13 @@
     <div class="cms-element-{{ element.type }} {{ element.config.style.value }}"
          data-tile-layer-url="{{ tileLayerUrl|raw }}"
          data-tile-layer-copy='{{ tileLayerCopy|raw }}'
-         data-search-params="{{ shopware.config.MoorlMerchantFinder.config.searchParams }}"
+         data-search-params="{{ config('MoorlMerchantFinder.config.searchParams') }}"
          style="
                  --style-height: {{ element.config.minHeight.value }};
                  --style-gutter: {{ element.config.borders.value }};
                  --style-results-width: {{ element.config.resultsWidth.value }};">
         <div class="element-content" id="{{ element.id }}">
-            {% if shopware.config.MoorlMerchantFinder.config.enableSearch %}
+            {% if config('MoorlMerchantFinder.config.enableSearch') %}
                 <div class="search-box">
                     {% sw_include '@MoorlMerchantFinder/plugin/moorl-merchant-finder/component/search-form.html.twig' %}
                 </div>
@@ -32,7 +32,7 @@
                     {{ sw_csrf('moorl.merchant-finder.search') }}
                     <input type="hidden" name="items" value="{{ element.config.items.value }}">
                     <button type="submit"></button>
-                    {% for rule in shopware.config.MoorlMerchantFinder.config.searchRules %}
+                    {% for rule in config('MoorlMerchantFinder.config.searchRules') %}
                         <input type="hidden" name="rules[]" value="{{ rule }}">
                     {% endfor %}
                 </form>

@@ -10,7 +10,6 @@ use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantTag\MerchantTagDefinitio
 use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantTranslation\MerchantTranslationDefinition;
 use Moorl\MerchantFinder\Core\Content\Marker\MarkerDefinition;
 use Moorl\MerchantFinder\Core\Content\OpeningHour\OpeningHourDefinition;
-use MoorlFoundation\Core\Framework\DataAbstractionLayer\Field\DistanceField;
 use MoorlFoundation\Core\Framework\DataAbstractionLayer\Field\Flags\EditField;
 use MoorlFoundation\Core\Framework\DataAbstractionLayer\Field\Flags\LabelProperty;
 use MoorlFoundation\Core\Framework\DataAbstractionLayer\Field\Flags\Unique;
@@ -24,7 +23,6 @@ use Shopware\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\BoolField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\CustomFields;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\FkField;
-use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\Computed;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\SearchRanking;
@@ -132,8 +130,6 @@ class MerchantDefinition extends EntityDefinition
             new OneToManyAssociationField('customers', MerchantCustomerDefinition::class, 'moorl_merchant_id'),
 
             new TranslationsAssociationField(MerchantTranslationDefinition::class, 'moorl_merchant_id'),
-
-            (new DistanceField('distance', 'location_lat', 'location_lon'))->addFlags(new Computed()),
         ]);
     }
 }

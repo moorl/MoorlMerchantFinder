@@ -4,10 +4,8 @@ namespace Moorl\MerchantFinder\Core\Content\Aggregate\MerchantCustomer;
 
 use Moorl\MerchantFinder\Core\Content\Merchant\MerchantEntity;
 use Shopware\Core\Checkout\Customer\CustomerEntity;
-use Shopware\Core\Content\Product\ProductEntity;
 use Shopware\Core\Framework\DataAbstractionLayer\Entity;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityIdTrait;
-use Shopware\Core\System\DeliveryTime\DeliveryTimeEntity;
 
 class MerchantCustomerEntity extends Entity
 {

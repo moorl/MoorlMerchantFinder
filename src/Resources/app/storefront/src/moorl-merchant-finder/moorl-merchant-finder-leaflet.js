@@ -222,10 +222,6 @@ export default class MoorlMerchantFinder extends Plugin {
     _buildMapMarkers() {
         const that = this;
         const featureMarker = [];
-        let minLon = 10000,
-            minLat = 10000,
-            maxLon = 0,
-            maxLat = 0;
 
         // add features
         this._reponse.data.forEach(function (item) {
@@ -261,13 +257,6 @@ export default class MoorlMerchantFinder extends Plugin {
                     }
                 }
 
-                minLat = item.locationLat < minLat ? item.locationLat : minLat;
-                maxLat = item.locationLat > maxLat ? item.locationLat : maxLat;
-                minLon = item.locationLon < minLon ? item.locationLon : minLon;
-                maxLon = item.locationLon > maxLon ? item.locationLon : maxLon;
-
-                //console.log(item.popup);
-
                 featureMarker.push(
                     L.marker([item.locationLat, item.locationLon], markerOptions)
                         .bindPopup(item.popup, {
@@ -288,27 +277,11 @@ export default class MoorlMerchantFinder extends Plugin {
         });
 
         this.ol.markers.clearLayers();
-        this.ol.markers = L.layerGroup(featureMarker).addTo(that.ol.map);
+        this.ol.markers = L.featureGroup(featureMarker).addTo(that.ol.map);
 
-        if (this._reponse.data.length == 1) {
-            minLat = minLat - 0.02;
-            maxLat = maxLat + 0.02;
-            minLon = minLon - 0.02;
-            maxLon = maxLon + 0.02;
-        } else if (this._reponse.data.length == 0 && this._reponse.myLocation && this._reponse.myLocation.length > 0) {
-            minLon = maxLon = this._reponse.myLocation[0].lon;
-            minLat = maxLat = this._reponse.myLocation[0].lat;
-            minLat = minLat - 0.02;
-            maxLat = maxLat + 0.02;
-            minLon = minLon - 0.02;
-            maxLon = maxLon + 0.02;
-        }
-
-        // relocate bounding box
-        this.ol.map.fitBounds([
-            [minLat, minLon],
-            [maxLat, maxLon]
-        ])
+        this.ol.map.fitBounds(this.ol.markers.getBounds(), {
+            padding: [5, 5]
+        });
     }
 
     _updateMerchantId(id) {

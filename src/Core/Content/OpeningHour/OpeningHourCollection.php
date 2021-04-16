@@ -2,11 +2,7 @@
 
 namespace Moorl\MerchantFinder\Core\Content\OpeningHour;
 
-use Shopware\Core\Checkout\Customer\CustomerEntity;
-use Shopware\Core\Framework\DataAbstractionLayer\Entity;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Shopware\Core\System\Country\Aggregate\CountryState\CountryStateCollection;
-use Shopware\Core\System\Country\CountryCollection;
 
 /**
  * @method void                       add(OpeningHourEntity $entity)

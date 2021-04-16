@@ -2,7 +2,6 @@
 
 namespace Moorl\MerchantFinder\Core\Content\Marker;
 
-use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantStock\MerchantStockEntity;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
 
 /**

@@ -20,7 +20,7 @@ ADD `priority` int(11) NULL AFTER `id`,
 ADD `highlight` tinyint(4) NULL AFTER `priority`;
 SQL;
 
-        $connection->executeQuery($sql);
+        $connection->executeUpdate($sql);
     }
 
     public function updateDestructive(Connection $connection): void

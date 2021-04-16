@@ -3,7 +3,6 @@
 namespace Moorl\MerchantFinder\GeoLocation\Interfaces;
 
 use Moorl\MerchantFinder\GeoLocation\GeoPoint;
-use Moorl\MerchantFinder\GeoLocation;
 
 interface BoundingBoxInterface {
   public function __construct($geopoint, $distance, $unit_of_measurement);

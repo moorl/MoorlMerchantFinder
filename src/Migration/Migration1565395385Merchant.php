@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS `moorl_merchant` (
     COLLATE = utf8mb4_unicode_ci;
 SQL;
 
-        $connection->executeQuery($sql);
+        $connection->executeUpdate($sql);
 
         $sql = <<<SQL
 CREATE TABLE IF NOT EXISTS `moorl_zipcode` (
@@ -81,7 +81,7 @@ CREATE TABLE IF NOT EXISTS `moorl_zipcode` (
     COLLATE = utf8mb4_unicode_ci;
 SQL;
 
-        $connection->executeQuery($sql);
+        $connection->executeUpdate($sql);
 
     }
 

@@ -5,17 +5,14 @@ namespace Moorl\MerchantFinder\Core\Seo;
 
 use Moorl\MerchantFinder\Core\Content\Merchant\MerchantDefinition;
 use Moorl\MerchantFinder\Core\Content\Merchant\MerchantEntity;
-use Shopware\Core\Content\Seo\SeoTemplateReplacementVariable;
 use Shopware\Core\Content\Seo\SeoUrlRoute\SeoUrlExtractIdResult;
 use Shopware\Core\Content\Seo\SeoUrlRoute\SeoUrlMapping;
 use Shopware\Core\Content\Seo\SeoUrlRoute\SeoUrlRouteConfig;
 use Shopware\Core\Content\Seo\SeoUrlRoute\SeoUrlRouteInterface;
-use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\Entity;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Shopware\Core\System\SalesChannel\SalesChannelEntity;
 
 class MerchantSeoUrlRoute implements SeoUrlRouteInterface

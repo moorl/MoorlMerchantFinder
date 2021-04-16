@@ -29,11 +29,11 @@
     {% endblock %}
 
     {% block element_moorl_merchant_finder_result_button_cms %}
-        {% if shopware.config.MoorlMerchantFinder.config.detailPage == 'popup' %}
+        {% if config('MoorlMerchantFinder.config.detailPage') == 'popup' %}
             <a href="javascript:"
                data-moorl-foundation-modal="{{ path('moorl.merchant-finder.merchant.modal', {'merchantId': merchant.id}) }}"
                class="btn btn-sm btn-light">{{ "moorl-merchant-finder.more"|trans }}</a>
-        {% elseif shopware.config.MoorlMerchantFinder.config.detailPage == 'page' %}
+        {% elseif config('MoorlMerchantFinder.config.detailPage') == 'page' %}
             <a href="{{ merchant.seoUrl }}"
                class="btn btn-sm btn-light">{{ "moorl-merchant-finder.more"|trans }}</a>
         {% endif %}

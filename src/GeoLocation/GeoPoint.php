@@ -2,11 +2,8 @@
 
 namespace Moorl\MerchantFinder\GeoLocation;
 
-use Moorl\MerchantFinder\GeoLocation\Exceptions\NoApiKeyException;
-use Moorl\MerchantFinder\GeoLocation\Polygon;
 use Moorl\MerchantFinder\GeoLocation\Base\GeoLocation;
-use Moorl\MerchantFinder\GeoLocation\Earth;
-use Moorl\MerchantFinder\GeoLocation\BoundingBox;
+use Moorl\MerchantFinder\GeoLocation\Exceptions\NoApiKeyException;
 use Moorl\MerchantFinder\GeoLocation\Exceptions\OutOfBoundsException;
 use Moorl\MerchantFinder\GeoLocation\Exceptions\UnexpectedResponseException;
 

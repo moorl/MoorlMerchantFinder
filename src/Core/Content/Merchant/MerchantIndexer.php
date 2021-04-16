@@ -3,7 +3,6 @@
 namespace Moorl\MerchantFinder\Core\Content\Merchant;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Core\Framework\Adapter\Cache\CacheClearer;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
@@ -30,11 +29,6 @@ class MerchantIndexer extends EntityIndexer
     private $repository;
 
     /**
-     * @var CacheClearer
-     */
-    private $cacheClearer;
-
-    /**
      * @var EventDispatcherInterface
      */
     private $eventDispatcher;
@@ -43,13 +37,11 @@ class MerchantIndexer extends EntityIndexer
         Connection $connection,
         IteratorFactory $iteratorFactory,
         EntityRepositoryInterface $repository,
-        CacheClearer $cacheClearer,
         EventDispatcherInterface $eventDispatcher
     ) {
         $this->iteratorFactory = $iteratorFactory;
         $this->repository = $repository;
         $this->connection = $connection;
-        $this->cacheClearer = $cacheClearer;
         $this->eventDispatcher = $eventDispatcher;
     }
 
@@ -105,7 +97,5 @@ class MerchantIndexer extends EntityIndexer
         $context = Context::createDefaultContext();
 
         $this->eventDispatcher->dispatch(new MerchantIndexerEvent($ids, $context));
-
-        $this->cacheClearer->invalidateIds($ids, MerchantDefinition::ENTITY_NAME);
     }
 }

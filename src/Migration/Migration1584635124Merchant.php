@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `moorl_merchant_tag` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 SQL;
 
-        $connection->executeQuery($sql);
+        $connection->executeUpdate($sql);
 
         $this->addDemoData($connection);
 
@@ -90,7 +90,7 @@ INSERT INTO `moorl_merchant` (`id`, `sales_channel_id`, `country_id`, `customer_
 (UNHEX('E038DD449DBB4AD6BDA51C12AAB2639B'),	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	'76',	'Latia',	'Bushe',	'lbushe23@comsenz.com',	NULL,	1,	'28355',	'Bremen',	'Thoughtworks',	'3646 Maple Wood Center',	NULL,	NULL,	'DE',	53.0903,	8.9354,	NULL,	'719-40-9856',	'183-843-3636',	NULL,	NULL,	NULL,	'https://hud.gov',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	'2020-03-20 00:40:33.640',	NULL);
 SQL;
 
-        $connection->executeQuery($sql);
+        $connection->executeUpdate($sql);
 
     }
 }

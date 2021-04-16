@@ -22,7 +22,7 @@ ALTER TABLE `moorl_merchant`
 ADD `moorl_merchant_marker_id` BINARY(16) NULL AFTER `highlight`;
 SQL;
 
-        $connection->executeQuery($sql);
+        $connection->executeUpdate($sql);
 
         $sql = <<<SQL
 CREATE TABLE IF NOT EXISTS `moorl_merchant_marker` (

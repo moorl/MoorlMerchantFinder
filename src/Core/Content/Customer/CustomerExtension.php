@@ -2,12 +2,12 @@
 
 namespace Moorl\MerchantFinder\Core\Content\Customer;
 
-use Moorl\MerchantFinder\Core\Content\Merchant\MerchantDefinition;
 use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantCustomer\MerchantCustomerDefinition;
+use Moorl\MerchantFinder\Core\Content\Merchant\MerchantDefinition;
 use Shopware\Core\Checkout\Customer\CustomerDefinition;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityExtension;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\ManyToManyAssociationField;
 use Shopware\Core\Framework\DataAbstractionLayer\FieldCollection;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityExtension;
 
 class CustomerExtension extends EntityExtension
 {

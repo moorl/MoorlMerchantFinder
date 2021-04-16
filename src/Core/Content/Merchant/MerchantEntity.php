@@ -8,19 +8,19 @@ use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantStock\MerchantStockEntit
 use Moorl\MerchantFinder\Core\Content\Marker\MarkerEntity;
 use Moorl\MerchantFinder\Core\Content\OpeningHour\OpeningHourCollection;
 use Shopware\Core\Checkout\Customer\CustomerEntity;
+use Shopware\Core\Content\Category\CategoryCollection;
 use Shopware\Core\Content\Cms\CmsPageEntity;
 use Shopware\Core\Content\Media\MediaEntity;
-use Shopware\Core\Content\Product\Aggregate\ProductManufacturer\ProductManufacturerEntity;
 use Shopware\Core\Content\Product\Aggregate\ProductManufacturer\ProductManufacturerCollection;
+use Shopware\Core\Content\Product\Aggregate\ProductManufacturer\ProductManufacturerEntity;
 use Shopware\Core\Framework\DataAbstractionLayer\Entity;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Shopware\Core\System\Country\Aggregate\CountryState\CountryStateEntity;
 use Shopware\Core\System\Country\CountryEntity;
 use Shopware\Core\System\SalesChannel\SalesChannelEntity;
 use Shopware\Core\System\Salutation\SalutationEntity;
-use Shopware\Core\Content\Category\CategoryCollection;
 use Shopware\Core\System\Tag\TagCollection;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
 
 class MerchantEntity extends Entity
 {

@@ -8,13 +8,14 @@ use Doctrine\DBAL\ParameterType;
 use GuzzleHttp\Client;
 use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantStock\MerchantStockEntity;
 use Moorl\MerchantFinder\Core\Content\Marker\MarkerCollection;
-use MoorlFoundation\Core\Framework\DataAbstractionLayer\Search\Sorting\DistanceFieldSorting;
+use Moorl\MerchantFinder\Core\Content\Merchant\MerchantCollection;
 use Moorl\MerchantFinder\Core\Content\Merchant\MerchantEntity;
 use Moorl\MerchantFinder\Core\Content\OpeningHourCollection;
-use Moorl\MerchantFinder\MoorlMerchantFinder;
 use Moorl\MerchantFinder\Core\Event\MerchantsLoadedEvent;
 use Moorl\MerchantFinder\GeoLocation\BoundingBox;
 use Moorl\MerchantFinder\GeoLocation\GeoPoint;
+use Moorl\MerchantFinder\MoorlMerchantFinder;
+use MoorlFoundation\Core\Framework\DataAbstractionLayer\Search\Sorting\DistanceFieldSorting;
 use Shopware\Core\Checkout\Cart\Cart;
 use Shopware\Core\Checkout\Cart\LineItem\LineItem;
 use Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemEntity;
@@ -41,8 +42,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -518,9 +519,6 @@ class MerchantService
                 $context->addExtension('DistanceField', new ArrayStruct($this->myLocation[0]));
 
                 $criteria = new Criteria();
-                $criteria->addSorting(new FieldSorting('distance'));
-
-                $criteria->addFilter(new RangeFilter('distance', ['lte' => $distance]));
 
                 $geopoint = new GeoPoint(
                     (float) $this->myLocation[0]['lat'],
@@ -555,7 +553,6 @@ class MerchantService
         }
 
         $criteria->addAssociation('tags');
-        $criteria->addAssociation('merchantOpeningHours');
         $criteria->addAssociation('productManufacturers.media');
         $criteria->addAssociation('categories');
         $criteria->addAssociation('customers');
@@ -655,18 +652,17 @@ class MerchantService
             $entity->setSeoUrl(
                 $this->seoUrlReplacer->generate('moorl.merchant-finder.merchant.page', ['merchantId' => $entity->getId()])
             );
-
-            $entity->getMerchantOpeningHours()->merge($this->openingHours);
         }
 
         $this->setMerchantsCount($resultData->getTotal());
 
+        /** @var MerchantCollection $merchants */
         $merchants = $resultData->getEntities();
 
         $event = new MerchantsLoadedEvent($context, $merchants);
         $this->eventDispatcher->dispatch($event);
 
-        return $merchants;
+        return $merchants->sortByDistance();
     }
 
     public function initGlobalOpeningHours(): void
@@ -786,7 +782,7 @@ SQL;
                         'licence' => $item['licence']
                     ];
 
-                    $this->connection->executeQuery($sql, $placeholder);
+                    $this->connection->executeUpdate($sql, $placeholder);
 
                     $myLocation[] = $placeholder;
                 }

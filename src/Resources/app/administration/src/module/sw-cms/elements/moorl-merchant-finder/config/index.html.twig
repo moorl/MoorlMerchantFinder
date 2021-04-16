@@ -16,11 +16,6 @@
         <option value="basic">{{ $tc('moorl-cms.elements.general.config.label.styleBasic') }}</option>
     </sw-select-field>
 
-    <sw-select-field :label="$tc('moorl-cms.elements.general.config.label.colorScheme')"
-                     v-model="element.config.colorScheme.value">
-        <option v-for="item in moorlFoundation.colorScheme" :value="item.value">{{ $tc(item.label) }}</option>
-    </sw-select-field>
-
     <sw-field v-model="element.config.items.value"
               type="text"
               :label="$tc('moorl-cms.elements.general.config.label.maxItems')">

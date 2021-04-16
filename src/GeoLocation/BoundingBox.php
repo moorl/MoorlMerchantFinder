@@ -1,7 +1,6 @@
 <?php
 namespace Moorl\MerchantFinder\GeoLocation;
 
-use Moorl\MerchantFinder\GeoLocation\Earth;
 use Moorl\MerchantFinder\GeoLocation\Exceptions\InvalidArgumentException;
 use Moorl\MerchantFinder\GeoLocation\Exceptions\InvalidBoundingBoxCoordinatesException;
 

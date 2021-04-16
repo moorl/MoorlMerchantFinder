@@ -2,13 +2,13 @@
 
 {% block page_product_detail_product_buy_button %}
     {% if product.extensions.MoorlMerchantStocks %}
-        {% if shopware.config.MoorlMerchantStock.config.listingEnableSelection %}
+        {% if config('MoorlMerchantStock.config.listingEnableSelection') %}
             <div class="input-group">
                 {% block moorl_page_product_detail_product_buy_button_select %}
                     <select class="custom-select" name="lineItems[{{ product.id }}][merchantStockId]">
                         {% for key, merchantStock in product.extensions.MoorlMerchantStocks %}
                             <option value="{{ merchantStock.id }}"
-                                    {% if shopware.config.MoorlMerchantStock.config.disableOnNoStock and merchantStock.isStock and merchantStock.stock < 1 %}disabled{% endif %}>
+                                    {% if config('MoorlMerchantStock.config.disableOnNoStock') and merchantStock.isStock and merchantStock.stock < 1 %}disabled{% endif %}>
                                 {{ merchantStock.merchant.translated.name ?: merchantStock.merchant.company }}:
                                 {{ merchantStock.isStock ? merchantStock.stock : "moorl-merchant-finder.available"|trans }}
                             </option>

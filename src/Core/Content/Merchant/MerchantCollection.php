@@ -2,11 +2,7 @@
 
 namespace Moorl\MerchantFinder\Core\Content\Merchant;
 
-use Shopware\Core\Checkout\Customer\CustomerEntity;
-use Shopware\Core\Framework\DataAbstractionLayer\Entity;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Shopware\Core\System\Country\Aggregate\CountryState\CountryStateCollection;
-use Shopware\Core\System\Country\CountryCollection;
 
 /**
  * @method void                       add(MerchantEntity $entity)
@@ -32,6 +28,15 @@ class MerchantCollection extends EntityCollection
         return $this->fmap(function (MerchantEntity $merchant) {
             return $merchant->getMediaId();
         });
+    }
+
+    public function sortByDistance(): self
+    {
+        $this->sort(function (MerchantEntity $a, MerchantEntity $b) {
+            return $a->getDistance() > $b->getDistance();
+        });
+
+        return $this;
     }
 
     public function filterByMediaId(string $id): self

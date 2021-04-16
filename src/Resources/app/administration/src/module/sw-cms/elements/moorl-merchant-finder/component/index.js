@@ -11,8 +11,7 @@ Component.register('sw-cms-el-moorl-merchant-finder', {
     ],
 
     inject: [
-        'repositoryFactory',
-        'context'
+        'repositoryFactory'
     ],
 
     data() {

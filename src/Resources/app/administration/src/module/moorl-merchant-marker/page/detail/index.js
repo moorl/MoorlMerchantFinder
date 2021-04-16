@@ -41,8 +41,6 @@ Component.register('moorl-merchant-marker-detail', {
     },
 
     computed: {
-        ...mapApiErrors('item', ['name']),
-
         repository() {
             return this.repositoryFactory.create('moorl_merchant_marker');
         },

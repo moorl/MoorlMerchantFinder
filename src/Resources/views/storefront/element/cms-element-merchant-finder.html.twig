@@ -1,8 +1,8 @@
 {% block element_merchant_finder %}
     <div class="cms-element-{{ element.type }}"
-         data-tile-layer-url="{{ shopware.config.MoorlMerchantFinder.config.tileLayerUrl }}"
-         data-tile-layer-copy="{{ shopware.config.MoorlMerchantFinder.config.tileLayerCopy|escape }}"
-         data-tile-layer-token="{{ shopware.config.MoorlMerchantFinder.config.tileLayerToken }}">
+         data-tile-layer-url="{{ config('MoorlMerchantFinder.config.tileLayerUrl') }}"
+         data-tile-layer-copy="{{ config('MoorlMerchantFinder.config.tileLayerCopy|escape') }}"
+         data-tile-layer-token="{{ config('MoorlMerchantFinder.config.tileLayerToken') }}">
 
         {% sw_include '@MoorlMerchantFinder/plugin/moorl-merchant-finder/component/search-form.html.twig' %}
 

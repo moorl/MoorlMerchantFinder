@@ -37,12 +37,7 @@
                 <sw-field :label="$t('moorl-foundation.properties.email')" v-model="item.email"></sw-field>
 
                 <div class="sw-field">
-                    <sw-upload-store-listener
-                            :uploadTag="uploadTagMedia"
-                            autoUpload
-                            @media-upload-finish="setMediaItem">
-                    </sw-upload-store-listener>
-                    <sw-media-upload
+                    <sw-media-upload-v2
                             :uploadTag="uploadTagMedia"
                             :source="item.mediaId"
                             :allowMultiSelect="false"
@@ -51,7 +46,7 @@
                             @sw-media-upload-media-upload-success="setMediaItem"
                             @media-drop="onDropMedia"
                             @media-upload-remove-image="onUnlinkMedia">
-                    </sw-media-upload>
+                    </sw-media-upload-v2>
                 </div>
 
                 <sw-field type="textarea"
@@ -107,50 +102,6 @@
                 <sw-field :label="$t('moorl-foundation.properties.title')" v-model="item.title"></sw-field>
                 <sw-field :label="$t('moorl-foundation.properties.firstName')" v-model="item.firstName"></sw-field>
                 <sw-field :label="$t('moorl-foundation.properties.lastName')" v-model="item.lastName"></sw-field>
-            </sw-card>
-
-            <sw-card v-if="item" :isLoading="isLoading" :title="$t('moorl-foundation.properties.openingHours')">
-                <sw-button @click="getOpeningHour(null)">
-                    {{ $t('moorl-foundation.buttons.newButtonText') }}
-                </sw-button>
-
-                <sw-data-grid
-                        v-if="item.merchantOpeningHours"
-                        class="sw-product-stream-grid-preview__grid"
-                        :dataSource="openingHours"
-                        :columns="openingHourColumns"
-                        :showSelection="false"
-                        :showActions="false"
-                        :showPreviews="true"
-                        :plainAppearance="true"
-                        :isLoading="isLoading"
-                        :showActions="true">
-                    <template #column-date="{ item }">
-                        {{ item.date|date() }}
-                    </template>
-                    <template #column-showFrom="{ item }">
-                        {{ item.showFrom|date() }}
-                    </template>
-                    <template #column-showUntil="{ item }">
-                        {{ item.showUntil|date() }}
-                    </template>
-                    <template #column-merchantId="{ item }">
-                        {{ item.merchantId ? 'true' : 'false' }}
-                    </template>
-
-                    <slot name="additional-columns"></slot>
-
-                    <template #actions="{ item }">
-                        <sw-context-menu-item @click="getOpeningHour(item.id)">
-                            {{ $tc('global.default.edit') }}
-                        </sw-context-menu-item>
-
-                        <sw-context-menu-item variant="danger"
-                                              @click="deleteOpeningHour(item.id)">
-                            {{ $tc('global.default.delete') }}
-                        </sw-context-menu-item>
-                    </template>
-                </sw-data-grid>
             </sw-card>
 
             <sw-card v-if="item" :isLoading="isLoading" :title="$t('moorl-foundation.label.relationsCard')">
@@ -245,78 +196,6 @@
                 <sw-field :label="$t('moorl-foundation.properties.custom4')" v-model="item.custom4"></sw-field>
             </sw-card>
         </sw-card-view>
-
-        <sw-modal v-if="item && showOpeningHourModal"
-                  :title="$t('moorl-foundation.properties.openingHours')"
-                  @modal-close="onCloseModal">
-            <sw-container columns="repeat(auto-fit, minmax(250px, 1fr)" gap="0 30px">
-                <sw-field type="switch" bordered :label="$t('moorl-merchant-finder.properties.localMerchant')"
-                          v-model="openingHour.merchantId"></sw-field>
-
-                <sw-field type="switch" bordered :label="$t('moorl-merchant-finder.properties.oneDayYearlyLoop')"
-                          v-model="openingHour.repeat"></sw-field>
-
-                <template v-if="openingHour.repeat">
-                    <sw-datepicker dateType="date" :label="$t('moorl-foundation.properties.date')" size="default"
-                                   v-model="openingHour.date"></sw-datepicker>
-                </template>
-
-                <template v-else>
-                    <sw-datepicker dateType="date" :label="$t('moorl-foundation.properties.showFrom')" size="default"
-                                   v-model="openingHour.showFrom"></sw-datepicker>
-
-                    <sw-datepicker dateType="date" :label="$t('moorl-foundation.properties.showUntil')" size="default"
-                                   v-model="openingHour.showUntil"></sw-datepicker>
-                </template>
-
-                <sw-field :label="$t('moorl-foundation.properties.title')" v-model="openingHour.title"></sw-field>
-            </sw-container>
-
-            <ul class="moorl-merchant-finder-timetable">
-                <li class="day"
-                    v-if="(!openingHour.repeat && dayItem.day != 'today') || (openingHour.repeat && dayItem.day == 'today')"
-                    v-for="(dayItem, dayIndex) in openingHour.openingHours">
-                    <div class="sw-field">
-                        {{ $t('moorl-foundation.days.' + dayItem.day) }}
-                    </div>
-
-                    <div class="sw-field">
-                        <sw-button @click="removeTimes(dayIndex)">
-                            <sw-icon name="default-action-trash" size="16px"></sw-icon>
-                        </sw-button>
-                        <sw-button @click="addTimes(dayIndex)">
-                            <sw-icon name="default-basic-plus-block" size="16px"></sw-icon>
-                        </sw-button>
-                    </div>
-
-                    <template v-if="dayItem.openingHours.length > 0">
-                        <ul class="times">
-                            <li v-for="times in dayItem.openingHours">
-                                <sw-datepicker dateType="time" size="small" v-model="times.from"></sw-datepicker>
-                                <sw-datepicker dateType="time" size="small" v-model="times.until"></sw-datepicker>
-                            </li>
-                        </ul>
-                    </template>
-
-                    <template v-else>
-                        <sw-field :placeholder="$t('moorl-foundation.properties.closed')"
-                                  v-model="dayItem.info">
-                        </sw-field>
-                    </template>
-                </li>
-            </ul>
-
-            <template #modal-footer>
-                <sw-button @click="onCloseModal" size="small">
-                    {{ $t('moorl-foundation.buttons.cancelButtonText') }}
-                </sw-button>
-                <sw-button @click="onOpeningHourSave"
-                           variant="primary"
-                           size="small">
-                    {{ $t('moorl-foundation.buttons.saveButtonText') }}
-                </sw-button>
-            </template>
-        </sw-modal>
     </template>
 
     <template slot="sidebar">

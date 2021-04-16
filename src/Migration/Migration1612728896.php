@@ -22,7 +22,7 @@ ALTER TABLE `moorl_merchant_stock`
 ADD `product_version_id` binary(16) NULL AFTER `product_id`;
 SQL;
 
-        $connection->executeQuery($sql);
+        $connection->executeUpdate($sql);
     }
 
     public function updateDestructive(Connection $connection): void

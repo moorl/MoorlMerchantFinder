@@ -20,8 +20,7 @@
                 <sw-field :label="$t('moorl-foundation.properties.name')"
                           v-model="item.name"
                           required
-                          validation="required"
-                          :error="itemNameError"></sw-field>
+                          validation="required"></sw-field>
 
                 <sw-field :label="$t('moorl-foundation.properties.type')"
                           :helpText="$t('moorl-merchant-finder.tooltips.type')"
@@ -36,12 +35,7 @@
                 </div>
 
                 <div class="sw-field">
-                    <sw-upload-store-listener
-                            :uploadTag="uploadTagMarker"
-                            autoUpload
-                            @media-upload-finish="setMarkerItem">
-                    </sw-upload-store-listener>
-                    <sw-media-upload
+                    <sw-media-upload-v2
                             :uploadTag="uploadTagMarker"
                             :source="item.markerId"
                             :allowMultiSelect="false"
@@ -50,16 +44,11 @@
                             @sw-media-upload-media-upload-success="setMarkerItem"
                             @media-drop="onDropMarker"
                             @media-upload-remove-image="onUnlinkMarker">
-                    </sw-media-upload>
+                    </sw-media-upload-v2>
                 </div>
 
                 <div class="sw-field">
-                    <sw-upload-store-listener
-                            :uploadTag="uploadTagMarkerRetina"
-                            autoUpload
-                            @media-upload-finish="setMarkerRetinaItem">
-                    </sw-upload-store-listener>
-                    <sw-media-upload
+                    <sw-media-upload-v2
                             :uploadTag="uploadTagMarkerRetina"
                             :source="item.markerRetinaId"
                             :allowMultiSelect="false"
@@ -68,16 +57,11 @@
                             @sw-media-upload-media-upload-success="setMarkerRetinaItem"
                             @media-drop="onDropMarkerRetina"
                             @media-upload-remove-image="onUnlinkMarkerRetina">
-                    </sw-media-upload>
+                    </sw-media-upload-v2>
                 </div>
 
                 <div class="sw-field">
-                    <sw-upload-store-listener
-                            :uploadTag="uploadTagMarkerShadow"
-                            autoUpload
-                            @media-upload-finish="setMarkerShadowItem">
-                    </sw-upload-store-listener>
-                    <sw-media-upload
+                    <sw-media-upload-v2
                             :uploadTag="uploadTagMarkerShadow"
                             :source="item.markerShadowId"
                             :allowMultiSelect="false"
@@ -86,7 +70,7 @@
                             @sw-media-upload-media-upload-success="setMarkerShadowItem"
                             @media-drop="onDropMarkerShadow"
                             @media-upload-remove-image="onUnlinkMarkerShadow">
-                    </sw-media-upload>
+                    </sw-media-upload-v2>
                 </div>
             </sw-card>
 
