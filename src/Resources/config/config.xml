@@ -145,6 +145,12 @@
             <helpText lang="de-DE">Wenn nicht definiert wird immer https://nominatim.openstreetmap.org/search verwendet</helpText>
         </input-field>
         <input-field>
+            <name>googleMapsApiKey</name>
+            <label>Google Maps API-Key</label>
+            <label lang="de-DE">Google Maps API-Key</label>
+            <helpText>Use Google Maps to get Positions by Address, if not configured use free OpenStreetMap Search Engine</helpText>
+        </input-field>
+        <input-field>
             <name>tileLayerUrl</name>
             <label>Tile Layer Provider URL</label>
             <label lang="de-DE">Map Design Anbieter URL</label>

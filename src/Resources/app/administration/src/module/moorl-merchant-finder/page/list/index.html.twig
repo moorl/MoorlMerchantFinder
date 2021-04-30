@@ -40,7 +40,6 @@
                 detailRoute="moorl.merchant.finder.detail"
                 @select-item="updateSelection"
                 @update-records="updateTotal">
-
             <template #column-active="{ item, isInlineEdit }">
                 <template v-if="isInlineEdit">
                     <sw-checkbox-field v-model="item.active"></sw-checkbox-field>
@@ -64,6 +63,8 @@
                   @modal-close="onCloseModal"
                   :title="$t('moorl-foundation.getLocation.title')"
                   variant="default">
+            <p>Since Version 1.7.1 For Shopware 6.4 all Locations will fetched by Import or by Update. This Assistant will be removed in future.</p>
+
             <sw-field type="switch"
                       bordered
                       :label="$t('moorl-foundation.getLocation.overwrite')" v-model="getLocation.overwrite"></sw-field>

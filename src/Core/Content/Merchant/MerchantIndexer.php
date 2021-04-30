@@ -2,6 +2,7 @@
 
 namespace Moorl\MerchantFinder\Core\Content\Merchant;
 
+use Moorl\MerchantFinder\Core\Service\LocationService;
 use Doctrine\DBAL\Connection;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
@@ -9,6 +10,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
 use Shopware\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexer;
 use Shopware\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexingMessage;
+use Shopware\Core\Framework\Uuid\Uuid;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class MerchantIndexer extends EntityIndexer
@@ -33,21 +35,28 @@ class MerchantIndexer extends EntityIndexer
      */
     private $eventDispatcher;
 
+    /**
+     * @var LocationService
+     */
+    private $locationService;
+
     public function __construct(
         Connection $connection,
         IteratorFactory $iteratorFactory,
         EntityRepositoryInterface $repository,
-        EventDispatcherInterface $eventDispatcher
+        EventDispatcherInterface $eventDispatcher,
+        LocationService $locationService
     ) {
         $this->iteratorFactory = $iteratorFactory;
         $this->repository = $repository;
         $this->connection = $connection;
         $this->eventDispatcher = $eventDispatcher;
+        $this->locationService = $locationService;
     }
 
     public function getName(): string
     {
-        return 'moorl_magazine_article.indexer';
+        return 'moorl_merchant.indexer';
     }
 
     public function iterate($offset): ?EntityIndexingMessage
@@ -65,14 +74,14 @@ class MerchantIndexer extends EntityIndexer
 
     public function update(EntityWrittenContainerEvent $event): ?EntityIndexingMessage
     {
-        $articleEvent = $event->getEventByEntityName(MerchantDefinition::ENTITY_NAME);
+        $entityEvent = $event->getEventByEntityName(MerchantDefinition::ENTITY_NAME);
 
-        if (!$articleEvent) {
+        if (!$entityEvent) {
             return null;
         }
 
-        $ids = $articleEvent->getIds();
-        foreach ($articleEvent->getWriteResults() as $result) {
+        $ids = $entityEvent->getIds();
+        foreach ($entityEvent->getWriteResults() as $result) {
             if (!$result->getExistence()) {
                 continue;
             }
@@ -92,6 +101,47 @@ class MerchantIndexer extends EntityIndexer
         $ids = array_unique(array_filter($ids));
         if (empty($ids)) {
             return;
+        }
+
+        $sql = 'SELECT 
+LOWER(HEX(moorl_merchant.id)) AS id,
+moorl_merchant.street AS street,
+moorl_merchant.street_number AS streetNumber,
+moorl_merchant.zipcode AS zipcode,
+moorl_merchant.city AS city,
+moorl_merchant.country_code AS iso,
+moorl_merchant.location_lat AS lat,
+moorl_merchant.location_lon AS lon
+FROM moorl_merchant
+WHERE moorl_merchant.id IN (:ids);';
+
+        $data = $this->connection->fetchAll(
+            $sql,
+            ['ids' => Uuid::fromHexToBytesList($ids)],
+            ['ids' => Connection::PARAM_STR_ARRAY]
+        );
+
+        foreach ($data as $item) {
+            if (!empty($item['lat']) && empty($item['lon'])) {
+                continue;
+            }
+
+            $geoPoint = $this->locationService->getLocationByAddress($item);
+
+            if (!$geoPoint) {
+                continue;
+            }
+
+            $sql = 'UPDATE moorl_merchant SET location_lat = :lat, location_lon = :lon WHERE id = :id;';
+
+            $this->connection->executeUpdate(
+                $sql,
+                [
+                    'id' => Uuid::fromHexToBytes($item['id']),
+                    'lat' => $geoPoint->getLatitude(),
+                    'lon' => $geoPoint->getLongitude()
+                ]
+            );
         }
 
         $context = Context::createDefaultContext();
