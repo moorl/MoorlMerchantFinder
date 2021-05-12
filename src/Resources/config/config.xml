@@ -15,7 +15,7 @@
 
     <card>
         <title>Search Logic</title>
-        <title lang="de-DE">Suchlogig</title>
+        <title lang="de-DE">Suchlogik</title>
 
         <input-field type="bool">
             <name>hideSearchLabels</name>

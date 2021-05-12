@@ -133,13 +133,18 @@ class StorefrontController extends OriginController
         ]);
     }
 
-    protected function getMerchant(string $merchantId, Request $request, SalesChannelContext $context): MerchantEntity {
+    protected function getMerchant(string $merchantId, Request $request, SalesChannelContext $context): ?MerchantEntity
+    {
         $this->merchantService->setSalesChannelContext($context);
 
         /* @var $merchant MerchantEntity */
         $merchant = $this->merchantService->getMerchants(new ArrayStruct([
             'id' => $merchantId
         ]))->first();
+
+        if (!$merchant) {
+            return null;
+        }
 
         if ($merchant->getCmsPageId()) {
             $pages = $this->cmsPageLoader->load($request, new Criteria([$merchant->getCmsPageId()]), $context);

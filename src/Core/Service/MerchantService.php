@@ -493,6 +493,7 @@ class MerchantService
 
         if ($data->get('id')) {
             $criteria = new Criteria([$data->get('id')]);
+            $criteria->setLimit(1);
         } else {
             if ($options->get('myLocation')) {
                 $this->myLocation = $options->get('myLocation');
