@@ -14,7 +14,6 @@ class Migration1584635124Merchant extends MigrationStep
 
     public function update(Connection $connection): void
     {
-
         $sql = <<<SQL
 ALTER TABLE `moorl_merchant`
 ADD `cms_page_id` binary(16) NULL AFTER `product_manufacturer_id`;
@@ -47,11 +46,9 @@ CREATE TABLE IF NOT EXISTS `moorl_merchant_tag` (
   CONSTRAINT `moorl_merchant_tag_ibfk_1` FOREIGN KEY (`moorl_merchant_id`) REFERENCES `moorl_merchant` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 SQL;
-
         $connection->executeUpdate($sql);
 
-        $this->addDemoData($connection);
-
+        //$this->addDemoData($connection);
     }
 
     public function updateDestructive(Connection $connection): void
@@ -89,8 +86,6 @@ INSERT INTO `moorl_merchant` (`id`, `sales_channel_id`, `country_id`, `customer_
 (UNHEX('D6468D8C430541809768AB2FD09DAEDD'),	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	'144',	'Nollie',	'Schorah',	'nschorah3z@fotki.com',	NULL,	1,	'22559',	'Hamburg',	'Realbridge',	'6 1st Terrace',	NULL,	NULL,	'DE',	53.5831,	9.75376,	NULL,	'221-93-8028',	'544-384-6594',	NULL,	NULL,	NULL,	'https://goodreads.com',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	'2020-03-20 00:40:39.751',	NULL),
 (UNHEX('E038DD449DBB4AD6BDA51C12AAB2639B'),	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	'76',	'Latia',	'Bushe',	'lbushe23@comsenz.com',	NULL,	1,	'28355',	'Bremen',	'Thoughtworks',	'3646 Maple Wood Center',	NULL,	NULL,	'DE',	53.0903,	8.9354,	NULL,	'719-40-9856',	'183-843-3636',	NULL,	NULL,	NULL,	'https://hud.gov',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	'2020-03-20 00:40:33.640',	NULL);
 SQL;
-
         $connection->executeUpdate($sql);
-
     }
 }

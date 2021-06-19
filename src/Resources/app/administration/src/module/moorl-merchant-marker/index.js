@@ -30,12 +30,13 @@ Module.register('moorl-merchant-marker', {
             }
         }
     },
-    navigation: [{
-        label: 'moorl-merchant-finder.general.markerMenuItemGeneral',
-        color: '#ff3d58',
-        path: 'moorl.merchant.marker.list',
-        icon: 'default-object-globe',
-        position: 41,
-        parent: 'sw-content'
-    }]
+    settingsItem: [
+        {
+            name: 'studygood-tutor-list',
+            to: 'moorl.merchant.marker.list',
+            group: 'moorl-foundation',
+            icon: 'default-object-lab-flask',
+            label: 'moorl-merchant-finder.general.markerMenuItemGeneral'
+        }
+    ]
 });

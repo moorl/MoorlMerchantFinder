@@ -1,0 +1,9 @@
+[
+  {
+    "id": "{DEMO_WILD_0}",
+    "isValid": true,
+    "routeName": "moorl.merchant-finder.merchant.page",
+    "entityName": "moorl_merchant",
+    "template": "merchant/{{ merchant.translated.name ? merchant.translated.name|lower : merchant.company|lower }}"
+  }
+]

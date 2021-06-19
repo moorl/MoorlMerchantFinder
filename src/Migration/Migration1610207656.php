@@ -56,7 +56,7 @@ INSERT INTO `moorl_merchant_marker` (`id`, `marker_settings`, `name`, `created_a
 (UNHEX('FB3E870BB8AF468C983A02BFCB3F67F2'),	'{\"iconSizeX\": 25, \"iconSizeY\": 41, \"iconAnchorX\": 12, \"iconAnchorY\": 41, \"shadowSizeX\": 41, \"shadowSizeY\": 41, \"popupAnchorX\": 1, \"popupAnchorY\": -34, \"shadowAnchorX\": 6, \"shadowAnchorY\": 21}',	'Red', '2021-01-09 17:23:06.389');
 SQL;
 
-        $connection->executeUpdate($sql);
+        //$connection->executeUpdate($sql);
     }
 
     public function updateDestructive(Connection $connection): void
