@@ -1,1 +1,0 @@
-import './sw-cms-sidebar';
