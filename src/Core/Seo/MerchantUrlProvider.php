@@ -6,43 +6,57 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\ParameterType;
 use Moorl\MerchantFinder\Core\Content\Merchant\MerchantCollection;
+use Moorl\MerchantFinder\Core\Content\Merchant\MerchantDefinition;
 use Moorl\MerchantFinder\Core\Content\Merchant\MerchantEntity;
-use Shopware\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
-use Shopware\Core\Content\Sitemap\Provider\UrlProviderInterface;
+use Shopware\Core\Content\Sitemap\Provider\AbstractUrlProvider;
 use Shopware\Core\Content\Sitemap\Service\ConfigHandler;
 use Shopware\Core\Content\Sitemap\Struct\Url;
 use Shopware\Core\Content\Sitemap\Struct\UrlResult;
+use Shopware\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
+use Shopware\Core\Framework\DataAbstractionLayer\Doctrine\FetchModeHelper;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
+use Shopware\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\RouterInterface;
 
-class MerchantUrlProvider implements UrlProviderInterface
+class MerchantUrlProvider extends AbstractUrlProvider
 {
     public const CHANGE_FREQ = 'weekly';
 
-    /**
-     * @var EntityRepositoryInterface
-     */
-    private $repository;
+    private IteratorFactory $iteratorFactory;
 
-    /**
-     * @var ConfigHandler
-     */
-    private $configHandler;
+    private ConfigHandler $configHandler;
 
-    /**
-     * @var SeoUrlPlaceholderHandlerInterface
-     */
-    private $seoUrlPlaceholderHandler;
+    private Connection $connection;
+
+    private MerchantDefinition $definition;
+
+    private RouterInterface $router;
+
+    private EntityRepositoryInterface $repository;
 
     public function __construct(
-        EntityRepositoryInterface $repository,
         ConfigHandler $configHandler,
-        SeoUrlPlaceholderHandlerInterface $seoUrlPlaceholderHandler
+        Connection $connection,
+        MerchantDefinition $definition,
+        IteratorFactory $iteratorFactory,
+        RouterInterface $router,
+        EntityRepositoryInterface $repository
     ) {
-        $this->repository = $repository;
         $this->configHandler = $configHandler;
-        $this->seoUrlPlaceholderHandler = $seoUrlPlaceholderHandler;
+        $this->connection = $connection;
+        $this->definition = $definition;
+        $this->iteratorFactory = $iteratorFactory;
+        $this->router = $router;
+        $this->repository = $repository;
+    }
+
+    public function getDecorated(): AbstractUrlProvider
+    {
+        throw new DecorationPatternException(self::class);
     }
 
     public function getName(): string
@@ -57,17 +71,26 @@ class MerchantUrlProvider implements UrlProviderInterface
     {
         $collection = $this->getCollection($salesChannelContext, $limit, $offset);
 
+        if ($collection->count() === 0) {
+            return new UrlResult([], null);
+        }
+
+        $seoUrls = $this->getSeoUrls($collection->getIds(), 'moorl.merchant-finder.merchant.page', $salesChannelContext, $this->connection);
+        $seoUrls = FetchModeHelper::groupUnique($seoUrls);
+
         $urls = [];
         $url = new Url();
         foreach ($collection as $entity) {
-            /** @var \DateTimeInterface $lastmod */
-            $lastmod = $entity->getUpdatedAt() ?: $entity->getCreatedAt();
+            $lastMod = $entity->getUpdatedAt() ?: $entity->getCreatedAt();
 
             $newUrl = clone $url;
-            $newUrl->setLoc($this->seoUrlPlaceholderHandler->generate('moorl.merchant-finder.merchant.page', [
-                'merchantId' => $entity->getId(),
-            ]));
-            $newUrl->setLastmod($lastmod);
+            if (isset($seoUrls[$entity->getId()])) {
+                $newUrl->setLoc($seoUrls[$entity->getId()]['seo_path_info']);
+            } else {
+                $newUrl->setLoc($this->router->generate('moorl.merchant-finder.merchant.page', ['merchantId' => $entity->getId()], UrlGeneratorInterface::ABSOLUTE_PATH));
+            }
+
+            $newUrl->setLastmod($lastMod);
             $newUrl->setChangefreq(self::CHANGE_FREQ);
             $newUrl->setResource(MerchantEntity::class);
             $newUrl->setIdentifier($entity->getId());
@@ -90,6 +113,7 @@ class MerchantUrlProvider implements UrlProviderInterface
     {
         if (!$collectionCriteria) {
             $collectionCriteria = new Criteria();
+            $collectionCriteria->addFilter(new EqualsFilter('active', true));
         }
         $collectionCriteria->setLimit($limit);
 

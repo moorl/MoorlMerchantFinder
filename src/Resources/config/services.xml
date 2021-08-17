@@ -131,9 +131,12 @@
 
         <!-- UrlProviders / Sitemap -->
         <service id="Moorl\MerchantFinder\Core\Seo\MerchantUrlProvider">
-            <argument type="service" id="moorl_merchant.repository"/>
             <argument type="service" id="Shopware\Core\Content\Sitemap\Service\ConfigHandler"/>
-            <argument type="service" id="Shopware\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface"/>
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Moorl\MerchantFinder\Core\Content\Merchant\MerchantDefinition"/>
+            <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory"/>
+            <argument type="service" id="router"/>
+            <argument type="service" id="moorl_merchant.repository"/>
 
             <tag name="shopware.sitemap_url_provider"/>
         </service>
