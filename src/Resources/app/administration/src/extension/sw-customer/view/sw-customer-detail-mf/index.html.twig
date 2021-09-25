@@ -1,0 +1,13 @@
+<div class="sw-customer-detail-mf">
+    <sw-card v-if="customer"
+             :isLoading="isLoading"
+             :title="$t('global.entities.customer')"
+             class="moorl-entity-grid">
+        <moorl-entity-grid entity="moorl_merchant_customer"
+                           :isLoading="isLoading"
+                           :criteria="merchantCustomerCriteria"
+                           :filterColumns="merchantCustomerFilterColumns"
+                           :defaultItem="{ customerId: customer.id }">
+        </moorl-entity-grid>
+    </sw-card>
+</div>

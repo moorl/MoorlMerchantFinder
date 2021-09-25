@@ -401,6 +401,59 @@ class MerchantService
         }
     }
 
+    public function addSalesChannelProductCriteria(Criteria $criteria, $rules = []): void
+    {
+        $salesChannelContext = $this->getSalesChannelContext();
+        $customer = $salesChannelContext->getCustomer();
+
+        $criteria->addFilter(new EqualsFilter('product.MoorlMerchants.customers.customerId', $customer->getId()));
+        return;
+
+        /*if (in_array('salesChannel', $rules)) {
+            $criteria->addFilter(new EqualsFilter('product.MoorlMerchants.salesChannelId', $salesChannelContext->getSalesChannelId()));
+        } else {
+            $criteria->addFilter(
+                new MultiFilter(
+                    MultiFilter::CONNECTION_OR, [
+                        new EqualsFilter('product.MoorlMerchants.salesChannelId', null),
+                        new EqualsFilter('product.MoorlMerchants.salesChannelId', $salesChannelContext->getSalesChannelId())
+                    ]
+                )
+            );
+        }*/
+
+        if ($customer) {
+            if (in_array('customerGroup', $rules)) {
+                $criteria->addFilter(new EqualsFilter('product.MoorlMerchants.customerGroupId', $customer->getGroupId()));
+            } else {
+                $criteria->addFilter(
+                    new MultiFilter(
+                        MultiFilter::CONNECTION_XOR, [
+                            new EqualsFilter('product.MoorlMerchants.customerGroupId', null),
+                            new EqualsFilter('product.MoorlMerchants.customerGroupId', $customer->getGroupId())
+                        ]
+                    )
+                );
+            }
+
+            if (in_array('customer', $rules)) {
+                $criteria->addFilter(new EqualsFilter('product.MoorlMerchants.customers.customerId', $customer->getId()));
+            } else {
+                $criteria->addFilter(
+                    new MultiFilter(
+                        MultiFilter::CONNECTION_XOR, [
+                            new EqualsFilter('product.MoorlMerchants.customers.customerId', null),
+                            new EqualsFilter('product.MoorlMerchants.customers.customerId', $customer->getId())
+                        ]
+                    )
+                );
+            }
+        } else {
+            $criteria->addFilter(new EqualsFilter('product.MoorlMerchants.customers.customerId', null));
+            $criteria->addFilter(new EqualsFilter('product.MoorlMerchants.customerGroupId', null));
+        }
+    }
+
     public function addSalesChannelCriteria(Criteria $criteria, string $domain = ''): void
     {
         $salesChannelContext = $this->getSalesChannelContext();
@@ -508,8 +561,8 @@ class MerchantService
                 $criteria = new Criteria();
 
                 $geopoint = new GeoPoint(
-                    (float) $this->myLocation[0]['lat'],
-                    (float) $this->myLocation[0]['lon']
+                    (float)$this->myLocation[0]['lat'],
+                    (float)$this->myLocation[0]['lon']
                 );
 
                 /* @var $boundingBox BoundingBox */
@@ -621,8 +674,8 @@ class MerchantService
         foreach ($resultData->getEntities() as $entity) {
             if ($context->hasExtension('DistanceField')) {
                 $entity->setDistance($this->distance(
-                    (float) $context->getExtension('DistanceField')['lat'],
-                    (float) $context->getExtension('DistanceField')['lon'],
+                    (float)$context->getExtension('DistanceField')['lat'],
+                    (float)$context->getExtension('DistanceField')['lon'],
                     $entity->getLocationLat(),
                     $entity->getLocationLon()
                 ));
@@ -764,13 +817,13 @@ SQL;
         $this->context = $salesChannelContext->getContext();
     }
 
-    private function distance(float $lat1, float $lon1, float $lat2, float $lon2, string $unit = "K") {
+    private function distance(float $lat1, float $lon1, float $lat2, float $lon2, string $unit = "K")
+    {
         if (($lat1 == $lat2) && ($lon1 == $lon2)) {
             return 0;
-        }
-        else {
+        } else {
             $theta = $lon1 - $lon2;
-            $dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta));
+            $dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) + cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta));
             $dist = acos($dist);
             $dist = rad2deg($dist);
             $miles = $dist * 60 * 1.1515;
