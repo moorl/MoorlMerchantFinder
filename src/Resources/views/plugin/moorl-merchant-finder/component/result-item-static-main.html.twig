@@ -3,53 +3,64 @@
 {% endif %}
 
 {% block element_moorl_merchant_finder_result_title %}
-    <h4>
-        <span>{{ merchant.translated.name ?: merchant.company }}</span>
-        {% if merchant.distance %}
-            <small class="text-small">{{ "moorl-merchant-finder.distance"|trans }}: {{ merchant.distance }} {{ "moorl-merchant-finder.km"|trans }}</small>
-        {% endif %}
-    </h4>
+    {% if config('MoorlMerchantFinder.config.showName') %}
+        <h4>
+            <span>{{ merchant.translated.name ?: merchant.company }}</span>
+            {% if merchant.distance %}
+                <small class="text-small">{{ "moorl-merchant-finder.distance"|trans }}: {{ merchant.distance }} {{ "moorl-merchant-finder.km"|trans }}</small>
+            {% endif %}
+        </h4>
+    {% endif %}
 {% endblock %}
 
 <div class="row form-row">
     <div class="col-6">
         {% if merchant.media %}
             {% block element_moorl_merchant_finder_result_logo %}
-                <img src="{{ merchant.media.url }}">
+                {% if config('MoorlMerchantFinder.config.showLogo') %}
+                    <img src="{{ merchant.media.url }}">
+                {% endif %}
             {% endblock %}
         {% endif %}
 
         {% block element_moorl_merchant_finder_result_address %}
-            {% if merchant.street %}
-                <p>{{ merchant.street }} {{ merchant.streetNumber }}
-                    <br>{{ merchant.zipcode }} {{ merchant.city }}
-                    {% if merchant.country %}
-                        {{ merchant.country }}
-                    {% endif %}
-                </p>
+            {% if config('MoorlMerchantFinder.config.showAddress') %}
+                {% if merchant.street %}
+                    <p>{{ merchant.street }} {{ merchant.streetNumber }}
+                        <br>{{ merchant.zipcode }} {{ merchant.city }}
+                        {% if merchant.country %}
+                            {{ merchant.country }}
+                        {% endif %}
+                    </p>
+                {% endif %}
             {% endif %}
 
-            {% if merchant.phoneNumber %}
-                <p>{{ "moorl-merchant-finder.phoneNumber"|trans }} {{ merchant.phoneNumber }}</p>
+            {% if config('MoorlMerchantFinder.config.showPhoneNumber') %}
+                {% if merchant.phoneNumber %}
+                    <p>{{ "moorl-merchant-finder.phoneNumber"|trans }} {{ merchant.phoneNumber }}</p>
+                {% endif %}
             {% endif %}
         {% endblock %}
     </div>
 
     <div class="col-6">
         {% block element_moorl_merchant_finder_result_description %}
-            {% if merchant.description or merchant.translated.description %}
-                <b>{{ "moorl-merchant-finder.description"|trans }}</b>
-                <p style="white-space: pre-line">{{ merchant.translated.description ?: merchant.description }}</p>
+            {% if config('MoorlMerchantFinder.config.showDescription') %}
+                {% if merchant.description or merchant.translated.description %}
+                    <b>{{ "moorl-merchant-finder.description"|trans }}</b>
+                    <p style="white-space: pre-line">{{ merchant.translated.description ?: merchant.description }}</p>
+                {% endif %}
             {% endif %}
         {% endblock %}
 
         {% block element_moorl_merchant_finder_result_opening_hours %}
-            {% if merchant.openingHours or merchant.translated.openingHours %}
-                <i class="fa-fw fas fa-clock"></i> <b>{{ "moorl-merchant-finder.openingHours"|trans }}</b>
-                <p style="white-space: pre-line">{{ merchant.translated.openingHours ?: merchant.openingHours }}</p>
-            {% elseif openingHour %}
-                <i class="fa-fw fas fa-clock"></i> <b>{{ "moorl-merchant-finder.openingHours"|trans }}</b>
-                {% sw_include '@MoorlMerchantFinder/plugin/moorl-merchant-finder/component/opening-hours.html.twig' %}
+            {% if config('MoorlMerchantFinder.config.showOpeningHours') %}
+                {% if merchant.openingHours %}
+                    <i class="fa-fw fas fa-clock"></i> <b>{{ "moorl-merchant-finder.openingHours"|trans }}</b>
+                    {% sw_include '@Storefront/plugin/moorl-foundation/opening-hours.html.twig' with {
+                        'openingHours': merchant.openingHours
+                    } %}
+                {% endif %}
             {% endif %}
         {% endblock %}
     </div>
