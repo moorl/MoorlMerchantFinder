@@ -260,20 +260,6 @@
                         </moorl-entity-grid>
                     </sw-card>
 
-                    <sw-card v-if="active === 'stock'"
-                             :isLoading="isLoading"
-                             :title="$tc('moorl-merchant-finder.cards.linkedProducts')">
-                        <sw-alert variant="info">
-                            {{ $tc('moorl-merchant-finder.notification.linkedProducts') }}
-                        </sw-alert>
-
-                        <sw-entity-many-to-many-select
-                                :localMode="true"
-                                labelProperty="name"
-                                v-model="item.products">
-                        </sw-entity-many-to-many-select>
-                    </sw-card>
-
                     <sw-card v-if="active === 'merchantArea'"
                              :isLoading="isLoading"
                              :title="$tc('moorl-merchant-finder.cards.merchantArea')">

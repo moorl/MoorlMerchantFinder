@@ -1,7 +1,7 @@
 {
     "global": {
         "entities": {
-            "moorl_merchant": "Händlersuche"
+            "moorl_merchant": "Fachhändler"
         }
     },
     "moorl-merchant-finder": {

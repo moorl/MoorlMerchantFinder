@@ -6,7 +6,7 @@
     },
     "global": {
         "entities": {
-            "moorl_merchant": "Merchantfinder"
+            "moorl_merchant": "Merchants"
         }
     },
     "moorl-merchant-finder": {

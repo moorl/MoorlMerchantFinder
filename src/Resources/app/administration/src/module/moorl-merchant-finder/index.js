@@ -1,4 +1,4 @@
-const { Module, Application } = Shopware;
+const {Module, Application} = Shopware;
 import './page/list';
 import './page/_detail';
 import './page/create';
@@ -49,6 +49,6 @@ Module.register('moorl-merchant-finder', {
         path: 'moorl.merchant.finder.list',
         icon: 'default-object-globe',
         position: 40,
-        parent: 'sw-content'
+        parent: 'sw-catalogue'
     }]
 });

@@ -32,9 +32,9 @@ Module.register('moorl-merchant-marker', {
     },
     settingsItem: [
         {
-            name: 'studygood-tutor-list',
+            name: 'moorl-merchant-marker-list',
             to: 'moorl.merchant.marker.list',
-            group: 'moorl-foundation',
+            group: 'plugins',
             icon: 'default-object-lab-flask',
             label: 'moorl-merchant-finder.general.markerMenuItemGeneral'
         }
