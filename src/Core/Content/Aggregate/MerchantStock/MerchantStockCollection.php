@@ -20,7 +20,7 @@ class MerchantStockCollection extends EntityCollection
         return MerchantStockEntity::class;
     }
 
-    public function filterByMerchantCustomerId(string $customerId): self
+    public function filterByMerchantCustomerId(?string $customerId = null): self
     {
         return $this->filter(function (MerchantStockEntity $merchantStock) use ($customerId) {
             $merchant = $merchantStock->getMerchant();
