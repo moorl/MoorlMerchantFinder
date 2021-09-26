@@ -30,7 +30,7 @@
             "refresh": "Aktualisieren"
         },
         "notification": {
-            "linkedCustomers": "Dieser Fachhändler ist nur für die ausgewählten Kunden sichtbar. Sofern der Fachhändler mit Produkten verlinkt ist, sind auch nur dessen Produkte sichtbar.",
+            "linkedCustomers": "Dieser Fachhändler ist nur für die ausgewählten Kunden sichtbar.",
             "linkedSalesChannels": "Lassen Sie dieses Feld leer, wenn Sie Ihre Fachhändler in allen Verkaufskanälen anzeigen möchten.",
             "linkedShops": "Lassen Sie dieses Feld leer, wenn Sie Ihr Lebensmittelprodukt in allen Geschäften anzeigen möchten. Wenn Sie eine Fachhändler ausgewählt haben, ist dieses Produkt nur für diese Fachhändler sichtbar.",
             "linkedProducts": "Lassen Sie dieses Feld leer, wenn Sie Ihre Produkte in allen Fachhändlern anzeigen möchten. Wenn Sie ein Produkt ausgewählt haben, ist dieses Produkt nur für diese Fachhändler sichtbar.",

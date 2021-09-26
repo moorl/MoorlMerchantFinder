@@ -30,6 +30,7 @@
             "refresh": "Refresh"
         },
         "notification": {
+            "linkedCustomers": "This merchant is just visible for chosen customers.",
             "linkedSalesChannels": "Leave this empty if you want to show Your Store in all Sales Channels.",
             "linkedShops": "Leave this empty if you want to show Your Food Product in all Stores. If You chose a Store, this Product is just visible for this Store.",
             "linkedProducts": "Leave this empty if you want to show Your Food Products in all Stores. If You chose a Product, this Product is just visible for this Store.",
@@ -58,6 +59,7 @@
             "printerBinaries": "Printer Binaries"
         },
         "cards": {
+            "marker": "Marker",
             "imprint": "Imprint and Invoice",
             "quickOrder": "Quick Order",
             "linkedSalesChannels": "Linked Sales Channels",
@@ -116,6 +118,8 @@
             "cancelOrder": "Are you sure to cancel this Order?"
         },
         "properties": {
+            "autoLocation": "Auto location",
+            "content": "Content",
             "executiveDirector": "Executive Director",
             "placeOfFulfillment": "Place of Fulfillment",
             "placeOfJurisdiction": "Place of Jurisdiction",

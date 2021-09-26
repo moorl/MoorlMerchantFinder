@@ -3,7 +3,7 @@
 
     <sw-tabs-item v-if="customer"
                   :route="{ name: 'sw.customer.detail.mf' }"
-                  title="moori Merchant Finder">
-        moori Merchant Finder
+                  :title="$tc('moorl-merchant-finder.general.mainMenuItemGeneral')">
+        {{ $tc('moorl-merchant-finder.general.mainMenuItemGeneral') }}
     </sw-tabs-item>
 {% endblock %}
