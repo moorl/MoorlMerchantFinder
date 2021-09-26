@@ -16,18 +16,18 @@ Component.register('moorl-merchant-finder-detail', {
         Mixin.getByName('placeholder')
     ],
 
-    metaInfo() {
-        return {
-            title: this.$createTitle(this.identifier)
-        };
-    },
-
     data() {
         return {
-            item: null,
+            item: {},
             isLoading: false,
             processSuccess: false,
             mediaModalIsOpen: false
+        };
+    },
+
+    metaInfo() {
+        return {
+            title: this.$createTitle(this.identifier),
         };
     },
 
@@ -42,7 +42,11 @@ Component.register('moorl-merchant-finder-detail', {
         ]),
 
         identifier() {
-            return this.placeholder(this.item, 'name');
+            if (this.item && this.item.name) {
+                return this.item.name;
+            }
+
+            return this.$tc('sw-event-action.detail.titleNewEntity');
         },
 
         repository() {
@@ -198,6 +202,6 @@ Component.register('moorl-merchant-finder-detail', {
         },
         onOpenMediaModal() {
             this.mediaModalIsOpen = true;
-        },
+        }
     }
 });
