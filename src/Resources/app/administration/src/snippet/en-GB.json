@@ -11,8 +11,8 @@
     },
     "moorl-merchant-finder": {
         "general": {
-            "markerMenuItemGeneral": "Merchant Finder Markers",
-            "mainMenuItemGeneral": "Merchant Finder",
+            "markerMenuItemGeneral": "Merchant Markers",
+            "mainMenuItemGeneral": "Merchants",
             "descriptionTextModule": "Manage your Merchants here",
             "placeholderSearchBar": "Search for merchants"
         },

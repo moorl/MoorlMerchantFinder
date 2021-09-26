@@ -6,8 +6,8 @@
     },
     "moorl-merchant-finder": {
         "general": {
-            "markerMenuItemGeneral": "Händlersuche Markers",
-            "mainMenuItemGeneral": "Händlersuche",
+            "markerMenuItemGeneral": "Fachhändler Marker",
+            "mainMenuItemGeneral": "Fachhändler",
             "descriptionTextModule": "Verwalte die Händler hier",
             "placeholderSearchBar": "Search for merchants"
         },
