@@ -2,7 +2,7 @@
 
 namespace Moorl\MerchantFinder\Core\Content\Merchant;
 
-use Moorl\MerchantFinder\Core\Service\LocationService;
+use MoorlFoundation\Core\Service\LocationService;
 use Doctrine\DBAL\Connection;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
@@ -113,7 +113,7 @@ moorl_merchant.country_code AS iso,
 moorl_merchant.location_lat AS lat,
 moorl_merchant.location_lon AS lon
 FROM moorl_merchant
-WHERE moorl_merchant.id IN (:ids);';
+WHERE moorl_merchant.id IN (:ids) AND moorl_merchant.auto_location = 1;';
 
         $data = $this->connection->fetchAll(
             $sql,

@@ -18,10 +18,6 @@ class MerchantTranslationEntity extends TranslationEntity
      * @var string|null
      */
     protected $descriptionHtml;
-    /**
-     * @var string|null
-     */
-    protected $openingHours;
 
     /**
      * @return string
@@ -69,21 +65,5 @@ class MerchantTranslationEntity extends TranslationEntity
     public function setDescriptionHtml(?string $descriptionHtml): void
     {
         $this->descriptionHtml = $descriptionHtml;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getOpeningHours(): ?string
-    {
-        return $this->openingHours;
-    }
-
-    /**
-     * @param string|null $openingHours
-     */
-    public function setOpeningHours(?string $openingHours): void
-    {
-        $this->openingHours = $openingHours;
     }
 }

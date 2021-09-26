@@ -24,7 +24,8 @@ class MoorlMerchantFinder extends Plugin
         'moorl_merchant_translation',
         'moorl_merchant_stock',
         'moorl_merchant_customer',
-        'moorl_merchant_marker'
+        'moorl_merchant_marker',
+        'moorl_merchant_area'
     ];
     public const SHOPWARE_TABLES = [
         'media_folder',

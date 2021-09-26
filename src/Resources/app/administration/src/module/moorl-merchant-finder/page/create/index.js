@@ -1,6 +1,6 @@
 const { Component } = Shopware;
 
-import template from '../detail/index.html.twig';
+import template from '../_detail/index.html.twig';
 
 Component.extend('moorl-merchant-finder-create', 'moorl-merchant-finder-detail', {
     template,

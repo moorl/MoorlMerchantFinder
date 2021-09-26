@@ -1,6 +1,6 @@
 const { Module, Application } = Shopware;
 import './page/list';
-import './page/detail';
+import './page/_detail';
 import './page/create';
 import './search-service';
 import './style/main.scss';

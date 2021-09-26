@@ -1,0 +1,406 @@
+<sw-page class="moorl-merchant-finder-detail">
+    <template slot="smart-bar-header" v-if="item">
+        <h2> {{ item.name }}</h2>
+    </template>
+
+    <template slot="smart-bar-actions">
+        <sw-button :routerLink="{ name: 'moorl.merchant.finder.list' }">
+            {{ $t('moorl-merchant-finder.buttons.cancelButtonText') }}
+        </sw-button>
+
+        <sw-button-process
+                :isLoading="isLoading"
+                :processSuccess="processSuccess"
+                variant="primary"
+                @process-finish="saveFinish"
+                @click="onClickSave">
+            {{ $t('moorl-merchant-finder.buttons.saveButtonText') }}
+        </sw-button-process>
+    </template>
+
+    <template #language-switch>
+        <sw-language-switch
+                slot="language-switch"
+                :disabled="item && item._isNew"
+                @on-change="onChangeLanguage">
+        </sw-language-switch>
+    </template>
+
+    <template slot="content">
+        <sw-card-view>
+            <sw-tabs defaultItem="general">
+                <template slot-scope="{ active }">
+                    <sw-tabs-item :title="$tc('moorl-merchant-finder.cards.general')"
+                                  name="general"
+                                  :activeTab="active">
+                        {{ $tc('moorl-merchant-finder.cards.general') }}
+                    </sw-tabs-item>
+
+                    <sw-tabs-item :title="$tc('moorl-merchant-finder.cards.address')"
+                                  name="address"
+                                  :activeTab="active">
+                        {{ $tc('moorl-merchant-finder.cards.address') }}
+                    </sw-tabs-item>
+
+                    <sw-tabs-item :title="$tc('moorl-merchant-finder.cards.stock')"
+                                  name="stock"
+                                  :activeTab="active">
+                        {{ $tc('moorl-merchant-finder.cards.stock') }}
+                    </sw-tabs-item>
+
+                    <sw-tabs-item :title="$tc('moorl-merchant-finder.cards.merchantArea')"
+                                  name="merchantArea"
+                                  :activeTab="active">
+                        {{ $tc('moorl-merchant-finder.cards.merchantArea') }}
+                    </sw-tabs-item>
+
+                    <sw-tabs-item :title="$tc('moorl-merchant-finder.cards.timeSettings')"
+                                  name="timeSettings"
+                                  :activeTab="active">
+                        {{ $tc('moorl-merchant-finder.cards.timeSettings') }}
+                    </sw-tabs-item>
+
+                    <sw-tabs-item :title="$tc('moorl-merchant-finder.cards.other')"
+                                  name="other"
+                                  :activeTab="active">
+                        {{ $tc('moorl-merchant-finder.cards.other') }}
+                    </sw-tabs-item>
+                </template>
+
+                <template slot="content" slot-scope="{ active }">
+                    <sw-card v-if="active === 'general'" :isLoading="isLoading" :title="$tc('moorl-merchant-finder.cards.general')">
+                        <sw-container columns="1fr 1fr" gap="0 20px">
+                            <sw-field :label="$tc('moorl-merchant-finder.properties.name')"
+                                      v-model="item.name"
+                                      required
+                                      validation="required"
+                                      :error="itemNameError"></sw-field>
+
+                            <sw-field :label="$tc('moorl-merchant-finder.properties.company')"
+                                      v-model="item.company"></sw-field>
+
+                            <sw-field type="switch"
+                                      bordered
+                                      :label="$tc('moorl-merchant-finder.properties.active')"
+                                      v-model="item.active">
+                            </sw-field>
+
+                            <sw-field type="switch"
+                                      bordered
+                                      :label="$tc('moorl-merchant-finder.properties.highlight')"
+                                      v-model="item.highlight"></sw-field>
+
+                            <sw-field type="switch"
+                                      bordered
+                                      :label="$tc('moorl-merchant-finder.properties.deliveryActive')"
+                                      v-model="item.deliveryActive">
+                            </sw-field>
+
+                            <sw-field type="switch"
+                                      bordered
+                                      :label="$tc('moorl-merchant-finder.properties.collectActive')"
+                                      v-model="item.collectActive">
+                            </sw-field>
+
+                            <sw-field type="switch"
+                                      bordered
+                                      :label="$tc('moorl-merchant-finder.properties.isDefault')"
+                                      :helpText="$tc('moorl-merchant-finder.tooltip.merchantIsDefault')"
+                                      v-model="item.isDefault">
+                            </sw-field>
+                        </sw-container>
+
+                        <div class="sw-field">
+                            <sw-upload-listener
+                                    :uploadTag="item.id"
+                                    autoUpload
+                                    @media-upload-finish="setMediaItem">
+                            </sw-upload-listener>
+                            <sw-media-upload-v2
+                                    :uploadTag="item.id"
+                                    defaultFolder="product_manufacturer"
+                                    :source="item.mediaId"
+                                    :allowMultiSelect="false"
+                                    :label="$tc('moorl-merchant-finder.properties.logo')"
+                                    variant="regular"
+                                    @sw-media-upload-media-upload-success="setMediaItem"
+                                    @media-drop="onDropMedia"
+                                    @media-upload-sidebar-open="onOpenMediaModal"
+                                    @media-upload-remove-image="onUnlinkMedia">
+                            </sw-media-upload-v2>
+                        </div>
+
+                        <sw-container columns="1fr 1fr" gap="0 20px">
+                            <sw-number-field :label="$tc('moorl-merchant-finder.properties.priority')"
+                                             v-model="item.priority"></sw-number-field>
+                            <sw-field :label="$tc('moorl-merchant-finder.properties.originId')"
+                                      v-model="item.originId"></sw-field>
+                        </sw-container>
+
+                        <sw-field type="textarea"
+                                  :label="$tc('moorl-merchant-finder.properties.description')"
+                                  name="description"
+                                  v-model="item.description">
+                        </sw-field>
+
+                        <sw-entity-single-select
+                                :label="$tc('moorl-merchant-finder.properties.cmsPage')"
+                                entity="cms_page"
+                                v-model="item.cmsPageId">
+                        </sw-entity-single-select>
+
+                        <sw-text-editor v-if="!item.cmsPageId"
+                                        :label="$tc('moorl-merchant-finder.properties.content')"
+                                        v-model="item.descriptionHtml">
+                        </sw-text-editor>
+                    </sw-card>
+
+                    <sw-card v-if="active === 'general'" :isLoading="isLoading" :title="$tc('moorl-merchant-finder.cards.marker')">
+                        <sw-entity-single-select
+                                :label="$tc('moorl-merchant-finder.properties.markerId')"
+                                entity="moorl_merchant_marker"
+                                v-model="item.markerId">
+                        </sw-entity-single-select>
+                    </sw-card>
+
+                    <sw-card v-if="active === 'general'" :isLoading="isLoading" :title="$tc('moorl-merchant-finder.cards.contact')">
+                        <sw-container columns="1fr 1fr" gap="0 20px">
+                            <sw-field :label="$tc('moorl-merchant-finder.properties.email')"
+                                      v-model="item.email"
+                                      required
+                                      validation="required"
+                                      :error="itemEmailError"></sw-field>
+                            <sw-field :label="$tc('moorl-merchant-finder.properties.phoneNumber')" v-model="item.phoneNumber"></sw-field>
+                            <sw-field :label="$tc('moorl-merchant-finder.properties.faxNumber')" v-model="item.faxNumber"></sw-field>
+                        </sw-container>
+                    </sw-card>
+
+                    <sw-card v-if="active === 'general'" :isLoading="isLoading" :title="$tc('moorl-merchant-finder.cards.imprint')">
+                        <sw-container columns="1fr 1fr" gap="0 20px">
+                            <sw-field :label="$tc('moorl-merchant-finder.properties.executiveDirector')" v-model="item.executiveDirector"></sw-field>
+                            <sw-field :label="$tc('moorl-merchant-finder.properties.placeOfFulfillment')" v-model="item.placeOfFulfillment"></sw-field>
+                            <sw-field :label="$tc('moorl-merchant-finder.properties.placeOfJurisdiction')" v-model="item.placeOfJurisdiction"></sw-field>
+                            <sw-field :label="$tc('moorl-merchant-finder.properties.bankBic')" v-model="item.bankBic"></sw-field>
+                            <sw-field :label="$tc('moorl-merchant-finder.properties.bankIban')" v-model="item.bankIban"></sw-field>
+                            <sw-field :label="$tc('moorl-merchant-finder.properties.bankName')" v-model="item.bankName"></sw-field>
+                            <sw-field :label="$tc('moorl-merchant-finder.properties.taxOffice')" v-model="item.taxOffice"></sw-field>
+                            <sw-field :label="$tc('moorl-merchant-finder.properties.taxNumber')" v-model="item.taxNumber"></sw-field>
+                            <sw-field :label="$tc('moorl-merchant-finder.properties.vatId')" v-model="item.vatId"></sw-field>
+                        </sw-container>
+                    </sw-card>
+
+                    <sw-card v-if="active === 'address'" :isLoading="isLoading" :title="$tc('moorl-merchant-finder.cards.address')">
+                        <sw-container columns="1fr 1fr" gap="0 20px">
+                            <sw-field :label="$tc('moorl-merchant-finder.properties.firstName')" v-model="item.firstName"></sw-field>
+
+                            <sw-field :label="$tc('moorl-merchant-finder.properties.lastName')" v-model="item.lastName"></sw-field>
+
+                            <sw-field :label="$tc('moorl-merchant-finder.properties.street')"
+                                      v-model="item.street"
+                                      required
+                                      validation="required"
+                                      :error="itemStreetError"></sw-field>
+                            <sw-field :label="$tc('moorl-merchant-finder.properties.streetNumber')" v-model="item.streetNumber"></sw-field>
+
+                            <sw-field :label="$tc('moorl-merchant-finder.properties.zipcode')"
+                                      v-model="item.zipcode"
+                                      required
+                                      validation="required"
+                                      :error="itemZipcodeError"></sw-field>
+
+                            <sw-field :label="$tc('moorl-merchant-finder.properties.city')"
+                                      v-model="item.city"
+                                      required
+                                      validation="required"
+                                      :error="itemCityError"></sw-field>
+
+                            <sw-entity-single-select
+                                :label="$tc('moorl-merchant-finder.properties.country')"
+                                v-model="item.countryId"
+                                labelProperty="name"
+                                entity="country"
+                                required
+                                validation="required"
+                                :error="itemCountryIdError">
+                            </sw-entity-single-select>
+
+                            <sw-field :label="$tc('moorl-merchant-finder.properties.countryCode')" v-model="item.countryCode"></sw-field>
+
+                            <sw-field type="switch"
+                                      bordered
+                                      :label="$tc('moorl-merchant-finder.properties.autoLocation')"
+                                      v-model="item.autoLocation">
+                            </sw-field>
+
+                            <sw-number-field :disabled="item.autoLocation" :label="$tc('moorl-merchant-finder.properties.locationLat')" numberType="float"
+                                             v-model="item.locationLat"></sw-number-field>
+
+                            <sw-number-field :disabled="item.autoLocation" :label="$tc('moorl-merchant-finder.properties.locationLon')" numberType="float"
+                                             v-model="item.locationLon"></sw-number-field>
+                        </sw-container>
+                    </sw-card>
+
+                    <sw-card v-if="active === 'address' && !item._isNew"
+                             :isLoading="isLoading"
+                             :title="$tc('moorl-merchant-finder.cards.overview')">
+                        <moorl-map :item="item"></moorl-map>
+                    </sw-card>
+
+                    <sw-card v-if="active === 'stock'"
+                             :isLoading="isLoading"
+                             :title="$tc('moorl-merchant-finder.cards.stock')"
+                             class="moorl-entity-grid">
+                        <moorl-entity-grid
+                                key="moorl_merchant_stock"
+                                entity="moorl_merchant_stock"
+                                :isLoading="isLoading"
+                                :criteria="merchantStockCriteria"
+                                :filterColumns="merchantStockFilterColumns"
+                                :defaultItem="{ merchantId: item.id }">
+                        </moorl-entity-grid>
+                    </sw-card>
+
+                    <sw-card v-if="active === 'stock'"
+                             :isLoading="isLoading"
+                             :title="$tc('moorl-merchant-finder.cards.linkedProducts')">
+                        <sw-alert variant="info">
+                            {{ $tc('moorl-merchant-finder.notification.linkedProducts') }}
+                        </sw-alert>
+
+                        <sw-entity-many-to-many-select
+                                :localMode="true"
+                                labelProperty="name"
+                                v-model="item.products">
+                        </sw-entity-many-to-many-select>
+                    </sw-card>
+
+                    <sw-card v-if="active === 'merchantArea'"
+                             :isLoading="isLoading"
+                             :title="$tc('moorl-merchant-finder.cards.merchantArea')">
+                        <sw-container columns="1fr 1fr" gap="0 20px">
+                            <sw-single-select v-model="item.deliveryType"
+                                              :options="deliveryTypeOptions"
+                                              :label="$tc('moorl-merchant-finder.properties.deliveryType')">
+                            </sw-single-select>
+
+                            <sw-field v-if="item.deliveryType === 'radius'"
+                                      type="number"
+                                      :label="$tc('moorl-merchant-finder.properties.maxRadius')"
+                                      :helpText="$tc('moorl-merchant-finder.tooltip.merchantMaxRadius')"
+                                      v-model="item.maxRadius">
+                            </sw-field>
+
+                            <sw-field v-if="item.deliveryType === 'radius'"
+                                      type="number"
+                                      :label="$tc('moorl-merchant-finder.properties.minOrderValue')"
+                                      v-model="item.minOrderValue">
+                            </sw-field>
+
+                            <sw-field v-if="item.deliveryType === 'radius'"
+                                      type="number"
+                                      :label="$tc('moorl-merchant-finder.properties.deliveryPrice')"
+                                      v-model="item.deliveryPrice">
+                            </sw-field>
+                        </sw-container>
+                    </sw-card>
+
+                    <sw-card v-if="active === 'merchantArea' && item.deliveryType === 'area'"
+                             :isLoading="isLoading"
+                             :title="$tc('moorl-merchant-finder.cards.merchantArea')"
+                             class="moorl-entity-grid">
+                        <moorl-entity-grid
+                                key="moorl_merchant_area"
+                                entity="moorl_merchant_area"
+                                :isLoading="isLoading"
+                                :criteria="merchantAreaCriteria"
+                                :filterColumns="merchantAreaFilterColumns"
+                                :defaultItem="{ merchantId: item.id }">
+                        </moorl-entity-grid>
+                    </sw-card>
+
+                    <sw-card v-if="active === 'timeSettings'" :isLoading="isLoading" :title="$tc('moorl-merchant-finder.cards.timeSettings')">
+                        <sw-field :label="$tc('moorl-merchant-finder.properties.timeZone')"
+                                  placeholder="Europe/Berlin"
+                                  type="text"
+                                  v-model="item.timeZone">
+                        </sw-field>
+                    </sw-card>
+
+                    <sw-card v-if="active === 'timeSettings' && !item._isNew" :isLoading="isLoading" :title="$tc('moorl-merchant-finder.cards.openingHours')">
+                        <moorl-opening-hours v-model="item.openingHours"></moorl-opening-hours>
+                    </sw-card>
+
+                    <sw-card v-if="active === 'other'"
+                             :isLoading="isLoading"
+                             :title="$tc('moorl-merchant-finder.cards.linkedSalesChannels')">
+                        <sw-alert variant="info">
+                            {{ $tc('moorl-merchant-finder.notification.linkedSalesChannels') }}
+                        </sw-alert>
+
+                        <sw-entity-single-select
+                                :label="$t('moorl-foundation.properties.salesChannelId')"
+                                entity="sales_channel"
+                                v-model="item.salesChannelId">
+                        </sw-entity-single-select>
+
+                        <sw-inherit-wrapper v-model="item.categories"
+                                            isAssociation
+                                            :label="$tc('sw-product.categoryForm.labelCategory')">
+                            <template #content="{ currentValue }">
+                                <sw-category-tree-field :categoriesCollection="currentValue ? currentValue : []"
+                                                        :placeholder="$tc('sw-product.categoryForm.placeholderCategory')">
+                                </sw-category-tree-field>
+                            </template>
+                        </sw-inherit-wrapper>
+
+                        <sw-entity-single-select
+                                :label="$t('moorl-foundation.properties.customerGroupId')"
+                                entity="customer_group"
+                                v-model="item.customerGroupId">
+                        </sw-entity-single-select>
+
+                        <sw-entity-tag-select
+                                :label="$t('sw-customer.baseForm.labelTags')"
+                                v-model="item.tags">
+                        </sw-entity-tag-select>
+
+                        <sw-entity-multi-select
+                                :label="$t('sw-product.basicForm.labelManufacturer')"
+                                v-model="item.productManufacturers">
+                        </sw-entity-multi-select>
+
+                        <sw-alert variant="info">
+                            {{ $tc('moorl-merchant-finder.notification.linkedCustomers') }}
+                        </sw-alert>
+
+                        <moorl-entity-grid entity="moorl_merchant_customer"
+                                           :isLoading="isLoading"
+                                           :criteria="merchantCustomerCriteria"
+                                           :filterColumns="merchantCustomerFilterColumns"
+                                           :defaultItem="{ merchantId: item.id }">
+                        </moorl-entity-grid>
+                    </sw-card>
+
+                    <sw-card v-if="active === 'other'"
+                             :isLoading="isLoading"
+                             :title="$t('moorl-foundation.label.customCard')">
+                        <sw-field :label="$t('moorl-foundation.properties.custom1')" v-model="item.custom1"></sw-field>
+                        <sw-field :label="$t('moorl-foundation.properties.custom2')" v-model="item.custom2"></sw-field>
+                        <sw-field :label="$t('moorl-foundation.properties.custom3')" v-model="item.custom3"></sw-field>
+                        <sw-field :label="$t('moorl-foundation.properties.custom4')" v-model="item.custom4"></sw-field>
+                    </sw-card>
+                </template>
+            </sw-tabs>
+        </sw-card-view>
+
+        <sw-media-modal-v2
+                variant="regular"
+                v-if="mediaModalIsOpen"
+                :caption="$tc('sw-cms.elements.general.config.caption.mediaUpload')"
+                :allowMultiSelect="false"
+                @media-upload-remove-image="onUnlinkMedia"
+                @media-modal-selection-change="onSelectionChanges"
+                @modal-close="onCloseModal">
+        </sw-media-modal-v2>
+    </template>
+</sw-page>

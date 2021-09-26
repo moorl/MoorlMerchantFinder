@@ -18,22 +18,11 @@ class LocationService
 {
     public const SEARCH_ENGINE = 'https://nominatim.openstreetmap.org/search';
 
-    /**
-     * @var Context|null
-     */
-    private $context;
-    /**
-     * @var DefinitionInstanceRegistry
-     */
-    private $definitionInstanceRegistry;
-    /**
-     * @var SystemConfigService
-     */
-    private $systemConfigService;
-    /**
-     * @var ClientInterface
-     */
-    protected $client;
+    private ?Context $context;
+    private DefinitionInstanceRegistry $definitionInstanceRegistry;
+    private SystemConfigService $systemConfigService;
+    protected ClientInterface $client;
+    protected \DateTimeImmutable $now;
 
     public function __construct(
         DefinitionInstanceRegistry $definitionInstanceRegistry,
@@ -48,11 +37,16 @@ class LocationService
             'allow_redirects' => false,
         ]);
 
+        $this->now = new \DateTimeImmutable();
         $this->context = Context::createDefaultContext();
     }
 
-    public function getCustomerLocation(CustomerEntity $customer): ?GeoPoint
+    public function getCustomerLocation(?CustomerEntity $customer = null): ?GeoPoint
     {
+        if (!$customer) {
+            return null;
+        }
+
         $address = $customer->getActiveShippingAddress();
 
         return $this->getLocationByAddress([
@@ -63,7 +57,51 @@ class LocationService
         ]);
     }
 
-    public function getLocationByAddress(array $payload, $tries = 0): ?GeoPoint
+    public function getLocationByTerm(?string $term = null): ?GeoPoint
+    {
+        if (!$term) {
+            return null;
+        }
+
+        $terms = explode(',', $term);
+        $iso = null;
+        $zipcode = null;
+        $street = null;
+        $city = null;
+
+        foreach ($terms as $term) {
+            $term = trim($term);
+
+            preg_match('/([A-Z]{2})/', $term, $matches, PREG_UNMATCHED_AS_NULL);
+            if (!empty($matches[1])) {
+                $iso = $matches[1];
+            }
+
+            preg_match('/([\d]{5})/', $term, $matches, PREG_UNMATCHED_AS_NULL);
+            if (!empty($matches[1])) {
+                $zipcode = $matches[1];
+            }
+
+            preg_match('/(\w[\s\w]+?)\s*(\d+\s*[a-z]?)/', $term, $matches, PREG_UNMATCHED_AS_NULL);
+            if (!empty($matches[0])) {
+                $street = $matches[0];
+            }
+
+            preg_match('/^(^\D+)$/', $term, $matches, PREG_UNMATCHED_AS_NULL);
+            if (!empty($matches[1])) {
+                $city = $matches[1];
+            }
+        }
+
+        return $this->getLocationByAddress([
+            'street' => $street,
+            'zipcode' => $zipcode,
+            'city' => $city,
+            'iso' => $iso
+        ]);
+    }
+
+    public function getLocationByAddress(array $payload, $tries = 0, ?string $locationId = null): ?GeoPoint
     {
         $payload = array_merge([
             'street' => null,
@@ -73,8 +111,26 @@ class LocationService
             'iso' => null
         ], $payload);
 
+        if (!$locationId) {
+            $locationId = md5(serialize($payload));
+        }
+
+        /* Check if location already exists */
+        $repo = $this->definitionInstanceRegistry->getRepository('dewa_location');
+        $criteria = new Criteria([$locationId]);
+        $criteria->addFilter(new RangeFilter('updatedAt', [
+            RangeFilter::GTE => ($this->now->modify("-1 hour"))->format(DATE_ATOM)
+        ]));
+
+        /** @var $location LocationEntity */
+        $location = $repo->search($criteria, $this->context)->first();
+
+        if ($location) {
+            return new GeoPoint($location->getLocationLat(), $location->getLocationLon());
+        }
+
         try {
-            $apiKey = $this->systemConfigService->get('MoorlMerchantFinder.config.googleMapsApiKey');
+            $apiKey = $this->systemConfigService->get('AppflixDewaShop.config.googleMapsApiKey');
 
             if ($apiKey) {
                 $address = sprintf('%s %s, %s %s, %s',
@@ -103,26 +159,32 @@ class LocationService
             $response = $this->apiRequest('GET', self::SEARCH_ENGINE, null, $params);
 
             if ($response && isset($response[0])) {
+                $repo->upsert([[
+                    'id' => $locationId,
+                    'payload' => $payload,
+                    'locationLat' => $response[0]['lat'],
+                    'locationLon' => $response[0]['lon'],
+                    'updatedAt' => $this->now->format(DATE_ATOM)
+                ]], $this->context);
+
                 return new GeoPoint($response[0]['lat'], $response[0]['lon']);
             } else {
-                sleep(1);
-
                 $tries++;
 
                 switch ($tries) {
                     case 1:
-                        $payload['country'] = 'DE';
-                        return $this->getLocationByAddress($payload, $tries);
+                        $payload['iso'] = 'DE';
+                        return $this->getLocationByAddress($payload, $tries, $locationId);
                     case 2:
-                        $payload['country'] = null;
-                        return $this->getLocationByAddress($payload, $tries);
+                        $payload['iso'] = null;
+                        return $this->getLocationByAddress($payload, $tries, $locationId);
                     case 3:
                         $payload['street'] = null;
                         $payload['streetNumber'] = null;
-                        return $this->getLocationByAddress($payload, $tries);
+                        return $this->getLocationByAddress($payload, $tries, $locationId);
                     case 4:
                         $payload['zipcode'] = null;
-                        return $this->getLocationByAddress($payload, $tries);
+                        return $this->getLocationByAddress($payload, $tries, $locationId);
                 }
 
                 return null;

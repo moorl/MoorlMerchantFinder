@@ -82,8 +82,8 @@
             <tag name="shopware.entity.definition" entity="moorl_merchant_product_manufacturer" />
         </service>
 
-        <service id="Moorl\MerchantFinder\Core\Content\OpeningHour\OpeningHourDefinition">
-            <tag name="shopware.entity.definition" entity="moorl_merchant_oh" />
+        <service id="Moorl\MerchantFinder\Core\Content\Aggregate\MerchantArea\MerchantAreaDefinition">
+            <tag name="shopware.entity.definition" entity="moorl_merchant_area" />
         </service>
 
         <service id="Moorl\MerchantFinder\Core\Content\Aggregate\MerchantStock\MerchantStockDefinition">
@@ -124,7 +124,7 @@
             <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory"/>
             <argument type="service" id="moorl_merchant.repository"/>
             <argument type="service" id="event_dispatcher"/>
-            <argument type="service" id="Moorl\MerchantFinder\Core\Service\LocationService"/>
+            <argument type="service" id="MoorlFoundation\Core\Service\LocationService"/>
 
             <tag name="shopware.entity_indexer"/>
         </service>

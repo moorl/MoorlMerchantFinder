@@ -38,8 +38,7 @@ class MerchantTranslationDefinition extends EntityTranslationDefinition
         return new FieldCollection([
             new StringField('name', 'name'),
             new LongTextField('description', 'description'),
-            (new LongTextField('description_html', 'descriptionHtml'))->addFlags(new AllowHtml()),
-            new LongTextField('opening_hours', 'openingHours'),
+            (new LongTextField('description_html', 'descriptionHtml'))->addFlags(new AllowHtml())
         ]);
     }
 }
