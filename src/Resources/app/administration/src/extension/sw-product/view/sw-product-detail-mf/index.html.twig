@@ -1,9 +1,7 @@
-{% block sw_product_detail_deliverability_info_card %}
-    {% parent() %}
-
-    <sw-card v-if="!isLoading"
-             :title="$tc('moorl-foundation.label.stockCard')"
+<div class="sw-product-detail-base">
+    <sw-card v-if="product && product.id"
              :isLoading="isLoading"
+             :title="$tc('moorl-foundation.label.stockCard')"
              class="moorl-entity-grid">
         <moorl-entity-grid entity="moorl_merchant_stock"
                            :isLoading="isLoading"
@@ -12,4 +10,4 @@
                            :defaultItem="{ productId: product.id }">
         </moorl-entity-grid>
     </sw-card>
-{% endblock %}
+</div>
