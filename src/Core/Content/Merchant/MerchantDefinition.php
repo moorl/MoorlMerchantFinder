@@ -67,7 +67,7 @@ class MerchantDefinition extends EntityDefinition
     {
         return [
             'openingHours' => OpeningHoursDefaults::getOpeningHours(),
-            'auto_location' => true
+            'autoLocation' => true
         ];
     }
 
