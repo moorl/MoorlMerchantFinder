@@ -31,7 +31,7 @@
         },
         "notification": {
             "linkedCustomers": "This merchant is just visible for chosen customers.",
-            "linkedSalesChannels": "Leave this empty if you want to show Your Store in all Sales Channels.",
+            "linkedSalesChannels": "Leave this empty if you want to show this merchant in all Sales Channels.",
             "linkedShops": "Leave this empty if you want to show Your Food Product in all Stores. If You chose a Store, this Product is just visible for this Store.",
             "linkedProducts": "Leave this empty if you want to show Your Food Products in all Stores. If You chose a Product, this Product is just visible for this Store.",
             "weekdayConfig": "Here you are able to enable/disable Food Products for specific Weekdays. If you want to add Discounts also, please give your Product a List Price.",
@@ -213,7 +213,8 @@
             "ingredients": "Ingredients",
             "badges": "Badges",
             "optionItem": "Option Item",
-            "salesChannel": "Sales Channel"
+            "salesChannel": "Sales Channel",
+            "salesChannels": "Sales Channels"
         },
         "option": {
             "disabled": "Disabled",

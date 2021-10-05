@@ -25,7 +25,8 @@ class MoorlMerchantFinder extends Plugin
         'moorl_merchant_stock',
         'moorl_merchant_customer',
         'moorl_merchant_marker',
-        'moorl_merchant_area'
+        'moorl_merchant_area',
+        'moorl_merchant_sales_channel'
     ];
     public const SHOPWARE_TABLES = [
         'media_folder',

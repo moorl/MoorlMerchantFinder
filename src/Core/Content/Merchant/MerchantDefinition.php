@@ -6,6 +6,7 @@ use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantArea\MerchantAreaDefinit
 use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantCategory\MerchantCategoryDefinition;
 use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantCustomer\MerchantCustomerDefinition;
 use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantProductManufacturer\MerchantProductManufacturerDefinition;
+use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantSalesChannel\MerchantSalesChannelDefinition;
 use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantStock\MerchantStockDefinition;
 use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantTag\MerchantTagDefinition;
 use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantTranslation\MerchantTranslationDefinition;
@@ -149,6 +150,7 @@ class MerchantDefinition extends EntityDefinition
             (new ManyToManyAssociationField('tags', TagDefinition::class, MerchantTagDefinition::class, 'moorl_merchant_id', 'tag_id'))->addFlags(new EditField(), new LabelProperty('name')),
             (new ManyToManyAssociationField('productManufacturers', ProductManufacturerDefinition::class, MerchantProductManufacturerDefinition::class, 'moorl_merchant_id', 'product_manufacturer_id'))->addFlags(new EditField(), new LabelProperty('name')),
             (new ManyToManyAssociationField('products', ProductDefinition::class, MerchantStockDefinition::class, 'moorl_merchant_id', 'product_id'))->addFlags(new EditField(), new LabelProperty('productNumber')),
+            (new ManyToManyAssociationField('salesChannels', SalesChannelDefinition::class, MerchantSalesChannelDefinition::class, 'moorl_merchant_id', 'sales_channel_id'))->addFlags(new EditField(), new LabelProperty('name')),
 
             new OneToManyAssociationField('merchantStocks', MerchantStockDefinition::class, 'moorl_merchant_id'),
             new OneToManyAssociationField('customers', MerchantCustomerDefinition::class, 'moorl_merchant_id'),

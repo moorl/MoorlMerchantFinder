@@ -462,8 +462,8 @@ class MerchantService
             $criteria->addFilter(
                 new MultiFilter(
                     MultiFilter::CONNECTION_OR, [
-                        new EqualsFilter($domain . 'salesChannelId', null),
-                        new EqualsFilter($domain . 'salesChannelId', $salesChannelContext->getSalesChannel()->getId())
+                        new EqualsFilter($domain . 'salesChannels.id', null),
+                        new EqualsFilter($domain . 'salesChannels.id', $salesChannelContext->getSalesChannel()->getId())
                     ]
                 )
             );

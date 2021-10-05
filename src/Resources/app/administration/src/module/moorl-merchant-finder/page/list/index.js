@@ -1,6 +1,5 @@
 const {Application, Component, Mixin} = Shopware;
 const {Criteria} = Shopware.Data;
-const Papa = require('papaparse');
 
 import template from './index.html.twig';
 
