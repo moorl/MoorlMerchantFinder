@@ -60,7 +60,11 @@ Component.register('moorl-merchant-finder-detail', {
         criteria() {
             const criteria = new Criteria();
 
-            criteria.addAssociation('salesChannels');
+            criteria
+                .addAssociation('tags')
+                .addAssociation('categories')
+                .addAssociation('productManufacturers')
+                .addAssociation('salesChannels');
 
             return criteria;
         },
