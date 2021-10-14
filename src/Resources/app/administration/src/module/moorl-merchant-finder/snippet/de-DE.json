@@ -212,7 +212,8 @@
             "ingredients": "Inhaltsstoffe",
             "badges": "Badges",
             "optionItem": "Options-Item",
-            "salesChannel": "Verkaufskanal"
+            "salesChannel": "Verkaufskanal",
+            "salesChannels": "Verkaufskanäle"
         },
         "option": {
             "disabled": "Geblockt",

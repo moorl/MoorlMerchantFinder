@@ -323,8 +323,15 @@
                             {{ $tc('moorl-merchant-finder.notification.linkedSalesChannels') }}
                         </sw-alert>
 
+                        <sw-entity-many-to-many-select
+                                :label="$tc('moorl-merchant-finder.properties.salesChannels')"
+                                :localMode="true"
+                                labelProperty="name"
+                                v-model="item.salesChannels">
+                        </sw-entity-many-to-many-select>
+
                         <sw-entity-single-select
-                                :label="$t('moorl-foundation.properties.salesChannelId')"
+                                :label="$tc('moorl-merchant-finder.properties.salesChannel')"
                                 entity="sales_channel"
                                 v-model="item.salesChannelId">
                         </sw-entity-single-select>

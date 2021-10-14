@@ -70,6 +70,10 @@
             <tag name="shopware.entity.definition" entity="moorl_merchant_translation" />
         </service>
 
+        <service id="Moorl\MerchantFinder\Core\Content\Aggregate\MerchantSalesChannel\MerchantSalesChannelDefinition">
+            <tag name="shopware.entity.definition" entity="moorl_merchant_sales_channel" />
+        </service>
+
         <service id="Moorl\MerchantFinder\Core\Content\Aggregate\MerchantCategory\MerchantCategoryDefinition">
             <tag name="shopware.entity.definition" entity="moorl_merchant_category" />
         </service>
