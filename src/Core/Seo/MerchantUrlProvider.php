@@ -20,6 +20,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
 use Shopware\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
+use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -39,13 +40,16 @@ class MerchantUrlProvider extends AbstractUrlProvider
 
     private EntityRepositoryInterface $repository;
 
+    private SystemConfigService $systemConfigService;
+
     public function __construct(
         ConfigHandler $configHandler,
         Connection $connection,
         MerchantDefinition $definition,
         IteratorFactory $iteratorFactory,
         RouterInterface $router,
-        EntityRepositoryInterface $repository
+        EntityRepositoryInterface $repository,
+        SystemConfigService $systemConfigService
     ) {
         $this->configHandler = $configHandler;
         $this->connection = $connection;
@@ -53,6 +57,7 @@ class MerchantUrlProvider extends AbstractUrlProvider
         $this->iteratorFactory = $iteratorFactory;
         $this->router = $router;
         $this->repository = $repository;
+        $this->systemConfigService = $systemConfigService;
     }
 
     public function getDecorated(): AbstractUrlProvider
@@ -70,6 +75,10 @@ class MerchantUrlProvider extends AbstractUrlProvider
      */
     public function getUrls(SalesChannelContext $salesChannelContext, int $limit, ?int $offset = null): UrlResult
     {
+        if ($this->systemConfigService->get('MoorlMerchantFinder.config.') !== 'page') {
+            return new UrlResult([], null);
+        }
+
         $collection = $this->getCollection($salesChannelContext, $limit, $offset);
 
         if ($collection->count() === 0) {
