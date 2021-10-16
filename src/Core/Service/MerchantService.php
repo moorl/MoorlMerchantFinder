@@ -14,7 +14,6 @@ use Moorl\MerchantFinder\Core\Event\MerchantsLoadedEvent;
 use Moorl\MerchantFinder\GeoLocation\BoundingBox;
 use Moorl\MerchantFinder\GeoLocation\GeoPoint;
 use Moorl\MerchantFinder\MoorlMerchantFinder;
-use MoorlFoundation\Core\Framework\DataAbstractionLayer\Search\Sorting\DistanceFieldSorting;
 use Shopware\Core\Checkout\Cart\Cart;
 use Shopware\Core\Checkout\Cart\LineItem\LineItem;
 use Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemEntity;
@@ -463,7 +462,7 @@ class MerchantService
                 new MultiFilter(
                     MultiFilter::CONNECTION_OR, [
                         new EqualsFilter($domain . 'salesChannels.id', null),
-                        new EqualsFilter($domain . 'salesChannels.id', $salesChannelContext->getSalesChannel()->getId())
+                        new EqualsFilter($domain . 'salesChannels.id', $salesChannelContext->getSalesChannelId())
                     ]
                 )
             );

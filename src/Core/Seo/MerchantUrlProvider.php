@@ -17,6 +17,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\Doctrine\FetchModeHelper;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
 use Shopware\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -114,6 +115,14 @@ class MerchantUrlProvider extends AbstractUrlProvider
         if (!$collectionCriteria) {
             $collectionCriteria = new Criteria();
             $collectionCriteria->addFilter(new EqualsFilter('active', true));
+            $collectionCriteria->addFilter(
+                new MultiFilter(
+                    MultiFilter::CONNECTION_OR, [
+                        new EqualsFilter('salesChannels.id', null),
+                        new EqualsFilter('salesChannels.id', $salesChannelContext->getSalesChannelId())
+                    ]
+                )
+            );
         }
         $collectionCriteria->setLimit($limit);
 

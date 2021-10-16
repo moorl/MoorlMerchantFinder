@@ -142,7 +142,7 @@ class MerchantDefinition extends EntityDefinition
 
             (new ManyToOneAssociationField('media', 'media_id', MediaDefinition::class, 'id', true))->addFlags(new EditField(), new LabelProperty('fileName')),
             (new ManyToOneAssociationField('marker', 'moorl_merchant_marker_id', MarkerDefinition::class, 'id', true))->addFlags(new EditField(), new LabelProperty('name')),
-            (new ManyToOneAssociationField('salesChannel', 'sales_channel_id', SalesChannelDefinition::class, 'id', false))->addFlags(new EditField(), new LabelProperty('name')),
+            (new ManyToOneAssociationField('salesChannel', 'sales_channel_id', SalesChannelDefinition::class, 'id', false))->addFlags(),
             (new ManyToOneAssociationField('customerGroup', 'customer_group_id', CustomerGroupDefinition::class, 'id', false))->addFlags(new EditField(), new LabelProperty('name')),
             (new ManyToOneAssociationField('cmsPage', 'cms_page_id', CmsPageDefinition::class, 'id', false))->addFlags(new EditField(), new LabelProperty('name')),
 

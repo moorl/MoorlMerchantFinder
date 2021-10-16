@@ -2,7 +2,6 @@
 
 namespace Moorl\MerchantFinder\Core\Seo;
 
-
 use Moorl\MerchantFinder\Core\Content\Merchant\MerchantDefinition;
 use Moorl\MerchantFinder\Core\Content\Merchant\MerchantEntity;
 use Shopware\Core\Content\Seo\SeoUrlRoute\SeoUrlExtractIdResult;

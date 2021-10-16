@@ -330,12 +330,6 @@
                                 v-model="item.salesChannels">
                         </sw-entity-many-to-many-select>
 
-                        <sw-entity-single-select
-                                :label="$tc('moorl-merchant-finder.properties.salesChannel')"
-                                entity="sales_channel"
-                                v-model="item.salesChannelId">
-                        </sw-entity-single-select>
-
                         <sw-inherit-wrapper v-model="item.categories"
                                             isAssociation
                                             :label="$tc('sw-product.categoryForm.labelCategory')">
