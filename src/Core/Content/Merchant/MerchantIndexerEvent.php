@@ -7,20 +7,15 @@ use Shopware\Core\Framework\Event\NestedEvent;
 
 class MerchantIndexerEvent extends NestedEvent
 {
-    /**
-     * @var Context
-     */
-    private $context;
+    private Context $context;
+    private array $ids;
+    private array $skip;
 
-    /**
-     * @var array
-     */
-    private $ids;
-
-    public function __construct(array $ids, Context $context)
+    public function __construct(array $ids, Context $context, array $skip = [])
     {
         $this->context = $context;
         $this->ids = $ids;
+        $this->skip = $skip;
     }
 
     public function getContext(): Context
@@ -31,5 +26,10 @@ class MerchantIndexerEvent extends NestedEvent
     public function getIds(): array
     {
         return $this->ids;
+    }
+
+    public function getSkip(): array
+    {
+        return $this->skip;
     }
 }

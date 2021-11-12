@@ -15,30 +15,11 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class MerchantIndexer extends EntityIndexer
 {
-    /**
-     * @var IteratorFactory
-     */
-    private $iteratorFactory;
-
-    /**
-     * @var Connection
-     */
-    private $connection;
-
-    /**
-     * @var EntityRepositoryInterface
-     */
-    private $repository;
-
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
-     * @var LocationService
-     */
-    private $locationService;
+    private IteratorFactory $iteratorFactory;
+    private Connection $connection;
+    private EntityRepositoryInterface $repository;
+    private EventDispatcherInterface $eventDispatcher;
+    private LocationService $locationService;
 
     public function __construct(
         Connection $connection,
@@ -59,9 +40,14 @@ class MerchantIndexer extends EntityIndexer
         return 'moorl_merchant.indexer';
     }
 
-    public function iterate($offset): ?EntityIndexingMessage
+    /**
+     * @param array|null $offset
+     *
+     * @deprecated tag:v6.5.0 The parameter $offset will be native typed
+     */
+    public function iterate(/*?array */$offset): ?EntityIndexingMessage
     {
-        $iterator = $this->iteratorFactory->createIterator($this->repository->getDefinition(), $offset);
+        $iterator = $this->iteratorFactory->createIterator($this->repository->getDefinition(), $offset, 20);
 
         $ids = $iterator->fetch();
 
@@ -74,24 +60,13 @@ class MerchantIndexer extends EntityIndexer
 
     public function update(EntityWrittenContainerEvent $event): ?EntityIndexingMessage
     {
-        $entityEvent = $event->getEventByEntityName(MerchantDefinition::ENTITY_NAME);
-
-        if (!$entityEvent) {
-            return null;
-        }
-
-        $ids = $entityEvent->getIds();
-        foreach ($entityEvent->getWriteResults() as $result) {
-            if (!$result->getExistence()) {
-                continue;
-            }
-        }
+        $ids = $event->getPrimaryKeys(MerchantDefinition::ENTITY_NAME);
 
         if (empty($ids)) {
             return null;
         }
 
-        return new MerchantIndexingMessage(array_values($ids), null, $event->getContext(), \count($ids) > 20);
+        return new MerchantIndexingMessage(array_values($ids), null, $event->getContext());
     }
 
     public function handle(EntityIndexingMessage $message): void
@@ -105,6 +80,8 @@ class MerchantIndexer extends EntityIndexer
 
         $sql = 'SELECT 
 LOWER(HEX(moorl_merchant.id)) AS id,
+LOWER(HEX(moorl_merchant.country_id)) AS countryId,
+moorl_merchant.auto_location AS autoLocation,
 moorl_merchant.street AS street,
 moorl_merchant.street_number AS streetNumber,
 moorl_merchant.zipcode AS zipcode,
@@ -113,7 +90,7 @@ moorl_merchant.country_code AS iso,
 moorl_merchant.location_lat AS lat,
 moorl_merchant.location_lon AS lon
 FROM moorl_merchant
-WHERE moorl_merchant.id IN (:ids) AND moorl_merchant.auto_location = 1;';
+WHERE moorl_merchant.id IN (:ids);';
 
         $data = $this->connection->fetchAll(
             $sql,
@@ -122,26 +99,43 @@ WHERE moorl_merchant.id IN (:ids) AND moorl_merchant.auto_location = 1;';
         );
 
         foreach ($data as $item) {
-            if (!empty($item['lat']) && empty($item['lon'])) {
-                continue;
+            if (!$item['countryId'] && $item['iso']) {
+                try {
+                    $country = $this->locationService->getCountryByIso($item['iso']);
+                    if ($country) {
+                        $sql = 'UPDATE moorl_merchant SET country_id = :country_id WHERE id = :id;';
+                        $this->connection->executeUpdate(
+                            $sql,
+                            [
+                                'id' => Uuid::fromHexToBytes($item['id']),
+                                'country_id' => Uuid::fromHexToBytes($country->getId())
+                            ]
+                        );
+                    }
+                } catch (\Exception $exception) {}
             }
 
-            $geoPoint = $this->locationService->getLocationByAddress($item);
+            if ($item['autoLocation'] === "1") {
+                if (!empty($item['lat']) && empty($item['lon'])) {
+                    continue;
+                }
 
-            if (!$geoPoint) {
-                continue;
+                $geoPoint = $this->locationService->getLocationByAddress($item);
+
+                if (!$geoPoint) {
+                    continue;
+                }
+
+                $sql = 'UPDATE moorl_merchant SET location_lat = :lat, location_lon = :lon WHERE id = :id;';
+                $this->connection->executeUpdate(
+                    $sql,
+                    [
+                        'id' => Uuid::fromHexToBytes($item['id']),
+                        'lat' => $geoPoint->getLatitude(),
+                        'lon' => $geoPoint->getLongitude()
+                    ]
+                );
             }
-
-            $sql = 'UPDATE moorl_merchant SET location_lat = :lat, location_lon = :lon WHERE id = :id;';
-
-            $this->connection->executeUpdate(
-                $sql,
-                [
-                    'id' => Uuid::fromHexToBytes($item['id']),
-                    'lat' => $geoPoint->getLatitude(),
-                    'lon' => $geoPoint->getLongitude()
-                ]
-            );
         }
 
         $context = Context::createDefaultContext();

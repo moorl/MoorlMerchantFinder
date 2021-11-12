@@ -68,7 +68,7 @@ class MerchantDefinition extends EntityDefinition
     {
         return [
             'openingHours' => OpeningHoursDefaults::getOpeningHours(),
-            'autoLocation' => true
+            'autoLocation' => false
         ];
     }
 
@@ -84,7 +84,6 @@ class MerchantDefinition extends EntityDefinition
             (new BoolField('highlight', 'highlight'))->addFlags(new EditField('switch')),
             (new BoolField('auto_location', 'autoLocation'))->addFlags(new EditField('switch')),
 
-            (new IntField('auto_increment', 'autoIncrement'))->addFlags(new WriteProtected()),
             (new IntField('priority', 'priority'))->addFlags(new EditField('number')),
 
             (new StringField('executive_director', 'executiveDirector'))->addFlags(new EditField('text')),

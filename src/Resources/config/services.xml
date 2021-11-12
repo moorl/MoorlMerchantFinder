@@ -66,6 +66,15 @@
 
             <tag name="shopware.cms.data_resolver"/>
         </service>
+        <service id="Moorl\MerchantFinder\Core\Content\Merchant\MerchantIndexer">
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory"/>
+            <argument type="service" id="moorl_merchant.repository"/>
+            <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="MoorlFoundation\Core\Service\LocationService"/>
+
+            <tag name="shopware.entity_indexer" priority="9000"/>
+        </service>
 
         <service id="Moorl\MerchantFinder\Core\Content\Marker\MarkerDefinition">
             <tag name="shopware.entity.definition" entity="moorl_merchant_marker" />
@@ -126,16 +135,6 @@
             <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexerRegistry"/>
 
             <tag name="kernel.event_subscriber"/>
-        </service>
-
-        <service id="Moorl\MerchantFinder\Core\Content\Merchant\MerchantIndexer">
-            <argument type="service" id="Doctrine\DBAL\Connection"/>
-            <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory"/>
-            <argument type="service" id="moorl_merchant.repository"/>
-            <argument type="service" id="event_dispatcher"/>
-            <argument type="service" id="MoorlFoundation\Core\Service\LocationService"/>
-
-            <tag name="shopware.entity_indexer"/>
         </service>
 
         <!-- UrlProviders / Sitemap -->

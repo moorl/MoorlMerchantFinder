@@ -2,8 +2,14 @@
 
 namespace Moorl\MerchantFinder\Core\Content\Merchant\Cms;
 
+use Shopware\Core\Content\Category\CategoryCollection;
+use Shopware\Core\Content\Product\Aggregate\ProductManufacturer\ProductManufacturerCollection;
+use Shopware\Core\Content\Product\Aggregate\ProductManufacturer\ProductManufacturerEntity;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Shopware\Core\Framework\Struct\Struct;
+use Shopware\Core\System\Country\CountryCollection;
+use Shopware\Core\System\Tag\TagCollection;
+use Shopware\Core\System\Tag\TagEntity;
 
 class MoorlMerchantFinderStruct extends Struct
 {
@@ -26,6 +32,10 @@ class MoorlMerchantFinderStruct extends Struct
      */
     public function setCountries(EntityCollection $countries): void
     {
+        if ($countries instanceof CountryCollection) {
+            $countries->sortByPositionAndName();
+        }
+
         $this->countries = $countries;
     }
 
@@ -42,6 +52,12 @@ class MoorlMerchantFinderStruct extends Struct
      */
     public function setTags(EntityCollection $tags): void
     {
+        if ($tags instanceof TagCollection) {
+            $tags->sort(function (TagEntity $a, TagEntity $b) {
+                return strnatcasecmp($a->getName(), $b->getName());
+            });
+        }
+
         $this->tags = $tags;
     }
 
@@ -58,6 +74,10 @@ class MoorlMerchantFinderStruct extends Struct
      */
     public function setCategories(EntityCollection $categories): void
     {
+        if ($categories instanceof CategoryCollection) {
+            $categories->sortByName();
+        }
+
         $this->categories = $categories;
     }
 
@@ -74,6 +94,12 @@ class MoorlMerchantFinderStruct extends Struct
      */
     public function setProductManufacturers(EntityCollection $productManufacturers): void
     {
+        if ($productManufacturers instanceof ProductManufacturerCollection) {
+            $productManufacturers->sort(function (ProductManufacturerEntity $a, ProductManufacturerEntity $b) {
+                return strnatcasecmp($a->getName(), $b->getName());
+            });
+        }
+
         $this->productManufacturers = $productManufacturers;
     }
 
