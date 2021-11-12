@@ -19,15 +19,8 @@ class MerchantSeoUrlRoute implements SeoUrlRouteInterface
     public const ROUTE_NAME = 'moorl.merchant-finder.merchant.page';
     public const DEFAULT_TEMPLATE = 'merchant/{{ merchant.translated.name ? merchant.translated.name|lower : merchant.company|lower }}';
 
-    /**
-     * @var MerchantDefinition
-     */
-    private $entityDefinition;
-
-    /**
-     * @var EntityRepositoryInterface
-     */
-    private $repository;
+    private MerchantDefinition $entityDefinition;
+    private EntityRepositoryInterface $repository;
 
     public function __construct(
         MerchantDefinition $entityDefinition,

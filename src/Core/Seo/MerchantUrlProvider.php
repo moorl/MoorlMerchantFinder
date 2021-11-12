@@ -17,8 +17,6 @@ use Shopware\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
 use Shopware\Core\Framework\DataAbstractionLayer\Doctrine\FetchModeHelper;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
 use Shopware\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
@@ -30,17 +28,11 @@ class MerchantUrlProvider extends AbstractUrlProvider
     public const CHANGE_FREQ = 'weekly';
 
     private IteratorFactory $iteratorFactory;
-
     private ConfigHandler $configHandler;
-
     private Connection $connection;
-
     private MerchantDefinition $definition;
-
     private RouterInterface $router;
-
     private EntityRepositoryInterface $repository;
-
     private SystemConfigService $systemConfigService;
 
     public function __construct(
