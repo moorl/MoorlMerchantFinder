@@ -39,6 +39,8 @@ class StorefrontSubscriber implements EventSubscriberInterface
 
     public function onEntityLoadedEvent(EntityLoadedEvent $event): void
     {
+        return;
+
         foreach ($event->getEntities() as $entity) {
             if ($entity->getType() == 'moorl-merchant-finder') {
                 $languageId = $event->getContext()->getLanguageId();

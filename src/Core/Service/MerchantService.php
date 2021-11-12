@@ -10,6 +10,7 @@ use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantStock\MerchantStockEntit
 use Moorl\MerchantFinder\Core\Content\Marker\MarkerCollection;
 use Moorl\MerchantFinder\Core\Content\Merchant\MerchantCollection;
 use Moorl\MerchantFinder\Core\Content\Merchant\MerchantEntity;
+use Moorl\MerchantFinder\Core\Content\Merchant\SalesChannel\MerchantAvailableFilter;
 use Moorl\MerchantFinder\Core\Event\MerchantsLoadedEvent;
 use Moorl\MerchantFinder\GeoLocation\BoundingBox;
 use Moorl\MerchantFinder\GeoLocation\GeoPoint;
@@ -406,51 +407,6 @@ class MerchantService
         $customer = $salesChannelContext->getCustomer();
 
         $criteria->addFilter(new EqualsFilter('product.MoorlMerchants.customers.customerId', $customer->getId()));
-        return;
-
-        /*if (in_array('salesChannel', $rules)) {
-            $criteria->addFilter(new EqualsFilter('product.MoorlMerchants.salesChannelId', $salesChannelContext->getSalesChannelId()));
-        } else {
-            $criteria->addFilter(
-                new MultiFilter(
-                    MultiFilter::CONNECTION_OR, [
-                        new EqualsFilter('product.MoorlMerchants.salesChannelId', null),
-                        new EqualsFilter('product.MoorlMerchants.salesChannelId', $salesChannelContext->getSalesChannelId())
-                    ]
-                )
-            );
-        }*/
-
-        if ($customer) {
-            if (in_array('customerGroup', $rules)) {
-                $criteria->addFilter(new EqualsFilter('product.MoorlMerchants.customerGroupId', $customer->getGroupId()));
-            } else {
-                $criteria->addFilter(
-                    new MultiFilter(
-                        MultiFilter::CONNECTION_XOR, [
-                            new EqualsFilter('product.MoorlMerchants.customerGroupId', null),
-                            new EqualsFilter('product.MoorlMerchants.customerGroupId', $customer->getGroupId())
-                        ]
-                    )
-                );
-            }
-
-            if (in_array('customer', $rules)) {
-                $criteria->addFilter(new EqualsFilter('product.MoorlMerchants.customers.customerId', $customer->getId()));
-            } else {
-                $criteria->addFilter(
-                    new MultiFilter(
-                        MultiFilter::CONNECTION_XOR, [
-                            new EqualsFilter('product.MoorlMerchants.customers.customerId', null),
-                            new EqualsFilter('product.MoorlMerchants.customers.customerId', $customer->getId())
-                        ]
-                    )
-                );
-            }
-        } else {
-            $criteria->addFilter(new EqualsFilter('product.MoorlMerchants.customers.customerId', null));
-            $criteria->addFilter(new EqualsFilter('product.MoorlMerchants.customerGroupId', null));
-        }
     }
 
     public function addSalesChannelCriteria(Criteria $criteria, string $domain = ''): void
@@ -458,39 +414,7 @@ class MerchantService
         $salesChannelContext = $this->getSalesChannelContext();
 
         if ($salesChannelContext) {
-            $criteria->addFilter(
-                new MultiFilter(
-                    MultiFilter::CONNECTION_OR, [
-                        new EqualsFilter($domain . 'salesChannels.id', null),
-                        new EqualsFilter($domain . 'salesChannels.id', $salesChannelContext->getSalesChannelId())
-                    ]
-                )
-            );
-
-            $customer = $salesChannelContext->getCustomer();
-
-            if ($customer) {
-                $criteria->addFilter(
-                    new MultiFilter(
-                        MultiFilter::CONNECTION_OR, [
-                            new EqualsFilter($domain . 'customerGroupId', null),
-                            new EqualsFilter($domain . 'customerGroupId', $customer->getGroupId())
-                        ]
-                    )
-                );
-
-                $criteria->addFilter(
-                    new MultiFilter(
-                        MultiFilter::CONNECTION_OR, [
-                            new EqualsFilter($domain . 'customers.customerId', null),
-                            new EqualsFilter($domain . 'customers.customerId', $customer->getId())
-                        ]
-                    )
-                );
-            } else {
-                $criteria->addFilter(new EqualsFilter($domain . 'customers.customerId', null));
-                $criteria->addFilter(new EqualsFilter($domain . 'customerGroupId', null));
-            }
+            $criteria->addFilter(new MerchantAvailableFilter($salesChannelContext, $domain));
         } else {
             die("NO SALES CHANNEL CONTEXT SET");
         }
