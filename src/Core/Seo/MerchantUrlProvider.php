@@ -8,6 +8,7 @@ use Doctrine\DBAL\ParameterType;
 use Moorl\MerchantFinder\Core\Content\Merchant\MerchantCollection;
 use Moorl\MerchantFinder\Core\Content\Merchant\MerchantDefinition;
 use Moorl\MerchantFinder\Core\Content\Merchant\MerchantEntity;
+use Moorl\MerchantFinder\Core\Content\Merchant\SalesChannel\MerchantAvailableFilter;
 use Shopware\Core\Content\Sitemap\Provider\AbstractUrlProvider;
 use Shopware\Core\Content\Sitemap\Service\ConfigHandler;
 use Shopware\Core\Content\Sitemap\Struct\Url;
@@ -123,16 +124,9 @@ class MerchantUrlProvider extends AbstractUrlProvider
     {
         if (!$collectionCriteria) {
             $collectionCriteria = new Criteria();
-            $collectionCriteria->addFilter(new EqualsFilter('active', true));
-            $collectionCriteria->addFilter(
-                new MultiFilter(
-                    MultiFilter::CONNECTION_OR, [
-                        new EqualsFilter('salesChannels.id', null),
-                        new EqualsFilter('salesChannels.id', $salesChannelContext->getSalesChannelId())
-                    ]
-                )
-            );
+            $collectionCriteria->addFilter(new MerchantAvailableFilter($salesChannelContext));
         }
+
         $collectionCriteria->setLimit($limit);
 
         if ($offset !== null) {
