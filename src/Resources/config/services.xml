@@ -61,6 +61,11 @@
         <service id="Moorl\MerchantFinder\Core\Content\Merchant\MerchantDefinition">
             <tag name="shopware.entity.definition" entity="moorl_merchant" />
         </service>
+        <service id="Moorl\MerchantFinder\Core\Content\Merchant\Cms\MoorlMerchantFinderCmsElementResolver">
+            <argument type="service" id="MoorlFoundation\Core\Service\SortingService"/>
+
+            <tag name="shopware.cms.data_resolver"/>
+        </service>
 
         <service id="Moorl\MerchantFinder\Core\Content\Marker\MarkerDefinition">
             <tag name="shopware.entity.definition" entity="moorl_merchant_marker" />

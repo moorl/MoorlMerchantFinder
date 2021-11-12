@@ -2,22 +2,21 @@
     {
         "id": "{CMS_PAGE_ID}",
         "type": "product_list",
-        "entity": "moorl_vc_course",
         "name": "Store Locator Demo",
         "sections": [
             {
-                "id": "{DEMO_CMS_SECTION_1}",
+                "id": "{ID:CMS_SECTION_1}",
                 "position": 0,
                 "type": "default",
                 "sizingMode": "boxed",
                 "blocks": [
                     {
-                        "id": "{DEMO_CMS_BLOCK_1}",
+                        "id": "{ID:CMS_BLOCK_1}",
                         "position": 1,
                         "type": "moorl-merchant-finder-basic",
                         "slots": [
                             {
-                                "id": "{DEMO_CMS_SLOT_1}",
+                                "id": "{ID:CMS_SLOT_1}",
                                 "type": "moorl-merchant-finder",
                                 "slot": "one",
                                 "config": {

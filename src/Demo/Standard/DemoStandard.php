@@ -58,21 +58,14 @@ class DemoStandard extends DataExtension implements DataInterface
         return __DIR__;
     }
 
-    public function getRemoveQueries(): array
-    {
-        return [];
-    }
-
     public function getInstallConfig(): array
     {
-        $globalReplacers = $this->getGlobalReplacers();
-
         return [
             "MoorlFoundation.config.fontawesome" => true,
-            "MoorlMerchantFinder.config.category" => $globalReplacers['{DEMO_CATEGORY_0}'],
+            "MoorlMerchantFinder.config.category" => "{ID:CATEGORY_0}",
             "MoorlMerchantFinder.config.countryCode" => true,
-            "MoorlMerchantFinder.config.defaultMarker" => $globalReplacers['{DEMO_WILD_101}'],
-            "MoorlMerchantFinder.config.highlightMarker" => $globalReplacers['{DEMO_WILD_102}']
+            "MoorlMerchantFinder.config.defaultMarker" => '{ID:WILD_101}',
+            "MoorlMerchantFinder.config.highlightMarker" => '{ID:WILD_102}'
         ];
     }
 }

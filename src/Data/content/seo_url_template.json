@@ -1,6 +1,6 @@
 [
   {
-    "id": "{DEMO_WILD_0}",
+    "id": "{ID:WILD_0}",
     "isValid": true,
     "routeName": "moorl.merchant-finder.merchant.page",
     "entityName": "moorl_merchant",

@@ -145,6 +145,7 @@ class MerchantDefinition extends EntityDefinition
             (new ManyToOneAssociationField('salesChannel', 'sales_channel_id', SalesChannelDefinition::class, 'id', false))->addFlags(),
             (new ManyToOneAssociationField('customerGroup', 'customer_group_id', CustomerGroupDefinition::class, 'id', false))->addFlags(new EditField(), new LabelProperty('name')),
             (new ManyToOneAssociationField('cmsPage', 'cms_page_id', CmsPageDefinition::class, 'id', false))->addFlags(new EditField(), new LabelProperty('name')),
+            (new ManyToOneAssociationField('country', 'country_id', CountryDefinition::class))->addFlags(new EditField(), new LabelProperty('name')),
 
             (new ManyToManyAssociationField('categories', CategoryDefinition::class, MerchantCategoryDefinition::class, 'moorl_merchant_id', 'category_id'))->addFlags(new EditField(), new LabelProperty('name')),
             (new ManyToManyAssociationField('tags', TagDefinition::class, MerchantTagDefinition::class, 'moorl_merchant_id', 'tag_id'))->addFlags(new EditField(), new LabelProperty('name')),

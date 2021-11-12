@@ -1,6 +1,6 @@
 [
   {
-    "id": "{DEMO_CATEGORY_0}",
+    "id": "{ID:CATEGORY_0}",
     "parentId": "{NAVIGATION_CATEGORY_ID}",
     "cmsPageId": "{CMS_PAGE_ID}",
     "active": true,

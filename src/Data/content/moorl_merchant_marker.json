@@ -1,6 +1,6 @@
 [
   {
-    "id": "{DEMO_WILD_100}",
+    "id": "{ID:WILD_100}",
     "name": "Leaf Orange",
     "markerId": "marker/leaf-orange.png",
     "markerShadowId": "marker/leaf-shadow.png",
@@ -19,7 +19,7 @@
     }
   },
   {
-    "id": "{DEMO_WILD_101}",
+    "id": "{ID:WILD_101}",
     "name": "Leaf Red",
     "markerId": "marker/leaf-red.png",
     "markerShadowId": "marker/leaf-shadow.png",
@@ -38,7 +38,7 @@
     }
   },
   {
-    "id": "{DEMO_WILD_102}",
+    "id": "{ID:WILD_102}",
     "name": "Leaf Green",
     "markerId": "marker/leaf-green.png",
     "markerShadowId": "marker/leaf-shadow.png",
@@ -57,7 +57,7 @@
     }
   },
   {
-    "id": "{DEMO_WILD_103}",
+    "id": "{ID:WILD_103}",
     "name": "Black",
     "markerId": "marker/marker-icon-black.png",
     "markerShadowId": "marker/marker-shadow.png",
@@ -76,7 +76,7 @@
     }
   },
   {
-    "id": "{DEMO_WILD_104}",
+    "id": "{ID:WILD_104}",
     "name": "Blue",
     "markerId": "marker/marker-icon-blue.png",
     "markerShadowId": "marker/marker-shadow.png",
@@ -95,7 +95,7 @@
     }
   },
   {
-    "id": "{DEMO_WILD_105}",
+    "id": "{ID:WILD_105}",
     "name": "Gold",
     "markerId": "marker/marker-icon-gold.png",
     "markerShadowId": "marker/marker-shadow.png",
@@ -114,7 +114,7 @@
     }
   },
   {
-    "id": "{DEMO_WILD_106}",
+    "id": "{ID:WILD_106}",
     "name": "Green",
     "markerId": "marker/marker-icon-green.png",
     "markerShadowId": "marker/marker-shadow.png",
@@ -133,7 +133,7 @@
     }
   },
   {
-    "id": "{DEMO_WILD_107}",
+    "id": "{ID:WILD_107}",
     "name": "Grey",
     "markerId": "marker/marker-icon-grey.png",
     "markerShadowId": "marker/marker-shadow.png",
@@ -152,7 +152,7 @@
     }
   },
   {
-    "id": "{DEMO_WILD_108}",
+    "id": "{ID:WILD_108}",
     "name": "Orange",
     "markerId": "marker/marker-icon-orange.png",
     "markerShadowId": "marker/marker-shadow.png",
@@ -171,7 +171,7 @@
     }
   },
   {
-    "id": "{DEMO_WILD_109}",
+    "id": "{ID:WILD_109}",
     "name": "Red",
     "markerId": "marker/marker-icon-red.png",
     "markerShadowId": "marker/marker-shadow.png",
@@ -190,7 +190,7 @@
     }
   },
   {
-    "id": "{DEMO_WILD_110}",
+    "id": "{ID:WILD_110}",
     "name": "Violet",
     "markerId": "marker/marker-icon-violet.png",
     "markerShadowId": "marker/marker-shadow.png",
@@ -209,7 +209,7 @@
     }
   },
   {
-    "id": "{DEMO_WILD_111}",
+    "id": "{ID:WILD_111}",
     "name": "Yellow",
     "markerId": "marker/marker-icon-yellow.png",
     "markerShadowId": "marker/marker-shadow.png",
