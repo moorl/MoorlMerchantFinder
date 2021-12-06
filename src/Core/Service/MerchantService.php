@@ -21,7 +21,7 @@ use Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemEntity;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Content\Product\ProductEntity;
 use Shopware\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
-use Shopware\Core\Framework\Adapter\Translation\Translator;
+use Shopware\Core\Framework\Adapter\Translation\AbstractTranslator;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
@@ -90,7 +90,7 @@ class MerchantService
      */
     private $markers;
     /*
-     * @var Translator
+     * @var AbstractTranslator
      */
     private $translator;
 
@@ -103,7 +103,7 @@ class MerchantService
         Session $session,
         EventDispatcherInterface $eventDispatcher,
         SeoUrlPlaceholderHandlerInterface $seoUrlReplacer,
-        Translator $translator
+        AbstractTranslator $translator
     )
     {
         $this->requestStack = $requestStack;
@@ -621,7 +621,10 @@ class MerchantService
 
         /** @var MerchantCollection $merchants */
         $merchants = $resultData->getEntities();
-        $merchants = $merchants->sortByDistance();
+
+        if ($context->hasExtension('DistanceField')) {
+            $merchants = $merchants->sortByDistance();
+        }
 
         $event = new MerchantsLoadedEvent($context, $merchants);
         $this->eventDispatcher->dispatch($event);
