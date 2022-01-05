@@ -179,9 +179,6 @@ Component.register('moorl-merchant-marker-detail', {
         },
 
         drawMap() {
-            const that = this;
-            let coord = [52.5173, 13.4020];
-
             this.mapItem = L.map(this.$refs['embedMap'], {
                 center: this.coord,
                 zoom: 16

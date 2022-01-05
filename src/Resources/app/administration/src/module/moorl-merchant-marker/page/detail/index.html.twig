@@ -35,6 +35,11 @@
                 </div>
 
                 <div class="sw-field">
+                    <sw-upload-listener
+                            :uploadTag="uploadTagMarker"
+                            autoUpload
+                            @media-upload-finish="setMarkerItem">
+                    </sw-upload-listener>
                     <sw-media-upload-v2
                             :uploadTag="uploadTagMarker"
                             :source="item.markerId"
@@ -48,6 +53,11 @@
                 </div>
 
                 <div class="sw-field">
+                    <sw-upload-listener
+                            :uploadTag="uploadTagMarkerRetina"
+                            autoUpload
+                            @media-upload-finish="setMarkerRetinaItem">
+                    </sw-upload-listener>
                     <sw-media-upload-v2
                             :uploadTag="uploadTagMarkerRetina"
                             :source="item.markerRetinaId"
@@ -61,6 +71,11 @@
                 </div>
 
                 <div class="sw-field">
+                    <sw-upload-listener
+                            :uploadTag="uploadTagMarkerShadow"
+                            autoUpload
+                            @media-upload-finish="setMarkerShadowItem">
+                    </sw-upload-listener>
                     <sw-media-upload-v2
                             :uploadTag="uploadTagMarkerShadow"
                             :source="item.markerShadowId"
