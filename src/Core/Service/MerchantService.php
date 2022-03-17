@@ -17,6 +17,9 @@ use Moorl\MerchantFinder\GeoLocation\GeoPoint;
 use Moorl\MerchantFinder\MoorlMerchantFinder;
 use Shopware\Core\Checkout\Cart\Cart;
 use Shopware\Core\Checkout\Cart\LineItem\LineItem;
+use Shopware\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
+use Shopware\Core\Checkout\Cart\Tax\Struct\CalculatedTaxCollection;
+use Shopware\Core\Checkout\Cart\Tax\Struct\TaxRuleCollection;
 use Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemEntity;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Content\Product\ProductEntity;
@@ -385,6 +388,14 @@ class MerchantService
             if ($merchantStock->getIsStock() && $merchantStock->getStock() < 1 && $this->systemConfigService->get('MoorlMerchantStock.config.disableOnNoStock')) {
                 $cart->remove($lineItem->getId());
                 $this->session->getFlashBag()->add('danger', $this->translator->trans('moorl-merchant-finder.outOfStock'));
+                return;
+            }
+
+            // If stack then get origin lineItem
+            if ($cart->has($merchantStock->getId())) {
+                $cart->remove($lineItem->getId());
+                $lineItem->setId($merchantStock->getId());
+                $cart->add($lineItem);
                 return;
             }
 
