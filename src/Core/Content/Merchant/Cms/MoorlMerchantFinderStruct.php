@@ -13,18 +13,50 @@ use Shopware\Core\System\Tag\TagEntity;
 
 class MoorlMerchantFinderStruct extends Struct
 {
-    protected EntityCollection $countries;
-    protected EntityCollection $tags;
-    protected EntityCollection $categories;
-    protected EntityCollection $productManufacturers;
-    protected EntityCollection $merchants;
+    protected ?EntityCollection $countries = null;
+    protected ?EntityCollection $tags = null;
+    protected ?EntityCollection $categories = null;
+    protected ?EntityCollection $productManufacturers = null;
+    protected ?EntityCollection $merchants = null;
 
     /**
-     * @return EntityCollection
+     * @return EntityCollection|null
      */
-    public function getCountries(): EntityCollection
+    public function getCountries(): ?EntityCollection
     {
         return $this->countries;
+    }
+
+    /**
+     * @return EntityCollection|null
+     */
+    public function getTags(): ?EntityCollection
+    {
+        return $this->tags;
+    }
+
+    /**
+     * @return EntityCollection|null
+     */
+    public function getCategories(): ?EntityCollection
+    {
+        return $this->categories;
+    }
+
+    /**
+     * @return EntityCollection|null
+     */
+    public function getProductManufacturers(): ?EntityCollection
+    {
+        return $this->productManufacturers;
+    }
+
+    /**
+     * @return EntityCollection|null
+     */
+    public function getMerchants(): ?EntityCollection
+    {
+        return $this->merchants;
     }
 
     /**
@@ -37,14 +69,6 @@ class MoorlMerchantFinderStruct extends Struct
         }
 
         $this->countries = $countries;
-    }
-
-    /**
-     * @return EntityCollection
-     */
-    public function getTags(): EntityCollection
-    {
-        return $this->tags;
     }
 
     /**
@@ -62,14 +86,6 @@ class MoorlMerchantFinderStruct extends Struct
     }
 
     /**
-     * @return EntityCollection
-     */
-    public function getCategories(): EntityCollection
-    {
-        return $this->categories;
-    }
-
-    /**
      * @param EntityCollection $categories
      */
     public function setCategories(EntityCollection $categories): void
@@ -79,14 +95,6 @@ class MoorlMerchantFinderStruct extends Struct
         }
 
         $this->categories = $categories;
-    }
-
-    /**
-     * @return EntityCollection
-     */
-    public function getProductManufacturers(): EntityCollection
-    {
-        return $this->productManufacturers;
     }
 
     /**
@@ -101,14 +109,6 @@ class MoorlMerchantFinderStruct extends Struct
         }
 
         $this->productManufacturers = $productManufacturers;
-    }
-
-    /**
-     * @return EntityCollection
-     */
-    public function getMerchants(): EntityCollection
-    {
-        return $this->merchants;
     }
 
     /**
