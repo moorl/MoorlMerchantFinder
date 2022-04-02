@@ -1,7 +1,7 @@
 [
     {
         "id": "{CMS_PAGE_ID}",
-        "type": "product_list",
+        "type": "page",
         "name": "Store Locator Demo",
         "sections": [
             {
@@ -13,12 +13,12 @@
                     {
                         "id": "{ID:CMS_BLOCK_1}",
                         "position": 1,
-                        "type": "moorl-merchant-finder-basic",
+                        "type": "moorl-column-layout-1",
                         "slots": [
                             {
                                 "id": "{ID:CMS_SLOT_1}",
                                 "type": "moorl-merchant-finder",
-                                "slot": "one",
+                                "slot": "slot-a",
                                 "config": {
                                     "type": {
                                         "source": "static",

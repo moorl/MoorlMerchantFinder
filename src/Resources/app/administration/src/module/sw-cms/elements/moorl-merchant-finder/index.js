@@ -4,6 +4,8 @@ import './config';
 import './preview';
 
 Application.getContainer('service').cmsService.registerCmsElement({
+    plugin: 'MoorlMerchantFinder',
+    icon: 'default-location-map',
     name: 'moorl-merchant-finder',
     label: 'Merchant Finder',
     component: 'sw-cms-el-moorl-merchant-finder',
