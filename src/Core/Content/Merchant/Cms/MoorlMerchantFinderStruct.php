@@ -104,7 +104,10 @@ class MoorlMerchantFinderStruct extends Struct
     {
         if ($productManufacturers instanceof ProductManufacturerCollection) {
             $productManufacturers->sort(function (ProductManufacturerEntity $a, ProductManufacturerEntity $b) {
-                return strnatcasecmp($a->getName(), $b->getName());
+                if ($a->getName() && $b->getName()) {
+                    return strnatcasecmp($a->getName(), $b->getName());
+                }
+                return strnatcasecmp($a->getTranslation('name'), $b->getTranslation('name'));
             });
         }
 
