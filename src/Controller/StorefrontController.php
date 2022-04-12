@@ -10,7 +10,6 @@ use Moorl\MerchantFinder\Core\Service\MerchantService;
 use Shopware\Core\Content\Cms\Exception\PageNotFoundException;
 use Shopware\Core\Content\Cms\SalesChannel\SalesChannelCmsPageLoaderInterface;
 use Shopware\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
-use Shopware\Core\Framework\Adapter\Twig\TemplateFinder;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
@@ -196,32 +195,18 @@ class StorefrontController extends OriginController
         $popupItemTemplate = null;
         $listItemTemplate = null;
 
-        /*switch ($data->get('initiator')) {
-            case 'merchant-picker':
-                $listItemTemplate = $this->get(TemplateFinder::class)->find('plugin/moorl-merchant-picker/component/result-item-static.html.twig', false, null);
-                $popupItemTemplate = $this->get(TemplateFinder::class)->find('plugin/moorl-merchant-finder/component/popup-item-static.html.twig', false, null);
-                break;
-            case 'merchant-stock':
-                $listItemTemplate = $this->get(TemplateFinder::class)->find('plugin/moorl-merchant-stock/component/result-item-static.html.twig', false, null);
-                $popupItemTemplate = $this->get(TemplateFinder::class)->find('plugin/moorl-merchant-stock/component/popup-item-static.html.twig', false, null);
-                break;
-            default:
-                $listItemTemplate = $this->get(TemplateFinder::class)->find('plugin/moorl-merchant-finder/component/result-item-static.html.twig', false, null);
-                $popupItemTemplate = $this->get(TemplateFinder::class)->find('plugin/moorl-merchant-finder/component/popup-item-static.html.twig', false, null);
-        }*/
-
         switch ($data->get('initiator')) {
             case 'merchant-picker':
-                $listItemTemplate = '@Storefront/plugin/moorl-merchant-picker/component/result-item-static.html.twig';
-                $popupItemTemplate = '@Storefront/plugin/moorl-merchant-finder/component/popup-item-static.html.twig';
+                $listItemTemplate = '@MoorlMerchantPicker/plugin/moorl-merchant-picker/component/result-item-static.html.twig';
+                $popupItemTemplate = '@MoorlMerchantPicker/plugin/moorl-merchant-finder/component/popup-item-static.html.twig';
                 break;
             case 'merchant-stock':
-                $listItemTemplate = '@Storefront/plugin/moorl-merchant-stock/component/result-item-static.html.twig';
-                $popupItemTemplate = '@Storefront/plugin/moorl-merchant-stock/component/popup-item-static.html.twig';
+                $listItemTemplate = '@MoorlMerchantStock/plugin/moorl-merchant-stock/component/result-item-static.html.twig';
+                $popupItemTemplate = '@MoorlMerchantStock/plugin/moorl-merchant-stock/component/popup-item-static.html.twig';
                 break;
             default:
-                $listItemTemplate = '@Storefront/plugin/moorl-merchant-finder/component/result-item-static.html.twig';
-                $popupItemTemplate = '@Storefront/plugin/moorl-merchant-finder/component/popup-item-static.html.twig';
+                $listItemTemplate = '@MoorlMerchantFinder/plugin/moorl-merchant-finder/component/result-item-static.html.twig';
+                $popupItemTemplate = '@MoorlMerchantFinder/plugin/moorl-merchant-finder/component/popup-item-static.html.twig';
         }
 
         $html = '';
