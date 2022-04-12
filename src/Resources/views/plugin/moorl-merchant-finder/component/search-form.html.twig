@@ -53,7 +53,8 @@
                         {% endif %}
                         <input id="{{ element.id }}zipcode"
                                name="zipcode"
-                               value="{{ context.shippingLocation.address.zipcode }}"
+                               value=""
+                               data-value="{{ context.shippingLocation.address.zipcode }}"
                                class="form-control"
                                placeholder="{{ "moorl-merchant-finder.zipcodeCity"|trans }}">
                     </div>

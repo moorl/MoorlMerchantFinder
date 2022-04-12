@@ -196,7 +196,7 @@ class StorefrontController extends OriginController
         $popupItemTemplate = null;
         $listItemTemplate = null;
 
-        switch ($data->get('initiator')) {
+        /*switch ($data->get('initiator')) {
             case 'merchant-picker':
                 $listItemTemplate = $this->get(TemplateFinder::class)->find('plugin/moorl-merchant-picker/component/result-item-static.html.twig', false, null);
                 $popupItemTemplate = $this->get(TemplateFinder::class)->find('plugin/moorl-merchant-finder/component/popup-item-static.html.twig', false, null);
@@ -208,6 +208,20 @@ class StorefrontController extends OriginController
             default:
                 $listItemTemplate = $this->get(TemplateFinder::class)->find('plugin/moorl-merchant-finder/component/result-item-static.html.twig', false, null);
                 $popupItemTemplate = $this->get(TemplateFinder::class)->find('plugin/moorl-merchant-finder/component/popup-item-static.html.twig', false, null);
+        }*/
+
+        switch ($data->get('initiator')) {
+            case 'merchant-picker':
+                $listItemTemplate = '@Storefront/plugin/moorl-merchant-picker/component/result-item-static.html.twig';
+                $popupItemTemplate = '@Storefront/plugin/moorl-merchant-finder/component/popup-item-static.html.twig';
+                break;
+            case 'merchant-stock':
+                $listItemTemplate = '@Storefront/plugin/moorl-merchant-stock/component/result-item-static.html.twig';
+                $popupItemTemplate = '@Storefront/plugin/moorl-merchant-stock/component/popup-item-static.html.twig';
+                break;
+            default:
+                $listItemTemplate = '@Storefront/plugin/moorl-merchant-finder/component/result-item-static.html.twig';
+                $popupItemTemplate = '@Storefront/plugin/moorl-merchant-finder/component/popup-item-static.html.twig';
         }
 
         $html = '';

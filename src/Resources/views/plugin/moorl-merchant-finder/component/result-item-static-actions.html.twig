@@ -28,6 +28,15 @@
         {% endif %}
     {% endblock %}
 
+    {# prevent theme inheritance bug #}
+    {% if config('MoorlMerchantPicker.config.selectionButton') == true %}
+        {% if config('MoorlMerchantPicker.config.customerGroupId') != context.customer.groupId %}
+            <button type="button" value="pick" data-merchant="{{ merchant.id }}" class="btn btn-sm btn-light">
+                <i class="fas fa-store"></i> {{ "moorl-merchant-finder.chose"|trans }}
+            </button>
+        {% endif %}
+    {% endif %}
+
     {% block element_moorl_merchant_finder_result_button_cms %}
         {% if config('MoorlMerchantFinder.config.detailPage') == 'popup' %}
             <a href="javascript:"
