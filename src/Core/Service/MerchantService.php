@@ -396,7 +396,6 @@ class MerchantService
                 $cart->remove($lineItem->getId());
                 $lineItem->setId($merchantStock->getId());
                 $cart->add($lineItem);
-                return;
             }
 
             // yes
