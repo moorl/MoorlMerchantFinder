@@ -130,7 +130,7 @@ class LocationService
         }
 
         try {
-            $apiKey = $this->systemConfigService->get('AppflixDewaShop.config.googleMapsApiKey');
+            $apiKey = $this->systemConfigService->get('MoorlMerchantFinder.config.googleMapsApiKey');
 
             if ($apiKey) {
                 $address = sprintf('%s %s, %s %s, %s',
