@@ -47,7 +47,7 @@
                                         data-placement="top"
                                         title="{{ "moorl-merchant-finder.myLocation"|trans }}"
                                         aria-label="{{ "moorl-merchant-finder.myLocation"|trans }}">
-                                    <i class="fas fa-crosshairs"></i>
+                                    {% sw_icon 'crosshairs' style {size:'sm', pack:'fas'} %}
                                 </button>
                             </div>
                         {% endif %}
@@ -64,9 +64,6 @@
                 <div class="form-group col-6 col-lg">
                     <label for="{{ element.id }}distance">{{ "moorl-merchant-finder.distance"|trans }}</label>
                     <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">{{ "moorl-merchant-finder.radius"|trans }}</span>
-                        </div>
                         <select id="{{ element.id }}distance" name="distance" class="custom-select form-control">
                             {% for distance in config('MoorlMerchantFinder.config.positionDistance') | split(',') %}
                                 <option value="{{ distance }}">{{ distance }}</option>
@@ -121,7 +118,7 @@
                 <div class="form-group col-6 col-lg">
                     <label for="{{ element.id }}submit">&nbsp;</label>
                     <button id="{{ element.id }}submit" type="submit" class="btn btn-block btn-primary" aria-label="{{ "moorl-merchant-finder.search"|trans }}">
-                        <i class="fas fa-search-location"></i>
+                        {% sw_icon 'search-location' style {size:'sm', pack:'fas'} %}
                         {{ "moorl-merchant-finder.search"|trans }}
                     </button>
                 </div>

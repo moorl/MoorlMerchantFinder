@@ -2,7 +2,8 @@
     {% block element_moorl_merchant_finder_result_tags %}
         {% if merchant.tags.count %}
             <div class="col-6">
-                <i class="fa-fw fas fa-tags"></i> <b>{{ "moorl-merchant-finder.tags"|trans }}</b>
+                {% sw_icon 'tags' style {size:'xs', pack:'fas'} %}
+                <b>{{ "moorl-merchant-finder.tags"|trans }}</b>
                 <div class="tags">
                     {% for tag in merchant.tags %}
                         <span>{{ tag.name }}</span>
@@ -15,7 +16,8 @@
     {% block element_moorl_merchant_finder_result_categories %}
         {% if merchant.categories.count %}
             <div class="col-6">
-                <i class="fa-fw fas fa-tshirt"></i> <b>{{ "moorl-merchant-finder.categories"|trans }}</b>
+                {% sw_icon 'tshirt' style {size:'xs', pack:'fas'} %}
+                <b>{{ "moorl-merchant-finder.categories"|trans }}</b>
                 <div class="categories">
                     {% for category in merchant.categories %}
                         <span>{{ category.name }}</span>
@@ -30,7 +32,8 @@
     <div class="row form-row">
         {% block element_moorl_merchant_finder_result_manufacturers %}
             <div class="col-12">
-                <i class="fa-fw fas fa-industry"></i> <b>{{ "moorl-merchant-finder.manufacturers"|trans }}</b>
+                {% sw_icon 'industry' style {size:'xs', pack:'fas'} %}
+                <b>{{ "moorl-merchant-finder.manufacturers"|trans }}</b>
                 <div class="manufacturers">
                     {% for manufacturer in merchant.productManufacturers %}
                         {% if manufacturer.media %}

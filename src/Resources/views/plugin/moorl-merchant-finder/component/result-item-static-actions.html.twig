@@ -1,15 +1,19 @@
 <div class="mt-2">
     {% block element_moorl_merchant_finder_result_button_merchant_url %}
         {% if merchant.merchantUrl %}
-            <a href="{{ merchant.merchantUrl }}" target="_blank" rel="noopener" class="btn btn-sm btn-light"><i
-                        class="fas fa-info-circle"></i> {{ "moorl-merchant-finder.merchantUrl"|trans }}</a>
+            <a href="{{ merchant.merchantUrl }}" target="_blank" rel="noopener" class="btn btn-sm btn-light">
+                {% sw_icon 'info-circle' style {size:'sm', pack:'fas'} %}
+                {{ "moorl-merchant-finder.merchantUrl"|trans }}
+            </a>
         {% endif %}
     {% endblock %}
 
     {% block element_moorl_merchant_finder_result_button_shop_url %}
         {% if merchant.shopUrl %}
-            <a href="{{ merchant.shopUrl }}" target="_blank" rel="noopener" class="btn btn-sm btn-light"><i
-                        class="fas fa-shopping-cart"></i> {{ "moorl-merchant-finder.shopUrl"|trans }}</a>
+            <a href="{{ merchant.shopUrl }}" target="_blank" rel="noopener" class="btn btn-sm btn-light">
+                {% sw_icon 'shopping-cart' style {size:'sm', pack:'fas'} %}
+                {{ "moorl-merchant-finder.shopUrl"|trans }}
+            </a>
         {% endif %}
     {% endblock %}
 
@@ -22,7 +26,8 @@
                    data-location-lon="{{ merchant.locationLon }}"
                    data-item="{{ merchant.id }}"
                    class="btn btn-sm btn-light">
-                    <i class="fas fa-map-pin"></i> {{ "moorl-merchant-finder.displayOnMap"|trans }}
+                    {% sw_icon 'map-pin' style {size:'sm', pack:'fas'} %}
+                    {{ "moorl-merchant-finder.displayOnMap"|trans }}
                 </a>
             {% endif %}
         {% endif %}

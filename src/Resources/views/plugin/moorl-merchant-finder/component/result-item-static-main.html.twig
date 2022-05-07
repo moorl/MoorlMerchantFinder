@@ -56,7 +56,8 @@
         {% block element_moorl_merchant_finder_result_opening_hours %}
             {% if config('MoorlMerchantFinder.config.showOpeningHours') %}
                 {% if merchant.openingHours %}
-                    <i class="fa-fw fas fa-clock"></i> <b>{{ "moorl-merchant-finder.openingHours"|trans }}</b>
+                    {% sw_icon 'clock' style {size:'xs', pack:'fas'} %}
+                    <b>{{ "moorl-merchant-finder.openingHours"|trans }}</b>
                     {% sw_include '@Storefront/plugin/moorl-foundation/opening-hours.html.twig' with {
                         'openingHours': merchant.openingHours
                     } %}
