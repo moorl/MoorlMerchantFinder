@@ -47,3 +47,12 @@ Module.register('moorl-merchant-finder', {
 
     defaultSearchConfiguration
 });
+
+
+const SearchTypeService = Shopware.Service('searchTypeService');
+
+SearchTypeService.upsertType('moorl_merchant', {
+    entityName: 'moorl_merchant',
+    placeholderSnippet: 'moorl-merchant-finder.general.placeholderSearchBar',
+    listingRoute: 'moorl.merchant.finder.list'
+});

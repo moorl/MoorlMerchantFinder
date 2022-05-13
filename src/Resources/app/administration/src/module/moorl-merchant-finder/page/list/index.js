@@ -24,7 +24,7 @@ Component.register('moorl-merchant-finder-list', {
             sortBy: 'name',
             sortDirection: 'ASC',
             filterCriteria: [],
-            naturalSorting: true,
+            naturalSorting: false,
             showImportModal: false,
             showExportModal: false,
             isLoading: true,
@@ -47,7 +47,7 @@ Component.register('moorl-merchant-finder-list', {
 
         defaultCriteria() {
             const defaultCriteria  = new Criteria(this.page, this.limit);
-            this.naturalSorting = this.sortBy === 'name';
+            this.naturalSorting = this.sortBy === 'priority';
 
             defaultCriteria.setTerm(this.term);
 
@@ -116,8 +116,7 @@ Component.register('moorl-merchant-finder-list', {
                 label: this.$tc('moorl-foundation.properties.type'),
                 inlineEdit: 'string',
                 align: 'center',
-                allowResize: true,
-                visible: false
+                allowResize: true
             },{
                 property: 'company',
                 dataIndex: 'company',
@@ -166,12 +165,12 @@ Component.register('moorl-merchant-finder-list', {
 
             const criteria = await this.addQueryScores(this.term, this.defaultCriteria);
 
-            /*if (!this.entitySearchable) {
+            if (!this.entitySearchable) {
                 this.isLoading = false;
                 this.total = 0;
 
                 return false;
-            }*/
+            }
 
             if (this.freshSearchTerm) {
                 criteria.resetSorting();

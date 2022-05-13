@@ -51,7 +51,11 @@
                 :sort-direction="sortDirection"
                 :disable-data-fetching="true"
                 @select-item="updateSelection"
-                @update-records="updateTotal">
+                @update-records="updateTotal"
+                @page-change="onPageChange"
+                @column-sort="onSortColumn"
+                @update-records="updateTotal"
+        >
             <template #column-active="{ item, isInlineEdit }">
                 <template v-if="isInlineEdit">
                     <sw-checkbox-field v-model="item.active"></sw-checkbox-field>
