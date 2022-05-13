@@ -314,7 +314,14 @@
                     </sw-card>
 
                     <sw-card v-if="active === 'timeSettings' && !item._isNew" :isLoading="isLoading" :title="$tc('moorl-merchant-finder.cards.openingHours')">
-                        <moorl-opening-hours v-model="item.openingHours"></moorl-opening-hours>
+                        <sw-field
+                                type="switch"
+                                bordered
+                                :label="$tc('moorl-merchant-finder.properties.showOpeningHours')"
+                                v-model="item.openingHours"
+                        />
+
+                        <moorl-opening-hours v-if="item.openingHours" v-model="item.openingHours"/>
                     </sw-card>
 
                     <sw-card v-if="active === 'other'"

@@ -164,6 +164,10 @@ Component.register('moorl-merchant-finder-detail', {
         onClickSave() {
             this.isLoading = true;
 
+            if (this.item.openingHours === false) {
+                this.item.openingHours = null;
+            }
+
             this.repository
                 .save(this.item, Shopware.Context.api)
                 .then(() => {

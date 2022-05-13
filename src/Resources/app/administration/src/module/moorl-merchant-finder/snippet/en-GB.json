@@ -118,6 +118,7 @@
             "cancelOrder": "Are you sure to cancel this Order?"
         },
         "properties": {
+            "showOpeningHours": "Show opening hours",
             "autoLocation": "Auto location",
             "content": "Content",
             "executiveDirector": "Executive Director",

@@ -118,6 +118,7 @@
             "cancelOrder": "Sind Sie sicher, dass Sie diesen Auftrag stornieren möchten?"
         },
         "properties": {
+            "showOpeningHours": "Öffnungszeiten anzeigen",
             "autoLocation": "Position automatisch",
             "executiveDirector": "Geschäftsführer",
             "placeOfFulfillment": "Erfüllungsort",
