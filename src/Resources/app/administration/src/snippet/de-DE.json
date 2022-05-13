@@ -1,13 +1,13 @@
 {
     "global": {
         "entities": {
-            "moorl_merchant": "Fachhändler"
+            "moorl_merchant": "Händlersuche"
         }
     },
     "moorl-merchant-finder": {
         "general": {
-            "markerMenuItemGeneral": "Fachhändler Marker",
-            "mainMenuItemGeneral": "Fachhändler",
+            "markerMenuItemGeneral": "Händler Marker",
+            "mainMenuItemGeneral": "Händlersuche",
             "descriptionTextModule": "Verwalte die Händler hier",
             "placeholderSearchBar": "Search for merchants"
         },
@@ -44,7 +44,7 @@
         "buttons": {
             "saveButtonText": "Speichern",
             "refreshButtonText": "Neu laden",
-            "addMerchantButtonText": "Neuer Händler",
+            "addStoreButtonText": "Neuer Händler",
             "cancelButtonText": "Abbrechen",
             "startImportButtonText": "Starte Import",
             "importButtonText": "Import CSV",
@@ -59,7 +59,7 @@
         },
         "properties": {
             "oneDayYearlyLoop": "Einzelner Tag mit jährlicher Wiederholung",
-            "localMerchant": "Nur dieser Händler",
+            "localStore": "Nur dieser Händler",
             "cmsPageId": "CMS Seiten ID",
             "logo": "Logo",
             "markerId": "Marker",

@@ -1,7 +1,7 @@
 {
     "moorl-merchant-finder": {
         "action": {
-            "editShop": "Fachhändler Bearbeiten",
+            "editShop": "Händler Bearbeiten",
             "quickOrder": "Schnellbestellung",
             "testApi": "API Verbindung testen",
             "action": "Aktion",
@@ -17,7 +17,7 @@
             "add": "Hinzufügen",
             "remove": "Entfernen",
             "newItem": "Neues Item",
-            "newShop": "Neue Fachhändler",
+            "newShop": "Neue Händler",
             "newOptionItem": "Neues Optionen Item",
             "newOption": "Neue Option",
             "newIngredient": "Neuer Inhaltsstoff",
@@ -30,10 +30,10 @@
             "refresh": "Aktualisieren"
         },
         "notification": {
-            "linkedCustomers": "Dieser Fachhändler ist nur für die ausgewählten Kunden sichtbar.",
-            "linkedSalesChannels": "Lassen Sie dieses Feld leer, wenn Sie Ihre Fachhändler in allen Verkaufskanälen anzeigen möchten.",
-            "linkedShops": "Lassen Sie dieses Feld leer, wenn Sie Ihr Lebensmittelprodukt in allen Geschäften anzeigen möchten. Wenn Sie eine Fachhändler ausgewählt haben, ist dieses Produkt nur für diese Fachhändler sichtbar.",
-            "linkedProducts": "Lassen Sie dieses Feld leer, wenn Sie Ihre Produkte in allen Fachhändlern anzeigen möchten. Wenn Sie ein Produkt ausgewählt haben, ist dieses Produkt nur für diese Fachhändler sichtbar.",
+            "linkedCustomers": "Dieser Händler ist nur für die ausgewählten Kunden sichtbar.",
+            "linkedSalesChannels": "Lassen Sie dieses Feld leer, wenn Sie Ihre Händler in allen Verkaufskanälen anzeigen möchten.",
+            "linkedShops": "Lassen Sie dieses Feld leer, wenn Sie Ihr Lebensmittelprodukt in allen Geschäften anzeigen möchten. Wenn Sie eine Händler ausgewählt haben, ist dieses Produkt nur für diese Händler sichtbar.",
+            "linkedProducts": "Lassen Sie dieses Feld leer, wenn Sie Ihre Produkte in allen Händler anzeigen möchten. Wenn Sie ein Produkt ausgewählt haben, ist dieses Produkt nur für diese Händler sichtbar.",
             "weekdayConfig": "Hier können Sie Lebensmittelprodukte für bestimmte Wochentage aktivieren/deaktivieren. Wenn Sie auch Rabatte hinzufügen möchten, geben Sie bitte Ihrem Produkt einen Listenpreis.",
             "apiTestSuccess": "API Verbindung erfolgreich hergestellt",
             "apiTestFailed": "API Verbindung fehlerhaft",
@@ -49,7 +49,7 @@
             "config": "Allgemeine Konfiguration",
             "settings": "Einstellungen",
             "main": "DeliveryWare",
-            "merchant": "Fachhändlern",
+            "merchant": "Händler",
             "ingredient": "Inhaltsstoffe",
             "badge": "Badges",
             "dashboard": "Dashboard",
@@ -86,7 +86,7 @@
             "selectPrinter": "Drucker auswählen",
             "additionalPrices": "Zusätzliche Preise",
             "linkedProducts": "Verlinkte Produkte",
-            "linkedShops": "Verlinkte Fachhändlern",
+            "linkedShops": "Verlinkte Händler",
             "linkedOrders": "Verlinkte Bestellungen",
             "linkedIngredients": "Verlinkte Inhaltsstoffe",
             "linkedBadges": "Verlinkte Badges",
@@ -106,7 +106,7 @@
             "internalUse": "Dieses Feld ist nur für den internen Gebrauch",
             "priority": "Elemente mit einer höheren Priorität werden zuerst angezeigt",
             "merchantDeliveryTime": "Die Lieferzeit wird zur Vorbereitungszeit addiert",
-            "merchantIsDefault": "Diese Fachhändler ist immer vorausgewählt",
+            "merchantIsDefault": "Diese Händler ist immer vorausgewählt",
             "merchantMaxRadius": "Der maximale Radius für Auslieferer",
             "printerTemplate": "Diese Vorlage ist nur editierbar, wenn Sie das Drucker-Binärpaket installiert haben",
             "delivererTrackingCode": "Mit diesem Code können Sie und Ihre Kunden den Zusteller auf der Karte verfolgen"
@@ -205,7 +205,7 @@
             "printer": "Drucker",
             "category": "Kategorie",
             "ingredient": "Inhaltsstoff",
-            "merchant": "Fachhändler",
+            "merchant": "Händler",
             "country": "Land",
             "order": "Bestellung",
             "option": "Option",
@@ -249,8 +249,8 @@
             "catering": "Catering Demo Paket"
         },
         "dashboard": {
-            "merchantsTitle": "DeliveryWare - Deine Fachhändlern",
-            "noShops": "Du hast noch keine Fachhändler erstellt. Installiere eines unserer Demopakete oder erstelle selbst einen Fachhändler in den Optionen von DeliveryWare.",
+            "merchantsTitle": "DeliveryWare - Deine Händler",
+            "noShops": "Du hast noch keine Händler erstellt. Installiere eines unserer Demopakete oder erstelle selbst einen Händler in den Optionen von DeliveryWare.",
             "dokuTitle": "DeliveryWare - Dokumentation",
             "dokuText": "Du benötigst Hilfe bei der Einrichtung? Kein Problem. Melde dich einfach bei uns oder schau dir die offizielle Doku an.",
             "dokuButton": "Zur Dokumentation",

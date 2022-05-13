@@ -1,43 +1,55 @@
 <sw-page class="moorl-merchant-finder-list">
+    <template #search-bar>
+        <sw-search-bar
+                initial-search-type="moorl_merchant"
+                :initial-search="term"
+                @search="onSearch"
+        />
+    </template>
+
     <sw-sidebar slot="sidebar">
-        <sw-sidebar-item icon="default-arrow-360-left"
-                         :title="$t('moorl-foundation.buttons.refreshButtonText')"
-                         @click="onRefresh"></sw-sidebar-item>
+        <sw-sidebar-item
+                icon="default-arrow-360-left"
+                :title="$tc('moorl-foundation.buttons.refreshButtonText')"
+                @click="getList"
+        />
 
-        <sw-sidebar-item icon="default-action-cloud-upload"
-                         :title="$t('moorl-foundation.buttons.importButtonText')"
-                         @click="onImportModal"></sw-sidebar-item>
+        <sw-sidebar-item
+                icon="default-action-cloud-upload"
+                :title="$tc('moorl-foundation.buttons.importButtonText')"
+                @click="onImportModal"
+        />
 
-        <sw-sidebar-item icon="default-action-cloud-download"
-                         :title="$t('moorl-foundation.buttons.exportButtonText')"
-                         @click="onExportModal"></sw-sidebar-item>
-
-        <sw-sidebar-item icon="default-object-globe"
-                         :title="$t('moorl-foundation.getLocation.title')"
-                         @click="onClickGetLocation"></sw-sidebar-item>
+        <sw-sidebar-item
+                icon="default-action-cloud-download"
+                :title="$tc('moorl-foundation.buttons.exportButtonText')"
+                @click="onExportModal"
+        />
     </sw-sidebar>
 
     <template slot="smart-bar-actions">
         <sw-button variant="primary" :routerLink="{ name: 'moorl.merchant.finder.create' }">
-            {{ $t('moorl-foundation.buttons.addMerchantButtonText') }}
+            {{ $tc('moorl-foundation.buttons.addMerchantButtonText') }}
         </sw-button>
     </template>
 
     <template #language-switch>
-        <sw-language-switch slot="language-switch" @on-change="onChangeLanguage"></sw-language-switch>
+        <sw-language-switch slot="language-switch" @on-change="getList"/>
     </template>
 
     <template slot="content">
-        <sw-loader v-if="isImporting"></sw-loader>
-
         <sw-entity-listing
-                v-if="merchants"
-                :items="merchants"
+                v-if="entitySearchable"
+                detailRoute="moorl.merchant.finder.detail"
+                :items="items"
                 :repository="repository"
                 :showSelection="true"
                 :columns="columns"
-                :isLoading="isLoading"
-                detailRoute="moorl.merchant.finder.detail"
+                :is-loading="isLoading"
+                :criteria-limit="limit"
+                :sort-by="currentSortBy"
+                :sort-direction="sortDirection"
+                :disable-data-fetching="true"
                 @select-item="updateSelection"
                 @update-records="updateTotal">
             <template #column-active="{ item, isInlineEdit }">
@@ -59,48 +71,18 @@
             </template>
         </sw-entity-listing>
 
-        <sw-modal v-if="showLocModal"
-                  @modal-close="onCloseModal"
-                  :title="$t('moorl-foundation.getLocation.title')"
-                  variant="default">
-            <p>Since Version 1.7.1 For Shopware 6.4 all Locations will fetched by Import or by Update. This Assistant will be removed in future.</p>
-
-            <sw-field type="switch"
-                      bordered
-                      :label="$t('moorl-foundation.getLocation.overwrite')" v-model="getLocation.overwrite"></sw-field>
-
-            <sw-field type="switch"
-                      bordered
-                      :label="$t('moorl-foundation.getLocation.skipError')" v-model="getLocation.skipError"></sw-field>
-
-            <div v-if="getLocation.data.length > 0">
-                <div class="sw-field">
-                    {{ $t('moorl-foundation.import.processText', { count: getLocation.total , remaining: getLocation.data.length }) }}
-                </div>
-            </div>
-
-            <template #modal-footer>
-                <sw-button @click="onCloseModal" size="small">
-                    {{ $t('moorl-foundation.buttons.cancelButtonText') }}
-                </sw-button>
-                <sw-button variant="primary"
-                           @click="onStartGetLocation"
-                           size="small">
-                    {{ $t('moorl-foundation.buttons.startButtonText') }}
-                </sw-button>
-            </template>
-        </sw-modal>
-
         <moorl-csv-import
                 v-if="showImportModal"
                 entity="moorl_merchant"
                 :onCloseModal="onCloseModal"
-                :onFinishImport="getItems"></moorl-csv-import>
+                :onFinishImport="getList"
+        />
 
         <moorl-csv-export
                 v-if="showExportModal"
                 entity="moorl_merchant"
                 :onCloseModal="onCloseModal"
-                :selectedItems="selectedItems"></moorl-csv-export>
+                :selectedItems="selectedItems"
+        />
     </template>
 </sw-page>

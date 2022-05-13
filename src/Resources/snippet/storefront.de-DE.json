@@ -3,7 +3,7 @@
         "pickupDateSet": "Abholzeit wurde gespeichert",
         "desiredDate": "Wunsch Abholdatum",
         "desiredTime": "Wunsch Abholzeit",
-        "commentToMerchant": "Verfassen Sie einen Kommentar an den Fachhändler",
+        "commentToMerchant": "Verfassen Sie einen Kommentar an den Händler",
         "productNotAvailable": "Produkt nicht verfügbar. Bitte kontaktieren Sie den Shop-Support für weitere Informationen.",
         "noMerchantSelected": "Produkt nicht verfügbar. Kein Händler ausgewählt.",
         "outOfStock": "Produkt nicht verfügbar. Der von Ihnen gewählte Händler hat dieses Produkt nicht auf Lager.",
@@ -17,7 +17,7 @@
         "mySelection": "Meine Auswahl",
         "merchant": "Händler",
         "country": "Land",
-        "allowMerchantCustomerContact": "Ich erlaube meinem ausgewählten Fachhändler mich per Telefon oder E-Mail zu kontaktieren.",
+        "allowMerchantCustomerContact": "Ich erlaube meinem ausgewählten Händler mich per Telefon oder E-Mail zu kontaktieren.",
         "forTheSearch": "für die Suche ",
         "forTheSearchZipcode": "in zipcode und distance km Umgebung ",
         "are": "wurden ",
@@ -57,10 +57,10 @@
         "highlight": "Tipp",
         "resetSelection": "Auswahl zurücksetzen",
         "searchRules": {
-            "isHighlighted": "Premium Fachhändler",
-            "isNotHighlighted": "Normaler Fachhändler",
+            "isHighlighted": "Premium Händler",
+            "isNotHighlighted": "Normaler Händler",
             "hasPriority": "Empfehlung",
-            "hasLogo": "Fachhändler mit Logo"
+            "hasLogo": "Händler mit Logo"
         },
         "myLocation": "Meine aktuelle Position"
     },

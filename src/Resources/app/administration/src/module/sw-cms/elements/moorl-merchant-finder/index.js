@@ -1,7 +1,6 @@
 const { Application } = Shopware;
 import './component';
 import './config';
-import './preview';
 
 Application.getContainer('service').cmsService.registerCmsElement({
     plugin: 'MoorlMerchantFinder',
@@ -10,7 +9,7 @@ Application.getContainer('service').cmsService.registerCmsElement({
     label: 'Merchant Finder',
     component: 'sw-cms-el-moorl-merchant-finder',
     configComponent: 'sw-cms-el-config-moorl-merchant-finder',
-    previewComponent: 'sw-cms-el-preview-moorl-merchant-finder',
+    previewComponent: true,
     defaultConfig: {
         type: {
             source: 'static',

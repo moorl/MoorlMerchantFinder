@@ -5,24 +5,16 @@ import './page/create';
 import './search-service';
 import './style/main.scss';
 
-Application.addServiceProviderDecorator('searchTypeService', searchTypeService => {
-    searchTypeService.upsertType('moorl_merchant', {
-        entityName: 'moorl_merchant',
-        entityService: 'moorlMerchantService',
-        placeholderSnippet: 'moorl-merchant-finder.general.placeholderSearchBar',
-        listingRoute: 'moorl.merchant.finder.list'
-    });
-
-    return searchTypeService;
-});
+import defaultSearchConfiguration from './default-search-configuration';
 
 Module.register('moorl-merchant-finder', {
     type: 'plugin',
-    name: 'MerchantFinder',
+    name: 'moorl-merchant-finder',
     title: 'moorl-merchant-finder.general.mainMenuItemGeneral',
     color: '#ff3d58',
     icon: 'default-object-globe',
     entity: 'moorl_merchant',
+
     routes: {
         list: {
             component: 'moorl-merchant-finder-list',
@@ -43,6 +35,7 @@ Module.register('moorl-merchant-finder', {
             }
         }
     },
+
     navigation: [{
         label: 'moorl-merchant-finder.general.mainMenuItemGeneral',
         color: '#ff3d58',
@@ -50,5 +43,7 @@ Module.register('moorl-merchant-finder', {
         icon: 'default-object-globe',
         position: 40,
         parent: 'sw-catalogue'
-    }]
+    }],
+
+    defaultSearchConfiguration
 });

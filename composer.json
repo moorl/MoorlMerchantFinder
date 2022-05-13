@@ -1,7 +1,7 @@
 {
     "name": "moorl/merchant-finder",
     "description": "Merchant finder for Shopware 6",
-    "version": "1.7.15",
+    "version": "1.7.16",
     "license": "proprietary",
     "authors": [
         {
@@ -22,12 +22,12 @@
         "shopware-plugin-class": "Moorl\\MerchantFinder\\MoorlMerchantFinder",
         "copyright": "(c) by moori",
         "label": {
-            "de-DE": "Händlersuche für Shopware 6",
-            "en-GB": "Merchantfinder for Shopware 6"
+            "de-DE": "Händlersuche | Basis Version",
+            "en-GB": "Store Locator | Base Version"
         },
         "description": {
-            "de-DE": "Händlersuche für Shopware 6",
-            "en-GB": "Merchantfinder for Shopware 6"
+            "de-DE": "Händlersuche | Basis Version",
+            "en-GB": "Store Locator | Base Version"
         },
         "manufacturerLink": {
             "de-DE": "https://docs.moori.net/",

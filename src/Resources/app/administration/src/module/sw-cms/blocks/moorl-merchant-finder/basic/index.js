@@ -2,6 +2,7 @@ import './component';
 import './preview';
 
 Shopware.Service('cmsService').registerCmsBlock({
+    hidden: true,
     name: 'moorl-merchant-finder-basic',
     label: 'moorl-cms.blocks.general.merchantFinderBasic.label',
     category: 'moorl-cms-old',
