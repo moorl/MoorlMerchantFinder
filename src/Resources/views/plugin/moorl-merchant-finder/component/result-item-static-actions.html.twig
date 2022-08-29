@@ -36,7 +36,7 @@
     {% block element_moorl_merchant_finder_result_button_cms %}
         {% if config('MoorlMerchantFinder.config.detailPage') == 'popup' %}
             <a href="javascript:"
-               data-moorl-foundation-modal="{{ path('moorl.merchant-finder.merchant.modal', {'merchantId': merchant.id}) }}"
+               data-moorl-foundation-modal="{{ seoUrl('moorl.merchant-finder.merchant.modal', {'merchantId': merchant.id}) }}"
                class="btn btn-sm btn-light">{{ "moorl-merchant-finder.more"|trans }}</a>
         {% elseif config('MoorlMerchantFinder.config.detailPage') == 'page' %}
             <a href="{{ merchant.seoUrl }}"

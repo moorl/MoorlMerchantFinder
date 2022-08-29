@@ -71,6 +71,11 @@ export default class MoorlMerchantFinder extends Plugin {
             button.click();
         });
 
+        $(this.el).on('click', '[data-moorl-foundation-modal]', function () {
+            const url = this.dataset.moorlFoundationModal;
+            window.moorlFoundationModal(url);
+        });
+
         $(this.el).on('change', 'select', function () {
             const button = that._form.querySelector("[type=submit]");
             button.click();
