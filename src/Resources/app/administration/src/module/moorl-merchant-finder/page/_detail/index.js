@@ -21,7 +21,8 @@ Component.register('moorl-merchant-finder-detail', {
             item: {},
             isLoading: false,
             processSuccess: false,
-            mediaModalIsOpen: false
+            mediaModalIsOpen: false,
+            timezoneOptions: []
         };
     },
 
@@ -146,6 +147,7 @@ Component.register('moorl-merchant-finder-detail', {
 
     methods: {
         createdComponent() {
+            this.loadTimezones();
             this.getItem();
         },
 
@@ -212,6 +214,22 @@ Component.register('moorl-merchant-finder-detail', {
         },
         onOpenMediaModal() {
             this.mediaModalIsOpen = true;
-        }
+        },
+        loadTimezones() {
+            return Shopware.Service('timezoneService').loadTimezones()
+                .then((result) => {
+                    this.timezoneOptions.push({
+                        label: 'UTC',
+                        value: 'UTC',
+                    });
+
+                    const loadedTimezoneOptions = result.map(timezone => ({
+                        label: timezone,
+                        value: timezone,
+                    }));
+
+                    this.timezoneOptions.push(...loadedTimezoneOptions);
+                });
+        },
     }
 });
