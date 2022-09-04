@@ -1,0 +1,21 @@
+{% sw_extends '@Storefront/storefront/base.html.twig' %}
+
+{% set merchant = page.merchant %}
+
+{% block base_head %}
+    {% sw_include '@Storefront/plugin/moorl-merchant/layout/merchant-meta.html.twig' %}
+{% endblock %}
+
+{% block base_main_inner %}
+    <div class="container-main">
+        {% sw_include '@Storefront/storefront/element/cms-element-merchant-header.html.twig' %}
+
+        <div class="container">
+            {% block merchant_page_other %}
+                <div class="text-center h3">{{ "moorl-merchant.productsOf"|trans }} {{ merchant.translated.name }}</div>
+            {% endblock %}
+
+            {% sw_include '@Storefront/storefront/element/cms-element-merchant-product-listing.html.twig' %}
+        </div>
+    </div>
+{% endblock %}
