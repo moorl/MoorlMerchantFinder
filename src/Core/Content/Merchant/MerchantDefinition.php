@@ -10,7 +10,6 @@ use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantSalesChannel\MerchantSal
 use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantStock\MerchantStockDefinition;
 use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantTag\MerchantTagDefinition;
 use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantTranslation\MerchantTranslationDefinition;
-use Moorl\MerchantFinder\Core\Content\Marker\MarkerDefinition;
 use MoorlFoundation\Core\Content\OpeningHours\OpeningHoursDefaults;
 use MoorlFoundation\Core\Framework\DataAbstractionLayer\Collection\FieldCompanyCollection;
 use MoorlFoundation\Core\Framework\DataAbstractionLayer\Collection\FieldContactCollection;
@@ -25,7 +24,6 @@ use MoorlFoundation\Core\Framework\DataAbstractionLayer\Collection\FieldLocation
 use MoorlFoundation\Core\Framework\DataAbstractionLayer\Collection\FieldPersonCollection;
 use Shopware\Core\Checkout\Customer\Aggregate\CustomerGroup\CustomerGroupDefinition;
 use Shopware\Core\Content\Category\CategoryDefinition;
-use Shopware\Core\Content\Media\MediaDefinition;
 use Shopware\Core\Content\Product\Aggregate\ProductManufacturer\ProductManufacturerDefinition;
 use Shopware\Core\Content\Product\ProductDefinition;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityDefinition;
@@ -90,8 +88,6 @@ class MerchantDefinition extends EntityDefinition
             (new StringField('delivery_type', 'deliveryType'))->addFlags(new EditField('text')),
             (new StringField('department', 'department'))->addFlags(new EditField('text')),
             (new StringField('country_code', 'countryCode'))->addFlags(new EditField('text')),
-            (new StringField('shop_url', 'shopUrl'))->addFlags(new EditField('text')),
-            (new StringField('merchant_url', 'merchantUrl'))->addFlags(new EditField('text')),
             (new TranslatedField('descriptionHtml'))->addFlags(new EditField('code')),
             new CustomFields(),
             new JsonField('data', 'data'),
@@ -99,8 +95,7 @@ class MerchantDefinition extends EntityDefinition
             (new FloatField('min_order_value', 'minOrderValue'))->addFlags(new EditField('number')),
             new FkField('sales_channel_id', 'salesChannelId', SalesChannelDefinition::class),
             new FkField('customer_group_id', 'customerGroupId', CustomerGroupDefinition::class),
-            new FkField('moorl_merchant_marker_id', 'markerId', MarkerDefinition::class),
-            (new ManyToOneAssociationField('marker', 'moorl_merchant_marker_id', MarkerDefinition::class, 'id', true))->addFlags(new EditField(), new LabelProperty('name')),
+
             (new ManyToOneAssociationField('salesChannel', 'sales_channel_id', SalesChannelDefinition::class, 'id', false))->addFlags(),
             (new ManyToOneAssociationField('customerGroup', 'customer_group_id', CustomerGroupDefinition::class, 'id', false))->addFlags(new EditField(), new LabelProperty('name')),
             (new ManyToManyAssociationField('categories', CategoryDefinition::class, MerchantCategoryDefinition::class, 'moorl_merchant_id', 'category_id'))->addFlags(new EditField(), new LabelProperty('name')),

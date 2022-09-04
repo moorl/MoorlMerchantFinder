@@ -219,14 +219,14 @@
 
         <component name="sw-entity-single-select">
             <name>defaultMarker</name>
-            <entity>moorl_merchant_marker</entity>
+            <entity>moorl_marker</entity>
             <label>Default</label>
             <label lang="de-DE">Standard</label>
         </component>
 
         <component name="sw-entity-single-select">
             <name>highlightMarker</name>
-            <entity>moorl_merchant_marker</entity>
+            <entity>moorl_marker</entity>
             <label>Highlight</label>
             <label lang="de-DE">Hervorgehoben</label>
         </component>

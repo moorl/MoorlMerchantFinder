@@ -3,7 +3,7 @@
 namespace Moorl\MerchantFinder\Storefront\Page\Merchant;
 
 use Moorl\MerchantFinder\Core\Content\Merchant\SalesChannel\MerchantDetailRoute;
-use Moorl\MerchantFinder\Moorl\MerchantFinder;
+use Moorl\MerchantFinder\MoorlMerchantFinder;
 use Shopware\Core\Content\Cms\Exception\PageNotFoundException;
 use Shopware\Core\Content\Product\SalesChannel\Listing\AbstractProductListingRoute;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -42,7 +42,7 @@ class MerchantPageLoader
 
         $criteria = new Criteria();
         $criteria->addFilter(new EqualsFilter('merchants.id', $merchantId));
-        $result = $this->productListingRoute->load(Moorl\MerchantFinder::NAME, $request, $context, $criteria);
+        $result = $this->productListingRoute->load(MoorlMerchantFinder::NAME, $request, $context, $criteria);
         $products = $result->getResult();
 
         $criteria = new Criteria();

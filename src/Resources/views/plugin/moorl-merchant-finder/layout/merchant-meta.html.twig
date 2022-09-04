@@ -1,0 +1,31 @@
+{% sw_extends '@Storefront/storefront/layout/meta.html.twig' %}
+
+{% block layout_head_meta_tags_opengraph %}
+    <meta property="og:type"
+          content="article"/>
+    <meta property="og:site_name"
+          content="{{ config('core.basicInformation.shopName') }}"/>
+    <meta property="og:url"
+          content="{{ seoUrl('moorl.merchant.detail', { merchantId: merchant.id }) }}"/>
+    <meta property="og:title"
+          content="{{ merchant.translated.metaTitle ? merchant.translated.metaTitle : metaTitle }}"/>
+    <meta property="og:description"
+          content="{{ merchant.translated.metaDescription ?: merchant.translated.teaser }}"/>
+    <meta property="og:image"
+          content="{{ merchant.media.url }}"/>
+
+    <meta name="twitter:card"
+          content="article"/>
+    <meta name="twitter:site"
+          content="{{ config('core.basicInformation.shopName') }}"/>
+    <meta name="twitter:title"
+          content="{{ merchant.translated.metaTitle ? merchant.translated.metaTitle : metaTitle }}"/>
+    <meta name="twitter:description"
+          content="{{ merchant.translated.metaDescription ?: merchant.translated.teaser }}"/>
+    <meta name="twitter:image"
+          content="{{ merchant.media.url }}"/>
+{% endblock %}
+
+{% block layout_head_canonical %}
+    <link rel="canonical" href="{{ seoUrl('moorl.merchant.detail', { merchantId: merchant.id }) }}" />
+{% endblock %}

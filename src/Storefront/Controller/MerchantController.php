@@ -2,8 +2,8 @@
 
 namespace Moorl\MerchantFinder\Storefront\Controller;
 
-use MoorlCreator\Core\Content\Creator\SalesChannel\CreatorFollowRoute;
-use MoorlCreator\Storefront\Page\Creator\CreatorPageLoader;
+use Moorl\MerchantFinder\Core\Content\Merchant\SalesChannel\MerchantFollowRoute;
+use Moorl\MerchantFinder\Storefront\Page\Merchant\MerchantPageLoader;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Storefront\Controller\StorefrontController;
@@ -19,63 +19,63 @@ use Shopware\Core\Framework\Routing\Annotation\LoginRequired;
  */
 class MerchantController extends StorefrontController
 {
-    private CreatorPageLoader $creatorPageLoader;
-    private CreatorFollowRoute $creatorFollowRoute;
+    private MerchantPageLoader $merchantPageLoader;
+    private MerchantFollowRoute $merchantFollowRoute;
 
     public function __construct(
-        CreatorPageLoader $creatorPageLoader,
-        CreatorFollowRoute $creatorFollowRoute
+        MerchantPageLoader $merchantPageLoader,
+        MerchantFollowRoute $merchantFollowRoute
     ) {
-        $this->creatorPageLoader = $creatorPageLoader;
-        $this->creatorFollowRoute = $creatorFollowRoute;
+        $this->merchantPageLoader = $merchantPageLoader;
+        $this->merchantFollowRoute = $merchantFollowRoute;
     }
 
     /**
      * @HttpCache()
-     * @Route("/creator/{creatorId}", name="moorl.creator.detail", methods={"GET"}, defaults={"XmlHttpRequest"=true})
+     * @Route("/merchant/{merchantId}", name="moorl.merchant.detail", methods={"GET"}, defaults={"XmlHttpRequest"=true})
      */
     public function detail(SalesChannelContext $context, Request $request): Response
     {
-        $page = $this->creatorPageLoader->load($request, $context);
+        $page = $this->merchantPageLoader->load($request, $context);
 
         if (!$page->getCmsPage()) {
-            return $this->renderStorefront('@Storefront/plugin/moorl-creator/page/creator-detail/index.html.twig', [
+            return $this->renderStorefront('@Storefront/plugin/moorl-merchant-finder/page/merchant-detail/index.html.twig', [
                 'page' => $page
             ]);
         }
 
-        return $this->renderStorefront('@Storefront/plugin/moorl-creator/page/content/creator-detail.html.twig', [
+        return $this->renderStorefront('@Storefront/plugin/moorl-merchant-finder/page/content/merchant-detail.html.twig', [
             'page' => $page
         ]);
     }
 
     /**
      * @LoginRequired()
-     * @Route("/creator/{creatorId}/follow", name="moorl.creator.follow", methods={"GET"})
+     * @Route("/merchant/{merchantId}/follow", name="moorl.merchant.follow", methods={"GET"})
      */
     public function follow(SalesChannelContext $context, Request $request): Response
     {
-        $this->creatorFollowRoute->toggle($request, $context);
+        $this->merchantFollowRoute->toggle($request, $context);
 
-        return $this->redirectToRoute('moorl.creator.detail', [
-            'creatorId' => $request->get('creatorId')
+        return $this->redirectToRoute('moorl.merchant.detail', [
+            'merchantId' => $request->get('merchantId')
         ]);
     }
 
     /**
-     * @Route("/creator/{creatorId}/products", name="moorl.creator.products", methods={"GET"}, defaults={"XmlHttpRequest"=true})
+     * @Route("/merchant/{merchantId}/products", name="moorl.merchant.products", methods={"GET"}, defaults={"XmlHttpRequest"=true})
      */
     public function products(SalesChannelContext $context, Request $request): Response
     {
-        $page = $this->creatorPageLoader->load($request, $context);
+        $page = $this->merchantPageLoader->load($request, $context);
 
-        return $this->renderStorefront('@Storefront/storefront/element/cms-element-creator-product-listing.html.twig', [
+        return $this->renderStorefront('@Storefront/storefront/element/cms-element-merchant-product-listing.html.twig', [
             'page' => $page
         ]);
     }
 
     /**
-     * @Route("/creator/{creatorId}/filter", name="moorl.creator.filter", methods={"GET"}, defaults={"XmlHttpRequest"=true})
+     * @Route("/merchant/{merchantId}/filter", name="moorl.merchant.filter", methods={"GET"}, defaults={"XmlHttpRequest"=true})
      */
     public function filter(SalesChannelContext $context, Request $request): JsonResponse
     {

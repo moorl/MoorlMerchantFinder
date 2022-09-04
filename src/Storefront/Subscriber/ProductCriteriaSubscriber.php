@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace MoorlCreator\Storefront\Subscriber;
+namespace Moorl\MerchantFinder\Storefront\Subscriber;
 
-use MoorlCreator\Core\Content\Creator\CreatorDefinition;
+use Moorl\MerchantFinder\Core\Content\Merchant\MerchantDefinition;
 use Shopware\Core\Content\Product\Events\ProductListingCollectFilterEvent;
 use Shopware\Core\Content\Product\SalesChannel\Listing\Filter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Aggregation\Metric\EntityAggregation;
@@ -35,34 +35,34 @@ class ProductCriteriaSubscriber implements EventSubscriberInterface
 
     public function onProductListingCollectFilter(ProductListingCollectFilterEvent $event): void
     {
-        if (!$this->systemConfigService->get('MoorlCreator.config.enableListingFilter')) {
+        if (!$this->systemConfigService->get('Moorl\MerchantFinder.config.enableListingFilter')) {
             return;
         }
 
         $filters = $event->getFilters();
         $request = $event->getRequest();
 
-        $ids = array_filter(explode('|', $request->query->get('creator', '')));
+        $ids = array_filter(explode('|', $request->query->get('merchant', '')));
 
         $filter = new Filter(
-            'creator',
+            'merchant',
             !empty($ids),
-            [$this->getCreatorEntityAggregation()],
-            new EqualsAnyFilter('product.creators.id', $ids),
+            [$this->getMerchantEntityAggregation()],
+            new EqualsAnyFilter('product.merchants.id', $ids),
             $ids
         );
 
         $filters->add($filter);
     }
 
-    private function getCreatorEntityAggregation(): EntityAggregation
+    private function getMerchantEntityAggregation(): EntityAggregation
     {
-        return new EntityAggregation('creator', 'product.creators.id', CreatorDefinition::ENTITY_NAME);
+        return new EntityAggregation('merchant', 'product.merchants.id', MerchantDefinition::ENTITY_NAME);
     }
 
     public function processCriteria(SalesChannelProcessCriteriaEvent $event): void
     {
         $criteria = $event->getCriteria();
-        $criteria->addAssociation('creators.avatar');
+        $criteria->addAssociation('merchants.avatar');
     }
 }

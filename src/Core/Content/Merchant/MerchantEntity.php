@@ -5,7 +5,6 @@ namespace Moorl\MerchantFinder\Core\Content\Merchant;
 use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantCustomer\MerchantCustomerCollection;
 use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantStock\MerchantStockCollection;
 use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantStock\MerchantStockEntity;
-use Moorl\MerchantFinder\Core\Content\Marker\MarkerEntity;
 use MoorlFoundation\Core\Framework\DataAbstractionLayer\EntityAddressTrait;
 use MoorlFoundation\Core\Framework\DataAbstractionLayer\EntityCompanyTrait;
 use MoorlFoundation\Core\Framework\DataAbstractionLayer\EntityContactTrait;
@@ -16,7 +15,6 @@ use MoorlFoundation\Core\Framework\DataAbstractionLayer\EntityPersonTrait;
 use MoorlFoundation\Core\Framework\DataAbstractionLayer\EntityThingTrait;
 use Shopware\Core\Checkout\Customer\CustomerEntity;
 use Shopware\Core\Content\Category\CategoryCollection;
-use Shopware\Core\Content\Media\MediaEntity;
 use Shopware\Core\Content\Product\Aggregate\ProductManufacturer\ProductManufacturerCollection;
 use Shopware\Core\Content\Product\Aggregate\ProductManufacturer\ProductManufacturerEntity;
 use Shopware\Core\Framework\DataAbstractionLayer\Entity;
@@ -50,19 +48,13 @@ class MerchantEntity extends Entity
     protected ?ProductManufacturerCollection $productManufacturers = null;
     protected ?TagCollection $tags = null;
     protected ?CategoryCollection $categories = null;
-    protected ?string $mediaId = null;
-    protected ?string $markerId = null;
-    protected ?MarkerEntity $marker = null;
     protected ?string $salesChannelId = null;
     protected ?string $customerGroupId = null;
-    protected ?MediaEntity $media = null;
     protected ?ProductManufacturerEntity $manufacturer = null;
     protected ?SalesChannelEntity $salesChannel = null;
     protected ?array $data = null;
     protected ?string $department = null;
     protected ?CustomerEntity $customer = null;
-    protected ?string $shopUrl = null;
-    protected ?string $merchantUrl = null;
     protected ?string $originId = null;
     protected ?string $countryCode = null;
     protected ?string $type = null;
@@ -262,54 +254,6 @@ class MerchantEntity extends Entity
     /**
      * @return string|null
      */
-    public function getMediaId(): ?string
-    {
-        return $this->mediaId;
-    }
-
-    /**
-     * @param string|null $mediaId
-     */
-    public function setMediaId(?string $mediaId): void
-    {
-        $this->mediaId = $mediaId;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getMarkerId(): ?string
-    {
-        return $this->markerId;
-    }
-
-    /**
-     * @param string|null $markerId
-     */
-    public function setMarkerId(?string $markerId): void
-    {
-        $this->markerId = $markerId;
-    }
-
-    /**
-     * @return MarkerEntity|null
-     */
-    public function getMarker(): ?MarkerEntity
-    {
-        return $this->marker;
-    }
-
-    /**
-     * @param MarkerEntity|null $marker
-     */
-    public function setMarker(?MarkerEntity $marker): void
-    {
-        $this->marker = $marker;
-    }
-
-    /**
-     * @return string|null
-     */
     public function getSalesChannelId(): ?string
     {
         return $this->salesChannelId;
@@ -337,22 +281,6 @@ class MerchantEntity extends Entity
     public function setCustomerGroupId(?string $customerGroupId): void
     {
         $this->customerGroupId = $customerGroupId;
-    }
-
-    /**
-     * @return MediaEntity|null
-     */
-    public function getMedia(): ?MediaEntity
-    {
-        return $this->media;
-    }
-
-    /**
-     * @param MediaEntity|null $media
-     */
-    public function setMedia(?MediaEntity $media): void
-    {
-        $this->media = $media;
     }
 
     /**
@@ -433,38 +361,6 @@ class MerchantEntity extends Entity
     public function setCustomer(?CustomerEntity $customer): void
     {
         $this->customer = $customer;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getShopUrl(): ?string
-    {
-        return $this->shopUrl;
-    }
-
-    /**
-     * @param string|null $shopUrl
-     */
-    public function setShopUrl(?string $shopUrl): void
-    {
-        $this->shopUrl = $shopUrl;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getMerchantUrl(): ?string
-    {
-        return $this->merchantUrl;
-    }
-
-    /**
-     * @param string|null $merchantUrl
-     */
-    public function setMerchantUrl(?string $merchantUrl): void
-    {
-        $this->merchantUrl = $merchantUrl;
     }
 
     /**
