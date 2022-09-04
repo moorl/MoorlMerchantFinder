@@ -42,6 +42,12 @@
                         {{ $tc('moorl-merchant-finder.cards.address') }}
                     </sw-tabs-item>
 
+                    <sw-tabs-item name="layout"
+                                  :activeTab="active"
+                                  :disabled="item && item.isNew()">
+                        {{ $tc('moorl-merchant-finder.cards.layout') }}
+                    </sw-tabs-item>
+
                     <sw-tabs-item :title="$tc('moorl-merchant-finder.cards.stock')"
                                   name="stock"
                                   :activeTab="active">
@@ -68,6 +74,16 @@
                 </template>
 
                 <template slot="content" slot-scope="{ active }">
+                    <moorl-layout-card
+                            v-bind="{ item, cmsPage, isLoading, pageTypes }"
+                            v-if="active === 'layout'"
+                    />
+
+                    <sw-cms-page-form
+                            v-if="active === 'layout' && cmsPage"
+                            :page="cmsPage"
+                    />
+
                     <sw-card v-if="active === 'general'" :isLoading="isLoading" :title="$tc('moorl-merchant-finder.cards.general')">
                         <sw-container columns="1fr 1fr" gap="0 20px">
                             <sw-field :label="$tc('moorl-merchant-finder.properties.name')"
@@ -137,22 +153,24 @@
                                       v-model="item.originId"></sw-field>
                         </sw-container>
 
-                        <sw-field type="textarea"
-                                  :label="$tc('moorl-merchant-finder.properties.description')"
-                                  name="description"
-                                  v-model="item.description">
-                        </sw-field>
+                        <sw-field
+                                type="textarea"
+                                :label="$tc('moorl-merchant-finder.properties.teaser')"
+                                name="teaser"
+                                v-model="item.teaser"
+                        />
 
-                        <sw-entity-single-select
-                                :label="$tc('moorl-merchant-finder.properties.cmsPage')"
-                                entity="cms_page"
-                                v-model="item.cmsPageId">
-                        </sw-entity-single-select>
+                        <sw-field
+                                type="textarea"
+                                :label="$tc('moorl-merchant-finder.properties.description')"
+                                name="description"
+                                v-model="item.description"
+                        />
 
-                        <sw-text-editor v-if="!item.cmsPageId"
-                                        :label="$tc('moorl-merchant-finder.properties.content')"
-                                        v-model="item.descriptionHtml">
-                        </sw-text-editor>
+                        <sw-text-editor
+                                :label="$tc('moorl-merchant-finder.properties.content')"
+                                v-model="item.descriptionHtml"
+                        />
                     </sw-card>
 
                     <sw-card v-if="active === 'general'" :isLoading="isLoading" :title="$tc('moorl-merchant-finder.cards.marker')">

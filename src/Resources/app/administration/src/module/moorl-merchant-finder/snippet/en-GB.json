@@ -59,6 +59,7 @@
             "printerBinaries": "Printer Binaries"
         },
         "cards": {
+            "layout": "Layout",
             "marker": "Marker",
             "imprint": "Imprint and Invoice",
             "quickOrder": "Quick Order",
@@ -118,6 +119,7 @@
             "cancelOrder": "Are you sure to cancel this Order?"
         },
         "properties": {
+            "teaser": "Teaser",
             "showOpeningHours": "Show opening hours",
             "autoLocation": "Auto location",
             "content": "Content",

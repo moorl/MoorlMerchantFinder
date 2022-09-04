@@ -2,54 +2,14 @@
 
 namespace Moorl\MerchantFinder\Core\Content\Aggregate\MerchantTranslation;
 
+use MoorlFoundation\Core\Framework\DataAbstractionLayer\EntityThingTranslationTrait;
 use Shopware\Core\Framework\DataAbstractionLayer\TranslationEntity;
 
 class MerchantTranslationEntity extends TranslationEntity
 {
-    /**
-     * @var string
-     */
-    protected $name;
-    /**
-     * @var string|null
-     */
-    protected $description;
-    /**
-     * @var string|null
-     */
-    protected $descriptionHtml;
+    use EntityThingTranslationTrait;
 
-    /**
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param string $name
-     */
-    public function setName(string $name): void
-    {
-        $this->name = $name;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    /**
-     * @param string|null $description
-     */
-    public function setDescription(?string $description): void
-    {
-        $this->description = $description;
-    }
+    protected ?string $descriptionHtml = null;
 
     /**
      * @return string|null

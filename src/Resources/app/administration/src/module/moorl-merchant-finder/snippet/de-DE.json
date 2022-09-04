@@ -59,6 +59,7 @@
             "printerBinaries": "Drucker - Binaries"
         },
         "cards": {
+            "layout": "Layout",
             "marker": "Marker Icon",
             "imprint": "Impressum und Rechnung",
             "quickOrder": "Schnellbestellung",
