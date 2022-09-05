@@ -1,5 +1,6 @@
 {
     "moorl-merchant-finder": {
+        "merchants": "Merchants",
         "pickupDateSet": "De ophaaltijd is vastgesteld.",
         "desiredDate": "Gewenste afhaaldatum",
         "desiredTime": "Gewenste ophaaltijd",

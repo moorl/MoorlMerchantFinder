@@ -30,15 +30,15 @@ class MerchantListing extends EntityListingExtension implements EntityListingInt
 
     public function getSnippet(): ?string
     {
-        return 'moorl-merchant.merchants';
+        return 'moorl-merchant-finder.merchants';
     }
 
     public function getElementConfig(): array
     {
-        if ($this->isSearch() && $this->systemConfigService->get('Moorl\MerchantFinder.config.searchConfigActive')) {
-            return $this->systemConfigService->get('Moorl\MerchantFinder.config.searchConfig') ?: parent::getElementConfig();
-        } elseif ($this->isSuggest() && $this->systemConfigService->get('Moorl\MerchantFinder.config.suggestConfigActive')) {
-            return $this->systemConfigService->get('Moorl\MerchantFinder.config.suggestConfig') ?: parent::getElementConfig();
+        if ($this->isSearch() && $this->systemConfigService->get('MoorlMerchantFinder.config.searchConfigActive')) {
+            return $this->systemConfigService->get('MoorlMerchantFinder.config.searchConfig') ?: parent::getElementConfig();
+        } elseif ($this->isSuggest() && $this->systemConfigService->get('MoorlMerchantFinder.config.suggestConfigActive')) {
+            return $this->systemConfigService->get('MoorlMerchantFinder.config.suggestConfig') ?: parent::getElementConfig();
         }
 
         return parent::getElementConfig();
@@ -47,9 +47,9 @@ class MerchantListing extends EntityListingExtension implements EntityListingInt
     public function isActive(): bool
     {
         if ($this->isSearch()) {
-            return $this->systemConfigService->get('Moorl\MerchantFinder.config.searchActive') ? true : false;
+            return $this->systemConfigService->get('MoorlMerchantFinder.config.searchActive') ? true : false;
         } elseif ($this->isSuggest()) {
-            return $this->systemConfigService->get('Moorl\MerchantFinder.config.suggestActive') ? true : false;
+            return $this->systemConfigService->get('MoorlMerchantFinder.config.suggestActive') ? true : false;
         }
 
         return true;
@@ -58,9 +58,9 @@ class MerchantListing extends EntityListingExtension implements EntityListingInt
     public function getLimit(): int
     {
         if ($this->isSearch()) {
-            return $this->systemConfigService->get('Moorl\MerchantFinder.config.searchLimit') ?: 12;
+            return $this->systemConfigService->get('MoorlMerchantFinder.config.searchLimit') ?: 12;
         } elseif ($this->isSuggest()) {
-            return $this->systemConfigService->get('Moorl\MerchantFinder.config.suggestLimit') ?: 6;
+            return $this->systemConfigService->get('MoorlMerchantFinder.config.suggestLimit') ?: 6;
         }
 
         return 1;
@@ -68,7 +68,7 @@ class MerchantListing extends EntityListingExtension implements EntityListingInt
 
     public function processCriteria(Criteria $criteria): void
     {
-        $criteria->addAssociation('avatar');
+        $criteria->addAssociation('media');
         $criteria->addFilter(new MerchantAvailableFilter($this->salesChannelContext));
 
         if ($this->event instanceof ProductSuggestResultEvent) {

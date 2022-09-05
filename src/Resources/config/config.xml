@@ -214,6 +214,105 @@
     </card>
 
     <card>
+        <title>Advanced search</title>
+        <title lang="de-DE">Erweiterte Suche</title>
+
+        <input-field type="bool">
+            <name>suggestActive</name>
+            <label>Suggest active</label>
+            <label lang="de-DE">Suchvorschläge aktiv</label>
+            <defaultValue>true</defaultValue>
+        </input-field>
+
+        <input-field type="int">
+            <name>suggestLimit</name>
+            <label>Suggest limit</label>
+            <label lang="de-DE">Maximale Suchvorschläge</label>
+            <defaultValue>6</defaultValue>
+        </input-field>
+
+        <input-field type="bool">
+            <name>searchActive</name>
+            <label>Search active</label>
+            <label lang="de-DE">Suchergebnisse aktiv</label>
+            <defaultValue>true</defaultValue>
+        </input-field>
+
+        <input-field type="int">
+            <name>searchLimit</name>
+            <label>Search limit</label>
+            <label lang="de-DE">Maximale Suchergebnisse</label>
+            <defaultValue>24</defaultValue>
+        </input-field>
+    </card>
+
+    <card>
+        <title>Suggest config</title>
+        <title lang="de-DE">Suchvorschläge Konfiguration</title>
+        <input-field type="bool">
+            <name>suggestConfigActive</name>
+            <label>Active</label>
+            <label lang="de-DE">Aktiv</label>
+            <defaultValue>false</defaultValue>
+        </input-field>
+        <component name="moorl-listing-config">
+            <name>suggestConfig</name>
+        </component>
+    </card>
+
+    <card>
+        <title>Search config</title>
+        <title lang="de-DE">Suchergebnisse Konfiguration</title>
+        <input-field type="bool">
+            <name>searchConfigActive</name>
+            <label>Active</label>
+            <label lang="de-DE">Aktiv</label>
+            <defaultValue>false</defaultValue>
+        </input-field>
+        <component name="moorl-listing-config">
+            <name>searchConfig</name>
+        </component>
+    </card>
+
+    <card>
+        <title>Auto translate [Premium]</title>
+        <title lang="de-DE">Automatische Übersetzungen [Premium]</title>
+
+        <input-field type="multi-select">
+            <name>translateMerchantProperties</name>
+            <label>Merchant fields</label>
+            <label lang="de-DE">Händler Felder</label>
+            <options>
+                <option>
+                    <id>name</id>
+                    <name>name</name>
+                </option>
+                <option>
+                    <id>teaser</id>
+                    <name>teaser</name>
+                </option>
+                <option>
+                    <id>description</id>
+                    <name>description</name>
+                </option>
+                <option>
+                    <id>metaTitle</id>
+                    <name>metaTitle</name>
+                </option>
+                <option>
+                    <id>metaDescription</id>
+                    <name>metaDescription</name>
+                </option>
+            </options>
+        </input-field>
+
+        <component name="moorl-support-link">
+            <name>null</name>
+            <path>/MoorlFoundation/features-premium/</path>
+        </component>
+    </card>
+
+    <card>
         <title>Marker settings</title>
         <title lang="de-DE">Marker Einstellungen</title>
 

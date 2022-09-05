@@ -35,7 +35,7 @@ class ProductCriteriaSubscriber implements EventSubscriberInterface
 
     public function onProductListingCollectFilter(ProductListingCollectFilterEvent $event): void
     {
-        if (!$this->systemConfigService->get('Moorl\MerchantFinder.config.enableListingFilter')) {
+        if (!$this->systemConfigService->get('MoorlMerchantFinder.config.enableListingFilter')) {
             return;
         }
 

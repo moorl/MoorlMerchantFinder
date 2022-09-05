@@ -1,5 +1,6 @@
 {
     "moorl-merchant-finder": {
+        "merchants": "Händler",
         "pickupDateSet": "Abholzeit wurde gespeichert",
         "desiredDate": "Wunsch Abholdatum",
         "desiredTime": "Wunsch Abholzeit",

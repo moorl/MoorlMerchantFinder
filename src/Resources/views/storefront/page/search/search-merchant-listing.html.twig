@@ -1,0 +1,22 @@
+{% sw_extends '@Storefront/plugin/moorl-foundation/listing.html.twig' %}
+
+{% block moorl_foundation_listing_item %}
+    {% sw_include '@Storefront/plugin/moorl-foundation/listing-item.html.twig' with {
+        url: seoUrl('moorl.merchant.detail', {merchantId: item.id}),
+        media: item.media,
+        title: item.translated.name,
+        description: item.translated.teaser
+    } %}
+{% endblock %}
+
+{% block moorl_foundation_listing %}
+    {% set searchResult = moorlSearchResult %}
+    {% if searchResult.total > 0 %}
+        {{ parent() }}
+    {% else %}
+        {% sw_include '@Storefront/storefront/utilities/alert.html.twig' with {
+            type: 'info',
+            content: 'listing.emptyResultMessage'|trans|sw_sanitize
+        } %}
+    {% endif %}
+{% endblock %}
