@@ -57,22 +57,6 @@ class Data extends DataExtension implements DataInterface
         ];
     }
 
-    public function getMediaProperties(): array
-    {
-        $data = parent::getMediaProperties();
-        $data[] = [
-            'table' => 'moorl_merchant_marker',
-            'mediaFolder' => 'cms_page',
-            'properties' => [
-                'markerId',
-                'markerShadowId',
-                'markerRetinaId'
-            ]
-        ];
-
-        return $data;
-    }
-
     public function getName(): string
     {
         return 'data';
@@ -86,12 +70,5 @@ class Data extends DataExtension implements DataInterface
     public function getPath(): string
     {
         return __DIR__;
-    }
-
-    public function getInstallQueries(): array
-    {
-        return [
-            "UPDATE `cms_page` SET `locked` = '1' WHERE `id` = UNHEX('{CMS_PAGE_ID}');"
-        ];
     }
 }
