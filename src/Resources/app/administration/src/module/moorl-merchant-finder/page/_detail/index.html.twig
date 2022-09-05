@@ -73,33 +73,13 @@
                                         :label="$tc('moorl-merchant-finder.properties.highlight')"
                                         v-model="item.highlight"
                                 />
-
-                                <sw-field
-                                        type="switch"
-                                        bordered
-                                        :label="$tc('moorl-merchant-finder.properties.deliveryActive')"
-                                        v-model="item.deliveryActive"
-                                />
-
-                                <sw-field
-                                        type="switch"
-                                        bordered
-                                        :label="$tc('moorl-merchant-finder.properties.collectActive')"
-                                        v-model="item.collectActive"
-                                />
-
-                                <sw-field
-                                        type="switch"
-                                        bordered
-                                        :label="$tc('moorl-merchant-finder.properties.isDefault')"
-                                        :helpText="$tc('moorl-merchant-finder.tooltip.merchantIsDefault')"
-                                        v-model="item.isDefault"
-                                />
                             </sw-container>
 
                             <sw-text-editor :label="$tc('moorl-merchant-finder.properties.content')" v-model="item.descriptionHtml"/>
                         </template>
                     </moorl-thing-card>
+
+                    <moorl-person-card v-if="active === 'general'" :item="item"/>
 
                     <moorl-contact-card v-if="active === 'general'" :item="item"/>
 
