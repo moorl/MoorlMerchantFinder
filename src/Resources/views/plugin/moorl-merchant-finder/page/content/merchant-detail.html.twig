@@ -11,7 +11,17 @@
         {% block page_content %}
             {% block cms_content %}
                 {% set cmsPageClasses = ('cms-page ' ~ page.cmsPage.cssClass|striptags)|trim %}
-                <div class="{{ cmsPageClasses }}" itemscope itemtype="https://schema.org/Person">
+                <div class="{{ cmsPageClasses }}" itemscope itemtype="https://www.schema.org/Place">
+                    {% block page_base_meta %}
+                        <div class="d-none">
+                            <a itemprop="mainEntityOfPage" title="{{ page.merchant.translated.name }}" href="{{ seoUrl('moorl.merchant.detail', { merchantId: page.merchant.id }) }}">
+                                <span itemprop="headline">{{ page.merchant.translated.name }}</span>
+                            </a>
+
+                            <meta itemprop="keywords" content="{{ page.merchant.translated.keywords }}" />
+                        </div>
+                    {% endblock %}
+
                     {% block page_content_blocks %}
                         {% sw_include "@Storefront/storefront/page/content/detail.html.twig" with {'cmsPage': page.cmsPage} %}
                     {% endblock %}
