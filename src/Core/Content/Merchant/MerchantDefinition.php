@@ -93,11 +93,12 @@ class MerchantDefinition extends EntityDefinition
             new JsonField('data', 'data'),
             (new FloatField('delivery_price', 'deliveryPrice'))->addFlags(new EditField('number')),
             (new FloatField('min_order_value', 'minOrderValue'))->addFlags(new EditField('number')),
+
             new FkField('sales_channel_id', 'salesChannelId', SalesChannelDefinition::class),
             new FkField('customer_group_id', 'customerGroupId', CustomerGroupDefinition::class),
-
             (new ManyToOneAssociationField('salesChannel', 'sales_channel_id', SalesChannelDefinition::class, 'id', false))->addFlags(),
             (new ManyToOneAssociationField('customerGroup', 'customer_group_id', CustomerGroupDefinition::class, 'id', false))->addFlags(new EditField(), new LabelProperty('name')),
+
             (new ManyToManyAssociationField('categories', CategoryDefinition::class, MerchantCategoryDefinition::class, 'moorl_merchant_id', 'category_id'))->addFlags(new EditField(), new LabelProperty('name')),
             (new ManyToManyAssociationField('tags', TagDefinition::class, MerchantTagDefinition::class, 'moorl_merchant_id', 'tag_id'))->addFlags(new EditField(), new LabelProperty('name')),
             (new ManyToManyAssociationField('productManufacturers', ProductManufacturerDefinition::class, MerchantProductManufacturerDefinition::class, 'moorl_merchant_id', 'product_manufacturer_id'))->addFlags(new EditField(), new LabelProperty('name')),
