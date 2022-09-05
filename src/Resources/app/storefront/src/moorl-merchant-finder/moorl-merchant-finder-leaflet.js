@@ -54,7 +54,7 @@ export default class MoorlMerchantFinder extends Plugin {
 
         this._form.addEventListener('submit', this._formSubmit.bind(this));
 
-        if (this.ol && this.ol.map) {
+        /*if (this.ol && this.ol.map) {
             const map = this.ol.map;
 
             map.on('click', function () {
@@ -64,7 +64,7 @@ export default class MoorlMerchantFinder extends Plugin {
                     map.scrollWheelZoom.enable();
                 }
             });
-        }
+        }*/
 
         $(this.el).on('change', 'input[type=checkbox]', function () {
             const button = that._form.querySelector("[type=submit]");

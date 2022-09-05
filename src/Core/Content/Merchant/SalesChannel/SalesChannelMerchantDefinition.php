@@ -17,6 +17,7 @@ class SalesChannelMerchantDefinition extends MerchantDefinition implements Sales
     public function processCriteria(Criteria $criteria, SalesChannelContext $context): void
     {
         $criteria->addAssociation('media');
+        $criteria->addAssociation('country');
 
         if (!$this->hasAvailableFilter($criteria)) {
             $criteria->addFilter(

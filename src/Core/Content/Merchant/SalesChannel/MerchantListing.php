@@ -69,6 +69,7 @@ class MerchantListing extends EntityListingExtension implements EntityListingInt
     public function processCriteria(Criteria $criteria): void
     {
         $criteria->addAssociation('media');
+        $criteria->addAssociation('country');
         $criteria->addFilter(new MerchantAvailableFilter($this->salesChannelContext));
 
         if ($this->event instanceof ProductSuggestResultEvent) {
