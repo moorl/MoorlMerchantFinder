@@ -49,6 +49,7 @@ class MerchantDetailRoute
         $criteria->addAssociation('country');
         $criteria->addAssociation('countryState');
         $criteria->addAssociation('marker');
+        $criteria->addAssociation('salutation');
 
         $merchant = $this->merchantRepository
             ->search($criteria, $context->getContext())
