@@ -7,7 +7,6 @@ use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\ParameterType;
 use GuzzleHttp\Client;
 use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantStock\MerchantStockEntity;
-use Moorl\MerchantFinder\Core\Content\Marker\MarkerCollection;
 use Moorl\MerchantFinder\Core\Content\Merchant\MerchantCollection;
 use Moorl\MerchantFinder\Core\Content\Merchant\MerchantEntity;
 use Moorl\MerchantFinder\Core\Content\Merchant\SalesChannel\MerchantAvailableFilter;
@@ -15,11 +14,10 @@ use Moorl\MerchantFinder\Core\Event\MerchantsLoadedEvent;
 use Moorl\MerchantFinder\GeoLocation\BoundingBox;
 use Moorl\MerchantFinder\GeoLocation\GeoPoint;
 use Moorl\MerchantFinder\MoorlMerchantFinder;
+use MoorlFoundation\Core\Content\Marker\MarkerCollection;
+use MoorlFoundation\Core\Content\Marker\MarkerDefinition;
 use Shopware\Core\Checkout\Cart\Cart;
 use Shopware\Core\Checkout\Cart\LineItem\LineItem;
-use Shopware\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
-use Shopware\Core\Checkout\Cart\Tax\Struct\CalculatedTaxCollection;
-use Shopware\Core\Checkout\Cart\Tax\Struct\TaxRuleCollection;
 use Shopware\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemEntity;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Content\Product\ProductEntity;
@@ -180,7 +178,7 @@ class MerchantService
 
     public function initMarkers(): void
     {
-        $repo = $this->definitionInstanceRegistry->getRepository('moorl_merchant_marker');
+        $repo = $this->definitionInstanceRegistry->getRepository(MarkerDefinition::ENTITY_NAME);
         $this->markers = $repo->search(new Criteria(), $this->getContext())->getEntities();
     }
 
