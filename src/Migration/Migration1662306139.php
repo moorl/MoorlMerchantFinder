@@ -23,6 +23,7 @@ ADD `salutation_id` BINARY(16) NULL,
 ADD `visible` TINYINT(4) NOT NULL DEFAULT '1',
 ADD `moorl_marker_id` BINARY(16) NULL,
 ADD `country_state_id` BINARY(16) NULL,
+ADD `location_place_id` VARCHAR(255) NULL,
 ADD `location_data` JSON NULL;
 SQL;
         $connection->executeUpdate($sql);

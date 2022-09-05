@@ -17,7 +17,8 @@
     "highlight": false,
     "name": "Swiss Helvetia Fund, Inc. (The)",
     "locationLat": 48.0381485,
-    "locationLon": -3.7612141
+    "locationLon": -3.7612141,
+    "locationPlaceId": "Bxw7ZjJuRbSvAqveA"
   },
   {
     "mediaId": "{MEDIA_FILE:moorl-merchant-finder-example-logo.png}",
@@ -37,7 +38,8 @@
     "highlight": false,
     "name": "Convergys Corporation",
     "locationLat": 39.109563,
-    "locationLon": 117.223371
+    "locationLon": 117.223371,
+    "locationPlaceId": "Bxw7ZjJuRbSvAqveA"
   },
   {
     "mediaId": "{MEDIA_FILE:moorl-merchant-finder-example-logo.png}",
@@ -57,7 +59,8 @@
     "highlight": false,
     "name": "NeuroDerm Ltd.",
     "locationLat": 51.6561,
-    "locationLon": 35.9314
+    "locationLon": 35.9314,
+    "locationPlaceId": "Bxw7ZjJuRbSvAqveA"
   },
   {
     "mediaId": "{MEDIA_FILE:moorl-merchant-finder-example-logo.png}",
@@ -77,7 +80,8 @@
     "highlight": true,
     "name": "Camping World Holdings, Inc.",
     "locationLat": 26.647661,
-    "locationLon": 106.630153
+    "locationLon": 106.630153,
+    "locationPlaceId": "Bxw7ZjJuRbSvAqveA"
   },
   {
     "mediaId": "{MEDIA_FILE:moorl-merchant-finder-example-logo.png}",
@@ -97,6 +101,7 @@
     "highlight": true,
     "name": "BlackRock California Municipal Income Trust",
     "locationLat": 44.4713171,
-    "locationLon": 38.4021735
+    "locationLon": 38.4021735,
+    "locationPlaceId": "Bxw7ZjJuRbSvAqveA"
   }
 ]

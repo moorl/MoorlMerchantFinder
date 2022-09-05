@@ -5,6 +5,7 @@ namespace Moorl\MerchantFinder\Core\Content\Merchant;
 use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantCustomer\MerchantCustomerCollection;
 use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantStock\MerchantStockCollection;
 use Moorl\MerchantFinder\Core\Content\Aggregate\MerchantStock\MerchantStockEntity;
+use Moorl\MerchantFinder\MoorlMerchantFinder;
 use MoorlFoundation\Core\Framework\DataAbstractionLayer\EntityAddressTrait;
 use MoorlFoundation\Core\Framework\DataAbstractionLayer\EntityCompanyTrait;
 use MoorlFoundation\Core\Framework\DataAbstractionLayer\EntityContactTrait;
@@ -58,6 +59,14 @@ class MerchantEntity extends Entity
     protected ?string $originId = null;
     protected ?string $countryCode = null;
     protected ?string $type = null;
+
+    /**
+     * @return string|null
+     */
+    public function getCmsPageId(): ?string
+    {
+        return $this->cmsPageId ?: MoorlMerchantFinder::CMS_PAGE_MERCHANT_DEFAULT_ID;
+    }
 
     /**
      * @return MerchantCustomerCollection|null
