@@ -8,8 +8,8 @@
         <component name="sw-entity-single-select">
             <name>category</name>
             <entity>category</entity>
-            <label>Page with merchant finder</label>
-            <label lang="de-DE">Seite mit Händlersuche</label>
+            <label>Main page with store locator</label>
+            <label lang="de-DE">Hauptseite mit Händlersuche</label>
         </component>
     </card>
 
@@ -167,6 +167,7 @@
                     <name lang="de-DE">Als Seite öffnen</name>
                 </option>
             </options>
+            <defaultValue>page</defaultValue>
         </input-field>
         <input-field type="bool">
             <name>searchParams</name>
@@ -294,6 +295,10 @@
                 <option>
                     <id>description</id>
                     <name>description</name>
+                </option>
+                <option>
+                    <id>keywords</id>
+                    <name>keywords</name>
                 </option>
                 <option>
                     <id>metaTitle</id>

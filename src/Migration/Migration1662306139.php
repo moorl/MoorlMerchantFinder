@@ -33,6 +33,7 @@ ALTER TABLE `moorl_merchant_translation`
 ADD `slot_config` JSON,
 ADD `teaser` longtext COLLATE 'utf8mb4_unicode_ci' NULL,
 ADD `meta_title` longtext COLLATE 'utf8mb4_unicode_ci' NULL,
+ADD `keywords` longtext COLLATE 'utf8mb4_unicode_ci' NULL,
 ADD `meta_description` longtext COLLATE 'utf8mb4_unicode_ci' NULL;
 SQL;
         $connection->executeUpdate($sql);
