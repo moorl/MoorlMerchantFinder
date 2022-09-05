@@ -331,48 +331,6 @@
                 "id": "{ID:CMS_PAGE_MERCHANT_SLOT_6}"
               }
             ]
-          },
-          {
-            "position": 5,
-            "type": "moorl-column-layout-1",
-            "sectionPosition": "moorl_grid_1",
-            "marginBottom": "20px",
-            "backgroundMediaMode": "cover",
-            "customFields": {},
-            "id": "{ID:CMS_PAGE_MERCHANT_BLOCK_7}",
-            "slots": [
-              {
-                "type": "moorl-fb-form",
-                "slot": "slot-a",
-                "config": {
-                  "form": {
-                    "source": "static",
-                    "value": null
-                  },
-                  "email": {
-                    "source": "mapped",
-                    "value": "moorl_merchant.email"
-                  },
-                  "custom1": {
-                    "source": "static",
-                    "value": null
-                  },
-                  "custom2": {
-                    "source": "static",
-                    "value": null
-                  },
-                  "custom3": {
-                    "source": "static",
-                    "value": null
-                  },
-                  "custom4": {
-                    "source": "static",
-                    "value": null
-                  }
-                },
-                "id": "{ID:CMS_PAGE_MERCHANT_SLOT_7}"
-              }
-            ]
           }
         ]
       }
