@@ -167,6 +167,10 @@
             <tag name="shopware.entity.extension" />
         </service>
 
+        <!-- Translate -->
+        <service id="Moorl\MerchantFinder\EntityTranslation\MerchantTranslation">
+            <tag name="moorl.foundation.entity_translation" priority="0" />
+        </service>
 
         <!-- SEO Urls -->
         <service id="Moorl\MerchantFinder\Core\Seo\MerchantSeoUrlRoute">
