@@ -124,6 +124,8 @@ class StorefrontController extends OriginController
      */
     public function merchantPage($merchantId, Request $request, SalesChannelContext $context): Response
     {
+        dump($merchantId);exit;
+
         $page = $this->genericLoader->load($request, $context);
 
         return $this->renderStorefront('plugin/moorl-merchant-finder/page/merchant-detail-page.html.twig', [
@@ -212,6 +214,7 @@ class StorefrontController extends OriginController
         $html = '';
         $markers = [];
 
+        /** @var MerchantEntity $merchant */
         foreach ($merchants as $merchant) {
             $html .= $this->renderView($listItemTemplate, ['merchant' => $merchant]);
 
@@ -220,8 +223,8 @@ class StorefrontController extends OriginController
                     'locationLat' => $merchant->getLocationLat(),
                     'locationLon' => $merchant->getLocationLon(),
                     'id' => $merchant->getId(),
-                    'markerSettings' => $merchant->getMarkerSettings(),
-                    'markerShadow' => $merchant->getMarkerShadow(),
+                    /*'markerSettings' => $merchant->getMarker()->getMarkerSettings(),
+                    'markerShadow' => $merchant->getMarker()->getMarkerShadow(),*/
                     'marker' => $merchant->getMarker(),
                     'popup' => $this->renderView($popupItemTemplate, ['merchant' => $merchant])
                 ];

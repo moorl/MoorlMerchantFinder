@@ -46,9 +46,9 @@
     <div class="col-6">
         {% block element_moorl_merchant_finder_result_description %}
             {% if config('MoorlMerchantFinder.config.showDescription') %}
-                {% if merchant.description or merchant.translated.description %}
+                {% if merchant.teaser or merchant.translated.teaser %}
                     <b>{{ "moorl-merchant-finder.description"|trans }}</b>
-                    <p style="white-space: pre-line">{{ merchant.translated.description ?: merchant.description }}</p>
+                    <p style="white-space: pre-line">{{ merchant.translated.teaser ?: merchant.teaser }}</p>
                 {% endif %}
             {% endif %}
         {% endblock %}

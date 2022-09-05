@@ -2,7 +2,6 @@
 
 namespace Moorl\MerchantFinder\Storefront\Controller;
 
-use Moorl\MerchantFinder\Core\Content\Merchant\SalesChannel\MerchantFollowRoute;
 use Moorl\MerchantFinder\Storefront\Page\Merchant\MerchantPageLoader;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
@@ -12,7 +11,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Shopware\Core\Framework\Routing\Annotation\LoginRequired;
 
 /**
  * @RouteScope(scopes={"storefront"})
@@ -20,14 +18,11 @@ use Shopware\Core\Framework\Routing\Annotation\LoginRequired;
 class MerchantController extends StorefrontController
 {
     private MerchantPageLoader $merchantPageLoader;
-    private MerchantFollowRoute $merchantFollowRoute;
 
     public function __construct(
-        MerchantPageLoader $merchantPageLoader,
-        MerchantFollowRoute $merchantFollowRoute
+        MerchantPageLoader $merchantPageLoader
     ) {
         $this->merchantPageLoader = $merchantPageLoader;
-        $this->merchantFollowRoute = $merchantFollowRoute;
     }
 
     /**
@@ -46,19 +41,6 @@ class MerchantController extends StorefrontController
 
         return $this->renderStorefront('@Storefront/plugin/moorl-merchant-finder/page/content/merchant-detail.html.twig', [
             'page' => $page
-        ]);
-    }
-
-    /**
-     * @LoginRequired()
-     * @Route("/merchant/{merchantId}/follow", name="moorl.merchant.follow", methods={"GET"})
-     */
-    public function follow(SalesChannelContext $context, Request $request): Response
-    {
-        $this->merchantFollowRoute->toggle($request, $context);
-
-        return $this->redirectToRoute('moorl.merchant.detail', [
-            'merchantId' => $request->get('merchantId')
         ]);
     }
 

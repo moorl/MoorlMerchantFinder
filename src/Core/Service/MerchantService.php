@@ -623,7 +623,7 @@ class MerchantService
             }
 
             $entity->setSeoUrl(
-                $this->seoUrlReplacer->generate('moorl.merchant-finder.merchant.page', ['merchantId' => $entity->getId()])
+                $this->seoUrlReplacer->generate('moorl.merchant.detail', ['merchantId' => $entity->getId()])
             );
         }
 

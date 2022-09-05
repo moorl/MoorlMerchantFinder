@@ -26,8 +26,43 @@
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
         </service>
 
+        <!-- Listing Route Decorator -->
+        <service id="Moorl\MerchantFinder\Core\Content\Product\SalesChannel\Listing\MerchantProductListingRoute"
+                 decorates="Shopware\Core\Content\Product\SalesChannel\Listing\ProductListingRoute"
+                 decoration-priority="-9998"
+                 public="true">
+            <argument type="service" id="Moorl\MerchantFinder\Core\Content\Product\SalesChannel\Listing\MerchantProductListingRoute.inner"/>
+            <argument type="service" id="Shopware\Core\Content\Product\SalesChannel\Listing\ProductListingLoader"/>
+            <argument type="service" id="event_dispatcher" />
+        </service>
+
+        <!-- DetailRoute -->
+        <service id="Moorl\MerchantFinder\Core\Content\Merchant\SalesChannel\MerchantDetailRoute" public="true">
+            <argument type="service" id="moorl_merchant.repository"/>
+            <argument type="service" id="Shopware\Core\Content\Cms\SalesChannel\SalesChannelCmsPageLoader"/>
+            <argument type="service" id="Moorl\MerchantFinder\Core\Content\Merchant\MerchantDefinition"/>
+        </service>
+
+        <!-- PageLoader -->
+        <service id="Moorl\MerchantFinder\Storefront\Page\Merchant\MerchantPageLoader">
+            <argument type="service" id="Shopware\Storefront\Page\GenericPageLoader"/>
+            <argument type="service" id="Moorl\MerchantFinder\Core\Content\Merchant\SalesChannel\MerchantDetailRoute"/>
+            <argument type="service" id="Shopware\Core\Content\Product\SalesChannel\Listing\ProductListingRoute"/>
+        </service>
+
         <!-- Controller -->
-        <service id="Moorl\MerchantFinder\Controller\ApiController" public="true">
+        <service id="Moorl\MerchantFinder\Storefront\Controller\MerchantController" public="true">
+            <argument type="service" id="Moorl\MerchantFinder\Storefront\Page\Merchant\MerchantPageLoader"/>
+
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+            <call method="setTwig">
+                <argument type="service" id="twig"/>
+            </call>
+        </service>
+
+        <!--service id="Moorl\MerchantFinder\Controller\ApiController" public="true">
             <argument type="service" id="Shopware\Storefront\Page\GenericPageLoader"/>
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
             <argument type="service" id="session"/>
@@ -35,7 +70,7 @@
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
             </call>
-        </service>
+        </service-->
 
         <service id="Moorl\MerchantFinder\Controller\StorefrontController" public="true">
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>

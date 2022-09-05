@@ -16,8 +16,8 @@ use Shopware\Core\System\SalesChannel\SalesChannelEntity;
 
 class MerchantSeoUrlRoute implements SeoUrlRouteInterface
 {
-    public const ROUTE_NAME = 'moorl.merchant-finder.merchant.page';
-    public const DEFAULT_TEMPLATE = 'merchant/{{ merchant.translated.name ? merchant.translated.name|lower : merchant.company|lower }}';
+    public const ROUTE_NAME = 'moorl.merchant.detail';
+    public const DEFAULT_TEMPLATE = 'merchant/{{ merchant.translated.name }}';
 
     private MerchantDefinition $entityDefinition;
     private EntityRepositoryInterface $repository;

@@ -2,8 +2,8 @@
   {
     "id": "{ID:WILD_0}",
     "isValid": true,
-    "routeName": "moorl.merchant-finder.merchant.page",
+    "routeName": "moorl.merchant.detail",
     "entityName": "moorl_merchant",
-    "template": "merchant/{{ merchant.translated.name ? merchant.translated.name|lower : merchant.company|lower }}"
+    "template": "merchant/{{ merchant.translated.name }}"
   }
 ]

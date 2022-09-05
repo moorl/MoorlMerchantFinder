@@ -41,7 +41,7 @@ class MerchantPageLoader
         }
 
         $criteria = new Criteria();
-        $criteria->addFilter(new EqualsFilter('merchants.id', $merchantId));
+        $criteria->addFilter(new EqualsFilter('MoorlMerchants.id', $merchantId));
         $result = $this->productListingRoute->load(MoorlMerchantFinder::NAME, $request, $context, $criteria);
         $products = $result->getResult();
 

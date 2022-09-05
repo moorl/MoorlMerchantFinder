@@ -3,8 +3,8 @@
         {% sw_include "@Storefront/storefront/page/content/detail.html.twig" with {'cmsPage': merchant.cmsPage} %}
     </div>
 {% else %}
-    {% if merchant.translated.descriptionHtml %}
-        <div class="mb-2">{{ merchant.translated.descriptionHtml|raw }}</div>
+    {% if merchant.translated.description %}
+        <div class="mb-2">{{ merchant.translated.description|raw }}</div>
     {% endif %}
 
     {% sw_include '@Storefront/plugin/moorl-merchant-finder/component/result-item-static-main.html.twig' %}

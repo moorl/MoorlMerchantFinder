@@ -35,6 +35,14 @@ ADD `meta_title` longtext COLLATE 'utf8mb4_unicode_ci' NULL,
 ADD `meta_description` longtext COLLATE 'utf8mb4_unicode_ci' NULL;
 SQL;
         $connection->executeUpdate($sql);
+
+        $sql = <<<SQL
+UPDATE `moorl_merchant_translation` 
+SET 
+    `teaser` = `description`,
+    `description` = `description_html`;
+SQL;
+        $connection->executeUpdate($sql);
     }
 
     public function updateDestructive(Connection $connection): void

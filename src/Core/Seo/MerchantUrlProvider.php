@@ -78,7 +78,7 @@ class MerchantUrlProvider extends AbstractUrlProvider
             return new UrlResult([], null);
         }
 
-        $seoUrls = $this->getSeoUrls($collection->getIds(), 'moorl.merchant-finder.merchant.page', $salesChannelContext, $this->connection);
+        $seoUrls = $this->getSeoUrls($collection->getIds(), 'moorl.merchant.detail', $salesChannelContext, $this->connection);
         $seoUrls = FetchModeHelper::groupUnique($seoUrls);
 
         $urls = [];
@@ -90,7 +90,7 @@ class MerchantUrlProvider extends AbstractUrlProvider
             if (isset($seoUrls[$entity->getId()])) {
                 $newUrl->setLoc($seoUrls[$entity->getId()]['seo_path_info']);
             } else {
-                $newUrl->setLoc($this->router->generate('moorl.merchant-finder.merchant.page', ['merchantId' => $entity->getId()], UrlGeneratorInterface::ABSOLUTE_PATH));
+                $newUrl->setLoc($this->router->generate('moorl.merchant.detail', ['merchantId' => $entity->getId()], UrlGeneratorInterface::ABSOLUTE_PATH));
             }
 
             $newUrl->setLastmod($lastMod);
