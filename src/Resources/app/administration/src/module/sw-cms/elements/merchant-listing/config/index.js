@@ -2,8 +2,6 @@ const {Component} = Shopware;
 const {Criteria} = Shopware.Data;
 
 Component.extend('sw-cms-el-config-merchant-listing', 'sw-cms-el-config-moorl-foundation-listing', {
-    template,
-
     data() {
         return {
             entity: 'moorl_merchant',
