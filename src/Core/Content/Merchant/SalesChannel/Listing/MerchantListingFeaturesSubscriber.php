@@ -10,13 +10,20 @@ use Moorl\MerchantFinder\Core\Content\Merchant\SalesChannel\Events\MerchantSearc
 use Moorl\MerchantFinder\Core\Content\Merchant\SalesChannel\Events\MerchantSearchResultEvent;
 use Moorl\MerchantFinder\Core\Content\Merchant\SalesChannel\Events\MerchantSuggestCriteriaEvent;
 use MoorlFoundation\Core\Content\Sorting\SortingCollection;
+use MoorlFoundation\Core\Service\LocationService;
 use MoorlFoundation\Core\Service\SortingService;
 use Shopware\Core\Content\Product\Events\ProductListingCriteriaEvent;
 use Shopware\Core\Content\Product\Events\ProductListingResultEvent;
+use Shopware\Core\Content\Product\SalesChannel\Listing\Filter;
 use Shopware\Core\Content\Product\SalesChannel\Listing\FilterCollection;
 use Shopware\Core\Content\Product\SalesChannel\Sorting\ProductSortingEntity;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Aggregation\Bucket\FilterAggregation;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Aggregation\Metric\EntityAggregation;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\RangeFilter;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,10 +33,15 @@ class MerchantListingFeaturesSubscriber implements EventSubscriberInterface
     public const DEFAULT_SEARCH_SORT = 'standard';
 
     private SortingService $sortingService;
+    private LocationService $locationService;
 
-    public function __construct(SortingService $sortingService)
+    public function __construct(
+        SortingService $sortingService,
+        LocationService $locationService
+    )
     {
         $this->sortingService = $sortingService;
+        $this->locationService = $locationService;
     }
 
     public static function getSubscribedEvents(): array
@@ -249,6 +261,101 @@ class MerchantListingFeaturesSubscriber implements EventSubscriberInterface
 
     private function getFilters(Request $request, SalesChannelContext $context): FilterCollection
     {
-        return new FilterCollection();
+        $filters = new FilterCollection();
+
+        $filters->add($this->getRadiusFilter($request));
+        $filters->add($this->getManufacturerFilter($request));
+        $filters->add($this->getCountryFilter($request));
+
+        return $filters;
+    }
+
+    private function getManufacturerFilter(Request $request): Filter
+    {
+        $ids = $this->getManufacturerIds($request);
+
+        return new Filter(
+            'manufacturer',
+            !empty($ids),
+            [new EntityAggregation('manufacturer', 'moorl_merchant.productManufacturers.id', 'product_manufacturer')],
+            new EqualsAnyFilter('moorl_merchant.productManufacturers.id', $ids),
+            $ids
+        );
+    }
+
+    private function getCountryFilter(Request $request): Filter
+    {
+        $ids = $this->getCountryIds($request);
+
+        return new Filter(
+            'country',
+            !empty($ids),
+            [new EntityAggregation('country', 'moorl_merchant.countryId', 'country')],
+            new EqualsAnyFilter('moorl_merchant.countryId', $ids),
+            $ids
+        );
+    }
+
+    private function getRadiusFilter(Request $request): Filter
+    {
+        $location = $request->get('location', '');
+        $distance = $request->get('distance', 0);
+
+        $filter = new EqualsFilter('moorl_merchant.active', true);
+
+        $geoPoint = $this->locationService->getLocationByTerm($location);
+        if ($geoPoint) {
+            $boundingBox = $geoPoint->boundingBox($distance, 'km');
+
+            $filter = new MultiFilter(MultiFilter::CONNECTION_AND, [
+                new RangeFilter('moorl_merchant.locationLat', [
+                    'gte' => $boundingBox->getMinLatitude(),
+                    'lte' => $boundingBox->getMaxLatitude()
+                ]),
+                new RangeFilter('moorl_merchant.locationLon', [
+                    'lte' => $boundingBox->getMaxLongitude(),
+                    'gte' => $boundingBox->getMinLongitude()
+                ])
+            ]);
+        }
+
+        return new Filter(
+            'radius',
+            !empty($geoPoint),
+            [],
+            $filter,
+            [
+                'location' => $request->get('location'),
+                'distance' => (float) $request->get('distance'),
+            ]
+        );
+    }
+
+    private function getManufacturerIds(Request $request): array
+    {
+        $ids = $request->query->get('manufacturer', '');
+        if ($request->isMethod(Request::METHOD_POST)) {
+            $ids = $request->request->get('manufacturer', '');
+        }
+
+        if (\is_string($ids)) {
+            $ids = explode('|', $ids);
+        }
+
+        return array_filter((array) $ids);
+    }
+
+    private function getCountryIds(Request $request): array
+    {
+        $ids = $request->query->get('country', '');
+        if ($request->isMethod(Request::METHOD_POST)) {
+            $ids = $request->request->get('country', '');
+        }
+
+        if (\is_string($ids)) {
+            $ids = explode('|', $ids);
+        }
+
+        return array_filter((array) $ids);
     }
 }

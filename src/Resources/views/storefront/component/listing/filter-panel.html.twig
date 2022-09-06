@@ -1,6 +1,30 @@
 {% sw_extends '@Storefront/storefront/component/listing/filter-panel.html.twig' %}
 
 {% block component_filter_panel_item_manufacturer %}
+    {% if cmsPage.firstElementOfType('merchant-listing') %}
+        {% sw_include '@Storefront/plugin/moorl-foundation/component/listing/filter/filter-search.html.twig' with {
+            sidebar: sidebar,
+            displayName: 'moorl-foundation.properties.search'|trans
+        } %}
+
+        {% sw_include '@Storefront/plugin/moorl-foundation/component/listing/filter/filter-radius.html.twig' with {
+            sidebar: sidebar,
+            displayName: 'moorl-foundation.properties.radius'|trans
+        } %}
+
+        {% set countries = listing.aggregations.get('country') %}
+        {% if countries and not countries.entities is empty %}
+            {% set countriesSorted = countries.entities|sort((a, b) => a.translated.name|lower > b.translated.name|lower) %}
+
+            {% sw_include '@Storefront/storefront/component/listing/filter/filter-multi-select.html.twig' with {
+                elements: countriesSorted,
+                sidebar: sidebar,
+                name: 'country',
+                displayName: 'moorl-merchant-finder.country'|trans
+            } %}
+        {% endif %}
+    {% endif %}
+
     {% if config('MoorlMerchantStock.config.showMerchantFilter') %}
         {% set merchants = listing.aggregations.get('merchant') %}
         {% if merchants and not merchants.entities is empty %}

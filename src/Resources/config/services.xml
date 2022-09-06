@@ -104,6 +104,13 @@
             <tag name="kernel.event_subscriber"/>
         </service>
 
+        <service id="Moorl\MerchantFinder\Core\Content\Merchant\SalesChannel\Listing\MerchantListingFeaturesSubscriber">
+            <argument type="service" id="MoorlFoundation\Core\Service\SortingService"/>
+            <argument type="service" id="MoorlFoundation\Core\Service\LocationService"/>
+
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
         <!-- Entity -->
         <service id="Moorl\MerchantFinder\Core\Content\Merchant\MerchantDefinition">
             <tag name="shopware.entity.definition" entity="moorl_merchant" />
