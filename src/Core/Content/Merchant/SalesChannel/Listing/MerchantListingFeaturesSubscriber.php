@@ -266,8 +266,22 @@ class MerchantListingFeaturesSubscriber implements EventSubscriberInterface
         $filters->add($this->getRadiusFilter($request));
         $filters->add($this->getManufacturerFilter($request));
         $filters->add($this->getCountryFilter($request));
+        $filters->add($this->getTagFilter($request));
 
         return $filters;
+    }
+
+    private function getTagFilter(Request $request): Filter
+    {
+        $ids = $this->getTagIds($request);
+
+        return new Filter(
+            'tag',
+            !empty($ids),
+            [new EntityAggregation('tag', 'moorl_merchant.tags.id', 'tag')],
+            new EqualsAnyFilter('moorl_merchant.tags.id', $ids),
+            $ids
+        );
     }
 
     private function getManufacturerFilter(Request $request): Filter
@@ -350,6 +364,20 @@ class MerchantListingFeaturesSubscriber implements EventSubscriberInterface
         $ids = $request->query->get('country', '');
         if ($request->isMethod(Request::METHOD_POST)) {
             $ids = $request->request->get('country', '');
+        }
+
+        if (\is_string($ids)) {
+            $ids = explode('|', $ids);
+        }
+
+        return array_filter((array) $ids);
+    }
+
+    private function getTagIds(Request $request): array
+    {
+        $ids = $request->query->get('tag', '');
+        if ($request->isMethod(Request::METHOD_POST)) {
+            $ids = $request->request->get('tag', '');
         }
 
         if (\is_string($ids)) {
