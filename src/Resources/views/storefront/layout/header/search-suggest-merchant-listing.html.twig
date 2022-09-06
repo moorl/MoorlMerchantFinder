@@ -5,7 +5,8 @@
         url: seoUrl('moorl.merchant.detail', {merchantId: item.id}),
         media: item.media,
         title: item.translated.name,
-        description: item.translated.teaser
+        description: item.translated.teaser,
+        meta: item.city
     } %}
 {% endblock %}
 

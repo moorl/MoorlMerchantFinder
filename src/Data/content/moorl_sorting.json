@@ -1,0 +1,37 @@
+[
+  {
+    "id": "{ID:SORTING_1}",
+    "priority": 0,
+    "translations": {
+      "{de-DE}": {
+        "label": "Standard"
+      },
+      "{en-GB}": {
+        "label": "Standard"
+      }
+    },
+    "key": "standard",
+    "entity": "moorl_merchant",
+    "active": true,
+    "fields": [
+      {
+        "field": "moorl_merchant.id",
+        "order": "asc",
+        "priority": 0,
+        "naturalSorting": 0
+      },
+      {
+        "field": "moorl_merchant.name",
+        "order": "asc",
+        "priority": 1,
+        "naturalSorting": 0
+      },
+      {
+        "field": "moorl_merchant.priority",
+        "order": "desc",
+        "priority": 2,
+        "naturalSorting": 0
+      }
+    ]
+  }
+]

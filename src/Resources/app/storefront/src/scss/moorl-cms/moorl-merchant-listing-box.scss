@@ -1,0 +1,29 @@
+.moorl-merchant-listing-box {
+  width: 100%;
+  display: grid;
+  grid-gap: 20px;
+  grid-template:
+            "a b" auto
+            "c c" auto / 1fr 3fr;
+  align-items: center;
+  justify-content: center;
+
+  > div,
+  > a {
+    box-sizing: border-box;
+    height: auto;
+    width: 100%;
+
+    &:nth-child(1) {
+      grid-area: a;
+    }
+
+    &:nth-child(2) {
+      grid-area: b;
+    }
+
+    &:nth-child(3) {
+      grid-area: c;
+    }
+  }
+}

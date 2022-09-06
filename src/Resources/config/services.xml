@@ -167,6 +167,14 @@
             <tag name="shopware.entity.extension" />
         </service>
 
+        <!-- CMS Resolver -->
+        <service id="Moorl\MerchantFinder\Core\Content\Merchant\Cms\MerchantListingCmsElementResolver">
+            <argument type="service" id="MoorlFoundation\Core\Service\SortingService"/>
+            <argument type="service" id="Shopware\Core\Content\Product\SalesChannel\Listing\ProductListingRoute" />
+
+            <tag name="shopware.cms.data_resolver"/>
+        </service>
+
         <!-- Translate -->
         <service id="Moorl\MerchantFinder\EntityTranslation\MerchantTranslation">
             <tag name="moorl.foundation.entity_translation" priority="0" />

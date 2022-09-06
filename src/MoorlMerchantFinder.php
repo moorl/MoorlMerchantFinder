@@ -31,6 +31,7 @@ class MoorlMerchantFinder extends Plugin
     ];
     public const SHOPWARE_TABLES = [
         'media_folder',
+        'moorl_sorting',
         'cms_page',
         'cms_page_translation',
         'cms_section',
