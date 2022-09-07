@@ -18,6 +18,8 @@ class SalesChannelMerchantDefinition extends MerchantDefinition implements Sales
     {
         $criteria->addAssociation('media');
         $criteria->addAssociation('country');
+        $criteria->addAssociation('productManufacturers');
+        $criteria->addAssociation('tags');
 
         if (!$this->hasAvailableFilter($criteria)) {
             $criteria->addFilter(

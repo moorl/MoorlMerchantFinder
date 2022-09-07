@@ -1,5 +1,9 @@
 {
     "moorl-merchant-finder": {
+        "shop": "Shop",
+        "www": "WWW",
+        "call": "Anrufen",
+        "sendMail": "Mail",
         "merchants": "Merchants",
         "pickupDateSet": "De ophaaltijd is vastgesteld.",
         "desiredDate": "Gewenste afhaaldatum",

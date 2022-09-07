@@ -1,0 +1,52 @@
+<div class="mt-2">
+    {% block moorl_merchant_listing_box_actions %}
+        <div class="btn-group btn-group-sm d-flex">
+            {% block moorl_merchant_listing_box_actions_inner %}
+                {% block moorl_merchant_listing_box_actions_merchant_url %}
+                    {% if item.merchantUrl %}
+                        <a class="btn btn-light" href="{{ item.merchantUrl }}" target="_blank" rel="noopener">
+                            {% sw_icon 'home' style {size:'sm', pack:'fas'} %}
+                            {{ "moorl-foundation.properties.merchantUrl"|trans }}
+                        </a>
+                    {% endif %}
+                {% endblock %}
+
+                {% block moorl_merchant_listing_box_actions_shop_url %}
+                    {% if item.shopUrl %}
+                        <a class="btn btn-light" href="{{ item.shopUrl }}" target="_blank" rel="noopener">
+                            {% sw_icon 'shopping-cart' style {size:'sm', pack:'fas'} %}
+                            {{ "moorl-merchant-finder.shop"|trans }}
+                        </a>
+                    {% endif %}
+                {% endblock %}
+
+                {% block moorl_merchant_listing_box_actions_phone %}
+                    {% if item.phoneNumber and config('MoorlMerchantFinder.config.showPhoneNumber') %}
+                        <a class="btn btn-light" href="tel:{{ item.phoneNumber }}" itemprop="telephone" content="{{ item.phoneNumber }}">
+                            {% sw_icon 'phone' style {size:'sm', pack:'fas'} %}
+                            {{ "moorl-merchant-finder.call"|trans }}
+                        </a>
+                    {% endif %}
+                {% endblock %}
+
+                {% block moorl_merchant_listing_box_actions_email %}
+                    {% if item.email %}
+                        <a class="btn btn-light" href="mailto:{{ item.email }}" itemprop="email" content="{{ item.email }}">
+                            {% sw_icon 'envelope' style {size:'sm', pack:'fas'} %}
+                            {{ "moorl-merchant-finder.sendMail"|trans }}
+                        </a>
+                    {% endif %}
+                {% endblock %}
+
+                {% block moorl_merchant_listing_box_actions_more %}
+                    {% if config('MoorlMerchantFinder.config.detailPage') %}
+                        <a href="{{ seoUrl('moorl.merchant.detail', { merchantId: merchant.id }) }}" class="btn btn-light">
+                            {% sw_icon 'map-pin' style {size:'sm', pack:'fas'} %}
+                            {{ "moorl-merchant-finder.more"|trans }}
+                        </a>
+                    {% endif %}
+                {% endblock %}
+            {% endblock %}
+        </div>
+    {% endblock %}
+</div>

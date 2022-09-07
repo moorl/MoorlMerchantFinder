@@ -1,5 +1,9 @@
 {
     "moorl-merchant-finder": {
+        "shop": "Shop",
+        "www": "WWW",
+        "call": "Call",
+        "sendMail": "Mail",
         "merchants": "Merchants",
         "pickupDateSet": "Pick up time has been set",
         "desiredDate": "Desired pick up date",

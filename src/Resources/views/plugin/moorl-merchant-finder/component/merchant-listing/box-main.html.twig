@@ -1,0 +1,92 @@
+{% block element_moorl_merchant_finder_result_title %}
+    {% if config('MoorlMerchantFinder.config.showName') %}
+        <h4>
+            <span>{{ merchant.translated.name }}</span>
+            {% if merchant.locationDistance %}
+                <small class="text-small">
+                    {{ "moorl-merchant-finder.distance"|trans }}:
+                    {{ merchant.locationDistance }}
+                    {{ "moorl-merchant-finder.km"|trans }}
+                </small>
+            {% endif %}
+        </h4>
+    {% endif %}
+{% endblock %}
+
+<div class="row form-row">
+    <div class="col-6">
+        {% if merchant.media %}
+            {% block element_moorl_merchant_finder_result_logo %}
+                {% if config('MoorlMerchantFinder.config.showLogo') %}
+                    <p>
+                        {% sw_thumbnails 'moorl-listing-item-image-thumbnails' with {
+                            media: merchant.media,
+                            attributes: {
+                                'itemprop': 'image',
+                                'alt': merchant.translated.name,
+                                'class': "is-#{config.displayMode.value}",
+                                'title': ''
+                            }
+                        } %}
+                    </p>
+                {% endif %}
+            {% endblock %}
+        {% endif %}
+
+        {% block element_moorl_merchant_finder_result_address %}
+            {% if config('MoorlMerchantFinder.config.showAddress') and merchant.street %}
+                <p itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
+                    {% if item.additionalAddressLine1 %}
+                        {{ item.additionalAddressLine1 }}<br>
+                    {% endif %}
+                    {% if item.additionalAddressLine2 %}
+                        {{ item.additionalAddressLine2 }}<br>
+                    {% endif %}
+                    <span itemprop="streetAddress">{{ item.street }} {{ item.streetNumber }}</span><br>
+                    <span itemprop="postalCode">{{ item.zipcode }}</span>
+                    <span itemprop="addressLocality">
+                        {{ item.city }}<br>
+                        {% if item.countryState %}
+                            {{ item.countryState.translated.name }}
+                        {% endif %}
+                        {% if item.country %}
+                            {{ item.country.translated.name }}
+                        {% endif %}
+                    </span>
+                </p>
+            {% endif %}
+
+            {% if item.locationPlaceId %}
+                <p>
+                    <a href="https://goo.gl/maps/{{ item.locationPlaceId }}" target="_blank" rel="noopener">
+                        {{ "moorl-foundation.buttons.placeIdLink"|trans }}
+                    </a>
+                </p>
+            {% endif %}
+        {% endblock %}
+    </div>
+
+    <div class="col-6">
+        {% block element_moorl_merchant_finder_result_description %}
+            {% if config('MoorlMerchantFinder.config.showDescription') %}
+                {% if merchant.translated.teaser %}
+                    <p style="white-space: pre-line">{{ merchant.translated.teaser }}</p>
+                {% endif %}
+            {% endif %}
+        {% endblock %}
+    </div>
+
+    <div class="col-12">
+        {% block element_moorl_merchant_finder_result_opening_hours %}
+            {% if config('MoorlMerchantFinder.config.showOpeningHours') %}
+                {% if merchant.openingHours %}
+                    {% sw_icon 'clock' style {size:'xs', pack:'fas'} %}
+                    <b>{{ "moorl-merchant-finder.openingHours"|trans }}</b>
+                    {% sw_include '@Storefront/plugin/moorl-foundation/opening-hours.html.twig' with {
+                        'openingHours': merchant.openingHours
+                    } %}
+                {% endif %}
+            {% endif %}
+        {% endblock %}
+    </div>
+</div>
