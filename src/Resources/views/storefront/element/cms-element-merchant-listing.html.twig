@@ -17,6 +17,10 @@
 {# Case 3: From CMS (others) #}
 {% block moorl_foundation_listing_item %}
     {% if element.fieldConfig.elements.itemLayout.value == 'standard' %}
+        {% if element.fieldConfig.elements.listingLayout.value == 'standard' %}
+            {% set listingColumns = 'cms-listing-col col-sm-12 col-lg-6 col-xl-4' %}
+        {% endif %}
+
         <li class="{{ listingColumns }}"
             itemscope
             itemtype="https://schema.org/Place">

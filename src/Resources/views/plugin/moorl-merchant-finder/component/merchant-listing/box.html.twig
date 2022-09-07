@@ -1,84 +1,106 @@
 <div class="moorl-listing-item-wrapper{% if config.itemHasBorder.value %} has-border{% endif %}"
      style="{{ itemCss|join(';')|raw }}">
     {% block moorl_merchant_listing_box %}
-        <div class="moorl-merchant-listing-box">
-            <a class="header-image"
-               href="{{ seoUrl('moorl.merchant.detail', { merchantId: item.id }) }}">
-                {% sw_thumbnails 'moorl-listing-item-image-thumbnails' with {
-                    media: item.media,
-                    attributes: {
-                        'itemprop': 'image',
-                        'alt': item.translated.name,
-                        'class': "is-#{config.displayMode.value}",
-                        'title': ''
-                    }
-                } %}
-            </a>
+        <div class="moorl-merchant-listing-box {% if item.highlight %}is-highlight{% endif %}">
+            {% block moorl_merchant_listing_box_image %}
+                <a class="header-image"
+                   href="{{ seoUrl('moorl.merchant.detail', { merchantId: item.id }) }}">
+                    {% if item.media.url %}
+                        {% sw_thumbnails 'moorl-listing-item-image-thumbnails' with {
+                            media: item.media,
+                            attributes: {
+                                'itemprop': 'image',
+                                'alt': item.translated.name,
+                                'class': "is-#{config.displayMode.value}",
+                                'title': ''
+                            }
+                        } %}
+                    {% else %}
+                        {% sw_icon 'placeholder' style {
+                            'size': 'fluid'
+                        } %}
+                    {% endif %}
+                </a>
+            {% endblock %}
 
-            <div class="header-content">
-                <div class="h3">{{ item.translated.name }}</div>
+            <div class="moorl-listing-item-content">
+                <div>
+                    {% block moorl_merchant_listing_box_title %}
+                        <div class="moorl-listing-item-title">
+                            <a itemprop="name"
+                               title="{{ item.translated.name }}"
+                               href="{{ seoUrl('moorl.merchant.detail', { merchantId: item.id }) }}">
+                                {{ item.translated.name }}
+                            </a>
+                        </div>
+                    {% endblock %}
 
-                {% block moorl_merchant_listing_box_address %}
-                    <p itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
-                        {% if item.additionalAddressLine1 %}
-                            {{ item.additionalAddressLine1 }}<br>
-                        {% endif %}
-                        {% if item.additionalAddressLine2 %}
-                            {{ item.additionalAddressLine2 }}<br>
-                        {% endif %}
-                        <span itemprop="streetAddress">{{ item.street }} {{ item.streetNumber }}</span><br>
-                        <span itemprop="postalCode">{{ item.zipcode }}</span>
-                        <span itemprop="addressLocality">
-                                    {{ item.city }}<br>
-                                    {% if item.countryState %}
-                                        {{ item.countryState.translated.name }}
-                                    {% endif %}
-                            {% if item.country %}
-                                {{ item.country.translated.name }}
+                    {% block moorl_merchant_listing_box_address %}
+                        <div itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
+                            {% if item.additionalAddressLine1 %}
+                                {{ item.additionalAddressLine1 }}<br>
                             {% endif %}
-                                </span>
-                    </p>
-                {% endblock %}
-
-                <div class="btn-group">
-                    {% block moorl_merchant_listing_box_actions %}
-                        {% if item.locationPlaceId %}
-                            <a class="btn" href="https://goo.gl/maps/{{ item.locationPlaceId }}" target="_blank" rel="noopener">
-                                {{ "moorl-foundation.buttons.placeIdLink"|trans }}
-                            </a>
-                        {% endif %}
-
-                        {% if item.merchantUrl %}
-                            <a class="btn" href="{{ item.merchantUrl }}" target="_blank" rel="noopener">
-                                {{ "moorl-foundation.properties.merchantUrl"|trans }}
-                            </a>
-                        {% endif %}
-
-                        {% if item.shopUrl %}
-                            <a class="btn" href="{{ item.shopUrl }}" target="_blank" rel="noopener">
-                                {{ "moorl-foundation.properties.shopUrl"|trans }}
-                            </a>
-                        {% endif %}
-
-                        {% if item.phoneNumber %}
-                            <a class="btn" href="tel:{{ item.phoneNumber }}" itemprop="telephone" content="{{ item.phoneNumber }}">
-                                {{ "moorl-foundation.properties.phoneNumber"|trans }}
-                            </a>
-                        {% endif %}
-
-                        {% if item.email %}
-                            <a class="btn" href="mailto:{{ item.email }}" itemprop="email" content="{{ item.email }}">
-                                {{ "moorl-foundation.properties.email"|trans }}
-                            </a>
-                        {% endif %}
+                            {% if item.additionalAddressLine2 %}
+                                {{ item.additionalAddressLine2 }}<br>
+                            {% endif %}
+                            <span itemprop="streetAddress">{{ item.street }} {{ item.streetNumber }}</span><br>
+                            <span itemprop="postalCode">{{ item.zipcode }}</span>
+                            <span itemprop="addressLocality">
+                                {{ item.city }}<br>
+                                {% if item.countryState %}
+                                    {{ item.countryState.translated.name }}
+                                {% endif %}
+                                {% if item.country %}
+                                    {{ item.country.translated.name }}
+                                {% endif %}
+                            </span>
+                        </div>
                     {% endblock %}
                 </div>
             </div>
 
             <div class="body-content">
-                {% sw_include '@Storefront/plugin/moorl-foundation/opening-hours.html.twig' with {
-                    'openingHours': item.openingHours
-                } %}
+                {% block moorl_merchant_listing_box_actions %}
+                    <div class="btn-group btn-group-sm">
+                        {% block moorl_merchant_listing_box_actions_inner %}
+                            {% if item.locationPlaceId %}
+                                <a class="btn btn-light" href="https://goo.gl/maps/{{ item.locationPlaceId }}" target="_blank" rel="noopener">
+                                    {{ "moorl-foundation.buttons.placeIdLink"|trans }}
+                                </a>
+                            {% endif %}
+
+                            {% if item.merchantUrl %}
+                                <a class="btn btn-light" href="{{ item.merchantUrl }}" target="_blank" rel="noopener">
+                                    {{ "moorl-foundation.properties.merchantUrl"|trans }}
+                                </a>
+                            {% endif %}
+
+                            {% if item.shopUrl %}
+                                <a class="btn btn-light" href="{{ item.shopUrl }}" target="_blank" rel="noopener">
+                                    {{ "moorl-foundation.properties.shopUrl"|trans }}
+                                </a>
+                            {% endif %}
+
+                            {% if item.phoneNumber %}
+                                <a class="btn btn-light" href="tel:{{ item.phoneNumber }}" itemprop="telephone" content="{{ item.phoneNumber }}">
+                                    {{ "moorl-foundation.properties.phoneNumber"|trans }}
+                                </a>
+                            {% endif %}
+
+                            {% if item.email %}
+                                <a class="btn btn-light" href="mailto:{{ item.email }}" itemprop="email" content="{{ item.email }}">
+                                    {{ "moorl-foundation.properties.email"|trans }}
+                                </a>
+                            {% endif %}
+                        {% endblock %}
+                    </div>
+                {% endblock %}
+
+                {% block moorl_merchant_listing_box_content %}
+                    {% sw_include '@Storefront/plugin/moorl-foundation/opening-hours.html.twig' with {
+                        'openingHours': item.openingHours
+                    } %}
+                {% endblock %}
             </div>
         </div>
     {% endblock %}
