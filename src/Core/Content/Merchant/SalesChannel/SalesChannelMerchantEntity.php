@@ -19,7 +19,7 @@ class SalesChannelMerchantEntity extends MerchantEntity
             ],
             'icon' => $this->marker ? $this->marker->getLeafletMarker() : false,
             'popup' => sprintf(
-                "<p><strong>%s</strong>%s %s<br>%s %s<br>%s %s<br></p>",
+                "<p><strong>%s</strong><br>%s %s<br>%s %s<br>%s %s<br></p>",
                 $this->getTranslation('name'),
                 $this->street,
                 $this->streetNumber,

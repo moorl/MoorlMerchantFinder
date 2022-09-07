@@ -23,6 +23,7 @@
 
         <li class="{{ listingColumns }}"
             data-entity-id="{{ item.id }}"
+            data-entity-location='{{ item.leafletLocation|json_encode }}'
             itemscope
             itemtype="https://schema.org/Place">
             {% sw_include '@Storefront/plugin/moorl-merchant-finder/component/merchant-listing/box.html.twig' %}

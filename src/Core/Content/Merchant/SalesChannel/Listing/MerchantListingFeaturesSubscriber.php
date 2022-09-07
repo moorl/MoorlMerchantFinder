@@ -268,8 +268,8 @@ class MerchantListingFeaturesSubscriber implements EventSubscriberInterface
 
         $filters->add($this->getRadiusFilter($request));
         $filters->add($this->getManufacturerFilter($request));
-        //$filters->add($this->getCountryFilter($request));
-        //$filters->add($this->getTagFilter($request));
+        $filters->add($this->getCountryFilter($request));
+        $filters->add($this->getTagFilter($request));
 
         //dump($filters);exit;
 
