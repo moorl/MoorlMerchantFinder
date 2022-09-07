@@ -2,6 +2,7 @@
 
 namespace Moorl\MerchantFinder\Core\Content\Merchant;
 
+use MoorlFoundation\Core\Framework\DataAbstractionLayer\CollectionLocationTrait;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
 
 /**
@@ -15,6 +16,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
  */
 class MerchantCollection extends EntityCollection
 {
+    use CollectionLocationTrait;
 
     public function getExport(): array
     {

@@ -2,11 +2,13 @@
   width: 100%;
   display: grid;
   grid-gap: 10px;
+  padding: 10px;
   grid-template:
             "a b" auto
             "c c" auto / 1fr 1fr;
   align-items: center;
   justify-content: center;
+  background-color: $light;
 
   > div,
   > a {
