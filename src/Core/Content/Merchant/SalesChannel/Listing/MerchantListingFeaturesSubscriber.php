@@ -9,6 +9,7 @@ use Moorl\MerchantFinder\Core\Content\Merchant\SalesChannel\Events\MerchantListi
 use Moorl\MerchantFinder\Core\Content\Merchant\SalesChannel\Events\MerchantSearchCriteriaEvent;
 use Moorl\MerchantFinder\Core\Content\Merchant\SalesChannel\Events\MerchantSearchResultEvent;
 use Moorl\MerchantFinder\Core\Content\Merchant\SalesChannel\Events\MerchantSuggestCriteriaEvent;
+use Moorl\MerchantFinder\GeoLocation\GeoPoint;
 use MoorlFoundation\Core\Content\Sorting\SortingCollection;
 use MoorlFoundation\Core\Service\LocationService;
 use MoorlFoundation\Core\Service\SortingService;
@@ -18,7 +19,9 @@ use Shopware\Core\Content\Product\SalesChannel\Listing\Filter;
 use Shopware\Core\Content\Product\SalesChannel\Listing\FilterCollection;
 use Shopware\Core\Content\Product\SalesChannel\Sorting\ProductSortingEntity;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Aggregation\Bucket\FilterAggregation;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Aggregation\Metric\CountAggregation;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Aggregation\Metric\EntityAggregation;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Aggregation\Metric\SumAggregation;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
@@ -265,8 +268,10 @@ class MerchantListingFeaturesSubscriber implements EventSubscriberInterface
 
         $filters->add($this->getRadiusFilter($request));
         $filters->add($this->getManufacturerFilter($request));
-        $filters->add($this->getCountryFilter($request));
-        $filters->add($this->getTagFilter($request));
+        //$filters->add($this->getCountryFilter($request));
+        //$filters->add($this->getTagFilter($request));
+
+        //dump($filters);exit;
 
         return $filters;
     }
@@ -310,16 +315,28 @@ class MerchantListingFeaturesSubscriber implements EventSubscriberInterface
         );
     }
 
+    private function getGeoPoint(): ?GeoPoint
+    {
+        return null;
+    }
+
     private function getRadiusFilter(Request $request): Filter
     {
+        /**
+         * km = Kilometer
+         * mi = Meilen
+         * nm = Nautische Meilen
+         */
+
         $location = $request->get('location', '');
         $distance = $request->get('distance', 0);
+        $unit = $request->get('unit', 'km');
 
         $filter = new EqualsFilter('moorl_merchant.active', true);
 
         $geoPoint = $this->locationService->getLocationByTerm($location);
         if ($geoPoint) {
-            $boundingBox = $geoPoint->boundingBox($distance, 'km');
+            $boundingBox = $geoPoint->boundingBox($distance, $unit);
 
             $filter = new MultiFilter(MultiFilter::CONNECTION_AND, [
                 new RangeFilter('moorl_merchant.locationLat', [
@@ -336,11 +353,14 @@ class MerchantListingFeaturesSubscriber implements EventSubscriberInterface
         return new Filter(
             'radius',
             !empty($geoPoint),
-            [],
+            [new CountAggregation('radius', 'moorl_merchant.active')],
             $filter,
             [
-                'location' => $request->get('location'),
-                'distance' => (float) $request->get('distance'),
+                'location' => $location,
+                'distance' => (int) $distance,
+                'unit' => $unit,
+                'locationLat' => !empty($geoPoint) ? $geoPoint->getDegLat() : null,
+                'locationLon' => !empty($geoPoint) ? $geoPoint->getDegLon() : null
             ]
         );
     }
