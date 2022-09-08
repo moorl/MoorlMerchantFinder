@@ -14,7 +14,7 @@ class MoorlMerchantFinder extends Plugin
     public const DATA_CREATED_AT = '2003-03-03 03:03:10.000';
     public const CMS_PAGE = 'moorl_merchant';
     public const CMS_PAGE_ID = 'd294117e81a9dee634b92f190d7719a3';
-    public const CMS_PAGE_MERCHANT_DEFAULT_ID = 'bf2b1ba2d91841c48e43b94d5aa84a9b';
+    public const CMS_PAGE_MERCHANT_DEFAULT_ID = 'fa05048f53068a5ec29e2c9aea4e8c40';
     public const PLUGIN_TABLES = [
         'moorl_merchant',
         'moorl_zipcode',

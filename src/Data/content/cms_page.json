@@ -2,22 +2,21 @@
   {
     "name": "Store Locator Default",
     "type": "merchant_detail",
-    "id": "bf2b1ba2d91841c48e43b94d5aa84a9b",
+    "id": "{ID:CMS_PAGE_MERCHANT_DEFAULT}",
     "sections": [
       {
         "position": 0,
         "type": "default",
         "sizingMode": "full_width",
         "backgroundMediaMode": "cover",
-        "id": "{ID:CMS_PAGE_MERCHANT_SECTION_1}",
+        "id": "{ID:CMS_PAGE_MERCHANT_DEFAULT_SECTION_1}",
         "blocks": [
           {
             "position": 0,
             "type": "moorl-column-layout-1",
             "sectionPosition": "main",
-            "marginBottom": "20px",
             "backgroundMediaMode": "cover",
-            "id": "{ID:CMS_PAGE_MERCHANT_BLOCK_1}",
+            "id": "{ID:CMS_PAGE_MERCHANT_DEFAULT_BLOCK_1}",
             "slots": [
               {
                 "type": "moorl-location",
@@ -44,7 +43,22 @@
                     "value": "300px"
                   }
                 },
-                "id": "{ID:CMS_PAGE_MERCHANT_SLOT_1}"
+                "id": "{ID:CMS_PAGE_MERCHANT_DEFAULT_SLOT_1}"
+              }
+            ]
+          },
+          {
+            "position": 1,
+            "type": "moorl-column-layout-1",
+            "sectionPosition": "main",
+            "backgroundMediaMode": "cover",
+            "id": "{ID:CMS_PAGE_MERCHANT_DEFAULT_BLOCK_2}",
+            "slots": [
+              {
+                "type": "merchant-meta",
+                "slot": "slot-a",
+                "config": {},
+                "id": "{ID:CMS_PAGE_MERCHANT_DEFAULT_SLOT_2}"
               }
             ]
           }
@@ -56,6 +70,7 @@
         "sizingMode": "boxed",
         "backgroundMediaMode": "cover",
         "customFields": {
+          "moorl_section_config": [],
           "moorl_section_grid_config": [
             {
               "value": {
@@ -136,7 +151,7 @@
           ],
           "moorl_section_column_count": "2"
         },
-        "id": "{ID:CMS_PAGE_MERCHANT_SECTION_2}",
+        "id": "{ID:CMS_PAGE_MERCHANT_DEFAULT_SECTION_2}",
         "blocks": [
           {
             "position": 0,
@@ -145,7 +160,7 @@
             "marginBottom": "20px",
             "backgroundMediaMode": "cover",
             "customFields": {},
-            "id": "{ID:CMS_PAGE_MERCHANT_BLOCK_2}",
+            "id": "{ID:CMS_PAGE_MERCHANT_DEFAULT_BLOCK_3}",
             "slots": [
               {
                 "type": "image",
@@ -176,7 +191,7 @@
                     "value": "center"
                   }
                 },
-                "id": "{ID:CMS_PAGE_MERCHANT_SLOT_2}"
+                "id": "{ID:CMS_PAGE_MERCHANT_DEFAULT_SLOT_3}"
               }
             ]
           },
@@ -187,7 +202,7 @@
             "marginBottom": "20px",
             "backgroundMediaMode": "cover",
             "customFields": {},
-            "id": "{ID:CMS_PAGE_MERCHANT_BLOCK_3}",
+            "id": "{ID:CMS_PAGE_MERCHANT_DEFAULT_BLOCK_4}",
             "slots": [
               {
                 "type": "moorl-address",
@@ -242,7 +257,7 @@
                     "value": "moorl_merchant.locationPlaceId"
                   }
                 },
-                "id": "{ID:CMS_PAGE_MERCHANT_SLOT_3}"
+                "id": "{ID:CMS_PAGE_MERCHANT_DEFAULT_SLOT_4}"
               }
             ]
           },
@@ -253,7 +268,7 @@
             "marginBottom": "20px",
             "backgroundMediaMode": "cover",
             "customFields": {},
-            "id": "{ID:CMS_PAGE_MERCHANT_BLOCK_4}",
+            "id": "{ID:CMS_PAGE_MERCHANT_DEFAULT_BLOCK_5}",
             "slots": [
               {
                 "type": "moorl-opening-hours",
@@ -268,7 +283,7 @@
                     "value": "moorl_merchant.timeZone"
                   }
                 },
-                "id": "{ID:CMS_PAGE_MERCHANT_SLOT_4}"
+                "id": "{ID:CMS_PAGE_MERCHANT_DEFAULT_SLOT_5}"
               }
             ]
           },
@@ -279,7 +294,7 @@
             "marginBottom": "20px",
             "backgroundMediaMode": "cover",
             "customFields": {},
-            "id": "{ID:CMS_PAGE_MERCHANT_BLOCK_5}",
+            "id": "{ID:CMS_PAGE_MERCHANT_DEFAULT_BLOCK_6}",
             "slots": [
               {
                 "type": "moorl-contact",
@@ -302,7 +317,7 @@
                     "value": "moorl_merchant.merchantUrl"
                   }
                 },
-                "id": "{ID:CMS_PAGE_MERCHANT_SLOT_5}"
+                "id": "{ID:CMS_PAGE_MERCHANT_DEFAULT_SLOT_6}"
               }
             ]
           },
@@ -313,7 +328,7 @@
             "marginBottom": "20px",
             "backgroundMediaMode": "cover",
             "customFields": {},
-            "id": "{ID:CMS_PAGE_MERCHANT_BLOCK_6}",
+            "id": "{ID:CMS_PAGE_MERCHANT_DEFAULT_BLOCK_7}",
             "slots": [
               {
                 "type": "text",
@@ -328,7 +343,49 @@
                     "value": null
                   }
                 },
-                "id": "{ID:CMS_PAGE_MERCHANT_SLOT_6}"
+                "id": "{ID:CMS_PAGE_MERCHANT_DEFAULT_SLOT_7}"
+              }
+            ]
+          },
+          {
+            "position": 5,
+            "type": "moorl-column-layout-1",
+            "sectionPosition": "moorl_grid_1",
+            "marginBottom": "20px",
+            "backgroundMediaMode": "cover",
+            "customFields": {},
+            "id": "{ID:CMS_PAGE_MERCHANT_DEFAULT_BLOCK_8}",
+            "slots": [
+              {
+                "type": "moorl-fb-form",
+                "slot": "slot-a",
+                "config": {
+                  "form": {
+                    "source": "static",
+                    "value": null
+                  },
+                  "email": {
+                    "source": "mapped",
+                    "value": "moorl_merchant.email"
+                  },
+                  "custom1": {
+                    "source": "static",
+                    "value": null
+                  },
+                  "custom2": {
+                    "source": "static",
+                    "value": null
+                  },
+                  "custom3": {
+                    "source": "static",
+                    "value": null
+                  },
+                  "custom4": {
+                    "source": "static",
+                    "value": null
+                  }
+                },
+                "id": "{ID:CMS_PAGE_MERCHANT_DEFAULT_SLOT_8}"
               }
             ]
           }

@@ -1,5 +1,6 @@
 {
     "moorl-merchant-finder": {
+        "emptyResultMessage": "Keine Händler gefunden",
         "backToOverview": "Back to overview",
         "shop": "Shop",
         "www": "WWW",
