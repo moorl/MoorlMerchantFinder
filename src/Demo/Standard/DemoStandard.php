@@ -61,11 +61,7 @@ class DemoStandard extends DataExtension implements DataInterface
     public function getInstallConfig(): array
     {
         return [
-            "MoorlFoundation.config.fontawesome" => true,
-            "MoorlMerchantFinder.config.category" => "{ID:CATEGORY_0}",
-            "MoorlMerchantFinder.config.countryCode" => true,
-            "MoorlMerchantFinder.config.defaultMarker" => '{ID:WILD_101}',
-            "MoorlMerchantFinder.config.highlightMarker" => '{ID:WILD_102}'
+            "MoorlMerchantFinder.config.category" => "{ID:CATEGORY_0}"
         ];
     }
 }
