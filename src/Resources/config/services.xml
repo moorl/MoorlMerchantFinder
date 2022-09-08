@@ -50,7 +50,7 @@
 
         <!-- DetailRoute -->
         <service id="Moorl\MerchantFinder\Core\Content\Merchant\SalesChannel\MerchantDetailRoute" public="true">
-            <argument type="service" id="moorl_merchant.repository"/>
+            <argument type="service" id="sales_channel.moorl_merchant.repository"/>
             <argument type="service" id="Shopware\Core\Content\Cms\SalesChannel\SalesChannelCmsPageLoader"/>
             <argument type="service" id="Moorl\MerchantFinder\Core\Content\Merchant\MerchantDefinition"/>
         </service>

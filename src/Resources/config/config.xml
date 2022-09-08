@@ -46,6 +46,13 @@
         </input-field>
 
         <input-field type="bool">
+            <name>showEmail</name>
+            <label>Show email</label>
+            <label lang="de-DE">E-Mail zeigen</label>
+            <defaultValue>true</defaultValue>
+        </input-field>
+
+        <input-field type="bool">
             <name>showDescription</name>
             <label>Show description</label>
             <label lang="de-DE">Beschreibung zeigen</label>
@@ -98,6 +105,14 @@
             <label lang="de-DE">Suchradius</label>
             <defaultValue>10,25,50,100,200,300</defaultValue>
             <placeholder>10,25,50,100,200,300</placeholder>
+        </input-field>
+
+        <input-field type="number">
+            <name>positionDistanceDefault</name>
+            <label>Default distance</label>
+            <label lang="de-DE">Standard Entfernung</label>
+            <defaultValue>50</defaultValue>
+            <placeholder>50</placeholder>
         </input-field>
 
         <input-field type="bool">

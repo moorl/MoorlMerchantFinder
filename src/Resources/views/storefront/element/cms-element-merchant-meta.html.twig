@@ -1,0 +1,94 @@
+{% set merchant = page.merchant %}
+
+{% if merchant.categories.count > 0 %}
+    {% set overviewLink = seoUrl('frontend.navigation.page', { navigationId: merchant.categories.first().id }) %}
+{% elseif config('MoorlMerchantFinder.config.category') %}
+    {% set overviewLink = seoUrl('frontend.navigation.page', { navigationId: config('MoorlMerchantFinder.config.category') }) %}
+{% else %}
+    {% set overviewLink = null %}
+{% endif %}
+
+<div class="cms-element-{{ element.type }}">
+    {% block merchant_meta %}
+        <ul>
+            {% block merchant_meta_highlight %}
+                {% if merchant.highlight %}
+                    <li>
+                        {% sw_icon 'star' %}
+                        {{ "moorl-merchant-finder.highlight"|trans }}
+                    </li>
+                {% endif %}
+            {% endblock %}
+
+            {% block merchant_meta_phone %}
+                {% if merchant.phoneNumber and config('MoorlMerchantFinder.config.showPhoneNumber') %}
+                    <li>
+                        {% sw_icon 'phone' style {pack:'fas'} %}
+                        <a href="tel:{{ merchant.phoneNumber }}">
+                            {{ merchant.phoneNumber }}
+                        </a>
+                    </li>
+                {% endif %}
+            {% endblock %}
+
+            {% block merchant_meta_email %}
+                {% if merchant.email and config('MoorlMerchantFinder.config.showEmail') %}
+                    <li>
+                        {% sw_icon 'envelope' style {pack:'fas'} %}
+                        <a href="mailto:{{ merchant.email }}">
+                            {{ merchant.email }}
+                        </a>
+                    </li>
+                {% endif %}
+            {% endblock %}
+
+            {% block merchant_meta_manufacturers %}
+                {% if merchant.productManufacturers.count() %}
+                    <li>
+                        {% sw_icon 'industry' style {pack:'fas'} %}
+                        <div>
+                            {% for productManufacturer in merchant.productManufacturers %}
+                                {% if overviewLink %}
+                                    <a href="{{ overviewLink }}?manufacturer={{ productManufacturer.id }}"
+                                       title="{{ productManufacturer.translated.name }}">{{ productManufacturer.translated.name }}</a>
+                                {% else %}
+                                    <span>{{ productManufacturer.translated.name }}</span>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </li>
+                {% endif %}
+            {% endblock %}
+
+            {% block merchant_meta_tags %}
+                {% if merchant.tags.count() %}
+                    <li>
+                        {% sw_icon 'tags' %}
+                        <div>
+                            {% for tag in merchant.tags %}
+                                {% if overviewLink %}
+                                    <a href="{{ overviewLink }}?tag={{ tag.id }}"
+                                       title="{{ tag.name }}">{{ tag.name }}</a>
+                                {% else %}
+                                    <span>{{ tag.name }}</span>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </li>
+                {% endif %}
+            {% endblock %}
+
+            {% block merchant_meta_back %}
+                {% if overviewLink %}
+                    <li>
+                        {% sw_icon 'stack' %}
+                        <a href="{{ overviewLink }}"
+                           title="{{ "moorl-merchant-finder.backToOverview"|trans }}">
+                            {{ "moorl-merchant-finder.backToOverview"|trans }}
+                        </a>
+                    </li>
+                {% endif %}
+            {% endblock %}
+        </ul>
+    {% endblock %}
+</div>

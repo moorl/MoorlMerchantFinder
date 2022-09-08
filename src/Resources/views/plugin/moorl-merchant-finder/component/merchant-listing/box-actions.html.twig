@@ -30,7 +30,7 @@
                 {% endblock %}
 
                 {% block moorl_merchant_listing_box_actions_email %}
-                    {% if item.email %}
+                    {% if item.email and config('MoorlMerchantFinder.config.showEmail') %}
                         <a class="btn btn-light" href="mailto:{{ item.email }}" itemprop="email" content="{{ item.email }}">
                             {% sw_icon 'envelope' style {size:'sm', pack:'fas'} %}
                             {{ "moorl-merchant-finder.sendMail"|trans }}

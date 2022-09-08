@@ -1,0 +1,9 @@
+{
+    "sw-cms": {
+        "elements": {
+            "merchant-meta": {
+                "name": "Meta"
+            }
+        }
+    }
+}

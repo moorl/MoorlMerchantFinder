@@ -11,6 +11,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Shopware\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
+use Shopware\Core\System\SalesChannel\Entity\SalesChannelRepositoryInterface;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -20,12 +21,12 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class MerchantDetailRoute
 {
-    private EntityRepositoryInterface $merchantRepository;
+    private SalesChannelRepositoryInterface $merchantRepository;
     private SalesChannelCmsPageLoaderInterface $cmsPageLoader;
     private MerchantDefinition $merchantDefinition;
 
     public function __construct(
-        EntityRepositoryInterface $merchantRepository,
+        SalesChannelRepositoryInterface $merchantRepository,
         SalesChannelCmsPageLoaderInterface $cmsPageLoader,
         MerchantDefinition $merchantDefinition
     ) {
@@ -52,7 +53,7 @@ class MerchantDetailRoute
         $criteria->addAssociation('salutation');
 
         $merchant = $this->merchantRepository
-            ->search($criteria, $context->getContext())
+            ->search($criteria, $context)
             ->first();
 
         $pageId = $merchant->getCmsPageId();

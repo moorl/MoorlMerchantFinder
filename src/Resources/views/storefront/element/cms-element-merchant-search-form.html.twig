@@ -1,0 +1,33 @@
+<div class="cms-element-{{ element.type }}">
+    {% if config('MoorlMerchantFinder.config.category') %}
+        {% set overviewLink = seoUrl('frontend.navigation.page', { navigationId: config('MoorlMerchantFinder.config.category') }) %}
+
+        {% block merchant_search_form %}
+            <form action="{{ overviewLink }}" method="get">
+                <input type="hidden" name="distance" value="{{ config('MoorlMerchantFinder.config.positionDistanceDefault') ?: 50 }}">
+
+                <div class="form-row">
+                    <div class="col-sm-4 my-1">
+                        <label class="sr-only" for="inlineFormInputName">
+                            {{ "moorl-merchant-finder.zipcodeCity"|trans }}
+                        </label>
+                        <input type="text"
+                               class="form-control"
+                               id="inlineFormInputName"
+                               name="location"
+                               placeholder="{{ "moorl-merchant-finder.zipcodeCityEnter"|trans }}">
+                    </div>
+
+                    <div class="col-auto my-1">
+                        <button type="submit" class="btn btn-primary">
+                            {{ "moorl-merchant-finder.search"|trans }}
+                        </button>
+                    </div>
+                </div>
+            </form>
+        {% endblock %}
+
+    {% else %}
+        <p>Missing configuration: Please set a default category page in the plugin settings.</p>
+    {% endif %}
+</div>
