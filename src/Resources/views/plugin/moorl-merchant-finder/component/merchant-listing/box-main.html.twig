@@ -1,15 +1,15 @@
 {% block element_moorl_merchant_finder_result_title %}
     {% if config('MoorlMerchantFinder.config.showName') %}
-        <h4>
+        <div class="h4 d-flex justify-content-between">
             <span>{{ merchant.translated.name }}</span>
             {% if merchant.locationDistance %}
-                <small class="text-small">
+                <small class="text-muted">
                     {{ "moorl-merchant-finder.distance"|trans }}:
                     {{ item.locationDistance|number_format(2) }}
                     {{ "moorl-merchant-finder.km"|trans }}
                 </small>
             {% endif %}
-        </h4>
+        </div>
     {% endif %}
 {% endblock %}
 

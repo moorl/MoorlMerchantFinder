@@ -6,7 +6,7 @@ Application.getContainer('service').cmsService.registerCmsElement({
     plugin: 'MoorlMerchantFinder',
     icon: 'default-location-map',
     name: 'moorl-merchant-finder',
-    label: 'Store Locator',
+    label: '[OLD STORE LOCATOR]',
     component: 'sw-cms-el-moorl-merchant-finder',
     configComponent: 'sw-cms-el-config-moorl-merchant-finder',
     previewComponent: true,
