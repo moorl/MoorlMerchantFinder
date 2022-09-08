@@ -111,6 +111,13 @@
             <tag name="kernel.event_subscriber"/>
         </service>
 
+        <service id="Moorl\MerchantFinder\Core\Content\Merchant\SalesChannel\SalesChannelMerchantSubscriber" public="true">
+            <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry"/>
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
         <!-- Entity -->
         <service id="Moorl\MerchantFinder\Core\Content\Merchant\MerchantDefinition">
             <tag name="shopware.entity.definition" entity="moorl_merchant" />
