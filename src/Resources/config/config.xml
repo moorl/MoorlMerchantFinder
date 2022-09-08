@@ -68,97 +68,6 @@
     </card>
 
     <card>
-        <title>Search Logic</title>
-        <title lang="de-DE">Suchlogik</title>
-
-        <input-field type="bool">
-            <name>hideSearchLabels</name>
-            <label>Hide the labels in searchbar</label>
-            <label lang="de-DE">Bezeichnungen in der Suchleiste verstecken</label>
-            <defaultValue>false</defaultValue>
-        </input-field>
-
-        <input-field type="bool">
-            <name>enableSearch</name>
-            <label>Enable search</label>
-            <label lang="de-DE">Suche aktiv</label>
-            <defaultValue>true</defaultValue>
-        </input-field>
-
-        <input-field type="bool">
-            <name>enableTextSearch</name>
-            <label>Enable text search</label>
-            <label lang="de-DE">Textsuche aktiv</label>
-            <defaultValue>true</defaultValue>
-        </input-field>
-
-        <input-field type="bool">
-            <name>positionRequest</name>
-            <label>Enable browser position request</label>
-            <label lang="de-DE">Standort Abfrage des Browsers nutzen</label>
-            <defaultValue>true</defaultValue>
-        </input-field>
-
-        <input-field>
-            <name>positionDistance</name>
-            <label>Search distance</label>
-            <label lang="de-DE">Suchradius</label>
-            <defaultValue>10,25,50,100,200,300</defaultValue>
-            <placeholder>10,25,50,100,200,300</placeholder>
-        </input-field>
-
-        <input-field type="int">
-            <name>positionDistanceDefault</name>
-            <label>Default distance</label>
-            <label lang="de-DE">Standard Entfernung</label>
-            <defaultValue>50</defaultValue>
-            <placeholder>50</placeholder>
-        </input-field>
-
-        <input-field type="bool">
-            <name>countryCode</name>
-            <label>Enable country filter</label>
-            <label lang="de-DE">Länderfilter aktivieren</label>
-            <defaultValue>false</defaultValue>
-        </input-field>
-
-        <input-field type="bool">
-            <name>resultInfo</name>
-            <label>Show search info</label>
-            <label lang="de-DE">Such Info anzeigen</label>
-            <defaultValue>true</defaultValue>
-        </input-field>
-
-        <input-field type="multi-select">
-            <name>searchRules</name>
-            <label>Additional filters</label>
-            <label lang="de-DE">Zusätzliche Filter</label>
-            <options>
-                <option>
-                    <id>isHighlighted</id>
-                    <name>Highlighted</name>
-                    <name lang="de-DE">Hervorgehoben</name>
-                </option>
-                <option>
-                    <id>isNotHighlighted</id>
-                    <name>Not Highlighted</name>
-                    <name lang="de-DE">Nicht Hervorgehoben</name>
-                </option>
-                <option>
-                    <id>hasPriority</id>
-                    <name>Priority added</name>
-                    <name lang="de-DE">Priorität hinzugefügt</name>
-                </option>
-                <option>
-                    <id>hasLogo</id>
-                    <name>Has logo</name>
-                    <name lang="de-DE">Mit Logo</name>
-                </option>
-            </options>
-        </input-field>
-    </card>
-
-    <card>
         <title>Advanced</title>
         <title lang="de-DE">Erweitert</title>
         <input-field type="single-select">
@@ -349,5 +258,96 @@
             <label>Highlight</label>
             <label lang="de-DE">Hervorgehoben</label>
         </component>
+    </card>
+
+    <card>
+        <title>Search Logic [DEPRECATED DO NOT USE]</title>
+        <title lang="de-DE">Suchlogik [VERALTET NICHT MEHR NUTZEN]</title>
+
+        <input-field type="bool">
+            <name>hideSearchLabels</name>
+            <label>Hide the labels in searchbar</label>
+            <label lang="de-DE">Bezeichnungen in der Suchleiste verstecken</label>
+            <defaultValue>false</defaultValue>
+        </input-field>
+
+        <input-field type="bool">
+            <name>enableSearch</name>
+            <label>Enable search</label>
+            <label lang="de-DE">Suche aktiv</label>
+            <defaultValue>true</defaultValue>
+        </input-field>
+
+        <input-field type="bool">
+            <name>enableTextSearch</name>
+            <label>Enable text search</label>
+            <label lang="de-DE">Textsuche aktiv</label>
+            <defaultValue>true</defaultValue>
+        </input-field>
+
+        <input-field type="bool">
+            <name>positionRequest</name>
+            <label>Enable browser position request</label>
+            <label lang="de-DE">Standort Abfrage des Browsers nutzen</label>
+            <defaultValue>true</defaultValue>
+        </input-field>
+
+        <input-field>
+            <name>positionDistance</name>
+            <label>Search distance</label>
+            <label lang="de-DE">Suchradius</label>
+            <defaultValue>10,25,50,100,200,300</defaultValue>
+            <placeholder>10,25,50,100,200,300</placeholder>
+        </input-field>
+
+        <input-field type="int">
+            <name>positionDistanceDefault</name>
+            <label>Default distance</label>
+            <label lang="de-DE">Standard Entfernung</label>
+            <defaultValue>50</defaultValue>
+            <placeholder>50</placeholder>
+        </input-field>
+
+        <input-field type="bool">
+            <name>countryCode</name>
+            <label>Enable country filter</label>
+            <label lang="de-DE">Länderfilter aktivieren</label>
+            <defaultValue>false</defaultValue>
+        </input-field>
+
+        <input-field type="bool">
+            <name>resultInfo</name>
+            <label>Show search info</label>
+            <label lang="de-DE">Such Info anzeigen</label>
+            <defaultValue>true</defaultValue>
+        </input-field>
+
+        <input-field type="multi-select">
+            <name>searchRules</name>
+            <label>Additional filters</label>
+            <label lang="de-DE">Zusätzliche Filter</label>
+            <options>
+                <option>
+                    <id>isHighlighted</id>
+                    <name>Highlighted</name>
+                    <name lang="de-DE">Hervorgehoben</name>
+                </option>
+                <option>
+                    <id>isNotHighlighted</id>
+                    <name>Not Highlighted</name>
+                    <name lang="de-DE">Nicht Hervorgehoben</name>
+                </option>
+                <option>
+                    <id>hasPriority</id>
+                    <name>Priority added</name>
+                    <name lang="de-DE">Priorität hinzugefügt</name>
+                </option>
+                <option>
+                    <id>hasLogo</id>
+                    <name>Has logo</name>
+                    <name lang="de-DE">Mit Logo</name>
+                </option>
+            </options>
+        </input-field>
     </card>
 </config>
