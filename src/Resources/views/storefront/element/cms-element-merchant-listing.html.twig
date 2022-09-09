@@ -21,7 +21,7 @@
             {% set listingColumns = 'cms-listing-col col-sm-12 col-lg-6 col-xl-4' %}
         {% endif %}
 
-        {% if searchResult.extensions.me and loop.index == 1 %}
+        {% if config('MoorlMerchantFinder.config.showSearchLocation') and searchResult.extensions.me and loop.index == 1 %}
             <li data-entity-id="me"
                 data-entity-location='{{ searchResult.extensions.me.leafletLocation|merge({
                     entityId: 'me',

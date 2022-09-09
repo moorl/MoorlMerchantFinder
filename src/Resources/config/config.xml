@@ -18,6 +18,13 @@
         <title lang="de-DE">Händler Ergebnisse</title>
 
         <input-field type="bool">
+            <name>showSearchLocation</name>
+            <label>Show search location</label>
+            <label lang="de-DE">Such Standort zeigen</label>
+            <defaultValue>false</defaultValue>
+        </input-field>
+
+        <input-field type="bool">
             <name>showName</name>
             <label>Show name</label>
             <label lang="de-DE">Namen zeigen</label>
