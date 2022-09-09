@@ -21,6 +21,21 @@
             {% set listingColumns = 'cms-listing-col col-sm-12 col-lg-6 col-xl-4' %}
         {% endif %}
 
+        {% if searchResult.extensions.me and loop.index == 1 %}
+            <li data-entity-id="me"
+                data-entity-location='{{ searchResult.extensions.me.leafletLocation|merge({
+                    entityId: 'me',
+                    popup: 'moorl-merchant-finder.searchLocation'|trans
+                })|json_encode }}'>
+                <div class="moorl-listing-item-wrapper{% if config.itemHasBorder.value %} has-border{% endif %}"
+                     style="{{ itemCss|join(';')|raw }}">
+                    <div class="h4 mb-0">
+                        {{ 'moorl-merchant-finder.searchLocation'|trans }}
+                    </div>
+                </div>
+            </li>
+        {% endif %}
+
         <li class="{{ listingColumns }}"
             data-entity-id="{{ item.id }}"
             data-entity-location='{{ item.leafletLocation|json_encode }}'
@@ -45,15 +60,4 @@
         type: 'info',
         content: 'moorl-merchant-finder.emptyResultMessage'|trans|sw_sanitize
     } %}
-{% endblock %}
-
-{% block moorl_foundation_listing %}
-    {% if searchResult.extensions.me %}
-        <meta data-entity-id="me"
-              data-entity-location='{{ searchResult.extensions.me.leafletLocation|merge({
-                  popup: 'moorl-merchant-finder.searchLocation'|trans
-              })|json_encode }}'>
-    {% endif %}
-
-    {{ parent() }}
 {% endblock %}
