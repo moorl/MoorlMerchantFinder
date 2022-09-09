@@ -46,3 +46,14 @@
         content: 'moorl-merchant-finder.emptyResultMessage'|trans|sw_sanitize
     } %}
 {% endblock %}
+
+{% block moorl_foundation_listing %}
+    {% if searchResult.extensions.me %}
+        <meta data-entity-id="me"
+              data-entity-location='{{ searchResult.extensions.me.leafletLocation|merge({
+                  popup: 'moorl-merchant-finder.searchLocation'|trans
+              })|json_encode }}'>
+    {% endif %}
+
+    {{ parent() }}
+{% endblock %}

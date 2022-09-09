@@ -3,10 +3,11 @@
         <div class="h4 d-flex justify-content-between">
             <span>{{ merchant.translated.name }}</span>
             {% if merchant.locationDistance %}
+                {% set unit = "moorl-foundation.listing.filter.#{config('MoorlFoundation.config.osmUnitOfMeasurement')}" %}
+
                 <small class="text-muted">
-                    {{ "moorl-merchant-finder.distance"|trans }}:
                     {{ item.locationDistance|number_format(2) }}
-                    {{ "moorl-merchant-finder.km"|trans }}
+                    {{ unit|trans }}
                 </small>
             {% endif %}
         </div>
