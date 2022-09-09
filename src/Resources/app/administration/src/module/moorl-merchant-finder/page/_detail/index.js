@@ -56,6 +56,7 @@ Component.register('moorl-merchant-finder-detail', {
             const criteria = new Criteria();
 
             criteria
+                .addAssociation('marker')
                 .addAssociation('tags')
                 .addAssociation('categories')
                 .addAssociation('productManufacturers')

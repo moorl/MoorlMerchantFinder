@@ -21,11 +21,6 @@
             <argument type="service" id="Shopware\Core\Framework\Adapter\Translation\Translator"/>
         </service>
 
-        <service id="Moorl\MerchantFinder\Core\Service\LocationService" public="true">
-            <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry"/>
-            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
-        </service>
-
         <!-- Sales Channel -->
         <service id="Moorl\MerchantFinder\Core\Content\Merchant\SalesChannel\SalesChannelMerchantDefinition">
             <tag name="shopware.sales_channel.entity.definition"/>
