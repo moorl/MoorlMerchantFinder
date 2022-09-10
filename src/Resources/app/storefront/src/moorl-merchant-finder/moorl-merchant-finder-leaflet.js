@@ -220,6 +220,48 @@ export default class MoorlMerchantFinder extends Plugin {
         $(this._loadingIndicator).addClass('d-none');
     }
 
+    _getIcon(icon) {
+        if (icon.svg) {
+            const size = 40;
+            const iconOptions = {
+                iconSize: [size, size + size / 2],
+                iconAnchor: [size/2, size + size / 2],
+                popupAnchor: [0, -size],
+                className: icon.className,
+                html: `<div class="marker-pin"></div>${icon.svg}`
+            }
+            return L.divIcon(iconOptions);
+        } else if (icon.marker) {
+            let iconOptions = {};
+
+            if (icon.markerSettings != null) {
+                const ms = icon.markerSettings;
+
+                iconOptions.iconSize = [ms.iconSizeX, ms.iconSizeY];
+                iconOptions.shadowSize = [ms.shadowSizeX, ms.shadowSizeY];
+                iconOptions.iconAnchor = [ms.iconAnchorX, ms.iconAnchorY];
+                iconOptions.shadowAnchor = [ms.shadowAnchorX, ms.shadowAnchorY];
+                iconOptions.popupAnchor = [ms.popupAnchorX, ms.popupAnchorY];
+            }
+
+            if (icon.markerShadow) {
+                iconOptions.shadowUrl = icon.markerShadow.url;
+            }
+
+            if (icon.markerRetina) {
+                iconOptions.iconRetinaUrl = icon.markerRetina.url;
+            }
+
+            if (icon.marker) {
+                iconOptions.iconUrl = icon.marker.url;
+            }
+
+            return L.icon(iconOptions);
+        }
+
+        return null;
+    }
+
     _buildMapMarkers() {
         const that = this;
         const featureMarker = [];
@@ -227,37 +269,10 @@ export default class MoorlMerchantFinder extends Plugin {
         // add features
         this._reponse.data.forEach(function (item) {
             if (item.locationLon != null) {
-                let iconOptions = {};
                 let markerOptions = { data: item };
 
                 if (item.marker != null) {
-                    if (item.marker.markerSettings != null) {
-                        const ms = item.marker.markerSettings;
-
-                        iconOptions = {
-                            iconSize: [ms.iconSizeX, ms.iconSizeY],
-                            shadowSize: [ms.shadowSizeX, ms.shadowSizeY],
-                            iconAnchor: [ms.iconAnchorX, ms.iconAnchorY],
-                            shadowAnchor: [ms.shadowAnchorX, ms.shadowAnchorY],
-                            popupAnchor: [ms.popupAnchorX, ms.popupAnchorY]
-                        }
-                    }
-
-                    if (item.marker.markerShadow) {
-                        iconOptions.shadowUrl = item.marker.markerShadow.url;
-                    }
-
-                    if (item.marker.markerRetina) {
-                        iconOptions.iconRetinaUrl = item.marker.markerRetina.url;
-                    }
-
-                    if (item.marker.marker) {
-                        iconOptions.iconUrl = item.marker.marker.url;
-                    }
-
-                    if (iconOptions) {
-                        markerOptions.icon = L.icon(iconOptions);
-                    }
+                    markerOptions.icon = that._getIcon(item.marker);
                 }
 
                 featureMarker.push(
@@ -283,10 +298,11 @@ export default class MoorlMerchantFinder extends Plugin {
         if (featureMarker.length === 0) {
             return;
         }
-
+        console.log(123);
         this.ol.markers = L.featureGroup(featureMarker).addTo(that.ol.map);
-
+        console.log(456);
         this.ol.map.fitBounds(this.ol.markers.getBounds(), {padding: [1, 1]});
+        console.log(789);
     }
 
     _updateMerchantId(id) {

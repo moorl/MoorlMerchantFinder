@@ -2,10 +2,12 @@
 
 namespace Moorl\MerchantFinder\Core\Content\Merchant\SalesChannel;
 
+use Moorl\MerchantFinder\Core\Content\Merchant\MerchantEntity;
 use MoorlFoundation\Core\Content\Marker\MarkerCollection;
 use MoorlFoundation\Core\Content\Marker\MarkerDefinition;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
+use Shopware\Core\Framework\DataAbstractionLayer\Event\EntityLoadedEvent;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\System\SalesChannel\Entity\SalesChannelEntityLoadedEvent;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
@@ -29,11 +31,32 @@ class SalesChannelMerchantSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            'sales_channel.moorl_merchant.loaded' => 'loaded'
+            'sales_channel.moorl_merchant.loaded' => 'salesChannelLoaded'
         ];
     }
 
-    public function loaded(SalesChannelEntityLoadedEvent $event): void
+    public function loaded(EntityLoadedEvent $event): void
+    {
+        $this->initMarkers($event->getContext());
+
+        $defaultMarker = $this->markers->get($this->systemConfigService->get('MoorlMerchantFinder.config.defaultMarker'));
+        $highlightMarker = $this->markers->get($this->systemConfigService->get('MoorlMerchantFinder.config.highlightMarker'));
+
+        /** @var MerchantEntity $entity */
+        foreach ($event->getEntities() as $entity) {
+            if ($entity->getMarkerId()) {
+                continue;
+            }
+
+            if ($entity->getHighlight()) {
+                $entity->setMarker($highlightMarker);
+            } else {
+                $entity->setMarker($defaultMarker);
+            }
+        }
+    }
+
+    public function salesChannelLoaded(SalesChannelEntityLoadedEvent $event): void
     {
         $this->initMarkers($event->getContext());
 
