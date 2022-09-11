@@ -36,25 +36,7 @@
 
         {% block element_moorl_merchant_finder_result_address %}
             {% if config('MoorlMerchantFinder.config.showAddress') and merchant.street %}
-                <p itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
-                    {% if item.additionalAddressLine1 %}
-                        {{ item.additionalAddressLine1 }}<br>
-                    {% endif %}
-                    {% if item.additionalAddressLine2 %}
-                        {{ item.additionalAddressLine2 }}<br>
-                    {% endif %}
-                    <span itemprop="streetAddress">{{ item.street }} {{ item.streetNumber }}</span><br>
-                    <span itemprop="postalCode">{{ item.zipcode }}</span>
-                    <span itemprop="addressLocality">
-                        {{ item.city }}<br>
-                        {% if item.countryState %}
-                            {{ item.countryState.translated.name }}
-                        {% endif %}
-                        {% if item.country %}
-                            {{ item.country.translated.name }}
-                        {% endif %}
-                    </span>
-                </p>
+                {% sw_include '@Storefront/plugin/moorl-merchant-finder/component/merchant-address.html.twig' %}
             {% endif %}
 
             {% if item.locationPlaceId %}

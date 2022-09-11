@@ -1,0 +1,19 @@
+<p itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
+    {% if merchant.additionalAddressLine1 %}
+        {{ merchant.additionalAddressLine1 }}<br>
+    {% endif %}
+    {% if merchant.additionalAddressLine2 %}
+        {{ merchant.additionalAddressLine2 }}<br>
+    {% endif %}
+    <span itemprop="streetAddress">{{ merchant.street }} {{ merchant.streetNumber }}</span><br>
+    <span itemprop="postalCode">{{ merchant.zipcode }}</span>
+    <span itemprop="addressLocality">
+        {{ merchant.city }}<br>
+        {% if merchant.countryState %}
+            {{ merchant.countryState.translated.name }}
+        {% endif %}
+        {% if merchant.country %}
+            {{ merchant.country.translated.name }}
+        {% endif %}
+    </span>
+</p>
