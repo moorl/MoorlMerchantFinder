@@ -298,11 +298,9 @@ export default class MoorlMerchantFinder extends Plugin {
         if (featureMarker.length === 0) {
             return;
         }
-        console.log(123);
+
         this.ol.markers = L.featureGroup(featureMarker).addTo(that.ol.map);
-        console.log(456);
         this.ol.map.fitBounds(this.ol.markers.getBounds(), {padding: [1, 1]});
-        console.log(789);
     }
 
     _updateMerchantId(id) {
