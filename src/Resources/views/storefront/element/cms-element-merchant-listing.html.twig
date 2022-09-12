@@ -22,7 +22,8 @@
         {% endif %}
 
         {% if config('MoorlMerchantFinder.config.showSearchLocation') and searchResult.extensions.me and loop.index == 1 %}
-            <li data-entity-id="me"
+            <li class="d-none"
+                data-entity-id="me"
                 data-entity-location='{{ searchResult.extensions.me.getLeafletCircle|merge({
                     entityId: 'me',
                     popup: 'moorl-merchant-finder.searchLocation'|trans
@@ -52,7 +53,8 @@
 {% block moorl_foundation_listing_empty %}
     {% if config('MoorlMerchantFinder.config.showSearchLocation') and searchResult.extensions.me %}
         <ul class="js-listing-wrapper moorl-listing-list">
-            <li data-entity-id="me"
+            <li class="d-none"
+                data-entity-id="me"
                 data-entity-location='{{ searchResult.extensions.me.getLeafletCircle|merge({
                     entityId: 'me',
                     popup: 'moorl-merchant-finder.searchLocation'|trans
