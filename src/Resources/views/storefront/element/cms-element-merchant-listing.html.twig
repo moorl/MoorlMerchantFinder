@@ -23,16 +23,10 @@
 
         {% if config('MoorlMerchantFinder.config.showSearchLocation') and searchResult.extensions.me and loop.index == 1 %}
             <li data-entity-id="me"
-                data-entity-location='{{ searchResult.extensions.me.leafletLocation|merge({
+                data-entity-location='{{ searchResult.extensions.me.getLeafletCircle|merge({
                     entityId: 'me',
                     popup: 'moorl-merchant-finder.searchLocation'|trans
                 })|json_encode }}'>
-                <div class="moorl-listing-item-wrapper{% if config.itemHasBorder.value %} has-border{% endif %}"
-                     style="{{ itemCss|join(';')|raw }}">
-                    <div class="h4 mb-0">
-                        {{ 'moorl-merchant-finder.searchLocation'|trans }}
-                    </div>
-                </div>
             </li>
         {% endif %}
 
@@ -56,6 +50,17 @@
 {% endblock %}
 
 {% block moorl_foundation_listing_empty %}
+    {% if config('MoorlMerchantFinder.config.showSearchLocation') and searchResult.extensions.me %}
+        <ul class="js-listing-wrapper moorl-listing-list">
+            <li data-entity-id="me"
+                data-entity-location='{{ searchResult.extensions.me.getLeafletCircle|merge({
+                    entityId: 'me',
+                    popup: 'moorl-merchant-finder.searchLocation'|trans
+                })|json_encode }}'>
+            </li>
+        </ul>
+    {% endif %}
+
     {% sw_include '@Storefront/storefront/utilities/alert.html.twig' with {
         type: 'info',
         content: 'moorl-merchant-finder.emptyResultMessage'|trans|sw_sanitize
