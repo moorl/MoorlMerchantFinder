@@ -2,11 +2,11 @@
     {% if config('MoorlMerchantFinder.config.showName') %}
         <div class="h4 d-flex justify-content-between">
             <span>{{ merchant.translated.name }}</span>
-            {% if merchant.locationDistance %}
+            {% if merchant.locationCache.first() %}
                 {% set unit = "moorl-foundation.listing.filter.#{config('MoorlFoundation.config.osmUnitOfMeasurement')}" %}
 
                 <small class="text-muted">
-                    {{ item.locationDistance|number_format(2) }}
+                    {{ merchant.locationCache.first().distance|number_format(2) }}
                     {{ unit|trans }}
                 </small>
             {% endif %}

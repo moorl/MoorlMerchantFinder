@@ -8,7 +8,7 @@ use Moorl\MerchantFinder\Core\Content\Merchant\SalesChannel\Events\MerchantListi
 use Moorl\MerchantFinder\Core\Content\Merchant\SalesChannel\Events\MerchantSearchCriteriaEvent;
 use Moorl\MerchantFinder\Core\Content\Merchant\SalesChannel\Events\MerchantSearchResultEvent;
 use Moorl\MerchantFinder\Core\Content\Merchant\SalesChannel\Events\MerchantSuggestCriteriaEvent;
-use MoorlFoundation\Core\Service\LocationService;
+use MoorlFoundation\Core\Service\LocationServiceV2;
 use MoorlFoundation\Core\Service\SortingService;
 use MoorlFoundation\Core\System\EntityListingFeaturesSubscriberExtension;
 use Shopware\Core\Content\Product\SalesChannel\Listing\FilterCollection;
@@ -20,11 +20,11 @@ class MerchantListingFeaturesSubscriber extends EntityListingFeaturesSubscriberE
 {
     public function __construct(
         SortingService $sortingService,
-        LocationService $locationService
+        LocationServiceV2 $locationServiceV2
     )
     {
         $this->sortingService = $sortingService;
-        $this->locationService = $locationService;
+        $this->locationServiceV2 = $locationServiceV2;
         $this->entityName = MerchantDefinition::ENTITY_NAME;
     }
 
@@ -53,7 +53,7 @@ class MerchantListingFeaturesSubscriber extends EntityListingFeaturesSubscriberE
     {
         $filters = new FilterCollection();
 
-        $filters->add($this->getRadiusFilter($request));
+        $filters->add($this->getRadiusFilter($request, $context));
         $filters->add($this->getManufacturerFilter($request));
         $filters->add($this->getCountryFilter($request));
         $filters->add($this->getTagFilter($request));

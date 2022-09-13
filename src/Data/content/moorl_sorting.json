@@ -33,5 +33,40 @@
         "naturalSorting": 0
       }
     ]
+  },
+  {
+    "id": "{ID:SORTING_2}",
+    "priority": 0,
+    "translations": {
+      "{de-DE}": {
+        "label": "Entfernung"
+      },
+      "{en-GB}": {
+        "label": "Distance"
+      }
+    },
+    "key": "distance",
+    "entity": "moorl_merchant",
+    "active": true,
+    "fields": [
+      {
+        "field": "moorl_merchant.id",
+        "order": "asc",
+        "priority": 0,
+        "naturalSorting": 0
+      },
+      {
+        "field": "moorl_merchant.name",
+        "order": "asc",
+        "priority": 1,
+        "naturalSorting": 0
+      },
+      {
+        "field": "moorl_merchant.locationCache.distance",
+        "order": "asc",
+        "priority": 2,
+        "naturalSorting": 0
+      }
+    ]
   }
 ]

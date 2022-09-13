@@ -70,6 +70,7 @@ class MerchantListing extends EntityListingExtension implements EntityListingInt
     {
         $criteria->addAssociation('media');
         $criteria->addAssociation('country');
+        $criteria->addAssociation('locationCache');
         $criteria->addFilter(new MerchantAvailableFilter($this->salesChannelContext));
 
         if ($this->event instanceof ProductSuggestResultEvent) {
