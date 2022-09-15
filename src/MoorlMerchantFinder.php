@@ -4,9 +4,11 @@ namespace Moorl\MerchantFinder;
 
 use Doctrine\DBAL\Connection;
 use MoorlFoundation\Core\Service\DataService;
+use MoorlFoundation\Core\Service\LocationServiceV2;
 use Shopware\Core\Framework\Plugin;
 use Shopware\Core\Framework\Plugin\Context\ActivateContext;
 use Shopware\Core\Framework\Plugin\Context\UninstallContext;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class MoorlMerchantFinder extends Plugin
 {
@@ -44,6 +46,13 @@ class MoorlMerchantFinder extends Plugin
         'product_visibility',
         'seo_url_template'
     ];
+
+    public function build(ContainerBuilder $container): void
+    {
+        if (class_exists(LocationServiceV2::class)) {
+            parent::build($container);
+        }
+    }
 
     public function activate(ActivateContext $activateContext): void
     {
