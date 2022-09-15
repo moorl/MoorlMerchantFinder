@@ -102,12 +102,19 @@
         <service id="Moorl\MerchantFinder\Core\Content\Merchant\SalesChannel\Listing\MerchantListingFeaturesSubscriber">
             <argument type="service" id="MoorlFoundation\Core\Service\SortingService"/>
             <argument type="service" id="MoorlFoundation\Core\Service\LocationServiceV2"/>
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
 
             <tag name="kernel.event_subscriber"/>
         </service>
 
         <service id="Moorl\MerchantFinder\Core\Content\Merchant\SalesChannel\SalesChannelMerchantSubscriber" public="true">
             <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry"/>
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service id="Moorl\MerchantFinder\Storefront\Subscriber\ProductCriteriaSubscriber" public="true">
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
 
             <tag name="kernel.event_subscriber"/>

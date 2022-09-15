@@ -7,19 +7,13 @@ use Shopware\Core\Content\Product\Events\ProductListingCollectFilterEvent;
 use Shopware\Core\Content\Product\SalesChannel\Listing\Filter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Aggregation\Metric\EntityAggregation;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
-use Shopware\Core\System\SalesChannel\Event\SalesChannelProcessCriteriaEvent;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
-use Shopware\Storefront\Page\Product\ProductPageCriteriaEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class ProductCriteriaSubscriber implements EventSubscriberInterface
 {
     private SystemConfigService $systemConfigService;
 
-    /**
-     * ProductCriteriaSubscriber constructor.
-     * @param SystemConfigService $systemConfigService
-     */
     public function __construct(SystemConfigService $systemConfigService)
     {
         $this->systemConfigService = $systemConfigService;
@@ -28,14 +22,13 @@ class ProductCriteriaSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            ProductListingCollectFilterEvent::class => 'onProductListingCollectFilter',
-            'sales_channel.product.process.criteria' => 'processCriteria',
+            ProductListingCollectFilterEvent::class => 'onProductListingCollectFilter'
         ];
     }
 
     public function onProductListingCollectFilter(ProductListingCollectFilterEvent $event): void
     {
-        if (!$this->systemConfigService->get('MoorlMerchantFinder.config.enableListingFilter')) {
+        if (!$this->systemConfigService->get('MoorlMerchantFinder.config.productFilterMerchant')) {
             return;
         }
 
@@ -48,7 +41,7 @@ class ProductCriteriaSubscriber implements EventSubscriberInterface
             'merchant',
             !empty($ids),
             [$this->getMerchantEntityAggregation()],
-            new EqualsAnyFilter('product.merchants.id', $ids),
+            new EqualsAnyFilter('product.MoorlMerchants.id', $ids),
             $ids
         );
 
@@ -57,12 +50,6 @@ class ProductCriteriaSubscriber implements EventSubscriberInterface
 
     private function getMerchantEntityAggregation(): EntityAggregation
     {
-        return new EntityAggregation('merchant', 'product.merchants.id', MerchantDefinition::ENTITY_NAME);
-    }
-
-    public function processCriteria(SalesChannelProcessCriteriaEvent $event): void
-    {
-        $criteria = $event->getCriteria();
-        $criteria->addAssociation('merchants.avatar');
+        return new EntityAggregation('merchant', 'product.MoorlMerchants.id', MerchantDefinition::ENTITY_NAME);
     }
 }

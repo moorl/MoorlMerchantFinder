@@ -14,6 +14,53 @@
     </card>
 
     <card>
+        <title>Listing options</title>
+        <title lang="de-DE">Listing Optionen</title>
+
+        <input-field type="bool">
+            <name>productFilterMerchant</name>
+            <label>Merchant filter for product listing</label>
+            <label lang="de-DE">Händlerfilter für Produktlisten</label>
+            <defaultValue>true</defaultValue>
+        </input-field>
+
+        <input-field type="bool">
+            <name>merchantRadiusFilter</name>
+            <label>Radius filter for merchant listing</label>
+            <label lang="de-DE">Radius-Filter für Händlerliste</label>
+            <defaultValue>true</defaultValue>
+        </input-field>
+
+        <input-field type="bool">
+            <name>merchantSearchFilter</name>
+            <label>Text search for merchant listing</label>
+            <label lang="de-DE">Textsuche für Händlerliste</label>
+            <defaultValue>true</defaultValue>
+        </input-field>
+
+        <input-field type="bool">
+            <name>merchantCountryFilter</name>
+            <label>Country filter for merchant listing</label>
+            <label lang="de-DE">Länder-Filter für Händlerliste</label>
+            <defaultValue>true</defaultValue>
+        </input-field>
+
+        <input-field type="bool">
+            <name>merchantTagFilter</name>
+            <label>Tag filter for merchant listing</label>
+            <label lang="de-DE">Tag-Filter für Händlerliste</label>
+            <defaultValue>true</defaultValue>
+        </input-field>
+
+        <input-field type="bool">
+            <name>merchantManufacturerFilter</name>
+            <label>Manufacturer filter for merchant listing</label>
+            <label lang="de-DE">Hertseller-Filter für Händlerliste</label>
+            <defaultValue>true</defaultValue>
+        </input-field>
+    </card>
+
+    <card>
         <title>Merchant Results</title>
         <title lang="de-DE">Händler Ergebnisse</title>
 

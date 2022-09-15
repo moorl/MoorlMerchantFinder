@@ -2,15 +2,19 @@
 
 {% block component_filter_panel_items %}
     {% if cmsPage.firstElementOfType('merchant-listing') %}
-        {% sw_include '@Storefront/plugin/moorl-foundation/component/listing/filter/filter-radius.html.twig' with {
-            sidebar: sidebar,
-            displayName: 'moorl-foundation.listing.filter.radius'|trans
-        } %}
+        {% if config('MoorlMerchantFinder.config.merchantRadiusFilter') %}
+            {% sw_include '@Storefront/plugin/moorl-foundation/component/listing/filter/filter-radius.html.twig' with {
+                sidebar: sidebar,
+                displayName: 'moorl-foundation.listing.filter.radius'|trans
+            } %}
+        {% endif %}
 
-        {% sw_include '@Storefront/plugin/moorl-foundation/component/listing/filter/filter-search.html.twig' with {
-            sidebar: sidebar,
-            displayName: 'moorl-foundation.listing.filter.search'|trans
-        } %}
+        {% if config('MoorlMerchantFinder.config.merchantSearchFilter') %}
+            {% sw_include '@Storefront/plugin/moorl-foundation/component/listing/filter/filter-search.html.twig' with {
+                sidebar: sidebar,
+                displayName: 'moorl-foundation.listing.filter.search'|trans
+            } %}
+        {% endif %}
     {% endif %}
 
     {% set merchants = listing.aggregations.get('merchant') %}

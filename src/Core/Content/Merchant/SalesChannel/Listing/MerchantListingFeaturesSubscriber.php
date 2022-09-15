@@ -13,18 +13,23 @@ use MoorlFoundation\Core\Service\SortingService;
 use MoorlFoundation\Core\System\EntityListingFeaturesSubscriberExtension;
 use Shopware\Core\Content\Product\SalesChannel\Listing\FilterCollection;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
+use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class MerchantListingFeaturesSubscriber extends EntityListingFeaturesSubscriberExtension implements EventSubscriberInterface
 {
+    private SystemConfigService $systemConfigService;
+
     public function __construct(
         SortingService $sortingService,
-        LocationServiceV2 $locationServiceV2
+        LocationServiceV2 $locationServiceV2,
+        SystemConfigService $systemConfigService
     )
     {
         $this->sortingService = $sortingService;
         $this->locationServiceV2 = $locationServiceV2;
+        $this->systemConfigService = $systemConfigService;
         $this->entityName = MerchantDefinition::ENTITY_NAME;
     }
 
@@ -53,10 +58,18 @@ class MerchantListingFeaturesSubscriber extends EntityListingFeaturesSubscriberE
     {
         $filters = new FilterCollection();
 
-        $filters->add($this->getRadiusFilter($request, $context));
-        $filters->add($this->getManufacturerFilter($request));
-        $filters->add($this->getCountryFilter($request));
-        $filters->add($this->getTagFilter($request));
+        if ($this->systemConfigService->get('MoorlMerchantFinder.config.merchantRadiusFilter')) {
+            $filters->add($this->getRadiusFilter($request, $context));
+        }
+        if ($this->systemConfigService->get('MoorlMerchantFinder.config.merchantManufacturerFilter')) {
+            $filters->add($this->getManufacturerFilter($request));
+        }
+        if ($this->systemConfigService->get('MoorlMerchantFinder.config.merchantCountryFilter')) {
+            $filters->add($this->getCountryFilter($request));
+        }
+        if ($this->systemConfigService->get('MoorlMerchantFinder.config.merchantTagFilter')) {
+            $filters->add($this->getTagFilter($request));
+        }
 
         return $filters;
     }
