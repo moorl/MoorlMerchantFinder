@@ -87,7 +87,6 @@ class MerchantDefinition extends EntityDefinition
             (new StringField('type', 'type'))->addFlags(new EditField('text')),
             (new StringField('delivery_type', 'deliveryType'))->addFlags(new EditField('text')),
             (new StringField('department', 'department'))->addFlags(new EditField('text')),
-            (new StringField('country_code', 'countryCode'))->addFlags(new EditField('text')),
             (new TranslatedField('descriptionHtml'))->addFlags(new EditField('code')),
             new CustomFields(),
             new JsonField('data', 'data'),
