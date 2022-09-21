@@ -1,7 +1,7 @@
 {% sw_extends '@Storefront/storefront/component/listing/filter-panel.html.twig' %}
 
 {% block component_filter_panel_items %}
-    {% if cmsPage.firstElementOfType('merchant-listing') %}
+    {% if cmsPage.firstElementOfType('merchant-listing') or listing.entity == "moorl_merchant" %}
         {% if config('MoorlMerchantFinder.config.merchantRadiusFilter') %}
             {% sw_include '@Storefront/plugin/moorl-foundation/component/listing/filter/filter-radius.html.twig' with {
                 sidebar: sidebar,
