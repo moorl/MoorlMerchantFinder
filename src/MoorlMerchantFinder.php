@@ -46,6 +46,11 @@ class MoorlMerchantFinder extends Plugin
         'product_visibility',
         'seo_url_template'
     ];
+    public const INHERITANCES = [
+        'product' => ['MoorlMerchants', 'MoorlMerchantStocks'],
+        'sales_channel' => ['MoorlMerchants'],
+        'order_line_item' => ['MoorlMerchantStock'],
+    ];
 
     public function build(ContainerBuilder $container): void
     {
@@ -71,32 +76,38 @@ class MoorlMerchantFinder extends Plugin
             return;
         }
 
-        $this->removePluginData();
-        $this->dropTables();
+        $this->uninstallTrait();
     }
 
-    private function removePluginData(): void
-    {
-        $connection = $this->container->get(Connection::class);
-
-        foreach (array_reverse(self::SHOPWARE_TABLES) as $table) {
-            $sql = sprintf("SET FOREIGN_KEY_CHECKS=0; DELETE FROM `%s` WHERE `created_at` = '%s';", $table, self::DATA_CREATED_AT);
-
-            try {
-                $connection->executeUpdate($sql);
-            } catch (\Exception $exception) {
-                continue;
-            }
-        }
-    }
-
-    private function dropTables(): void
+    private function uninstallTrait(): void
     {
         $connection = $this->container->get(Connection::class);
 
         foreach (self::PLUGIN_TABLES as $table) {
             $sql = sprintf('SET FOREIGN_KEY_CHECKS=0; DROP TABLE IF EXISTS `%s`;', $table);
-            $connection->executeUpdate($sql);
+            $connection->executeStatement ($sql);
+        }
+
+        foreach (array_reverse(self::SHOPWARE_TABLES) as $table) {
+            $sql = sprintf("SET FOREIGN_KEY_CHECKS=0; DELETE FROM `%s` WHERE `created_at` = '%s';", $table, self::DATA_CREATED_AT);
+
+            try {
+                $connection->executeStatement ($sql);
+            } catch (\Exception $exception) {
+                continue;
+            }
+        }
+
+        foreach (self::INHERITANCES as $table => $propertyNames) {
+            foreach ($propertyNames as $propertyName) {
+                $sql = sprintf("ALTER TABLE `%s` DROP `%s`;", $table, $propertyName);
+
+                try {
+                    $connection->executeStatement ($sql);
+                } catch (\Exception $exception) {
+                    continue;
+                }
+            }
         }
     }
 

@@ -29,9 +29,7 @@ class MerchantTagDefinition extends MappingEntityDefinition
     {
         return new FieldCollection([
             (new FkField('moorl_merchant_id', 'moorlMerchantId', MerchantDefinition::class))->addFlags(new PrimaryKey(), new Required()),
-
             (new FkField('tag_id', 'tagId', TagDefinition::class))->addFlags(new PrimaryKey(), new Required()),
-
             new ManyToOneAssociationField('moorlMerchant', 'moorl_merchant_id', MerchantDefinition::class, 'id', false),
             new ManyToOneAssociationField('tag', 'tag_id', TagDefinition::class, 'id', false),
         ]);
