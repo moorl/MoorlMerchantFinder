@@ -49,6 +49,7 @@ class MoorlMerchantFinder extends Plugin
     public const INHERITANCES = [
         'product' => ['MoorlMerchants', 'MoorlMerchantStocks'],
         'sales_channel' => ['MoorlMerchants'],
+        'customer' => ['MoorlMerchants'],
         'order_line_item' => ['MoorlMerchantStock'],
     ];
 
