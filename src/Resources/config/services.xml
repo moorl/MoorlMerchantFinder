@@ -120,7 +120,9 @@
             <tag name="kernel.event_subscriber"/>
         </service>
 
-        <!-- Entity -->
+        <!-- Entities -->
+
+        <!-- Merchant -->
         <service id="Moorl\MerchantFinder\Core\Content\Merchant\MerchantDefinition">
             <tag name="shopware.entity.definition" entity="moorl_merchant" />
         </service>
@@ -167,19 +169,46 @@
             <tag name="shopware.entity.definition" entity="moorl_merchant_area" />
         </service>
 
-        <service id="Moorl\MerchantFinder\Core\Content\Aggregate\MerchantStock\MerchantStockDefinition">
-            <tag name="shopware.entity.definition" entity="moorl_merchant_stock" />
-        </service>
-
-        <service id="Moorl\MerchantFinder\Core\Content\Product\ProductExtension">
-            <tag name="shopware.entity.extension" />
-        </service>
-
         <service id="Moorl\MerchantFinder\Core\Content\Aggregate\MerchantCustomer\MerchantCustomerDefinition">
             <tag name="shopware.entity.definition" entity="moorl_merchant_customer" />
         </service>
 
+        <!-- Merchant Stock -->
+        <service id="Moorl\MerchantFinder\Core\Content\Aggregate\MerchantStock\MerchantStockDefinition">
+            <tag name="shopware.entity.definition" entity="moorl_merchant_stock"/>
+        </service>
+        <service id="Moorl\MerchantFinder\Core\Content\Aggregate\MerchantStock\MerchantStockUpdater">
+            <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry"/>
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <argument type="string">moorl_merchant_stock</argument>
+            <argument type="string">MoorlMerchantStock</argument>
+
+            <tag name="kernel.event_subscriber"/>
+        </service>
+        <service id="Moorl\MerchantFinder\Core\Content\Aggregate\MerchantStock\MerchantStockIndexer">
+            <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory"/>
+            <argument type="service" id="moorl_merchant_stock.repository"/>
+            <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="Moorl\MerchantFinder\Core\Content\Aggregate\MerchantStock\MerchantStockUpdater"/>
+
+            <tag name="shopware.entity_indexer"/>
+        </service>
+
+        <!-- Entity Extensions -->
+        <service id="Moorl\MerchantFinder\Core\Content\Product\ProductExtension">
+            <tag name="shopware.entity.extension" />
+        </service>
+
         <service id="Moorl\MerchantFinder\Core\Content\Customer\CustomerExtension">
+            <tag name="shopware.entity.extension" />
+        </service>
+
+        <service id="Moorl\MerchantFinder\Core\Content\OrderLineItem\OrderLineItemExtension">
+            <tag name="shopware.entity.extension" />
+        </service>
+
+        <service id="Moorl\MerchantFinder\Core\Content\SalesChannel\SalesChannelExtension">
             <tag name="shopware.entity.extension" />
         </service>
 

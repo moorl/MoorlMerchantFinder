@@ -5,6 +5,7 @@ namespace Moorl\MerchantFinder;
 use Doctrine\DBAL\Connection;
 use MoorlFoundation\Core\Service\DataService;
 use MoorlFoundation\Core\Service\LocationServiceV2;
+use Shopware\Core\Framework\Migration\InheritanceUpdaterTrait;
 use Shopware\Core\Framework\Plugin;
 use Shopware\Core\Framework\Plugin\Context\ActivateContext;
 use Shopware\Core\Framework\Plugin\Context\UninstallContext;
@@ -12,6 +13,8 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class MoorlMerchantFinder extends Plugin
 {
+    use InheritanceUpdaterTrait;
+
     public const NAME = 'MoorlMerchantFinder';
     public const DATA_CREATED_AT = '2003-03-03 03:03:10.000';
     public const CMS_PAGE = 'moorl_merchant';
@@ -63,6 +66,17 @@ class MoorlMerchantFinder extends Plugin
     public function activate(ActivateContext $activateContext): void
     {
         parent::activate($activateContext);
+
+        $connection = $this->container->get(Connection::class);
+        foreach (self::INHERITANCES as $table => $propertyNames) {
+            foreach ($propertyNames as $propertyName) {
+                try {
+                    $this->updateInheritance($connection, $table, $propertyName);
+                } catch (\Exception $exception) {
+                    continue;
+                }
+            }
+        }
 
         /* @var $dataService DataService */
         $dataService = $this->container->get(DataService::class);

@@ -20,6 +20,13 @@ class MerchantStockCollection extends EntityCollection
         return MerchantStockEntity::class;
     }
 
+    public function sortByAvailableStock(): void
+    {
+        $this->sort(function (MerchantStockEntity $a, MerchantStockEntity $b) {
+            return $b->getAvailableStock() <=> $a->getAvailableStock();
+        });
+    }
+
     public function filterByMerchantCustomerId(?string $customerId = null): self
     {
         return $this->filter(function (MerchantStockEntity $merchantStock) use ($customerId) {

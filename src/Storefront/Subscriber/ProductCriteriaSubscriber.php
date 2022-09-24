@@ -7,6 +7,7 @@ use Shopware\Core\Content\Product\Events\ProductListingCollectFilterEvent;
 use Shopware\Core\Content\Product\SalesChannel\Listing\Filter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Aggregation\Metric\EntityAggregation;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
+use Shopware\Core\System\SalesChannel\Event\SalesChannelProcessCriteriaEvent;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -22,7 +23,8 @@ class ProductCriteriaSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            ProductListingCollectFilterEvent::class => 'onProductListingCollectFilter'
+            ProductListingCollectFilterEvent::class => 'onProductListingCollectFilter',
+            'sales_channel.product.process.criteria' => 'processCriteria',
         ];
     }
 
@@ -51,5 +53,11 @@ class ProductCriteriaSubscriber implements EventSubscriberInterface
     private function getMerchantEntityAggregation(): EntityAggregation
     {
         return new EntityAggregation('merchant', 'product.MoorlMerchants.id', MerchantDefinition::ENTITY_NAME);
+    }
+
+    public function processCriteria(SalesChannelProcessCriteriaEvent $event): void
+    {
+        $criteria = $event->getCriteria();
+        $criteria->addAssociation('product.MoorlMerchants');
     }
 }
