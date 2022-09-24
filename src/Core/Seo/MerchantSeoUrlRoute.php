@@ -9,7 +9,7 @@ use Shopware\Core\Content\Seo\SeoUrlRoute\SeoUrlMapping;
 use Shopware\Core\Content\Seo\SeoUrlRoute\SeoUrlRouteConfig;
 use Shopware\Core\Content\Seo\SeoUrlRoute\SeoUrlRouteInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Entity;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\System\SalesChannel\SalesChannelEntity;
@@ -20,11 +20,11 @@ class MerchantSeoUrlRoute implements SeoUrlRouteInterface
     public const DEFAULT_TEMPLATE = 'merchant/{{ merchant.translated.name }}';
 
     private MerchantDefinition $entityDefinition;
-    private EntityRepositoryInterface $repository;
+    private EntityRepository $repository;
 
     public function __construct(
         MerchantDefinition $entityDefinition,
-        EntityRepositoryInterface $repository
+        EntityRepository $repository
     ) {
         $this->entityDefinition = $entityDefinition;
         $this->repository = $repository;

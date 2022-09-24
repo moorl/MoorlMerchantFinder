@@ -7,7 +7,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\ParameterType;
 use Shopware\Core\Content\Cms\CmsPageEvents;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Event\EntityLoadedEvent;
 use Shopware\Core\Framework\Struct\ArrayStruct;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
@@ -21,7 +21,7 @@ class StorefrontSubscriber implements EventSubscriberInterface
 
     public function __construct(
         SystemConfigService $systemConfigService,
-        EntityRepositoryInterface $mediaRepository,
+        EntityRepository $mediaRepository,
         Connection $connection
     )
     {

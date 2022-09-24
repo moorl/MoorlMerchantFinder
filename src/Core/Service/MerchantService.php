@@ -26,7 +26,7 @@ use Shopware\Core\Framework\Adapter\Translation\AbstractTranslator;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
@@ -99,7 +99,7 @@ class MerchantService
         RequestStack $requestStack,
         DefinitionInstanceRegistry $definitionInstanceRegistry,
         SystemConfigService $systemConfigService,
-        EntityRepositoryInterface $repository,
+        EntityRepository $repository,
         Connection $connection,
         Session $session,
         EventDispatcherInterface $eventDispatcher,

@@ -15,7 +15,7 @@ use Shopware\Core\Content\Sitemap\Struct\Url;
 use Shopware\Core\Content\Sitemap\Struct\UrlResult;
 use Shopware\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
 use Shopware\Core\Framework\DataAbstractionLayer\Doctrine\FetchModeHelper;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
@@ -32,7 +32,7 @@ class MerchantUrlProvider extends AbstractUrlProvider
     private Connection $connection;
     private MerchantDefinition $definition;
     private RouterInterface $router;
-    private EntityRepositoryInterface $repository;
+    private EntityRepository $repository;
     private SystemConfigService $systemConfigService;
 
     public function __construct(
@@ -41,7 +41,7 @@ class MerchantUrlProvider extends AbstractUrlProvider
         MerchantDefinition $definition,
         IteratorFactory $iteratorFactory,
         RouterInterface $router,
-        EntityRepositoryInterface $repository,
+        EntityRepository $repository,
         SystemConfigService $systemConfigService
     ) {
         $this->configHandler = $configHandler;
