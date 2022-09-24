@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.4.14
+
+* Note: Update moori Foundation first
+* After the update the plugin-list can disappear. No panic, just clear the shop cache. You can use ALT+C to clear it.
 * Removed unused files
 
 ## 2.4.13
