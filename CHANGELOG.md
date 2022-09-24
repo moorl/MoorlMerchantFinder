@@ -4,6 +4,7 @@
 
 * Important: Disable plugin before update, update moori Foundation first
 * Added unified stock updater/traits from moori Foundation
+* Fix ScrollTo focus on listing page
 
 ## 2.4.12
 
