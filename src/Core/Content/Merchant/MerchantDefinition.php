@@ -75,7 +75,7 @@ class MerchantDefinition extends EntityDefinition
 
     protected function defineFields(): FieldCollection
     {
-        $collection = new FieldCollection([
+        $collection = [
             (new IdField('id', 'id'))->addFlags(new PrimaryKey(), new Required()),
 
             (new BoolField('is_default', 'isDefault'))->addFlags(new EditField('switch')),
@@ -107,17 +107,20 @@ class MerchantDefinition extends EntityDefinition
             new OneToManyAssociationField('customers', MerchantCustomerDefinition::class, 'moorl_merchant_id'),
             new OneToManyAssociationField('merchantAreas', MerchantAreaDefinition::class, 'moorl_merchant_id'),
             new TranslationsAssociationField(MerchantTranslationDefinition::class, 'moorl_merchant_id'),
-        ]);
+        ];
 
-        FieldThingCollection::merge($collection);
-        FieldContactCollection::merge($collection);
-        FieldPersonCollection::merge($collection);
-        FieldAddressCollection::merge($collection);
-        FieldCompanyCollection::merge($collection);
-        FieldLocationCollection::merge($collection);
-        FieldOpeningHoursCollection::merge($collection);
-        FieldCustomCollection::merge($collection);
+        $collection = array_merge(
+            $collection,
+            FieldThingCollection::getFieldItems(),
+            FieldContactCollection::getFieldItems(),
+            FieldPersonCollection::getFieldItems(),
+            FieldAddressCollection::getFieldItems(),
+            FieldCompanyCollection::getFieldItems(),
+            FieldLocationCollection::getFieldItems(),
+            FieldOpeningHoursCollection::getFieldItems(),
+            FieldCustomCollection::getFieldItems(),
+        );
 
-        return $collection;
+        return new FieldCollection($collection);
     }
 }

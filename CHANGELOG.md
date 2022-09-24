@@ -1,5 +1,7 @@
 # Changelog
 
+* Removed unused files
+
 ## 2.4.13
 
 * Important: Disable plugin before update, update moori Foundation first

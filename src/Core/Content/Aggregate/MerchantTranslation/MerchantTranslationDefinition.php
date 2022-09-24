@@ -3,7 +3,7 @@
 namespace Moorl\MerchantFinder\Core\Content\Aggregate\MerchantTranslation;
 
 use Moorl\MerchantFinder\Core\Content\Merchant\MerchantDefinition;
-use MoorlFoundation\Core\Framework\DataAbstractionLayer\Collection\FieldThingTranslationCollection;
+use MoorlFoundation\Core\Framework\DataAbstractionLayer\Collection\FieldThingCollection;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityTranslationDefinition;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\AllowHtml;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\LongTextField;
@@ -35,12 +35,15 @@ class MerchantTranslationDefinition extends EntityTranslationDefinition
 
     protected function defineFields(): FieldCollection
     {
-        $collection =  new FieldCollection([
+        $collection =  [
             (new LongTextField('description_html', 'descriptionHtml'))->addFlags(new AllowHtml())
-        ]);
+        ];
 
-        FieldThingTranslationCollection::merge($collection);
+        $collection = array_merge(
+            $collection,
+            FieldThingCollection::getTranslatedFieldItems()
+        );
 
-        return $collection;
+        return new FieldCollection($collection);
     }
 }
