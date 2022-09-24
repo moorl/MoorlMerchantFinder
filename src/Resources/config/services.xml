@@ -129,7 +129,7 @@
             <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory"/>
             <argument type="service" id="moorl_merchant.repository"/>
             <argument type="service" id="event_dispatcher"/>
-            <argument type="service" id="MoorlFoundation\Core\Service\LocationService"/>
+            <argument type="service" id="MoorlFoundation\Core\Service\LocationServiceV2"/>
 
             <tag name="shopware.entity_indexer" priority="9000"/>
         </service>
