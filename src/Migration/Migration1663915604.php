@@ -20,7 +20,7 @@ class Migration1663915604 extends MigrationStep
     {
         $sql = <<<SQL
 ALTER TABLE `moorl_merchant_stock`
-ADD `available_stock` int(11) NOT NULL
+ADD `available_stock` int(11) NOT NULL,
 ADD `sales` INT(11) NOT NULL;
 SQL;
         $connection->executeStatement($sql);
