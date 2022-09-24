@@ -2,34 +2,18 @@
 
 namespace Moorl\MerchantFinder\Core\Seo;
 
-use Doctrine\DBAL\Connection;
 use Moorl\MerchantFinder\Core\Content\Merchant\MerchantIndexerEvent;
 use Shopware\Core\Content\Seo\SeoUrlUpdater;
-use Shopware\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexerRegistry;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class SeoUrlUpdateListener implements EventSubscriberInterface
 {
-    /**
-     * @var SeoUrlUpdater
-     */
-    private $seoUrlUpdater;
+    private SeoUrlUpdater $seoUrlUpdater;
 
-    /**
-     * @var Connection
-     */
-    private $connection;
 
-    /**
-     * @var EntityIndexerRegistry
-     */
-    private $indexerRegistry;
-
-    public function __construct(SeoUrlUpdater $seoUrlUpdater, Connection $connection, EntityIndexerRegistry $indexerRegistry)
+    public function __construct(SeoUrlUpdater $seoUrlUpdater)
     {
         $this->seoUrlUpdater = $seoUrlUpdater;
-        $this->connection = $connection;
-        $this->indexerRegistry = $indexerRegistry;
     }
 
     public static function getSubscribedEvents()

@@ -228,8 +228,6 @@
 
         <service id="Moorl\MerchantFinder\Core\Seo\SeoUrlUpdateListener">
             <argument type="service" id="Shopware\Core\Content\Seo\SeoUrlUpdater"/>
-            <argument type="service" id="Doctrine\DBAL\Connection"/>
-            <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexerRegistry"/>
 
             <tag name="kernel.event_subscriber"/>
         </service>
