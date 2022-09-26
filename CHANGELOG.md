@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.4.15
+
+* Restored EntityRepositoryInterface typehint
+
 ## 2.4.14
 
 * Note: Update moori Foundation first

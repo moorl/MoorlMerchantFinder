@@ -10,7 +10,7 @@ use Moorl\MerchantFinder\Core\Service\MerchantService;
 use Shopware\Core\Content\Cms\Exception\PageNotFoundException;
 use Shopware\Core\Content\Cms\SalesChannel\SalesChannelCmsPageLoaderInterface;
 use Shopware\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Shopware\Core\Framework\Struct\ArrayStruct;
@@ -34,7 +34,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class StorefrontController extends OriginController
 {
     /**
-     * @var EntityRepository
+     * @var EntityRepositoryInterface
      */
     private $repository;
     private $systemConfigService;
@@ -50,7 +50,7 @@ class StorefrontController extends OriginController
 
     public function __construct(
         SystemConfigService $systemConfigService,
-        EntityRepository $repository,
+        EntityRepositoryInterface $repository,
         MerchantService $merchantService,
         SalesChannelCmsPageLoaderInterface $cmsPageLoader,
         GenericPageLoader $genericLoader
