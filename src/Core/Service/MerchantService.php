@@ -99,7 +99,7 @@ class MerchantService
         RequestStack $requestStack,
         DefinitionInstanceRegistry $definitionInstanceRegistry,
         SystemConfigService $systemConfigService,
-        EntityRepositoryInterfaceInterface $repository,
+        EntityRepositoryInterface $repository,
         Connection $connection,
         Session $session,
         EventDispatcherInterface $eventDispatcher,
