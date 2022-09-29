@@ -6,6 +6,9 @@ use Moorl\MerchantFinder\Core\Content\Merchant\MerchantCollection;
 use Shopware\Core\Framework\Context;
 use Symfony\Contracts\EventDispatcher\Event;
 
+/**
+ * @deprecated: will be removed
+ */
 class MerchantsLoadedEvent extends Event
 {
     /**

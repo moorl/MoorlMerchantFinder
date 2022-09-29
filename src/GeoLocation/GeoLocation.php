@@ -16,6 +16,7 @@ namespace Moorl\MerchantFinder\GeoLocation;
  *
  * @author Anthony Martin
  * @version November 21 2012
+ * @deprecated: src/GeoLocation will be completely removed
  */
 class GeoLocation {
 

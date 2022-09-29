@@ -14,6 +14,9 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
 
+/**
+ * @deprecated: will be removed use LocationServiceV2 from Foundation
+ */
 class LocationService
 {
     public const SEARCH_ENGINE = 'https://nominatim.openstreetmap.org/search';

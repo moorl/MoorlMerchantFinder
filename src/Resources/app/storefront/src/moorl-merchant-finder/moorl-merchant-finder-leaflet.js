@@ -3,8 +3,10 @@ import FormSerializeUtil from 'src/utility/form/form-serialize.util';
 import DomAccess from 'src/helper/dom-access.helper';
 import HttpClient from 'src/service/http-client.service';
 import L from 'leaflet';
-import 'url-search-params-polyfill';
 
+/**
+ * @deprecated: will be removed
+ */
 export default class MoorlMerchantFinder extends Plugin {
 
     static options = {};

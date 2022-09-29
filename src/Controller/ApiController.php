@@ -22,6 +22,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route(defaults={"_routeScope"={"api"}})
+ * @deprecated: will be removed
  */
 class ApiController extends AbstractController
 {
