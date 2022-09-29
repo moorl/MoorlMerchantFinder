@@ -26,7 +26,7 @@ ADD `custom3` varchar(255) NULL AFTER `custom2`,
 ADD `custom4` varchar(255) NULL AFTER `custom3`;
 SQL;
 
-        $connection->executeUpdate($sql);
+        $connection->executeStatement($sql);
     }
 
     public function updateDestructive(Connection $connection): void

@@ -3,7 +3,6 @@
 namespace Moorl\MerchantFinder\Migration;
 
 use Doctrine\DBAL\Connection;
-use Moorl\MerchantFinder\MoorlMerchantFinder;
 use Shopware\Core\Framework\Migration\InheritanceUpdaterTrait;
 use Shopware\Core\Framework\Migration\MigrationStep;
 

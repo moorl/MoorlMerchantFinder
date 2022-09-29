@@ -22,7 +22,7 @@ ALTER TABLE `moorl_merchant`
 ADD `moorl_merchant_marker_id` BINARY(16) NULL AFTER `highlight`;
 SQL;
 
-        $connection->executeUpdate($sql);
+        $connection->executeStatement($sql);
 
         $sql = <<<SQL
 CREATE TABLE IF NOT EXISTS `moorl_merchant_marker` (
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `moorl_merchant_marker` (
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 SQL;
-        $connection->executeUpdate($sql);
+        $connection->executeStatement($sql);
 
         $sql = <<<SQL
 SET NAMES utf8mb4;
@@ -56,7 +56,7 @@ INSERT INTO `moorl_merchant_marker` (`id`, `marker_settings`, `name`, `created_a
 (UNHEX('FB3E870BB8AF468C983A02BFCB3F67F2'),	'{\"iconSizeX\": 25, \"iconSizeY\": 41, \"iconAnchorX\": 12, \"iconAnchorY\": 41, \"shadowSizeX\": 41, \"shadowSizeY\": 41, \"popupAnchorX\": 1, \"popupAnchorY\": -34, \"shadowAnchorX\": 6, \"shadowAnchorY\": 21}',	'Red', '2021-01-09 17:23:06.389');
 SQL;
 
-        //$connection->executeUpdate($sql);
+        //$connection->executeStatement($sql);
     }
 
     public function updateDestructive(Connection $connection): void

@@ -26,7 +26,7 @@ ADD `country_state_id` BINARY(16) NULL,
 ADD `location_place_id` VARCHAR(255) NULL,
 ADD `location_data` JSON NULL;
 SQL;
-        $connection->executeUpdate($sql);
+        $connection->executeStatement($sql);
 
         $sql = <<<SQL
 ALTER TABLE `moorl_merchant_translation`
@@ -36,7 +36,7 @@ ADD `meta_title` longtext COLLATE 'utf8mb4_unicode_ci' NULL,
 ADD `keywords` longtext COLLATE 'utf8mb4_unicode_ci' NULL,
 ADD `meta_description` longtext COLLATE 'utf8mb4_unicode_ci' NULL;
 SQL;
-        $connection->executeUpdate($sql);
+        $connection->executeStatement($sql);
 
         $sql = <<<SQL
 UPDATE `moorl_merchant_translation` 
@@ -44,7 +44,7 @@ SET
     `teaser` = `description`,
     `description` = `description_html`;
 SQL;
-        $connection->executeUpdate($sql);
+        $connection->executeStatement($sql);
     }
 
     public function updateDestructive(Connection $connection): void

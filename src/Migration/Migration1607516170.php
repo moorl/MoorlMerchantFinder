@@ -20,7 +20,7 @@ class Migration1607516170 extends MigrationStep
         $sql = <<<SQL
 DROP TABLE `moorl_merchant_customer`;
 SQL;
-        $connection->executeUpdate($sql);
+        $connection->executeStatement($sql);
 
         $sql = <<<SQL
 CREATE TABLE IF NOT EXISTS `moorl_merchant_customer` (
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `moorl_merchant_customer` (
         REFERENCES `moorl_merchant` (`id`) ON DELETE CASCADE ON UPDATE CASCADE     
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 SQL;
-        $connection->executeUpdate($sql);
+        $connection->executeStatement($sql);
     }
 
     public function updateDestructive(Connection $connection): void

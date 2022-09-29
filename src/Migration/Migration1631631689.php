@@ -38,7 +38,7 @@ ADD `place_of_jurisdiction` varchar(255) AFTER `marker_settings`,
 ADD `place_of_fulfillment` varchar(255) AFTER `marker_settings`,
 ADD `executive_director` varchar(255) AFTER `marker_settings`;
 SQL;
-        $connection->executeUpdate($sql);
+        $connection->executeStatement($sql);
 
         $sql = <<<SQL
 CREATE TABLE IF NOT EXISTS `moorl_merchant_area` (
@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS `moorl_merchant_area` (
         ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 SQL;
-        $connection->executeUpdate($sql);
+        $connection->executeStatement($sql);
     }
 
     public function updateDestructive(Connection $connection): void

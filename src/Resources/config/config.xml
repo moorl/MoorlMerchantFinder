@@ -68,7 +68,7 @@
             <name>showSearchLocation</name>
             <label>Show search location</label>
             <label lang="de-DE">Such Standort zeigen</label>
-            <defaultValue>false</defaultValue>
+            <defaultValue>true</defaultValue>
         </input-field>
 
         <input-field type="bool">
