@@ -71,4 +71,18 @@ class Data extends DataExtension implements DataInterface
     {
         return __DIR__;
     }
+
+    public function getPreInstallQueries(): array
+    {
+        return [
+            "DELETE FROM `seo_url_template` WHERE `route_name` = 'moorl.merchant-finder.merchant.page';"
+        ];
+    }
+
+    public function getInstallQueries(): array
+    {
+        return [
+            "INSERT IGNORE INTO `seo_url_template` (`id`,`is_valid`,`route_name`,`entity_name`,`template`) VALUES (UNHEX('{ID:WILD_0}'),1,'moorl.merchant.detail','moorl_merchant','merchant/{{ merchant.translated.name }}');"
+        ];
+    }
 }
