@@ -9,6 +9,7 @@ use Shopware\Core\Framework\Migration\InheritanceUpdaterTrait;
 use Shopware\Core\Framework\Plugin;
 use Shopware\Core\Framework\Plugin\Context\ActivateContext;
 use Shopware\Core\Framework\Plugin\Context\UninstallContext;
+use Shopware\Core\Framework\Plugin\Context\UpdateContext;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class MoorlMerchantFinder extends Plugin
@@ -67,20 +68,18 @@ class MoorlMerchantFinder extends Plugin
     {
         parent::activate($activateContext);
 
-        $connection = $this->container->get(Connection::class);
-        foreach (self::INHERITANCES as $table => $propertyNames) {
-            foreach ($propertyNames as $propertyName) {
-                try {
-                    $this->updateInheritance($connection, $table, $propertyName);
-                } catch (\Exception $exception) {
-                    continue;
-                }
-            }
-        }
+        $this->updateInheritances();
 
         /* @var $dataService DataService */
         $dataService = $this->container->get(DataService::class);
         $dataService->install(self::NAME);
+    }
+
+    public function update(UpdateContext $updateContext): void
+    {
+        parent::update($updateContext);
+
+        $this->updateInheritances();
     }
 
     public function uninstall(UninstallContext $uninstallContext): void
@@ -92,6 +91,21 @@ class MoorlMerchantFinder extends Plugin
         }
 
         $this->uninstallTrait();
+    }
+
+    private function updateInheritances(): void
+    {
+        $connection = $this->container->get(Connection::class);
+
+        foreach (self::INHERITANCES as $table => $propertyNames) {
+            foreach ($propertyNames as $propertyName) {
+                try {
+                    $this->updateInheritance($connection, $table, $propertyName);
+                } catch (\Exception $exception) {
+                    continue;
+                }
+            }
+        }
     }
 
     private function uninstallTrait(): void
