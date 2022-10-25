@@ -64,9 +64,8 @@
                         <template slot="append">
                             <sw-container columns="1fr 1fr" gap="0 20px">
                                 <sw-number-field :label="$tc('moorl-merchant-finder.properties.priority')" v-model="item.priority"/>
-
                                 <sw-field :label="$tc('moorl-merchant-finder.properties.originId')" v-model="item.originId"/>
-
+                                <sw-field :label="$tc('moorl-merchant-finder.properties.type')" v-model="item.type"/>
                                 <sw-field
                                         type="switch"
                                         bordered
