@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.4.19
+
+* Added TWIG template for the popup content of the map
+
 ## 2.4.14
 
 * Restored EntityRepositoryInterface typehint

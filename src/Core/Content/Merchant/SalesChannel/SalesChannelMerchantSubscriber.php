@@ -5,27 +5,39 @@ namespace Moorl\MerchantFinder\Core\Content\Merchant\SalesChannel;
 use Moorl\MerchantFinder\Core\Content\Merchant\MerchantEntity;
 use MoorlFoundation\Core\Content\Marker\MarkerCollection;
 use MoorlFoundation\Core\Content\Marker\MarkerDefinition;
+use Shopware\Core\Framework\Adapter\Twig\TemplateFinder;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Shopware\Core\Framework\DataAbstractionLayer\Event\EntityLoadedEvent;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\System\SalesChannel\Entity\SalesChannelEntityLoadedEvent;
+use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Twig\Environment;
 
 class SalesChannelMerchantSubscriber implements EventSubscriberInterface
 {
+    public const POPUP_CONTENT_PATH = "plugin/moorl-merchant-finder/component/merchant-listing/map-popup-content.html.twig";
+
     private DefinitionInstanceRegistry $definitionInstanceRegistry;
     private SystemConfigService $systemConfigService;
+    private TemplateFinder $templateFinder;
+    private Environment $twig;
     private ?MarkerCollection $markers = null;
+    private ?string $popupContentTemplate = null;
 
     public function __construct(
         DefinitionInstanceRegistry $definitionInstanceRegistry,
-        SystemConfigService $systemConfigService
+        SystemConfigService $systemConfigService,
+        TemplateFinder $templateFinder,
+        Environment $twig
     )
     {
         $this->definitionInstanceRegistry = $definitionInstanceRegistry;
         $this->systemConfigService = $systemConfigService;
+        $this->templateFinder = $templateFinder;
+        $this->twig = $twig;
     }
 
     public static function getSubscribedEvents(): array
@@ -60,17 +72,23 @@ class SalesChannelMerchantSubscriber implements EventSubscriberInterface
     {
         $this->initMarkers($event->getContext());
 
+        $salesChannelContext = $event->getSalesChannelContext();
+
         $defaultMarker = $this->markers->get($this->systemConfigService->get(
             'MoorlMerchantFinder.config.defaultMarker',
-            $event->getSalesChannelContext()->getSalesChannelId()
+            $salesChannelContext->getSalesChannelId()
         ));
         $highlightMarker = $this->markers->get($this->systemConfigService->get(
             'MoorlMerchantFinder.config.highlightMarker',
-            $event->getSalesChannelContext()->getSalesChannelId()
+            $salesChannelContext->getSalesChannelId()
         ));
 
         /** @var SalesChannelMerchantEntity $entity */
         foreach ($event->getEntities() as $entity) {
+            $entity->setPopupContent(
+                $this->getPopupContent($entity, $salesChannelContext)
+            );
+
             if ($entity->getMarkerId()) {
                 continue;
             }
@@ -81,6 +99,22 @@ class SalesChannelMerchantSubscriber implements EventSubscriberInterface
                 $entity->setMarker($defaultMarker);
             }
         }
+    }
+
+    private function getPopupContent(SalesChannelMerchantEntity $merchant, SalesChannelContext $salesChannelContext): string
+    {
+        if (!$this->popupContentTemplate) {
+            $this->popupContentTemplate = $this->templateFinder->find(self::POPUP_CONTENT_PATH);
+        }
+
+        if (isset($this->twig)) {
+            return $this->twig->render($this->popupContentTemplate, [
+                'merchant' => $merchant,
+                'context' => $salesChannelContext
+            ]);
+        }
+
+        return self::POPUP_CONTENT_PATH;
     }
 
     private function initMarkers(Context $context): void

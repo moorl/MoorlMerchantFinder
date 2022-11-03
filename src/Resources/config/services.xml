@@ -103,6 +103,8 @@
         <service id="Moorl\MerchantFinder\Core\Content\Merchant\SalesChannel\SalesChannelMerchantSubscriber" public="true">
             <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry"/>
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <argument type="service" id="Shopware\Core\Framework\Adapter\Twig\TemplateFinder"/>
+            <argument type="service" id="twig"/>
 
             <tag name="kernel.event_subscriber"/>
         </service>

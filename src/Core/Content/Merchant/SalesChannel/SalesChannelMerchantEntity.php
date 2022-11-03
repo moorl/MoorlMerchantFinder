@@ -6,6 +6,16 @@ use Moorl\MerchantFinder\Core\Content\Merchant\MerchantEntity;
 
 class SalesChannelMerchantEntity extends MerchantEntity
 {
+    protected string $popupContent = "plugin/moorl-merchant-finder/component/merchant-listing/map-popup-content.html.twig";
+
+    /**
+     * @param string $popupContent
+     */
+    public function setPopupContent(string $popupContent): void
+    {
+        $this->popupContent = $popupContent;
+    }
+
     /**
      * @return array
      */
@@ -18,16 +28,7 @@ class SalesChannelMerchantEntity extends MerchantEntity
                 $this->locationLon,
             ],
             'icon' => $this->marker ? $this->marker->getLeafletMarker() : false,
-            'popup' => sprintf(
-                "<p><strong>%s</strong><br>%s %s<br>%s %s<br>%s %s<br></p>",
-                $this->getTranslation('name'),
-                $this->street,
-                $this->streetNumber,
-                $this->zipcode,
-                $this->city,
-                $this->countryState ? $this->countryState->getTranslation('name') : "",
-                $this->country ? $this->country->getTranslation('name') : ""
-            )
+            'popup' => $this->popupContent
         ];
     }
 }
