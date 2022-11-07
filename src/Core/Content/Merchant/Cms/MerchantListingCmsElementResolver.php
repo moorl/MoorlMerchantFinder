@@ -35,7 +35,7 @@ class MerchantListingCmsElementResolver extends FoundationListingCmsElementResol
         /* Enrich additional filters */
         $config = $slot->getFieldConfig();
         $listingSourceConfig = $config->get('listingSource');
-        if ($listingSourceConfig /*&& $listingSourceConfig->getValue() === 'static'*/) {
+        if ($listingSourceConfig) {
             $typeFilterConfig = $config->get('typeFilter');
             if ($typeFilterConfig && $typeFilterConfig->getValue()) {
                 $criteria->addFilter(new EqualsFilter(
