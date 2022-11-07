@@ -7,6 +7,7 @@ use Shopware\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotEntity;
 use Shopware\Core\Content\Cms\DataResolver\Element\ElementDataCollection;
 use Shopware\Core\Content\Cms\DataResolver\ResolverContext\ResolverContext;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 
 class MerchantListingCmsElementResolver extends FoundationListingCmsElementResolver
 {
@@ -30,6 +31,19 @@ class MerchantListingCmsElementResolver extends FoundationListingCmsElementResol
         $criteria->addAssociation('country');
 
         $this->enrichCmsElementResolverCriteriaV2($slot, $criteria, $resolverContext);
+
+        /* Enrich additional filters */
+        $config = $slot->getFieldConfig();
+        $listingSourceConfig = $config->get('listingSource');
+        if ($listingSourceConfig /*&& $listingSourceConfig->getValue() === 'static'*/) {
+            $typeFilterConfig = $config->get('typeFilter');
+            if ($typeFilterConfig && $typeFilterConfig->getValue()) {
+                $criteria->addFilter(new EqualsFilter(
+                    'moorl_merchant.type',
+                    $typeFilterConfig->getValue()
+                ));
+            }
+        }
 
         $listing = $this->listingRoute
             ->load($navigationId, $request, $salesChannelContext, $criteria)

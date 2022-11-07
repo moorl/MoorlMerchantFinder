@@ -10,5 +10,10 @@ Shopware.Service('cmsService').registerCmsElement({
     label: 'sw-cms.elements.moorl-foundation-listing.name',
     component: 'sw-cms-el-merchant-listing',
     configComponent: 'sw-cms-el-config-merchant-listing',
-    defaultConfig: {}
+    defaultConfig: {
+        typeFilter: {
+            source: 'static',
+            value: null
+        },
+    }
 });

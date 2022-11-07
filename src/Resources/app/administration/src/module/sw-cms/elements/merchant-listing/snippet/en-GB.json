@@ -2,7 +2,9 @@
     "sw-cms": {
         "elements": {
             "merchant-listing": {
-                "name": "Merchant listing"
+                "name": "Merchant listing",
+                "typeFilterLabel": "Filter listing by type",
+                "typeFilterHelpText": "You can define a type for your merchants. If you set a type for this listing, just merchants with the same type are shown."
             }
         }
     }
