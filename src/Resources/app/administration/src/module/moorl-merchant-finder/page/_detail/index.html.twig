@@ -86,7 +86,13 @@
 
                     <moorl-location-card v-if="active === 'address'" :item="item"/>
 
-                    <moorl-layout-card-v2 v-if="active === 'layout'" :item="item" entity="moorl_merchant" pageType="merchant_detail"/>
+                    <moorl-layout-card-v2
+                            v-if="active === 'layout'"
+                            :item="item"
+                            entity="moorl_merchant"
+                            pageType="merchant_detail"
+                            @save-cms-config="onClickSave"
+                    />
 
                     <sw-card v-if="active === 'stock'"
                              :isLoading="isLoading"

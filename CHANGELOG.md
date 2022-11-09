@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.4.21
+
+* Bugfix for CMS Configuration
+
+## 2.4.20
+
+* Optional CMS listing filter by type to separate entries from each other
+
 ## 2.4.19
 
 * Added TWIG template for the popup content of the map
