@@ -69,7 +69,9 @@ class MerchantDefinition extends EntityDefinition
     {
         return [
             'openingHours' => OpeningHoursDefaults::getOpeningHours(),
-            'autoLocation' => false
+            'autoLocation' => false,
+            'showOpeningHours' => true,
+            'showCmsPage' => true
         ];
     }
 
@@ -79,6 +81,8 @@ class MerchantDefinition extends EntityDefinition
             (new IdField('id', 'id'))->addFlags(new PrimaryKey(), new Required()),
 
             (new BoolField('is_default', 'isDefault'))->addFlags(new EditField('switch')),
+            (new BoolField('show_opening_hours', 'showOpeningHours'))->addFlags(new EditField('switch')),
+            (new BoolField('show_cms_page', 'showCmsPage'))->addFlags(new EditField('switch')),
             (new BoolField('delivery_active', 'deliveryActive'))->addFlags(new EditField('switch')),
             (new BoolField('collect_active', 'collectActive'))->addFlags(new EditField('switch')),
             (new BoolField('highlight', 'highlight'))->addFlags(new EditField('switch')),

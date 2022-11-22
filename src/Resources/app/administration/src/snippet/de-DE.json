@@ -58,6 +58,7 @@
             "mediaFolder": "In diesem Ordner Bilder speichern"
         },
         "properties": {
+            "showCmsPage": "Link zur CMS-Seite anzeigen",
             "oneDayYearlyLoop": "Einzelner Tag mit jährlicher Wiederholung",
             "localStore": "Nur dieser Händler",
             "cmsPageId": "CMS Seiten ID",

@@ -39,7 +39,7 @@
                 {% endblock %}
 
                 {% block moorl_merchant_listing_box_actions_more %}
-                    {% if config('MoorlMerchantFinder.config.detailPage') %}
+                    {% if config('MoorlMerchantFinder.config.detailPage') and merchant.showCmsPage %}
                         <a href="{{ seoUrl('moorl.merchant.detail', { merchantId: merchant.id }) }}" class="btn btn-light">
                             {% sw_icon 'map-pin' style {size:'sm', pack:'fas'} %}
                             {{ "moorl-merchant-finder.more"|trans }}

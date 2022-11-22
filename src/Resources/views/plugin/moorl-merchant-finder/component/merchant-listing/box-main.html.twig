@@ -61,7 +61,7 @@
 
     <div class="col-12">
         {% block element_moorl_merchant_finder_result_opening_hours %}
-            {% if config('MoorlMerchantFinder.config.showOpeningHours') %}
+            {% if config('MoorlMerchantFinder.config.showOpeningHours') and merchant.showOpeningHours %}
                 {% if merchant.openingHours %}
                     {% sw_icon 'clock' style {size:'xs', pack:'fas'} %}
                     <b>{{ "moorl-merchant-finder.openingHours"|trans }}</b>

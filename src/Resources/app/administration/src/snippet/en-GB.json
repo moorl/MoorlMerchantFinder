@@ -63,6 +63,7 @@
             "mediaFolder": "Save images in this folder"
         },
         "properties": {
+            "showCmsPage": "Show link to CMS page",
             "oneDayYearlyLoop": "Single day with yearly loop",
             "localStore": "Just local Store",
             "merchant": "Store",

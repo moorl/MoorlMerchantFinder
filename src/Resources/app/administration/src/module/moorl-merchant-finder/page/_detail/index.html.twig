@@ -72,6 +72,12 @@
                                         :label="$tc('moorl-merchant-finder.properties.highlight')"
                                         v-model="item.highlight"
                                 />
+                                <sw-field
+                                        type="switch"
+                                        bordered
+                                        :label="$tc('moorl-merchant-finder.properties.showCmsPage')"
+                                        v-model="item.showCmsPage"
+                                />
                             </sw-container>
                         </template>
                     </moorl-thing-card>
@@ -152,7 +158,16 @@
                         </moorl-entity-grid>
                     </sw-card>
 
-                    <moorl-opening-hours-card v-if="active === 'timeSettings'" :item="item"/>
+                    <moorl-opening-hours-card v-if="active === 'timeSettings'" :item="item">
+                        <template slot="append">
+                            <sw-field
+                                    type="switch"
+                                    bordered
+                                    :label="$tc('moorl-merchant-finder.properties.showOpeningHours')"
+                                    v-model="item.showOpeningHours"
+                            />
+                        </template>
+                    </moorl-opening-hours-card>
 
                     <sw-card v-if="active === 'other'"
                              :isLoading="isLoading"
