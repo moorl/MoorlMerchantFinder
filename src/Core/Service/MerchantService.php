@@ -426,8 +426,6 @@ class MerchantService
 
         if ($salesChannelContext) {
             $criteria->addFilter(new MerchantAvailableFilter($salesChannelContext, $domain));
-        } else {
-            die("NO SALES CHANNEL CONTEXT SET");
         }
     }
 
