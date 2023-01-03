@@ -1,7 +1,7 @@
 {
     "name": "moorl/merchant-finder",
     "description": "Store Locator for Shopware 6",
-    "version": "2.4.22",
+    "version": "2.4.23",
     "license": "proprietary",
     "authors": [
         {

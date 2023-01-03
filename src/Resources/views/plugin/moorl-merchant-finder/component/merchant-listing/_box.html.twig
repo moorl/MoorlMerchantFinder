@@ -74,7 +74,7 @@
                     <div class="btn-group btn-group-sm">
                         {% block moorl_merchant_listing_box_actions_inner %}
                             {% if item.locationPlaceId %}
-                                <a class="btn btn-light" href="https://www.google.com/maps/place/?q=place_id:/{{ item.locationPlaceId }}" target="_blank" rel="noopener">
+                                <a class="btn btn-light" href="https://www.google.com/maps/search/?api=1&query={{ item.name }}&query_place_id={{ item.locationPlaceId }}" target="_blank" rel="noopener">
                                     {{ "moorl-foundation.buttons.placeIdLink"|trans }}
                                 </a>
                             {% endif %}
