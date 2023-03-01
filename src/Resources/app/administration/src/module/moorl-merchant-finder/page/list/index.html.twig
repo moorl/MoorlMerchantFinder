@@ -56,16 +56,6 @@
                 @column-sort="onSortColumn"
                 @update-records="updateTotal"
         >
-            <template #column-active="{ item, isInlineEdit }">
-                <template v-if="isInlineEdit">
-                    <sw-checkbox-field v-model="item.active"></sw-checkbox-field>
-                </template>
-                <template v-else>
-                    <sw-icon v-if="item.active" name="small-default-checkmark-line-medium" small class="is--active"></sw-icon>
-                    <sw-icon v-else name="small-default-x-line-medium" small class="is--inactive"></sw-icon>
-                </template>
-            </template>
-
             <template #column-countryCode="{ item }">
                 <span>{{ item.countryCode }}-{{ item.zipcode }}</span>
             </template>
