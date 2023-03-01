@@ -14,49 +14,31 @@ class MerchantPage extends Page
     protected ProductListingResult $products;
     protected ?CmsPageEntity $cmsPage = null;
 
-    /**
-     * @return CmsPageEntity|null
-     */
     public function getCmsPage(): ?CmsPageEntity
     {
         return $this->cmsPage;
     }
 
-    /**
-     * @param CmsPageEntity|null $cmsPage
-     */
     public function setCmsPage(?CmsPageEntity $cmsPage): void
     {
         $this->cmsPage = $cmsPage;
     }
 
-    /**
-     * @return MerchantEntity
-     */
     public function getMerchant(): MerchantEntity
     {
         return $this->merchant;
     }
 
-    /**
-     * @param MerchantEntity $merchant
-     */
     public function setMerchant(MerchantEntity $merchant): void
     {
         $this->merchant = $merchant;
     }
 
-    /**
-     * @return ProductListingResult
-     */
     public function getProducts(): ProductListingResult
     {
         return $this->products;
     }
 
-    /**
-     * @param ProductListingResult $products
-     */
     public function setProducts(ProductListingResult $products): void
     {
         $this->products = $products;

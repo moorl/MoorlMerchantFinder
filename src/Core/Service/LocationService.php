@@ -2,6 +2,7 @@
 
 namespace Moorl\MerchantFinder\Core\Service;
 
+use function guzzlehttp\psr7\build_query;
 use Moorl\MerchantFinder\GeoLocation\GeoPoint;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
@@ -19,22 +20,17 @@ use Symfony\Component\HttpFoundation\Session\Session;
  */
 class LocationService
 {
-    public const SEARCH_ENGINE = 'https://nominatim.openstreetmap.org/search';
+    final public const SEARCH_ENGINE = 'https://nominatim.openstreetmap.org/search';
 
     private ?Context $context;
-    private DefinitionInstanceRegistry $definitionInstanceRegistry;
-    private SystemConfigService $systemConfigService;
     protected ClientInterface $client;
     protected \DateTimeImmutable $now;
 
     public function __construct(
-        DefinitionInstanceRegistry $definitionInstanceRegistry,
-        SystemConfigService $systemConfigService
+        private readonly DefinitionInstanceRegistry $definitionInstanceRegistry,
+        private readonly SystemConfigService $systemConfigService
     )
     {
-        $this->definitionInstanceRegistry = $definitionInstanceRegistry;
-        $this->systemConfigService = $systemConfigService;
-
         $this->client = new Client([
             'timeout' => 200,
             'allow_redirects' => false,
@@ -192,22 +188,16 @@ class LocationService
 
                 return null;
             }
-        } catch (\Exception $exception) {}
+        } catch (\Exception) {}
 
         return null;
     }
 
-    /**
-     * @return Context|null
-     */
     public function getContext(): ?Context
     {
         return $this->context;
     }
 
-    /**
-     * @param Context|null $context
-     */
     public function setContext(?Context $context): void
     {
         $this->context = $context;
@@ -222,7 +212,7 @@ class LocationService
 
         $httpBody = json_encode($data);
 
-        $query = \guzzlehttp\psr7\build_query($query);
+        $query = build_query($query);
 
         $request = new Request(
             $method,
@@ -246,7 +236,7 @@ class LocationService
 
         try {
             return json_decode($contents, true);
-        } catch (\Exception $exception) {
+        } catch (\Exception) {
             throw new \Exception(
                 sprintf('[%d] Error decoding JSON: %s', $statusCode, $contents),
                 $statusCode

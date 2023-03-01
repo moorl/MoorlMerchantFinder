@@ -2,6 +2,7 @@
 
 namespace Moorl\MerchantFinder\Core\Service;
 
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\ParameterType;
@@ -26,7 +27,6 @@ use Shopware\Core\Framework\Adapter\Translation\AbstractTranslator;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
@@ -53,117 +53,60 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
  */
 class MerchantService
 {
-    private $repository;
-    private $systemConfigService;
-    private $session;
-    private $connection;
-    /**
-     * @var int|null
-     */
-    private $merchantsCount;
+    private ?int $merchantsCount = null;
     /**
      * @var array|null
      */
     private $myLocation;
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-    /**
-     * @var SalesChannelContext|null
-     */
-    private $salesChannelContext;
-    /**
-     * @var SeoUrlPlaceholderHandlerInterface
-     */
-    private $seoUrlReplacer;
-    /**
-     * @var DefinitionInstanceRegistry
-     */
-    private $definitionInstanceRegistry;
-    /**
-     * @var Context
-     */
-    private $context;
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
+    private ?SalesChannelContext $salesChannelContext = null;
+    private ?Context $context = null;
     /**
      * @var MarkerCollection
      */
     private $markers;
-    /*
-     * @var AbstractTranslator
-     */
-    private $translator;
 
     public function __construct(
-        RequestStack $requestStack,
-        DefinitionInstanceRegistry $definitionInstanceRegistry,
-        SystemConfigService $systemConfigService,
-        EntityRepositoryInterface $repository,
-        Connection $connection,
-        Session $session,
-        EventDispatcherInterface $eventDispatcher,
-        SeoUrlPlaceholderHandlerInterface $seoUrlReplacer,
-        AbstractTranslator $translator
+        private readonly RequestStack $requestStack,
+        private readonly DefinitionInstanceRegistry $definitionInstanceRegistry,
+        private readonly SystemConfigService $systemConfigService,
+        private readonly EntityRepository $repository,
+        private readonly Connection $connection,
+        private readonly Session $session,
+        private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly SeoUrlPlaceholderHandlerInterface $seoUrlReplacer,
+        /*
+         * @var AbstractTranslator
+         */
+        private readonly AbstractTranslator $translator
     )
     {
-        $this->requestStack = $requestStack;
-        $this->definitionInstanceRegistry = $definitionInstanceRegistry;
-        $this->systemConfigService = $systemConfigService;
-        $this->repository = $repository;
-        $this->connection = $connection;
-        $this->session = $session;
-        $this->eventDispatcher = $eventDispatcher;
-        $this->seoUrlReplacer = $seoUrlReplacer;
-        $this->translator = $translator;
     }
 
-    /**
-     * @return Context
-     */
     public function getContext(): Context
     {
         return $this->context;
     }
 
-    /**
-     * @param Context $context
-     */
     public function setContext(Context $context): void
     {
         $this->context = $context;
     }
 
-    /**
-     * @return array|null
-     */
     public function getMyLocation(): ?array
     {
         return $this->myLocation;
     }
 
-    /**
-     * @param array|null $myLocation
-     */
     public function setMyLocation(?array $myLocation): void
     {
         $this->myLocation = $myLocation;
     }
 
-    /**
-     * @return int|null
-     */
     public function getMerchantsCount(): ?int
     {
         return $this->merchantsCount;
     }
 
-    /**
-     * @param int|null $merchantsCount
-     */
     public function setMerchantsCount(?int $merchantsCount): void
     {
         $this->merchantsCount = $merchantsCount;
@@ -474,7 +417,7 @@ class MerchantService
         $offset = (int)$data->get('offset') ?: 0;
 
         $context = $this->getContext();
-        $options = new ArrayStruct(json_decode($data->get('options'), true) ?: []);
+        $options = new ArrayStruct(json_decode((string) $data->get('options'), true) ?: []);
 
         if ($data->get('id')) {
             $criteria = new Criteria([$data->get('id')]);
@@ -556,7 +499,7 @@ class MerchantService
         }
 
         if ($data->get('type')) {
-            $types = explode(',', $data->get('type'));
+            $types = explode(',', (string) $data->get('type'));
             $criteria->addFilter(new EqualsAnyFilter('type', $types));
         }
 
@@ -648,7 +591,7 @@ class MerchantService
         }
 
         $pluginConfig = $this->systemConfigService->getDomain('MoorlMerchantFinder.config');
-        $filterCountries = !empty($pluginConfig['MoorlMerchantFinder.config.allowedSearchCountryCodes']) ? explode(',', $pluginConfig['MoorlMerchantFinder.config.allowedSearchCountryCodes']) : MoorlMerchantFinder::getDefault('allowedSearchCountryCodes');
+        $filterCountries = !empty($pluginConfig['MoorlMerchantFinder.config.allowedSearchCountryCodes']) ? explode(',', (string) $pluginConfig['MoorlMerchantFinder.config.allowedSearchCountryCodes']) : MoorlMerchantFinder::getDefault('allowedSearchCountryCodes');
         $searchEngine = !empty($pluginConfig['MoorlMerchantFinder.config.nominatim']) ? $pluginConfig['MoorlMerchantFinder.config.nominatim'] : MoorlMerchantFinder::getDefault('nominatim');
 
         $sql = <<<SQL
@@ -662,7 +605,7 @@ SQL;
                 'zipcode' => $term . '%',
                 'countries' => implode(',', $filterCountries),
             ]
-        )->fetchAll(FetchMode::ASSOCIATIVE);
+        )->fetchAllAssociative();
 
         // No location found - Get them from OSM
         if (count($myLocation) == 0) {
@@ -743,9 +686,6 @@ SQL;
         return $this->salesChannelContext;
     }
 
-    /**
-     * @param SalesChannelContext $salesChannelContext
-     */
     public function setSalesChannelContext(SalesChannelContext $salesChannelContext): void
     {
         $this->salesChannelContext = $salesChannelContext;

@@ -60,9 +60,6 @@ class MerchantEntity extends Entity
     protected ?string $countryCode = null;
     protected ?string $type = null;
 
-    /**
-     * @return string|null
-     */
     public function getCmsPageId(): ?string
     {
         return $this->cmsPageId ?: MoorlMerchantFinder::CMS_PAGE_MERCHANT_DEFAULT_ID;
@@ -84,337 +81,211 @@ class MerchantEntity extends Entity
         $this->customers = $customers;
     }
 
-    /**
-     * @return MerchantStockCollection|null
-     */
     public function getMerchantStocks(): ?MerchantStockCollection
     {
         return $this->merchantStocks;
     }
 
-    /**
-     * @param MerchantStockCollection|null $merchantStocks
-     */
     public function setMerchantStocks(?MerchantStockCollection $merchantStocks): void
     {
         $this->merchantStocks = $merchantStocks;
     }
 
-    /**
-     * @return MerchantStockEntity|null
-     */
     public function getMerchantStock(): ?MerchantStockEntity
     {
         return $this->merchantStock;
     }
 
-    /**
-     * @param MerchantStockEntity|null $merchantStock
-     */
     public function setMerchantStock(?MerchantStockEntity $merchantStock): void
     {
         $this->merchantStock = $merchantStock;
     }
 
-    /**
-     * @return string|null
-     */
     public function getSeoUrl(): ?string
     {
         return $this->seoUrl;
     }
 
-    /**
-     * @param string|null $seoUrl
-     */
     public function setSeoUrl(?string $seoUrl): void
     {
         $this->seoUrl = $seoUrl;
     }
 
-    /**
-     * @return int|null
-     */
     public function getDistance(): ?int
     {
         return $this->distance;
     }
 
-    /**
-     * @param int|null $distance
-     */
     public function setDistance(?int $distance): void
     {
         $this->distance = $distance;
     }
 
-    /**
-     * @return bool
-     */
     public function getAllowMerchantCustomerContact(): bool
     {
         return $this->allowMerchantCustomerContact;
     }
 
-    /**
-     * @param bool $allowMerchantCustomerContact
-     */
     public function setAllowMerchantCustomerContact(bool $allowMerchantCustomerContact): void
     {
         $this->allowMerchantCustomerContact = $allowMerchantCustomerContact;
     }
 
-    /**
-     * @return bool
-     */
     public function getHighlight(): bool
     {
         return $this->highlight;
     }
 
-    /**
-     * @param bool $highlight
-     */
     public function setHighlight(bool $highlight): void
     {
         $this->highlight = $highlight;
     }
 
-    /**
-     * @return int
-     */
     public function getPriority(): int
     {
         return $this->priority;
     }
 
-    /**
-     * @param int $priority
-     */
     public function setPriority(int $priority): void
     {
         $this->priority = $priority;
     }
 
-    /**
-     * @return ProductManufacturerCollection|null
-     */
     public function getManufacturers(): ?ProductManufacturerCollection
     {
         return $this->manufacturers;
     }
 
-    /**
-     * @param ProductManufacturerCollection|null $manufacturers
-     */
     public function setManufacturers(?ProductManufacturerCollection $manufacturers): void
     {
         $this->manufacturers = $manufacturers;
     }
 
-    /**
-     * @return ProductManufacturerCollection|null
-     */
     public function getProductManufacturers(): ?ProductManufacturerCollection
     {
         return $this->productManufacturers;
     }
 
-    /**
-     * @param ProductManufacturerCollection|null $productManufacturers
-     */
     public function setProductManufacturers(?ProductManufacturerCollection $productManufacturers): void
     {
         $this->productManufacturers = $productManufacturers;
     }
 
-    /**
-     * @return TagCollection|null
-     */
     public function getTags(): ?TagCollection
     {
         return $this->tags;
     }
 
-    /**
-     * @param TagCollection|null $tags
-     */
     public function setTags(?TagCollection $tags): void
     {
         $this->tags = $tags;
     }
 
-    /**
-     * @return CategoryCollection|null
-     */
     public function getCategories(): ?CategoryCollection
     {
         return $this->categories;
     }
 
-    /**
-     * @param CategoryCollection|null $categories
-     */
     public function setCategories(?CategoryCollection $categories): void
     {
         $this->categories = $categories;
     }
 
-    /**
-     * @return string|null
-     */
     public function getSalesChannelId(): ?string
     {
         return $this->salesChannelId;
     }
 
-    /**
-     * @param string|null $salesChannelId
-     */
     public function setSalesChannelId(?string $salesChannelId): void
     {
         $this->salesChannelId = $salesChannelId;
     }
 
-    /**
-     * @return string|null
-     */
     public function getCustomerGroupId(): ?string
     {
         return $this->customerGroupId;
     }
 
-    /**
-     * @param string|null $customerGroupId
-     */
     public function setCustomerGroupId(?string $customerGroupId): void
     {
         $this->customerGroupId = $customerGroupId;
     }
 
-    /**
-     * @return ProductManufacturerEntity|null
-     */
     public function getManufacturer(): ?ProductManufacturerEntity
     {
         return $this->manufacturer;
     }
 
-    /**
-     * @param ProductManufacturerEntity|null $manufacturer
-     */
     public function setManufacturer(?ProductManufacturerEntity $manufacturer): void
     {
         $this->manufacturer = $manufacturer;
     }
     
-    /**
-     * @return SalesChannelEntity|null
-     */
     public function getSalesChannel(): ?SalesChannelEntity
     {
         return $this->salesChannel;
     }
 
-    /**
-     * @param SalesChannelEntity|null $salesChannel
-     */
     public function setSalesChannel(?SalesChannelEntity $salesChannel): void
     {
         $this->salesChannel = $salesChannel;
     }
 
-    /**
-     * @return array|null
-     */
     public function getData(): ?array
     {
         return $this->data;
     }
 
-    /**
-     * @param array|null $data
-     */
     public function setData(?array $data): void
     {
         $this->data = $data;
     }
 
-    /**
-     * @return string|null
-     */
     public function getDepartment(): ?string
     {
         return $this->department;
     }
 
-    /**
-     * @param string|null $department
-     */
     public function setDepartment(?string $department): void
     {
         $this->department = $department;
     }
 
-    /**
-     * @return CustomerEntity|null
-     */
     public function getCustomer(): ?CustomerEntity
     {
         return $this->customer;
     }
 
-    /**
-     * @param CustomerEntity|null $customer
-     */
     public function setCustomer(?CustomerEntity $customer): void
     {
         $this->customer = $customer;
     }
 
-    /**
-     * @return string|null
-     */
     public function getOriginId(): ?string
     {
         return $this->originId;
     }
 
-    /**
-     * @param string|null $originId
-     */
     public function setOriginId(?string $originId): void
     {
         $this->originId = $originId;
     }
 
-    /**
-     * @return string|null
-     */
     public function getCountryCode(): ?string
     {
         return $this->countryCode;
     }
 
-    /**
-     * @param string|null $countryCode
-     */
     public function setCountryCode(?string $countryCode): void
     {
         $this->countryCode = $countryCode;
     }
 
-    /**
-     * @return string|null
-     */
     public function getType(): ?string
     {
         return $this->type;
     }
 
-    /**
-     * @param string|null $type
-     */
     public function setType(?string $type): void
     {
         $this->type = $type;

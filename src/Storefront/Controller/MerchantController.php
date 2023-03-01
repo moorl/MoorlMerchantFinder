@@ -12,23 +12,17 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route(defaults={"_routeScope"={"storefront"}})
- */
+#[Route(defaults: ['_routeScope' => ['storefront']])]
 class MerchantController extends StorefrontController
 {
-    private MerchantPageLoader $merchantPageLoader;
-
-    public function __construct(
-        MerchantPageLoader $merchantPageLoader
-    ) {
-        $this->merchantPageLoader = $merchantPageLoader;
+    public function __construct(private readonly MerchantPageLoader $merchantPageLoader)
+    {
     }
 
     /**
      * @HttpCache()
-     * @Route("/merchant/{merchantId}", name="moorl.merchant.detail", methods={"GET"}, defaults={"XmlHttpRequest"=true})
      */
+    #[Route(path: '/merchant/{merchantId}', name: 'moorl.merchant.detail', methods: ['GET'], defaults: ['XmlHttpRequest' => true])]
     public function detail(SalesChannelContext $context, Request $request): Response
     {
         $page = $this->merchantPageLoader->load($request, $context);
@@ -44,9 +38,7 @@ class MerchantController extends StorefrontController
         ]);
     }
 
-    /**
-     * @Route("/merchant/{merchantId}/products", name="moorl.merchant.products", methods={"GET"}, defaults={"XmlHttpRequest"=true})
-     */
+    #[Route(path: '/merchant/{merchantId}/products', name: 'moorl.merchant.products', methods: ['GET'], defaults: ['XmlHttpRequest' => true])]
     public function products(SalesChannelContext $context, Request $request): Response
     {
         $page = $this->merchantPageLoader->load($request, $context);
@@ -56,9 +48,7 @@ class MerchantController extends StorefrontController
         ]);
     }
 
-    /**
-     * @Route("/merchant/{merchantId}/filter", name="moorl.merchant.filter", methods={"GET"}, defaults={"XmlHttpRequest"=true})
-     */
+    #[Route(path: '/merchant/{merchantId}/filter', name: 'moorl.merchant.filter', methods: ['GET'], defaults: ['XmlHttpRequest' => true])]
     public function filter(SalesChannelContext $context, Request $request): JsonResponse
     {
        return new JsonResponse([]);

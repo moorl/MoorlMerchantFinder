@@ -10,16 +10,8 @@ use Doctrine\DBAL\Connection;
 
 class Data extends DataExtension implements DataInterface
 {
-    private Connection $connection;
-    private DefinitionInstanceRegistry $definitionInstanceRegistry;
-
-    public function __construct(
-        Connection $connection,
-        DefinitionInstanceRegistry $definitionInstanceRegistry
-    )
+    public function __construct(private readonly Connection $connection, private readonly DefinitionInstanceRegistry $definitionInstanceRegistry)
     {
-        $this->connection = $connection;
-        $this->definitionInstanceRegistry = $definitionInstanceRegistry;
     }
 
     public function getTables(): ?array

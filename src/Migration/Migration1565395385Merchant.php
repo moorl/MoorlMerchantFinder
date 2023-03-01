@@ -9,7 +9,7 @@ class Migration1565395385Merchant extends MigrationStep
 {
     public function getCreationTimestamp(): int
     {
-        return 1565395385;
+        return 1_565_395_385;
     }
 
     public function update(Connection $connection): void

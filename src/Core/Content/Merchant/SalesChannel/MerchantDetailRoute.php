@@ -2,6 +2,7 @@
 
 namespace Moorl\MerchantFinder\Core\Content\Merchant\SalesChannel;
 
+use Shopware\Core\System\SalesChannel\Entity\SalesChannelRepository;
 use Moorl\MerchantFinder\Core\Content\Merchant\MerchantDefinition;
 use Shopware\Core\Content\Cms\DataResolver\ResolverContext\EntityResolverContext;
 use Shopware\Core\Content\Cms\Exception\PageNotFoundException;
@@ -9,31 +10,18 @@ use Shopware\Core\Content\Cms\SalesChannel\SalesChannelCmsPageLoaderInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Shopware\Core\Framework\Plugin\Exception\DecorationPatternException;
-use Shopware\Core\System\SalesChannel\Entity\SalesChannelRepositoryInterface;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route(defaults={"_routeScope"={"store-api"}})
- */
+#[Route(defaults: ['_routeScope' => ['store-api']])]
 class MerchantDetailRoute
 {
-    private SalesChannelRepositoryInterface $merchantRepository;
-    private SalesChannelCmsPageLoaderInterface $cmsPageLoader;
-    private MerchantDefinition $merchantDefinition;
-
-    public function __construct(
-        SalesChannelRepositoryInterface $merchantRepository,
-        SalesChannelCmsPageLoaderInterface $cmsPageLoader,
-        MerchantDefinition $merchantDefinition
-    ) {
-        $this->merchantRepository = $merchantRepository;
-        $this->cmsPageLoader = $cmsPageLoader;
-        $this->merchantDefinition = $merchantDefinition;
+    public function __construct(private readonly SalesChannelRepository $merchantRepository, private readonly SalesChannelCmsPageLoaderInterface $cmsPageLoader, private readonly MerchantDefinition $merchantDefinition)
+    {
     }
 
-    public function getDecorated()
+    public function getDecorated(): never
     {
         throw new DecorationPatternException(self::class);
     }

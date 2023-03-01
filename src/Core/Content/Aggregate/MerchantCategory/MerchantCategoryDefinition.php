@@ -14,7 +14,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\MappingEntityDefinition;
 
 class MerchantCategoryDefinition extends MappingEntityDefinition
 {
-    public const ENTITY_NAME = 'moorl_merchant_category';
+    final public const ENTITY_NAME = 'moorl_merchant_category';
 
     public function getEntityName(): string
     {

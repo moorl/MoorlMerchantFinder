@@ -13,14 +13,8 @@ use Shopware\Elasticsearch\Framework\Indexing\EntityMapper;
 
 class ProductEsDefinitionDecorator extends AbstractElasticsearchDefinition
 {
-    private AbstractElasticsearchDefinition $decorated;
-
-    private Connection $connection;
-
-    public function __construct(AbstractElasticsearchDefinition $decorated, Connection $connection)
+    public function __construct(private readonly AbstractElasticsearchDefinition $decorated, private readonly Connection $connection)
     {
-        $this->decorated = $decorated;
-        $this->connection = $connection;
     }
 
     public function getEntityDefinition(): EntityDefinition
@@ -58,9 +52,7 @@ class ProductEsDefinitionDecorator extends AbstractElasticsearchDefinition
 
         $parentIds = \array_filter(\array_column($documents, 'parentId'));
 
-        $fetchingIds = \array_unique(\array_merge($parentIds, \array_map(function ($id) {
-            return Uuid::fromBytesToHex($id);
-        }, $ids)));
+        $fetchingIds = \array_unique(\array_merge($parentIds, \array_map(fn($id) => Uuid::fromBytesToHex($id), $ids)));
 
         $merchants = $this->fetchCreators($fetchingIds);
 
@@ -74,13 +66,9 @@ class ProductEsDefinitionDecorator extends AbstractElasticsearchDefinition
             if (isset($merchants[$document['id']])) {
                 $merchantsItem = $merchants[$document['id']];
 
-                $document['MoorlMerchants'] = \array_map(static function (
-                    $cpId
-                ) {
-                    return [
-                        'id' => $cpId
-                    ];
-                },
+                $document['MoorlMerchants'] = \array_map(static fn($cpId) => [
+                    'id' => $cpId
+                ],
                     \array_column($merchantsItem, 'moorl_merchant_id')
                 );
             }

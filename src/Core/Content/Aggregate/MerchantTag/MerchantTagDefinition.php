@@ -13,7 +13,7 @@ use Shopware\Core\System\Tag\TagDefinition;
 
 class MerchantTagDefinition extends MappingEntityDefinition
 {
-    public const ENTITY_NAME = 'moorl_merchant_tag';
+    final public const ENTITY_NAME = 'moorl_merchant_tag';
 
     public function getEntityName(): string
     {

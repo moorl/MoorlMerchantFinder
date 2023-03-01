@@ -16,12 +16,12 @@ class MoorlMerchantFinder extends Plugin
 {
     use InheritanceUpdaterTrait;
 
-    public const NAME = 'MoorlMerchantFinder';
-    public const DATA_CREATED_AT = '2003-03-03 03:03:10.000';
-    public const CMS_PAGE = 'moorl_merchant';
-    public const CMS_PAGE_ID = 'd294117e81a9dee634b92f190d7719a3';
-    public const CMS_PAGE_MERCHANT_DEFAULT_ID = 'fa05048f53068a5ec29e2c9aea4e8c40';
-    public const PLUGIN_TABLES = [
+    final public const NAME = 'MoorlMerchantFinder';
+    final public const DATA_CREATED_AT = '2003-03-03 03:03:10.000';
+    final public const CMS_PAGE = 'moorl_merchant';
+    final public const CMS_PAGE_ID = 'd294117e81a9dee634b92f190d7719a3';
+    final public const CMS_PAGE_MERCHANT_DEFAULT_ID = 'fa05048f53068a5ec29e2c9aea4e8c40';
+    final public const PLUGIN_TABLES = [
         'moorl_merchant',
         'moorl_zipcode',
         'moorl_merchant_category',
@@ -35,7 +35,7 @@ class MoorlMerchantFinder extends Plugin
         'moorl_merchant_area',
         'moorl_merchant_sales_channel'
     ];
-    public const SHOPWARE_TABLES = [
+    final public const SHOPWARE_TABLES = [
         'media_folder',
         'moorl_sorting',
         'cms_page',
@@ -50,7 +50,7 @@ class MoorlMerchantFinder extends Plugin
         'product_visibility',
         'seo_url_template'
     ];
-    public const INHERITANCES = [
+    final public const INHERITANCES = [
         'product' => ['MoorlMerchants', 'MoorlMerchantStocks'],
         'sales_channel' => ['MoorlMerchants'],
         'customer' => ['MoorlMerchants'],
@@ -101,7 +101,7 @@ class MoorlMerchantFinder extends Plugin
             foreach ($propertyNames as $propertyName) {
                 try {
                     $this->updateInheritance($connection, $table, $propertyName);
-                } catch (\Exception $exception) {
+                } catch (\Exception) {
                     continue;
                 }
             }
@@ -122,7 +122,7 @@ class MoorlMerchantFinder extends Plugin
 
             try {
                 $connection->executeStatement ($sql);
-            } catch (\Exception $exception) {
+            } catch (\Exception) {
                 continue;
             }
         }
@@ -133,14 +133,14 @@ class MoorlMerchantFinder extends Plugin
 
                 try {
                     $connection->executeStatement ($sql);
-                } catch (\Exception $exception) {
+                } catch (\Exception) {
                     continue;
                 }
             }
         }
     }
 
-    private static $_defaults = [
+    private static array $_defaults = [
         'allowedSearchCountryCodes' => ['de', 'at', 'ch'],
         'nominatim' => 'https://nominatim.openstreetmap.org/search',
     ];

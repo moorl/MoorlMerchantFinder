@@ -11,7 +11,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\FieldCollection;
 
 class MerchantTranslationDefinition extends EntityTranslationDefinition
 {
-    public const ENTITY_NAME = 'moorl_merchant_translation';
+    final public const ENTITY_NAME = 'moorl_merchant_translation';
 
     public function getEntityName(): string
     {

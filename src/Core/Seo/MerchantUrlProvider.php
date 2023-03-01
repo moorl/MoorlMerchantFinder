@@ -2,6 +2,7 @@
 
 namespace Moorl\MerchantFinder\Core\Seo;
 
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\ParameterType;
@@ -15,7 +16,6 @@ use Shopware\Core\Content\Sitemap\Struct\Url;
 use Shopware\Core\Content\Sitemap\Struct\UrlResult;
 use Shopware\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
 use Shopware\Core\Framework\DataAbstractionLayer\Doctrine\FetchModeHelper;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
@@ -25,32 +25,10 @@ use Symfony\Component\Routing\RouterInterface;
 
 class MerchantUrlProvider extends AbstractUrlProvider
 {
-    public const CHANGE_FREQ = 'weekly';
+    final public const CHANGE_FREQ = 'weekly';
 
-    private IteratorFactory $iteratorFactory;
-    private ConfigHandler $configHandler;
-    private Connection $connection;
-    private MerchantDefinition $definition;
-    private RouterInterface $router;
-    private EntityRepositoryInterface $repository;
-    private SystemConfigService $systemConfigService;
-
-    public function __construct(
-        ConfigHandler $configHandler,
-        Connection $connection,
-        MerchantDefinition $definition,
-        IteratorFactory $iteratorFactory,
-        RouterInterface $router,
-        EntityRepositoryInterface $repository,
-        SystemConfigService $systemConfigService
-    ) {
-        $this->configHandler = $configHandler;
-        $this->connection = $connection;
-        $this->definition = $definition;
-        $this->iteratorFactory = $iteratorFactory;
-        $this->router = $router;
-        $this->repository = $repository;
-        $this->systemConfigService = $systemConfigService;
+    public function __construct(private readonly ConfigHandler $configHandler, private readonly Connection $connection, private readonly MerchantDefinition $definition, private readonly IteratorFactory $iteratorFactory, private readonly RouterInterface $router, private readonly EntityRepository $repository, private readonly SystemConfigService $systemConfigService)
+    {
     }
 
     public function getDecorated(): AbstractUrlProvider

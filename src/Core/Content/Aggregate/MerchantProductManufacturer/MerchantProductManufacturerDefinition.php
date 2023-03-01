@@ -13,7 +13,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\MappingEntityDefinition;
 
 class MerchantProductManufacturerDefinition extends MappingEntityDefinition
 {
-    public const ENTITY_NAME = 'moorl_merchant_product_manufacturer';
+    final public const ENTITY_NAME = 'moorl_merchant_product_manufacturer';
 
     public function getEntityName(): string
     {

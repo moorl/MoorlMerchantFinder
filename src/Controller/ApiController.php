@@ -21,44 +21,30 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route(defaults={"_routeScope"={"api"}})
  * @deprecated: will be removed
  */
+#[Route(defaults: ['_routeScope' => ['api']])]
 class ApiController extends AbstractController
 {
-    private $genericLoader;
-    private $systemConfigService;
-
-    public function __construct(
-        GenericPageLoader $genericLoader,
-        SystemConfigService $systemConfigService
-    )
+    public function __construct(private readonly GenericPageLoader $genericLoader, private readonly SystemConfigService $systemConfigService)
     {
-        $this->genericLoader = $genericLoader;
-        $this->systemConfigService = $systemConfigService;
     }
 
-    /**
-     * @Route("/api/v{version}/moorl/merchant-finder/import", name="api.moorl.merchant-finder.import", methods={"POST"}, requirements={"version"="\d+"})
-     */
+    #[Route(path: '/api/v{version}/moorl/merchant-finder/import', name: 'api.moorl.merchant-finder.import', methods: ['POST'], requirements: ['version' => '\d+'])]
     public function import(Request $request, Context $context): JsonResponse
     {
         // TODO: make it happen
         return new JsonResponse();
     }
 
-    /**
-     * @Route("/api/v{version}/moorl/merchant-finder/update-locations", name="api.moorl.merchant-finder.update-locations", methods={"POST"}, requirements={"version"="\d+"})
-     */
+    #[Route(path: '/api/v{version}/moorl/merchant-finder/update-locations', name: 'api.moorl.merchant-finder.update-locations', methods: ['POST'], requirements: ['version' => '\d+'])]
     public function updateLocations(Context $context): JsonResponse
     {
         // TODO: make it happen
         return new JsonResponse();
     }
 
-    /**
-     * @Route("/api/v{version}/moorl/merchant-finder/export", name="api.moorl.merchant-finder.export", methods={"GET"}, requirements={"version"="\d+"})
-     */
+    #[Route(path: '/api/v{version}/moorl/merchant-finder/export', name: 'api.moorl.merchant-finder.export', methods: ['GET'], requirements: ['version' => '\d+'])]
     public function export(Context $context): NoContentResponse
     {
         $data = [];
@@ -123,9 +109,7 @@ class ApiController extends AbstractController
                 if ($v) {
                     $obj = $entity->get($k);
                     if ($obj instanceof EntityCollection) {
-                        $item[$k] = implode("|", $obj->map(function(Entity $subEntity) use ($v) {
-                            return $subEntity->get($v);
-                        }));
+                        $item[$k] = implode("|", $obj->map(fn(Entity $subEntity) => $subEntity->get($v)));
                     }
                     if ($obj instanceof Entity) {
                         $item[$k] = $obj->get($v);

@@ -11,17 +11,11 @@ class MerchantTranslationEntity extends TranslationEntity
 
     protected ?string $descriptionHtml = null;
 
-    /**
-     * @return string|null
-     */
     public function getDescriptionHtml(): ?string
     {
         return $this->descriptionHtml;
     }
 
-    /**
-     * @param string|null $descriptionHtml
-     */
     public function setDescriptionHtml(?string $descriptionHtml): void
     {
         $this->descriptionHtml = $descriptionHtml;

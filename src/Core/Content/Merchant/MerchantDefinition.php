@@ -48,7 +48,7 @@ use Shopware\Core\System\Tag\TagDefinition;
 
 class MerchantDefinition extends EntityDefinition
 {
-    public const ENTITY_NAME = 'moorl_merchant';
+    final public const ENTITY_NAME = 'moorl_merchant';
 
     public function getEntityName(): string
     {

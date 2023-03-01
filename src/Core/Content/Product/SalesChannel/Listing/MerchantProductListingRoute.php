@@ -17,23 +17,11 @@ use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
-/**
- * @Route(defaults={"_routeScope"={"store-api"}})
- */
+#[Route(defaults: ['_routeScope' => ['store-api']])]
 class MerchantProductListingRoute extends AbstractProductListingRoute
 {
-    private AbstractProductListingRoute $decorated;
-    private ProductListingLoader $listingLoader;
-    private EventDispatcherInterface $eventDispatcher;
-
-    public function __construct(
-        AbstractProductListingRoute $decorated,
-        ProductListingLoader $listingLoader,
-        EventDispatcherInterface $eventDispatcher
-    ) {
-        $this->decorated = $decorated;
-        $this->listingLoader = $listingLoader;
-        $this->eventDispatcher = $eventDispatcher;
+    public function __construct(private readonly AbstractProductListingRoute $decorated, private readonly ProductListingLoader $listingLoader, private readonly EventDispatcherInterface $eventDispatcher)
+    {
     }
 
     public function getDecorated(): AbstractProductListingRoute

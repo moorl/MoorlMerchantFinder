@@ -2,6 +2,7 @@
 
 namespace Moorl\MerchantFinder\Controller;
 
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\ParameterType;
@@ -10,7 +11,6 @@ use Moorl\MerchantFinder\Core\Service\MerchantService;
 use Shopware\Core\Content\Cms\Exception\PageNotFoundException;
 use Shopware\Core\Content\Cms\SalesChannel\SalesChannelCmsPageLoaderInterface;
 use Shopware\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Shopware\Core\Framework\Struct\ArrayStruct;
@@ -28,53 +28,21 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route(defaults={"_routeScope"={"storefront"}})
- */
+#[Route(defaults: ['_routeScope' => ['storefront']])]
 class StorefrontController extends OriginController
 {
-    /**
-     * @var EntityRepositoryInterface
-     */
-    private $repository;
-    private $systemConfigService;
-    private $merchantService;
-    /**
-     * @var SalesChannelCmsPageLoaderInterface
-     */
-    private $cmsPageLoader;
-    /**
-     * @var GenericPageLoader
-     */
-    private $genericLoader;
-
-    public function __construct(
-        SystemConfigService $systemConfigService,
-        EntityRepositoryInterface $repository,
-        MerchantService $merchantService,
-        SalesChannelCmsPageLoaderInterface $cmsPageLoader,
-        GenericPageLoader $genericLoader
-    )
+    public function __construct(private readonly SystemConfigService $systemConfigService, private readonly EntityRepository $repository, private readonly MerchantService $merchantService, private readonly SalesChannelCmsPageLoaderInterface $cmsPageLoader, private readonly GenericPageLoader $genericLoader)
     {
-        $this->systemConfigService = $systemConfigService;
-        $this->repository = $repository;
-        $this->merchantService = $merchantService;
-        $this->cmsPageLoader = $cmsPageLoader;
-        $this->genericLoader = $genericLoader;
     }
 
-    /**
-     * @Route("/moorl/merchant-finder/suggest", name="moorl.merchant-finder.search", methods={"POST"}, defaults={"XmlHttpRequest"=true})
-     */
+    #[Route(path: '/moorl/merchant-finder/suggest', name: 'moorl.merchant-finder.search', methods: ['POST'], defaults: ['XmlHttpRequest' => true])]
     public function suggest(Request $request, RequestDataBag $data, SalesChannelContext $context): JsonResponse
     {
         // TODO: Suggest Search, OSM doesn't allow service here
         return new JsonResponse();
     }
 
-    /**
-     * @Route("/moorl/merchant-finder/search", name="moorl.merchant-finder.search", methods={"POST"}, defaults={"XmlHttpRequest"=true})
-     */
+    #[Route(path: '/moorl/merchant-finder/search', name: 'moorl.merchant-finder.search', methods: ['POST'], defaults: ['XmlHttpRequest' => true])]
     public function search(Request $request, RequestDataBag $data, SalesChannelContext $context): JsonResponse
     {
         $response = new JsonResponse();
@@ -91,9 +59,7 @@ class StorefrontController extends OriginController
         return $response;
     }
 
-    /**
-     * @Route("/moorl/merchant-finder/unset", name="moorl.merchant-finder.unset", methods={"POST"}, defaults={"XmlHttpRequest"=true})
-     */
+    #[Route(path: '/moorl/merchant-finder/unset', name: 'moorl.merchant-finder.unset', methods: ['POST'], defaults: ['XmlHttpRequest' => true])]
     public function unset(RequestDataBag $data, SalesChannelContext $context): Response
     {
         $this->setCustomerSession($data, $context);
@@ -101,9 +67,7 @@ class StorefrontController extends OriginController
         return $this->redirectToRoute('frontend.home.page');
     }
 
-    /**
-     * @Route("/moorl/merchant-finder/merchant/modal/{merchantId}", name="moorl.merchant-finder.merchant.modal", methods={"GET"}, defaults={"XmlHttpRequest"=true})
-     */
+    #[Route(path: '/moorl/merchant-finder/merchant/modal/{merchantId}', name: 'moorl.merchant-finder.merchant.modal', methods: ['GET'], defaults: ['XmlHttpRequest' => true])]
     public function merchantModal($merchantId, Request $request, SalesChannelContext $context): Response
     {
         $merchant = $this->getMerchant($merchantId, $request, $context);
@@ -119,9 +83,7 @@ class StorefrontController extends OriginController
         ]);
     }
 
-    /**
-     * @Route("/moorl/merchant-finder/merchant/page/{merchantId}", name="moorl.merchant-finder.merchant.page", methods={"GET"}, defaults={"XmlHttpRequest"=true})
-     */
+    #[Route(path: '/moorl/merchant-finder/merchant/page/{merchantId}', name: 'moorl.merchant-finder.merchant.page', methods: ['GET'], defaults: ['XmlHttpRequest' => true])]
     public function merchantPage($merchantId, Request $request, SalesChannelContext $context): Response
     {
         $page = $this->genericLoader->load($request, $context);

@@ -59,17 +59,11 @@ class OpeningHourEntity extends Entity
         $this->_uniqueIdentifier = $uniqueIdentifier;
     }
 
-    /**
-     * @return string|null
-     */
     public function getMerchantId(): ?string
     {
         return $this->merchantId;
     }
 
-    /**
-     * @param string|null $merchantId
-     */
     public function setMerchantId(?string $merchantId): void
     {
         $this->merchantId = $merchantId;
@@ -91,97 +85,61 @@ class OpeningHourEntity extends Entity
         $this->merchant = $merchant;
     }
 
-    /**
-     * @return DateTimeImmutable|null
-     */
     public function getDate(): ?DateTimeImmutable
     {
         return $this->date;
     }
 
-    /**
-     * @param DateTimeImmutable|null $date
-     */
     public function setDate(?DateTimeImmutable $date): void
     {
         $this->date = $date;
     }
 
-    /**
-     * @return DateTimeImmutable|null
-     */
     public function getShowFrom(): ?DateTimeImmutable
     {
         return $this->showFrom;
     }
 
-    /**
-     * @param DateTimeImmutable|null $showFrom
-     */
     public function setShowFrom(?DateTimeImmutable $showFrom): void
     {
         $this->showFrom = $showFrom;
     }
 
-    /**
-     * @return DateTimeImmutable|null
-     */
     public function getShowUntil(): ?DateTimeImmutable
     {
         return $this->showUntil;
     }
 
-    /**
-     * @param DateTimeImmutable|null $showUntil
-     */
     public function setShowUntil(?DateTimeImmutable $showUntil): void
     {
         $this->showUntil = $showUntil;
     }
 
-    /**
-     * @return bool|null
-     */
     public function getRepeat(): ?bool
     {
         return $this->repeat;
     }
 
-    /**
-     * @param bool|null $repeat
-     */
     public function setRepeat(?bool $repeat): void
     {
         $this->repeat = $repeat;
     }
 
-    /**
-     * @return string|null
-     */
     public function getTitle(): ?string
     {
         return $this->title;
     }
 
-    /**
-     * @param string|null $title
-     */
     public function setTitle(?string $title): void
     {
         $this->title = $title;
     }
 
-    /**
-     * @return array|null
-     */
     public function getOpeningHours(): ?array
     {
         return $this->openingHours;
     }
 
-    /**
-     * @param array|null $openingHours
-     */
     public function setOpeningHours(?array $openingHours): void
     {
         $this->openingHours = $openingHours;

@@ -13,7 +13,7 @@ use Shopware\Core\System\SalesChannel\SalesChannelDefinition;
 
 class MerchantSalesChannelDefinition extends MappingEntityDefinition
 {
-    public const ENTITY_NAME = 'moorl_merchant_sales_channel';
+    final public const ENTITY_NAME = 'moorl_merchant_sales_channel';
 
     public function getEntityName(): string
     {

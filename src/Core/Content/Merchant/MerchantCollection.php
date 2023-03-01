@@ -20,32 +20,24 @@ class MerchantCollection extends EntityCollection
 
     public function getExport(): array
     {
-        return $this->fmap(function (MerchantEntity $merchant) {
-            return $merchant->getMediaId();
-        });
+        return $this->fmap(fn(MerchantEntity $merchant) => $merchant->getMediaId());
     }
 
     public function getMediaIds(): array
     {
-        return $this->fmap(function (MerchantEntity $merchant) {
-            return $merchant->getMediaId();
-        });
+        return $this->fmap(fn(MerchantEntity $merchant) => $merchant->getMediaId());
     }
 
     public function sortByDistance(): self
     {
-        $this->sort(function (MerchantEntity $a, MerchantEntity $b) {
-            return $a->getDistance() > $b->getDistance();
-        });
+        $this->sort(fn(MerchantEntity $a, MerchantEntity $b) => $a->getDistance() > $b->getDistance());
 
         return $this;
     }
 
     public function filterByMediaId(string $id): self
     {
-        return $this->filter(function (MerchantEntity $merchant) use ($id) {
-            return $merchant->getMediaId() === $id;
-        });
+        return $this->filter(fn(MerchantEntity $merchant) => $merchant->getMediaId() === $id);
     }
 
     protected function getExpectedClass(): string

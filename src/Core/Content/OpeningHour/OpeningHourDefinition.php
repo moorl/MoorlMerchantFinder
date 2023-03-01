@@ -19,7 +19,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\FieldCollection;
 
 class OpeningHourDefinition extends EntityDefinition
 {
-    public const ENTITY_NAME = 'moorl_merchant_oh';
+    final public const ENTITY_NAME = 'moorl_merchant_oh';
 
     public function getEntityName(): string
     {

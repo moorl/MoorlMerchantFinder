@@ -19,17 +19,14 @@ use Symfony\Component\HttpFoundation\Request;
 
 class MerchantListingFeaturesSubscriber extends EntityListingFeaturesSubscriberExtension implements EventSubscriberInterface
 {
-    private SystemConfigService $systemConfigService;
-
     public function __construct(
         SortingService $sortingService,
         LocationServiceV2 $locationServiceV2,
-        SystemConfigService $systemConfigService
+        private readonly SystemConfigService $systemConfigService
     )
     {
         $this->sortingService = $sortingService;
         $this->locationServiceV2 = $locationServiceV2;
-        $this->systemConfigService = $systemConfigService;
         $this->entityName = MerchantDefinition::ENTITY_NAME;
     }
 

@@ -19,7 +19,7 @@ use Shopware\Core\System\Tag\TagDefinition;
 
 class MoorlMerchantFinderCmsElementResolver extends AbstractCmsElementResolver
 {
-    private SortingService $sortingService;
+    private readonly SortingService $sortingService;
 
     public function __construct(
         SortingService $sortingService

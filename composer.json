@@ -1,7 +1,7 @@
 {
     "name": "moorl/merchant-finder",
     "description": "Store Locator for Shopware 6",
-    "version": "2.4.23",
+    "version": "2.5.0",
     "license": "proprietary",
     "authors": [
         {
@@ -9,8 +9,8 @@
         }
     ],
     "require": {
-        "shopware/core": "^6.4.14",
-        "moorl/foundation": "1.4.*"
+        "shopware/core": "^6.5.0",
+        "moorl/foundation": "1.5.*"
     },
     "type": "shopware-platform-plugin",
     "autoload": {

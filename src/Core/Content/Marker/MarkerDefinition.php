@@ -25,7 +25,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\FieldCollection;
 
 class MarkerDefinition extends EntityDefinition
 {
-    public const ENTITY_NAME = 'moorl_merchant_marker';
+    final public const ENTITY_NAME = 'moorl_merchant_marker';
 
     public function getEntityName(): string
     {

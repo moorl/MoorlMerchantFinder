@@ -18,26 +18,12 @@ use Twig\Environment;
 
 class SalesChannelMerchantSubscriber implements EventSubscriberInterface
 {
-    public const POPUP_CONTENT_PATH = "plugin/moorl-merchant-finder/component/merchant-listing/map-popup-content.html.twig";
-
-    private DefinitionInstanceRegistry $definitionInstanceRegistry;
-    private SystemConfigService $systemConfigService;
-    private TemplateFinder $templateFinder;
-    private Environment $twig;
+    final public const POPUP_CONTENT_PATH = "plugin/moorl-merchant-finder/component/merchant-listing/map-popup-content.html.twig";
     private ?MarkerCollection $markers = null;
     private ?string $popupContentTemplate = null;
 
-    public function __construct(
-        DefinitionInstanceRegistry $definitionInstanceRegistry,
-        SystemConfigService $systemConfigService,
-        TemplateFinder $templateFinder,
-        Environment $twig
-    )
+    public function __construct(private readonly DefinitionInstanceRegistry $definitionInstanceRegistry, private readonly SystemConfigService $systemConfigService, private readonly TemplateFinder $templateFinder, private readonly Environment $twig)
     {
-        $this->definitionInstanceRegistry = $definitionInstanceRegistry;
-        $this->systemConfigService = $systemConfigService;
-        $this->templateFinder = $templateFinder;
-        $this->twig = $twig;
     }
 
     public static function getSubscribedEvents(): array

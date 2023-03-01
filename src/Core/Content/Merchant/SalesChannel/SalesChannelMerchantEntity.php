@@ -8,17 +8,11 @@ class SalesChannelMerchantEntity extends MerchantEntity
 {
     protected string $popupContent = "plugin/moorl-merchant-finder/component/merchant-listing/map-popup-content.html.twig";
 
-    /**
-     * @param string $popupContent
-     */
     public function setPopupContent(string $popupContent): void
     {
         $this->popupContent = $popupContent;
     }
 
-    /**
-     * @return array
-     */
     public function getLeafletLocation(): array
     {
         return [

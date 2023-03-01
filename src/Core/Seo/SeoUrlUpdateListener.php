@@ -8,15 +8,11 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class SeoUrlUpdateListener implements EventSubscriberInterface
 {
-    private SeoUrlUpdater $seoUrlUpdater;
-
-
-    public function __construct(SeoUrlUpdater $seoUrlUpdater)
+    public function __construct(private readonly SeoUrlUpdater $seoUrlUpdater)
     {
-        $this->seoUrlUpdater = $seoUrlUpdater;
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             MerchantIndexerEvent::class => 'updateMerchantUrls'

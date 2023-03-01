@@ -18,7 +18,7 @@ use Shopware\Core\System\DeliveryTime\DeliveryTimeDefinition;
 
 class MerchantStockDefinition extends EntityDefinition
 {
-    public const ENTITY_NAME = 'moorl_merchant_stock';
+    final public const ENTITY_NAME = 'moorl_merchant_stock';
 
     public function getEntityName(): string
     {

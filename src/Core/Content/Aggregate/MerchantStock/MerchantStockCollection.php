@@ -22,9 +22,7 @@ class MerchantStockCollection extends EntityCollection
 
     public function sortByAvailableStock(): void
     {
-        $this->sort(function (MerchantStockEntity $a, MerchantStockEntity $b) {
-            return $b->getAvailableStock() <=> $a->getAvailableStock();
-        });
+        $this->sort(fn(MerchantStockEntity $a, MerchantStockEntity $b) => $b->getAvailableStock() <=> $a->getAvailableStock());
     }
 
     public function filterByMerchantCustomerId(?string $customerId = null): self
@@ -41,15 +39,11 @@ class MerchantStockCollection extends EntityCollection
 
     public function getByProductId(string $productId): ?MerchantStockEntity
     {
-        return $this->filter(function (MerchantStockEntity $merchantStockEntity) use ($productId) {
-            return $merchantStockEntity->getProductId() == $productId;
-        })->first();
+        return $this->filter(fn(MerchantStockEntity $merchantStockEntity) => $merchantStockEntity->getProductId() == $productId)->first();
     }
 
     public function getByMerchantId(string $merchantId): ?MerchantStockEntity
     {
-        return $this->filter(function (MerchantStockEntity $merchantStockEntity) use ($merchantId) {
-            return $merchantStockEntity->getMerchantId() == $merchantId;
-        })->first();
+        return $this->filter(fn(MerchantStockEntity $merchantStockEntity) => $merchantStockEntity->getMerchantId() == $merchantId)->first();
     }
 }

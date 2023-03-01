@@ -15,18 +15,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 class MerchantPageLoader
 {
-    private GenericPageLoaderInterface $genericLoader;
-    private MerchantDetailRoute $merchantDetailRoute;
-    private AbstractProductListingRoute $productListingRoute;
-
-    public function __construct(
-        GenericPageLoaderInterface $genericLoader,
-        MerchantDetailRoute $merchantDetailRoute,
-        AbstractProductListingRoute $productListingRoute
-    ) {
-        $this->genericLoader = $genericLoader;
-        $this->merchantDetailRoute = $merchantDetailRoute;
-        $this->productListingRoute = $productListingRoute;
+    public function __construct(private readonly GenericPageLoaderInterface $genericLoader, private readonly MerchantDetailRoute $merchantDetailRoute, private readonly AbstractProductListingRoute $productListingRoute)
+    {
     }
 
     /**

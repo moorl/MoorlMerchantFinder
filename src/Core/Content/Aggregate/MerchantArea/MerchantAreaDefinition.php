@@ -18,7 +18,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\FieldCollection;
 
 class MerchantAreaDefinition extends EntityDefinition
 {
-    public const ENTITY_NAME = 'moorl_merchant_area';
+    final public const ENTITY_NAME = 'moorl_merchant_area';
 
     public function getEntityName(): string
     {
