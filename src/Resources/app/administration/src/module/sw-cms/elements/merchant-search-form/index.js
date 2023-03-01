@@ -1,6 +1,6 @@
 Shopware.Service('cmsService').registerCmsElement({
     plugin: 'MoorlMerchantFinder',
-    icon: 'default-action-search',
+    icon: 'regular-search',
     color: '#c0eebe',
     previewComponent: true,
     name: 'merchant-search-form',
