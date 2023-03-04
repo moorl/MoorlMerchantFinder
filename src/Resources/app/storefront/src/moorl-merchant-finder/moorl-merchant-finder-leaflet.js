@@ -99,7 +99,7 @@ export default class MoorlMerchantFinder extends Plugin {
         });
 
         $(this.el).on('click', '[data-trigger]', function () {
-            const button = that.el.querySelector('[data-toggle=modal]');
+            const button = that.el.querySelector('[data-bs-toggle=modal]');
 
             button.dataset.url = this.dataset.url;
             button.click();
