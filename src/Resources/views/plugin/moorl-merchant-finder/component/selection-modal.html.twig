@@ -25,7 +25,7 @@
                         <h3 class="modal-title">
                             {{ modalTitle }}
                         </h3>
-                        <button type="button" class="modal-close close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="modal-close close" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">{% sw_icon 'x' %}</span>
                         </button>
                     </div>
@@ -81,13 +81,13 @@
                                         </button>
                                     {% endif %}
 
-                                    <button type="button" class="btn btn-light" data-dismiss="modal" aria-label="Close">
+                                    <button type="button" class="btn btn-light" data-bs-dismiss="modal" aria-label="Close">
                                         {{ 'moorl-merchant-finder.close'|trans }}
                                     </button>
                                 {% endblock %}
                             </form>
                         {% else %}
-                            <button type="button" class="btn btn-light" data-dismiss="modal" aria-label="Close">
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal" aria-label="Close">
                                 {{ 'moorl-merchant-finder.close'|trans }}
                             </button>
                         {% endif %}
