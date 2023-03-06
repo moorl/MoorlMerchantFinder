@@ -25,7 +25,7 @@
                 {% block element_moorl_merchant_finder_form_inner_countries %}
                     <div class="form-group col-6 col-lg">
                         <label for="{{ element.id }}countryCode">{{ "moorl-merchant-finder.country"|trans }}</label>
-                        <select id="{{ element.id }}countryCode" name="countryCode" class="custom-select form-control">
+                        <select id="{{ element.id }}countryCode" name="countryCode" class="form-select form-control">
                             <option value="">{{ "moorl-merchant-finder.allCountries"|trans }}</option>
                             {% for item in element.data.countries %}
                                 <option {% if item.iso == countryCode %}selected{% endif %} value="{{ item.iso }}">{{ item.name }}</option>
@@ -64,7 +64,7 @@
                 <div class="form-group col-6 col-lg">
                     <label for="{{ element.id }}distance">{{ "moorl-merchant-finder.distance"|trans }}</label>
                     <div class="input-group">
-                        <select id="{{ element.id }}distance" name="distance" class="custom-select form-control">
+                        <select id="{{ element.id }}distance" name="distance" class="form-select form-control">
                             {% for distance in config('MoorlMerchantFinder.config.positionDistance') | split(',') %}
                                 <option value="{{ distance }}">{{ distance }}</option>
                             {% endfor %}
@@ -79,7 +79,7 @@
                 {% block element_moorl_merchant_finder_form_inner_tags %}
                     <div class="form-group col-6 col-lg">
                         <label for="{{ element.id }}tags">{{ "moorl-merchant-finder.tags"|trans }}</label>
-                        <select id="{{ element.id }}tags" name="tags" class="custom-select form-control">
+                        <select id="{{ element.id }}tags" name="tags" class="form-select form-control">
                             <option value="">{{ "moorl-merchant-finder.allTags"|trans }}</option>
                             {% for item in element.data.tags %}
                                 <option {% if item.id == element.config.tagId.value %}selected{% endif %} value="{{ item.id }}">{{ item.name }}</option>
@@ -92,7 +92,7 @@
                 {% block element_moorl_merchant_finder_form_inner_manufacturers %}
                     <div class="form-group col-6 col-lg">
                         <label for="{{ element.id }}productManufacturerId">{{ "moorl-merchant-finder.manufacturers"|trans }}</label>
-                        <select id="{{ element.id }}productManufacturerId" name="productManufacturerId" class="custom-select form-control">
+                        <select id="{{ element.id }}productManufacturerId" name="productManufacturerId" class="form-select form-control">
                             <option value="">{{ "moorl-merchant-finder.allManufacturers"|trans }}</option>
                             {% for item in element.data.productManufacturers %}
                                 <option {% if item.id == element.config.manufacturerId.value %}selected{% endif %} value="{{ item.id }}">{{ item.name }}</option>
@@ -105,7 +105,7 @@
                 {% block element_moorl_merchant_finder_form_inner_categories %}
                     <div class="form-group col-6 col-lg">
                         <label for="{{ element.id }}categoryId">{{ "moorl-merchant-finder.categories"|trans }}</label>
-                        <select id="{{ element.id }}categoryId" name="categoryId" class="custom-select form-control">
+                        <select id="{{ element.id }}categoryId" name="categoryId" class="form-select form-control">
                             <option value="">{{ "moorl-merchant-finder.allCategories"|trans }}</option>
                             {% for item in element.data.categories %}
                                 <option {% if item.id == element.config.categoryId.value %}selected{% endif %} value="{{ item.id }}">{{ item.name }}</option>
