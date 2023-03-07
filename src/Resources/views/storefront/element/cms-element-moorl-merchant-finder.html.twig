@@ -26,10 +26,9 @@
             {% else %}
                 <form data-moorl-merchant-finder="true"
                       class="d-none"
-                      action="{{ seoUrl('moorl.merchant-finder.search') }}"
+                      action="..."
                       method="post"
                       data-form-csrf-handler="true">
-                    {{ sw_csrf('moorl.merchant-finder.search') }}
                     <input type="hidden" name="items" value="{{ element.config.items.value }}">
                     <button type="submit"></button>
                     {% for rule in config('MoorlMerchantFinder.config.searchRules') %}

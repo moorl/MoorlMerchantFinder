@@ -1,9 +1,7 @@
 <form data-moorl-merchant-finder="true"
-      action="{{ seoUrl('moorl.merchant-finder.search') }}"
+      action="..."
       method="post"
       data-form-csrf-handler="true">
-    {{ sw_csrf('moorl.merchant-finder.search') }}
-
     <input type="hidden" name="type" value="{{ element.config.type.value }}">
     <input type="hidden" name="initiator" value="{{ element.config.initiator.value }}">
     <input type="hidden" name="items" value="{{ element.config.items.value }}">
