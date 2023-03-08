@@ -24,6 +24,10 @@ export default class MoorlMerchantSelectionPlugin extends Plugin {
                 }, false)
             );
         });
+
+        this.el.addEventListener('submit', (e) => {
+            e.preventDefault();
+        });
     }
 
     _selectionSearch() {

@@ -12,7 +12,7 @@
     >
         <div class="modal-header">
             <div class="modal-title h4">
-                {{ "#{initiator}.modalTitle"|trans }}
+                {{ "moorl-merchant-finder.choseMerchant"|trans }}
             </div>
             <button type="button" class="modal-close close" data-bs-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">{% sw_icon 'x' %}</span>
@@ -38,7 +38,7 @@
 
                         <div class="col">
                             <select class="form-select" name="country" aria-label="{{ 'moorl-foundation.listing.filter.country'|trans }}">
-                                <option selected value="">{{ 'moorl-foundation.listing.filter.country'|trans }}</option>
+                                <option selected value="">{{ 'moorl-merchant-finder.allCountries'|trans }}</option>
                                 {% for country in countriesSorted %}
                                     <option value="{{ country.id }}">{{ country.translated.name }}</option>
                                 {% endfor %}

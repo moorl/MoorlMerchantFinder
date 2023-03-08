@@ -1,6 +1,6 @@
-<div class="mt-2">
+<div class="mt-3">
     {% block moorl_merchant_listing_box_actions %}
-        <div class="btn-group btn-group-sm d-flex">
+        <div class="{% if direction == 'vertical' %}d-grid g-3{% else %}btn-group btn-group-sm d-flex{% endif %}">
             {% block moorl_merchant_listing_box_actions_inner %}
                 {% block moorl_merchant_listing_box_actions_merchant_url %}
                     {% if item.merchantUrl %}

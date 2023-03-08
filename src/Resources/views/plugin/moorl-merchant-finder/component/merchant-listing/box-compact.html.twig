@@ -3,7 +3,69 @@
     {% set merchant = item %}
 
     {% block moorl_merchant_listing_box_compact %}
-        {% sw_include '@Storefront/plugin/moorl-merchant-finder/component/merchant-listing/box-main.html.twig' %}
-        {% sw_include '@Storefront/plugin/moorl-merchant-finder/component/merchant-listing/box-actions.html.twig' %}
+        <div class="card mb-4">
+            <div class="row g-3">
+                {% if merchant.media %}
+                    {% block element_moorl_merchant_finder_result_logo %}
+                        {% if config('MoorlMerchantFinder.config.showLogo') %}
+                            <div class="d-none d-lg-flex col-2 bg-light" style="align-items: center; justify-content: center;">
+                                {% sw_thumbnails 'moorl-listing-item-image-thumbnails' with {
+                                    media: merchant.media,
+                                    attributes: {
+                                        'itemprop': 'image',
+                                        'alt': merchant.translated.name,
+                                        'title': '',
+                                        'class': 'img-fluid'
+                                    }
+                                } %}
+                            </div>
+                        {% endif %}
+                    {% endblock %}
+                {% endif %}
+
+                <div class="col">
+                    <div class="card-body">
+                        <div class="h5 mb-0">
+                            {{ merchant.translated.name }}
+                        </div>
+
+                        <p class="small text-muted"></p>
+
+                        {% block element_moorl_merchant_finder_result_description %}
+                            {% if config('MoorlMerchantFinder.config.showDescription') %}
+                                {% if merchant.translated.teaser %}
+                                    <p class="card-text">{{ merchant.translated.teaser }}</p>
+                                {% endif %}
+                            {% endif %}
+                        {% endblock %}
+
+                        <hr>
+
+                        <div class="">
+                            {% sw_include '@Storefront/plugin/moorl-merchant-finder/component/merchant-listing/box-actions.html.twig' %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-3 bg-light">
+                    <div class="card-body">
+                        {% if merchant.locationCache.first() %}
+                            {% set unit = "moorl-foundation.listing.filter.#{config('MoorlFoundation.config.osmUnitOfMeasurement')}" %}
+
+                            <div class="text-center text-muted small">
+                                {{ merchant.locationCache.first().distance|number_format(2) }}
+                                {{ unit|trans }}
+                            </div>
+
+                            <hr class="my-2">
+                        {% endif %}
+
+                        {% if config('MoorlMerchantFinder.config.showAddress') and merchant.street %}
+                            {% sw_include '@Storefront/plugin/moorl-merchant-finder/component/merchant-address.html.twig' %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
     {% endblock %}
 </div>
