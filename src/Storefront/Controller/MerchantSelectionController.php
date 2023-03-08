@@ -2,8 +2,10 @@
 
 namespace Moorl\MerchantFinder\Storefront\Controller;
 
+use Moorl\MerchantFinder\Core\Content\Merchant\SalesChannel\SalesChannelMerchantEntity;
 use Shopware\Core\Content\Product\SalesChannel\Listing\AbstractProductListingRoute;
 use Shopware\Core\Content\Product\SalesChannel\Listing\ProductListingResult;
+use Shopware\Core\Framework\DataAbstractionLayer\Entity;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
@@ -63,6 +65,21 @@ class MerchantSelectionController extends StorefrontController
         return $response;
     }
 
+    #[Route(path: '/merchant-selection/name', name: 'moorl.merchant-selection.name', methods: ['GET','POST'], defaults: ['XmlHttpRequest' => true])]
+    public function selectionName(SalesChannelContext $salesChannelContext, Request $request): Response
+    {
+        $initiator = $request->query->get('initiator', 'moorl-merchant-finder');
+
+        $merchantId = $request->cookies->get($initiator);
+        $merchant = $this->getItem($merchantId, $initiator, $salesChannelContext, $request);
+
+        return new Response(sprintf(
+            "%s | %s",
+            $merchant->getTranslation('name'),
+            $merchant->getCity()
+        ));
+    }
+
     private function getListing(string $initiator, SalesChannelContext $salesChannelContext, Request $request): ProductListingResult
     {
         $request->query->set('tab', 'merchant-listing');
@@ -82,5 +99,21 @@ class MerchantSelectionController extends StorefrontController
         return $this->listingRoute
             ->load($initiator, $request, $salesChannelContext, $criteria)
             ->getResult();
+    }
+
+    private function getItem(string $merchantId, string $initiator, SalesChannelContext $salesChannelContext, Request $request): ?SalesChannelMerchantEntity
+    {
+        $request->query->set('tab', 'merchant-listing');
+        $request->query->set('order', 'score');
+
+        $criteria = new Criteria([$merchantId]);
+        $criteria->addAssociation('media');
+        $criteria->addAssociation('country');
+        $criteria->setLimit(1);
+
+        return $this->listingRoute
+            ->load($initiator, $request, $salesChannelContext, $criteria)
+            ->getResult()
+            ->first();
     }
 }
