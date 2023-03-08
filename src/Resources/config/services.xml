@@ -58,6 +58,17 @@
             </call>
         </service>
 
+        <service id="Moorl\MerchantFinder\Storefront\Controller\MerchantSelectionController" public="true">
+            <argument type="service" id="sales_channel.moorl_merchant.repository"/>
+
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+            <call method="setTwig">
+                <argument type="service" id="twig"/>
+            </call>
+        </service>
+
         <!-- Subscriber -->
         <service id="Moorl\MerchantFinder\Core\Content\Merchant\SalesChannel\Listing\MerchantListingFeaturesSubscriber">
             <argument type="service" id="MoorlFoundation\Core\Service\SortingService"/>

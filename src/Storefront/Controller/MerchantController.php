@@ -3,10 +3,8 @@
 namespace Moorl\MerchantFinder\Storefront\Controller;
 
 use Moorl\MerchantFinder\Storefront\Page\Merchant\MerchantPageLoader;
-use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Storefront\Controller\StorefrontController;
-use Shopware\Storefront\Framework\Cache\Annotation\HttpCache;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,13 +13,12 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route(defaults: ['_routeScope' => ['storefront']])]
 class MerchantController extends StorefrontController
 {
-    public function __construct(private readonly MerchantPageLoader $merchantPageLoader)
+    public function __construct(
+        private readonly MerchantPageLoader $merchantPageLoader
+    )
     {
     }
 
-    /**
-     * @HttpCache()
-     */
     #[Route(path: '/merchant/{merchantId}', name: 'moorl.merchant.detail', methods: ['GET'], defaults: ['XmlHttpRequest' => true])]
     public function detail(SalesChannelContext $context, Request $request): Response
     {
