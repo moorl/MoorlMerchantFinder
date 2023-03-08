@@ -5,7 +5,6 @@ namespace Moorl\MerchantFinder\Storefront\Controller;
 use Moorl\MerchantFinder\Core\Content\Merchant\SalesChannel\SalesChannelMerchantEntity;
 use Shopware\Core\Content\Product\SalesChannel\Listing\AbstractProductListingRoute;
 use Shopware\Core\Content\Product\SalesChannel\Listing\ProductListingResult;
-use Shopware\Core\Framework\DataAbstractionLayer\Entity;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
@@ -53,9 +52,13 @@ class MerchantSelectionController extends StorefrontController
     {
         $initiator = $request->query->get('initiator', 'moorl-merchant-finder');
 
-        $cookie = Cookie::create($initiator, $request->query->get('merchantId'));
+        $cookie = Cookie::create(
+            $initiator,
+            $request->query->get('merchantId')
+        );
         $cookie->setSecureDefault($request->isSecure());
         $cookie = $cookie->withExpires(time() + 60 * 60 * 24 * 30);
+        $cookie = $cookie->withHttpOnly(false);
 
         $response = new JsonResponse([
             'reload' => true

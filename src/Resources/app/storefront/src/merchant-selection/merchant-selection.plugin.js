@@ -5,7 +5,6 @@ import queryString from 'query-string';
 export default class MoorlMerchantSelectionPlugin extends Plugin {
     static options = {
         searchUrl: null,
-        pickUrl: null,
         initiator: null,
     };
 
