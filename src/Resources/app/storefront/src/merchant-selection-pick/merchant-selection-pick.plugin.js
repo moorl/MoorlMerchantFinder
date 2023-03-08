@@ -22,13 +22,10 @@ export default class MoorlMerchantSelectionPickPlugin extends Plugin {
         };
 
         let selectedMerchantId = CookieStorage.getItem(this.options.initiator);
-
-        console.log("selectedMerchantId");
-        console.log(selectedMerchantId);
-        console.log(CookieStorage.getItem(this.options.initiator));
-        console.log(this.options.initiator);
-
-        if (selectedMerchantId !== this.options.merchantId) {
+        if (!selectedMerchantId) {
+            console.log("Merchant not selected");
+            console.log(this.options.initiator);
+        } else if (selectedMerchantId !== this.options.merchantId) {
             this._removeActiveStateClasses();
         } else {
             this._addActiveStateClasses();
@@ -48,13 +45,6 @@ export default class MoorlMerchantSelectionPickPlugin extends Plugin {
                 merchantId: this.options.merchantId,
             })}`, () => {
                 CookieStorage.setItem(this.options.initiator, this.options.merchantId);
-
-                let selectedMerchantId = CookieStorage.getItem(this.options.initiator);
-
-                console.log("selectedMerchantId");
-                console.log(selectedMerchantId);
-                console.log(CookieStorage.getItem(this.options.initiator));
-                console.log(this.options.initiator);
 
                 //window.location.reload();
             });
