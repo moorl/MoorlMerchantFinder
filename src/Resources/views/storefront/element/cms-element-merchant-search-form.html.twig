@@ -6,7 +6,7 @@
             <form action="{{ overviewLink }}" method="get">
                 <input type="hidden" name="distance" value="{{ config('MoorlMerchantFinder.config.positionDistanceDefault') ?: 50 }}">
 
-                <div class="form-row">
+                <div class="g-3">
                     <div class="col-sm-4 my-1">
                         <label class="sr-only" for="inlineFormInputName">
                             {{ "moorl-merchant-finder.zipcodeCity"|trans }}

@@ -59,7 +59,8 @@
         </service>
 
         <service id="Moorl\MerchantFinder\Storefront\Controller\MerchantSelectionController" public="true">
-            <argument type="service" id="sales_channel.moorl_merchant.repository"/>
+            <argument type="service" id="Shopware\Core\Content\Product\SalesChannel\Listing\ProductListingRoute" />
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
 
             <call method="setContainer">
                 <argument type="service" id="service_container"/>

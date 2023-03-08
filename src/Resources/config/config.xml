@@ -14,6 +14,25 @@
     </card>
 
     <card>
+        <title>Merchant selection</title>
+        <title lang="de-DE">Händlerauswahl</title>
+
+        <input-field type="int">
+            <name>merchantSelectionLimit</name>
+            <label>Result limit</label>
+            <label lang="de-DE">Maximale Ergebnisse</label>
+            <defaultValue>20</defaultValue>
+        </input-field>
+
+        <input-field type="int">
+            <name>merchantSelectionRadius</name>
+            <label>Radius limit</label>
+            <label lang="de-DE">Maximaler Suchradius</label>
+            <defaultValue>30</defaultValue>
+        </input-field>
+    </card>
+
+    <card>
         <title>Listing options</title>
         <title lang="de-DE">Listing Optionen</title>
 

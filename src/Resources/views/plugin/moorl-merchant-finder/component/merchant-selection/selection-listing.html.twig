@@ -1,0 +1,18 @@
+{% if listing.total > 0 %}
+    {% for item in listing %}
+        <li class="{{ listingColumns }}"
+            data-entity-id="{{ item.id }}"
+            data-entity-location='{{ item.leafletLocation|json_encode }}'
+            itemscope
+            itemtype="https://schema.org/Place">
+            {% sw_include '@Storefront/plugin/moorl-merchant-finder/component/merchant-listing/box-compact.html.twig' %}
+        </li>
+    {% endfor %}
+{% else %}
+    <li class="cms-listing-col col-12">
+        {% sw_include '@Storefront/storefront/utilities/alert.html.twig' with {
+            type: 'info',
+            content: 'moorl-merchant-finder.emptyResultMessage'|trans|sw_sanitize
+        } %}
+    </li>
+{% endif %}

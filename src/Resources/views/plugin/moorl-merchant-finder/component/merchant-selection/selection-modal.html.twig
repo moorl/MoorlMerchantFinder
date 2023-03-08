@@ -1,0 +1,64 @@
+<div class="modal-dialog modal-lg" role="document">
+    {% set merchantSelectionOptions = {
+        searchUrl: seoUrl('moorl.merchant-selection.search'),
+        pickUrl: "/",
+        initiator: initiator
+    } %}
+
+    <form
+            data-moorl-merchant-selection
+            data-moorl-merchant-selection-options='{{ merchantSelectionOptions|json_encode }}'
+            class="modal-content"
+    >
+        <div class="modal-header">
+            <div class="modal-title h4">
+                {{ "#{initiator}.modalTitle"|trans }}
+            </div>
+            <button type="button" class="modal-close close" data-bs-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">{% sw_icon 'x' %}</span>
+            </button>
+        </div>
+
+        <div class="modal-body moorl-foundation-modal-body">
+            <div class="js-listing-filter">
+                <div class="row g-3">
+                    <div class="col">
+                        <input
+                                type="text"
+                                class="form-control"
+                                name="location"
+                                aria-label="{{ "moorl-foundation.listing.filter.zipcodeCity"|trans }}"
+                                placeholder="{{ "moorl-foundation.listing.filter.zipcodeCity"|trans }}"
+                        >
+                    </div>
+
+                    {% set countries = listing.aggregations.get('country') %}
+                    {% if countries and not countries.entities is empty %}
+                        {% set countriesSorted = countries.entities|sort((a, b) => a.translated.name|lower > b.translated.name|lower) %}
+
+                        <div class="col">
+                            <select class="form-select" name="country" aria-label="{{ 'moorl-foundation.listing.filter.country'|trans }}">
+                                <option selected value="">{{ 'moorl-foundation.listing.filter.country'|trans }}</option>
+                                {% for country in countriesSorted %}
+                                    <option value="{{ country.id }}">{{ country.translated.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <hr>
+
+            <ul class="js-listing-wrapper moorl-listing-list">
+                {% sw_include '@MoorlMerchantFinder/plugin/moorl-merchant-finder/component/merchant-selection/selection-listing.html.twig' %}
+            </ul>
+        </div>
+
+        <div class="modal-footer text-end">
+            <button type="button" class="btn btn-light" data-bs-dismiss="modal" aria-label="Close">
+                {{ 'general.back'|trans }}
+            </button>
+        </div>
+    </form>
+</div>

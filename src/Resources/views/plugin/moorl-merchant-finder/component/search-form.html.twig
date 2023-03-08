@@ -8,7 +8,7 @@
     <input type="hidden" name="productId" value="{{ element.config.productId.value }}">
 
     {% block element_moorl_merchant_finder_form_inner %}
-        <div class="row form-row {% if config('MoorlMerchantFinder.config.hideSearchLabels') %}is-hide-label{% endif %}">
+        <div class="row g-3 {% if config('MoorlMerchantFinder.config.hideSearchLabels') %}is-hide-label{% endif %}">
             {% if config('MoorlMerchantFinder.config.enableTextSearch') %}
                 {% block element_moorl_merchant_finder_form_inner_search %}
                     <div class="form-group col-6 col-lg">
@@ -146,7 +146,7 @@
             {% else %}
                 {% block element_moorl_merchant_finder_form_inner_additional_default %}
                     {% if config('MoorlMerchantFinder.config.searchRules') %}
-                        <div class="row form-row">
+                        <div class="row g-3">
                             {% for rule in config('MoorlMerchantFinder.config.searchRules') %}
                                 <div class="form-group col-6 col-lg">
                                     <div class="custom-control custom-checkbox">
