@@ -25,6 +25,9 @@ export default class MoorlMerchantSelectionPickPlugin extends Plugin {
         if (!selectedMerchantId) {
             console.log("Merchant not selected");
             console.log(this.options.initiator);
+
+            console.log(CookieStorage.getItem('moorl-merchant-finder'));
+            console.log(CookieStorage.getItem('moorl-merchant-picker'));
         } else if (selectedMerchantId !== this.options.merchantId) {
             this._removeActiveStateClasses();
         } else {
