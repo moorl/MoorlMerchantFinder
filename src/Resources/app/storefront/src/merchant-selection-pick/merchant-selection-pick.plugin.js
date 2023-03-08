@@ -1,6 +1,7 @@
 import Plugin from 'src/plugin-system/plugin.class';
 import HttpClient from 'src/service/http-client.service';
 import CookieStorage from 'src/helper/storage/cookie-storage.helper';
+import queryString from 'query-string';
 
 export default class MoorlMerchantSelectionPickPlugin extends Plugin {
     static options = {
@@ -20,10 +21,14 @@ export default class MoorlMerchantSelectionPickPlugin extends Plugin {
             notSelectedState: this.options.notSelectedState
         };
 
-        this.storage = CookieStorage;
-        const activeMerchantId = this.storage.getItem(this.options.initiator);
+        let selectedMerchantId = CookieStorage.getItem(this.options.initiator);
 
-        if (activeMerchantId !== this.options.merchantId) {
+        console.log("selectedMerchantId");
+        console.log(selectedMerchantId);
+        console.log(CookieStorage.getItem(this.options.initiator));
+        console.log(this.options.initiator);
+
+        if (selectedMerchantId !== this.options.merchantId) {
             this._removeActiveStateClasses();
         } else {
             this._addActiveStateClasses();
@@ -35,9 +40,23 @@ export default class MoorlMerchantSelectionPickPlugin extends Plugin {
     _registerEvents() {
         this.el.addEventListener('click', event => {
             event.preventDefault();
+
             const httpClient = new HttpClient(window.accessKey, window.contextToken);
-            httpClient.get(this.options.pickUrl, () => {
-                window.location.reload();
+
+            httpClient.get(`${this.options.pickUrl}?${queryString.stringify({
+                initiator: this.options.initiator,
+                merchantId: this.options.merchantId,
+            })}`, () => {
+                CookieStorage.setItem(this.options.initiator, this.options.merchantId);
+
+                let selectedMerchantId = CookieStorage.getItem(this.options.initiator);
+
+                console.log("selectedMerchantId");
+                console.log(selectedMerchantId);
+                console.log(CookieStorage.getItem(this.options.initiator));
+                console.log(this.options.initiator);
+
+                //window.location.reload();
             });
         });
     }

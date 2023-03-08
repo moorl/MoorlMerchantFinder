@@ -1,6 +1,4 @@
 import Plugin from 'src/plugin-system/plugin.class';
-import FormSerializeUtil from 'src/utility/form/form-serialize.util';
-import DomAccess from 'src/helper/dom-access.helper';
 import HttpClient from 'src/service/http-client.service';
 import queryString from 'query-string';
 
@@ -39,6 +37,7 @@ export default class MoorlMerchantSelectionPlugin extends Plugin {
 
         this._client.get(`${this.options.searchUrl}?${queryString.stringify(query)}`, (response) => {
             this._listingWrapper.innerHTML = response;
+            window.PluginManager.initializePlugins();
         });
     }
 }

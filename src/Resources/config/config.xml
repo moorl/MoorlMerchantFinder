@@ -30,6 +30,25 @@
             <label lang="de-DE">Maximaler Suchradius</label>
             <defaultValue>30</defaultValue>
         </input-field>
+
+        <input-field type="single-select">
+            <name>merchantSelectionStyle</name>
+            <label>Layout</label>
+            <label lang="de-DE">Layout</label>
+            <options>
+                <option>
+                    <id>standard</id>
+                    <name>Standard</name>
+                    <name lang="de-DE">Standard</name>
+                </option>
+                <option>
+                    <id>compact</id>
+                    <name>Compact</name>
+                    <name lang="de-DE">Kompakt</name>
+                </option>
+            </options>
+            <defaultValue>compact</defaultValue>
+        </input-field>
     </card>
 
     <card>
