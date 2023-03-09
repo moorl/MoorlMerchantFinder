@@ -5,6 +5,7 @@ namespace Moorl\MerchantFinder\Storefront\Controller;
 use Moorl\MerchantFinder\Core\Content\Merchant\SalesChannel\SalesChannelMerchantEntity;
 use Shopware\Core\Content\Product\SalesChannel\Listing\AbstractProductListingRoute;
 use Shopware\Core\Content\Product\SalesChannel\Listing\ProductListingResult;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
@@ -20,7 +21,8 @@ class MerchantSelectionController extends StorefrontController
 {
     public function __construct(
         private readonly AbstractProductListingRoute $listingRoute,
-        private readonly SystemConfigService $systemConfigService
+        private readonly SystemConfigService $systemConfigService,
+        private readonly EntityRepository $customerRepository
     )
     {
     }
@@ -65,6 +67,10 @@ class MerchantSelectionController extends StorefrontController
         ]);
         $response->headers->setCookie($cookie);
 
+        $this->updateCustomer([
+            'moorl_mf_merchant_id' => $request->query->get('merchantId')
+        ], $salesChannelContext);
+
         return $response;
     }
 
@@ -85,6 +91,18 @@ class MerchantSelectionController extends StorefrontController
             $merchant->getTranslation('name'),
             $merchant->getCity()
         ));
+    }
+
+    #[Route(path: '/merchant-selection/checkout', name: 'moorl.merchant-selection.checkout', methods: ['POST'], defaults: ['XmlHttpRequest' => true])]
+    public function selectionCheckout(SalesChannelContext $salesChannelContext, Request $request): Response
+    {
+        $this->updateCustomer([
+            'moorl_mf_desired_date' => $request->request->get('date'),
+            'moorl_mf_desired_time' => $request->request->get('time'),
+            'moorl_mf_comment' => $request->request->get('comment'),
+        ], $salesChannelContext);
+
+        return $this->createActionResponse($request);
     }
 
     private function getListing(string $initiator, SalesChannelContext $salesChannelContext, Request $request): ProductListingResult
@@ -122,5 +140,22 @@ class MerchantSelectionController extends StorefrontController
             ->load($initiator, $request, $salesChannelContext, $criteria)
             ->getResult()
             ->first();
+    }
+
+    private function updateCustomer(array $data, SalesChannelContext $salesChannelContext): void
+    {
+        $customer = $salesChannelContext->getCustomer();
+        if (!$customer) {
+            return;
+        }
+
+        $customFields = $customer->getCustomFields() ?: [];
+
+        $customFields = array_merge($customFields, $data);
+
+        $this->customerRepository->update([[
+            'id' => $customer->getId(),
+            'customFields' => $customFields
+        ]], $salesChannelContext->getContext());
     }
 }
