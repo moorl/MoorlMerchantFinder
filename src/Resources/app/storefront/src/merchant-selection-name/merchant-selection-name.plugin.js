@@ -14,7 +14,9 @@ export default class MoorlMerchantSelectionNamePlugin extends Plugin {
         httpClient.get(`${this.options.nameUrl}?${queryString.stringify({
             initiator: this.options.initiator
         })}`, (response) => {
-            this.el.innerHTML = response;
+            if (response.length) {
+                this.el.innerHTML = response;
+            }
         });
     }
 }

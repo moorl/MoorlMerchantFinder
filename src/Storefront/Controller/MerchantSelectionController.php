@@ -74,6 +74,10 @@ class MerchantSelectionController extends StorefrontController
         $initiator = $request->query->get('initiator', 'moorl-merchant-finder');
 
         $merchantId = $request->cookies->get($initiator);
+        if (!$merchantId) {
+            return new Response();
+        }
+
         $merchant = $this->getItem($merchantId, $initiator, $salesChannelContext, $request);
 
         return new Response(sprintf(
