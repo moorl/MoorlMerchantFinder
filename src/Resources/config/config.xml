@@ -11,6 +11,13 @@
             <label>Main page with store locator</label>
             <label lang="de-DE">Hauptseite mit Händlersuche</label>
         </component>
+
+        <input-field type="bool">
+            <name>detailPage</name>
+            <label>Enable merchant detail pages</label>
+            <label lang="de-DE">Händler Infoseiten aktivieren</label>
+            <defaultValue>true</defaultValue>
+        </input-field>
     </card>
 
     <card>
