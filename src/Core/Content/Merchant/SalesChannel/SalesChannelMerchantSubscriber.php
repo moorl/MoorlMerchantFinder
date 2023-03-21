@@ -18,7 +18,7 @@ use Twig\Environment;
 
 class SalesChannelMerchantSubscriber implements EventSubscriberInterface
 {
-    final public const POPUP_CONTENT_PATH = "plugin/moorl-merchant-finder/component/merchant-listing/map-popup-content.html.twig";
+    final public const POPUP_CONTENT_PATH = "@MoorlMerchantFinder/plugin/moorl-merchant-finder/component/merchant-listing/map-popup-content.html.twig";
     private ?MarkerCollection $markers = null;
     private ?string $popupContentTemplate = null;
 
