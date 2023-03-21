@@ -1,4 +1,25 @@
-<strong>{{ merchant.translated.name }}</strong>
-{% if config('MoorlMerchantFinder.config.showAddress') and merchant.street %}
-    {% sw_include '@Storefront/plugin/moorl-merchant-finder/component/merchant-address.html.twig' %}
-{% endif %}
+{% block pupup_content %}
+    {% block pupup_content_name %}
+        <div>
+            <strong>{{ merchant.translated.name }}</strong>
+        </div>
+    {% endblock %}
+
+    {% block pupup_content_address %}
+        {% if config('MoorlMerchantFinder.config.showAddress') and merchant.street %}
+            <div>
+                {% sw_include '@Storefront/plugin/moorl-merchant-finder/component/merchant-address.html.twig' %}
+            </div>
+        {% endif %}
+    {% endblock %}
+
+    {% block pupup_content_more %}
+        {% if config('MoorlMerchantFinder.config.detailPage') and merchant.showCmsPage %}
+            <div>
+                <a href="{{ seoUrl('moorl.merchant.detail', { merchantId: merchant.id }) }}">
+                    {{ "moorl-merchant-finder.more"|trans }}
+                </a>
+            </div>
+        {% endif %}
+    {% endblock %}
+{% endblock %}
