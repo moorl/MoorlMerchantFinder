@@ -22,7 +22,12 @@ class SalesChannelMerchantSubscriber implements EventSubscriberInterface
     private ?MarkerCollection $markers = null;
     private ?string $popupContentTemplate = null;
 
-    public function __construct(private readonly DefinitionInstanceRegistry $definitionInstanceRegistry, private readonly SystemConfigService $systemConfigService, private readonly TemplateFinder $templateFinder, private readonly Environment $twig)
+    public function __construct(
+        private readonly DefinitionInstanceRegistry $definitionInstanceRegistry,
+        private readonly SystemConfigService $systemConfigService,
+        private readonly TemplateFinder $templateFinder,
+        private readonly Environment $twig
+    )
     {
     }
 
