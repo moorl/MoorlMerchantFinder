@@ -100,7 +100,7 @@
         <input-field type="bool">
             <name>merchantManufacturerFilter</name>
             <label>Manufacturer filter for merchant listing</label>
-            <label lang="de-DE">Hertseller-Filter für Händlerliste</label>
+            <label lang="de-DE">Hersteller-Filter für Händlerliste</label>
             <defaultValue>true</defaultValue>
         </input-field>
     </card>
