@@ -42,6 +42,10 @@ class MerchantDetailRoute
             ->search($criteria, $context)
             ->first();
 
+        if (!$merchant) {
+            throw new PageNotFoundException($merchantId);
+        }
+
         $pageId = $merchant->getCmsPageId();
         $slotConfig = $merchant->getTranslation('slotConfig');
 
