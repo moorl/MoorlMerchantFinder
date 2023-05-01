@@ -12,7 +12,7 @@ Module.register('moorl-merchant-finder', {
     name: 'moorl-merchant-finder',
     title: 'moorl-merchant-finder.general.mainMenuItemGeneral',
     color: '#ff3d58',
-    icon: 'default-object-globe',
+    icon: 'regular-globe-stand',
     entity: 'moorl_merchant',
 
     routes: {
@@ -40,7 +40,7 @@ Module.register('moorl-merchant-finder', {
         label: 'moorl-merchant-finder.general.mainMenuItemGeneral',
         color: '#ff3d58',
         path: 'moorl.merchant.finder.list',
-        icon: 'default-object-globe',
+        icon: 'regular-globe-stand',
         position: 40,
         parent: 'sw-catalogue'
     }],

@@ -60,22 +60,16 @@ class MerchantEntity extends Entity
     protected ?string $countryCode = null;
     protected ?string $type = null;
 
-    public function getCmsPageId(): ?string
+    public function getCmsPageId(?string $defaultCmsPageId = null): ?string
     {
-        return $this->cmsPageId ?: MoorlMerchantFinder::CMS_PAGE_MERCHANT_DEFAULT_ID;
+        return $this->cmsPageId ?: $defaultCmsPageId ?: MoorlMerchantFinder::CMS_PAGE_MERCHANT_DEFAULT_ID;
     }
 
-    /**
-     * @return MerchantCustomerCollection|null
-     */
     public function getCustomers(): ?MerchantCustomerCollection
     {
         return $this->customers;
     }
 
-    /**
-     * @param MerchantCustomerCollection|null $customers
-     */
     public function setCustomers(?MerchantCustomerCollection $customers): void
     {
         $this->customers = $customers;
@@ -290,8 +284,6 @@ class MerchantEntity extends Entity
     {
         $this->type = $type;
     }
-
-
 
     public function getAddressPlain(): ?string
     {

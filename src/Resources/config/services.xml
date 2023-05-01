@@ -37,6 +37,7 @@
             <argument type="service" id="sales_channel.moorl_merchant.repository"/>
             <argument type="service" id="Shopware\Core\Content\Cms\SalesChannel\SalesChannelCmsPageLoader"/>
             <argument type="service" id="Moorl\MerchantFinder\Core\Content\Merchant\MerchantDefinition"/>
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
         </service>
 
         <!-- PageLoader -->

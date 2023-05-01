@@ -2,6 +2,7 @@
 
 namespace Moorl\MerchantFinder\Core\Content\Merchant\SalesChannel;
 
+use Moorl\MerchantFinder\Core\Content\Merchant\MerchantEntity;
 use Shopware\Core\System\SalesChannel\Entity\SalesChannelRepository;
 use Moorl\MerchantFinder\Core\Content\Merchant\MerchantDefinition;
 use Shopware\Core\Content\Cms\DataResolver\ResolverContext\EntityResolverContext;
@@ -11,13 +12,19 @@ use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Shopware\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
+use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route(defaults: ['_routeScope' => ['store-api']])]
 class MerchantDetailRoute
 {
-    public function __construct(private readonly SalesChannelRepository $merchantRepository, private readonly SalesChannelCmsPageLoaderInterface $cmsPageLoader, private readonly MerchantDefinition $merchantDefinition)
+    public function __construct(
+        private readonly SalesChannelRepository $merchantRepository,
+        private readonly SalesChannelCmsPageLoaderInterface $cmsPageLoader,
+        private readonly MerchantDefinition $merchantDefinition,
+        private readonly SystemConfigService $systemConfigService
+    )
     {
     }
 
@@ -38,6 +45,7 @@ class MerchantDetailRoute
         $criteria->addAssociation('marker');
         $criteria->addAssociation('salutation');
 
+        /** @var MerchantEntity $merchant */
         $merchant = $this->merchantRepository
             ->search($criteria, $context)
             ->first();
@@ -46,7 +54,12 @@ class MerchantDetailRoute
             throw new PageNotFoundException($merchantId);
         }
 
-        $pageId = $merchant->getCmsPageId();
+        $defaultCmsPageId = $this->systemConfigService->get(
+            'MoorlMerchantFinder.config.cmsPageId',
+            $context->getSalesChannelId()
+        );
+
+        $pageId = $merchant->getCmsPageId($defaultCmsPageId);
         $slotConfig = $merchant->getTranslation('slotConfig');
 
         if (!$pageId) {

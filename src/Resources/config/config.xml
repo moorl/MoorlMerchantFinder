@@ -18,6 +18,13 @@
             <label lang="de-DE">Händler Infoseiten aktivieren</label>
             <defaultValue>true</defaultValue>
         </input-field>
+
+        <component name="sw-entity-single-select">
+            <name>cmsPageId</name>
+            <entity>cms_page</entity>
+            <label>Default merchant detail cms page</label>
+            <label lang="de-DE">Standard CMS für Händler Infoseite</label>
+        </component>
     </card>
 
     <card>

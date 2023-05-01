@@ -5,6 +5,6 @@ Shopware.Component.override('sw-cms-create-wizard', {
 
     created() {
         this.pageTypeNames['merchant_detail'] = this.$tc('moorl-merchant-finder.general.mainMenuItemGeneral');
-        this.pageTypeIcons['merchant_detail'] = 'default-object-globe';
+        this.pageTypeIcons['merchant_detail'] = 'regular-globe-stand';
     },
 });
