@@ -65,7 +65,7 @@
                 {% if merchant.openingHours %}
                     {% sw_icon 'clock' style {size:'xs', pack:'fas'} %}
                     <b>{{ "moorl-merchant-finder.openingHours"|trans }}</b>
-                    {% sw_include '@Storefront/plugin/moorl-foundation/opening-hours.html.twig' with {
+                    {% sw_include '@MoorlFoundation/plugin/moorl-foundation/opening-hours.html.twig' with {
                         'openingHours': merchant.openingHours
                     } %}
                 {% endif %}

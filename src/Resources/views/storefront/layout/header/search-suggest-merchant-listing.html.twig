@@ -1,7 +1,7 @@
-{% sw_extends '@Storefront/plugin/moorl-foundation/search-suggest.html.twig' %}
+{% sw_extends '@MoorlFoundation/plugin/moorl-foundation/search-suggest.html.twig' %}
 
 {% block moorl_foundation_listing_item %}
-    {% sw_include '@Storefront/plugin/moorl-foundation/listing-item.html.twig' with {
+    {% sw_include '@MoorlFoundation/plugin/moorl-foundation/listing-item.html.twig' with {
         url: seoUrl('moorl.merchant.detail', {merchantId: item.id}),
         media: item.media,
         title: item.translated.name,
