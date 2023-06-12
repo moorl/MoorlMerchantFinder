@@ -1,5 +1,5 @@
 # Open todos
 
 * hreflang
-* Remove all jQuery from storefront
+* Alternative one CMS element
 * Implement moori features
