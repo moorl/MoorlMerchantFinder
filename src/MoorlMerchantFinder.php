@@ -10,7 +10,10 @@ use Shopware\Core\Framework\Plugin;
 use Shopware\Core\Framework\Plugin\Context\ActivateContext;
 use Shopware\Core\Framework\Plugin\Context\UninstallContext;
 use Shopware\Core\Framework\Plugin\Context\UpdateContext;
+use Shopware\Elasticsearch\Framework\AbstractElasticsearchDefinition;
+use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
 class MoorlMerchantFinder extends Plugin
 {
@@ -61,6 +64,11 @@ class MoorlMerchantFinder extends Plugin
     {
         if (class_exists(LocationServiceV2::class)) {
             parent::build($container);
+        }
+
+        if (class_exists(AbstractElasticsearchDefinition::class)) {
+            $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/ElasticSearch'));
+            $loader->load('services.xml');
         }
     }
 

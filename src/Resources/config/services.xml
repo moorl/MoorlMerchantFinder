@@ -227,12 +227,5 @@
 
             <tag name="shopware.sitemap_url_provider"/>
         </service>
-
-        <!-- ES -->
-        <service id="Moorl\MerchantFinder\ElasticSearch\ProductEsDefinitionDecorator"
-                 decorates="Shopware\Elasticsearch\Product\ElasticsearchProductDefinition">
-            <argument type="service" id=".inner"/>
-            <argument type="service" id="Doctrine\DBAL\Connection"/>
-        </service>
     </services>
 </container>
