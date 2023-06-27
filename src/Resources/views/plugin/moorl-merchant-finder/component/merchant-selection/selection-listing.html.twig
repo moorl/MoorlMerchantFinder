@@ -5,7 +5,7 @@
             data-entity-location='{{ item.leafletLocation|json_encode }}'
             itemscope
             itemtype="https://schema.org/Place">
-            {% sw_include '@Storefront/plugin/moorl-merchant-finder/component/merchant-listing/box-compact.html.twig' %}
+            {% sw_include '@MoorlMerchantFinder/plugin/moorl-merchant-finder/component/merchant-listing/box-compact.html.twig' %}
         </li>
     {% endfor %}
 {% else %}

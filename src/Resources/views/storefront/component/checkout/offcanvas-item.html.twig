@@ -6,7 +6,7 @@
     {% if lineItem.extensions.MoorlMerchantStock %}
         {% set merchantStock = lineItem.extensions.MoorlMerchantStock %}
         <div class="col-12">
-            {% sw_include '@Storefront/plugin/moorl-merchant-finder/component/line-item-summary.html.twig' %}
+            {% sw_include '@MoorlMerchantFinder/plugin/moorl-merchant-finder/component/line-item-summary.html.twig' %}
         </div>
     {% endif %}
 {% endblock %}

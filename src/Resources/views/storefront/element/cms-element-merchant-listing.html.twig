@@ -36,7 +36,7 @@
             data-entity-location='{{ item.leafletLocation|json_encode }}'
             itemscope
             itemtype="https://schema.org/Place">
-            {% sw_include '@Storefront/plugin/moorl-merchant-finder/component/merchant-listing/box.html.twig' %}
+            {% sw_include '@MoorlMerchantFinder/plugin/moorl-merchant-finder/component/merchant-listing/box.html.twig' %}
         </li>
     {% else %}
         {% sw_include '@MoorlFoundation/plugin/moorl-foundation/listing-item.html.twig' with {

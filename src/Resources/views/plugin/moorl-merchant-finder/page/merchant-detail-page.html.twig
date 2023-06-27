@@ -3,12 +3,12 @@
 {% block base_main_inner %}
     {% if merchant.cmsPage %}
         <div class="container-main">
-            {% sw_include '@Storefront/plugin/moorl-merchant-finder/page/merchant-detail.html.twig' %}
+            {% sw_include '@MoorlMerchantFinder/plugin/moorl-merchant-finder/page/merchant-detail.html.twig' %}
         </div>
     {% else %}
         <div class="container-main">
             <div class="container">
-                {% sw_include '@Storefront/plugin/moorl-merchant-finder/page/merchant-detail.html.twig' %}
+                {% sw_include '@MoorlMerchantFinder/plugin/moorl-merchant-finder/page/merchant-detail.html.twig' %}
             </div>
         </div>
     {% endif %}

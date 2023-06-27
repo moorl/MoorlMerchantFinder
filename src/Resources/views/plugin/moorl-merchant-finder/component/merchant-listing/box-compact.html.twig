@@ -42,7 +42,7 @@
                         <hr>
 
                         <div class="">
-                            {% sw_include '@Storefront/plugin/moorl-merchant-finder/component/merchant-listing/box-actions.html.twig' %}
+                            {% sw_include '@MoorlMerchantFinder/plugin/moorl-merchant-finder/component/merchant-listing/box-actions.html.twig' %}
                         </div>
                     </div>
                 </div>
@@ -61,7 +61,7 @@
                         {% endif %}
 
                         {% if config('MoorlMerchantFinder.config.showAddress') and merchant.street %}
-                            {% sw_include '@Storefront/plugin/moorl-merchant-finder/component/merchant-address.html.twig' %}
+                            {% sw_include '@MoorlMerchantFinder/plugin/moorl-merchant-finder/component/merchant-address.html.twig' %}
                         {% endif %}
                     </div>
                 </div>
