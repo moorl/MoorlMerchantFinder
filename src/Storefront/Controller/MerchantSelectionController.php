@@ -3,6 +3,8 @@
 namespace Moorl\MerchantFinder\Storefront\Controller;
 
 use Moorl\MerchantFinder\Core\Content\Merchant\SalesChannel\SalesChannelMerchantEntity;
+use MoorlCustomerAccounts\Core\Content\CustomerAccountStruct;
+use Shopware\Core\Checkout\Customer\CustomerEntity;
 use Shopware\Core\Content\Product\SalesChannel\Listing\AbstractProductListingRoute;
 use Shopware\Core\Content\Product\SalesChannel\Listing\ProductListingResult;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -149,12 +151,20 @@ class MerchantSelectionController extends StorefrontController
             return;
         }
 
+        $customerId = $customer->getId();
+        /* Hack for MoorlMerchantPicker */
+        if ($customer->hasExtension('CustomerAccount')) {
+            /** @var CustomerAccountStruct $customerAccount */
+            $customerAccount = $customer->getExtension('CustomerAccount');
+            $customerId = $customerAccount->getId();
+        }
+
         $customFields = $customer->getCustomFields() ?: [];
 
         $customFields = array_merge($customFields, $data);
 
         $this->customerRepository->update([[
-            'id' => $customer->getId(),
+            'id' => $customerId,
             'customFields' => $customFields
         ]], $salesChannelContext->getContext());
     }
