@@ -1,4 +1,9 @@
 {
+    "sw-seo-url-template-card": {
+        "routeNames": {
+            "moorl-merchant-detail": "Händler Detail Seite"
+        }
+    },
     "global": {
         "entities": {
             "moorl_merchant": "Händlersuche"
