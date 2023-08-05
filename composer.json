@@ -26,8 +26,8 @@
             "en-GB": "Store Locator | Base Version"
         },
         "description": {
-            "de-DE": "Händlersuche | Basis Version",
-            "en-GB": "Store Locator | Base Version"
+            "de-DE": "Zeigt die Standorte von Fachhändlern, Partnern oder Geschäften an. CMS basierte Landingpage für die Standorte. Basiert auf OpenStreetMap und ist somit unbeschränkt verfügbar.",
+            "en-GB": "Displays the locations of specialist dealers, partners or shops. CMS-based landing page for the locations. Based on OpenStreetMap and therefore available without restrictions."
         },
         "manufacturerLink": {
             "de-DE": "https://docs.moori.net/",

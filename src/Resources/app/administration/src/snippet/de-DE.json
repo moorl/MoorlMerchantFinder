@@ -17,7 +17,7 @@
             "placeholderSearchBar": "Search for merchants"
         },
         "tooltips": {
-            "type": "Nutze den Typ um unterschieldiche Händler in mehrere Kategorien zu unterteilen. Der Filter lässt sich im Einkaufswelten Element definieren."
+            "type": "Nutze den Typ um unterschiedliche Händler in mehrere Kategorien zu unterteilen. Der Filter lässt sich im Einkaufswelten Element definieren."
         },
         "importAssistant": {
             "title": "Import Assistent",
@@ -115,7 +115,9 @@
         "label": {
             "accountCard": "Stammdaten",
             "locationCard": "Standort",
-            "addressCard": "Adresse"
+            "addressCard": "Adresse",
+            "markerCard": "Marker",
+            "relationsCard": "Verknüpfungen und Filter"
         }
     }
 }

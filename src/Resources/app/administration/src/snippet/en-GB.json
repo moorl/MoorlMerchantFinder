@@ -120,7 +120,7 @@
             "locationCard": "Location",
             "addressCard": "Address",
             "markerCard": "Marker",
-            "relationsCard": "Relations and Filters"
+            "relationsCard": "Relations and filters"
         }
     }
 }
