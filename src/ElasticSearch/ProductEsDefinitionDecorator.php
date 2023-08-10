@@ -8,12 +8,17 @@ use Shopware\Core\Framework\DataAbstractionLayer\Doctrine\FetchModeHelper;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Shopware\Core\Framework\Uuid\Uuid;
+use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Shopware\Elasticsearch\Framework\AbstractElasticsearchDefinition;
 use Shopware\Elasticsearch\Product\ElasticsearchProductDefinition;
 
 class ProductEsDefinitionDecorator extends AbstractElasticsearchDefinition
 {
-    public function __construct(private readonly AbstractElasticsearchDefinition $decorated, private readonly Connection $connection)
+    public function __construct(
+        private readonly AbstractElasticsearchDefinition $decorated,
+        private readonly Connection $connection,
+        private readonly SystemConfigService $systemConfigService
+    )
     {
     }
 
@@ -34,6 +39,10 @@ class ProductEsDefinitionDecorator extends AbstractElasticsearchDefinition
 
     public function getMapping(Context $context): array
     {
+        if ($this->systemConfigService->get('MoorlFoundation.config.cmpElasticSearchMappings')) {
+            return $this->decorated->getMapping($context);
+        }
+
         $decoratedMapping = $this->decorated->getMapping($context);
 
         $decoratedMapping['properties']['MoorlMerchants'] = [
@@ -48,6 +57,10 @@ class ProductEsDefinitionDecorator extends AbstractElasticsearchDefinition
 
     public function fetch(array $ids, Context $context): array
     {
+        if ($this->systemConfigService->get('MoorlFoundation.config.cmpElasticSearchMappings')) {
+            return $this->decorated->fetch($ids, $context);
+        }
+
         $documents = $this->decorated->fetch($ids, $context);
 
         $parentIds = \array_filter(\array_column($documents, 'parentId'));

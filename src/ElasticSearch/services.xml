@@ -9,6 +9,7 @@
                  decorates="Shopware\Elasticsearch\Product\ElasticsearchProductDefinition">
             <argument type="service" id=".inner"/>
             <argument type="service" id="Doctrine\DBAL\Connection"/>
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
         </service>
     </services>
 </container>
