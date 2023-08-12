@@ -9,6 +9,17 @@
 {% block base_main_inner %}
     <div class="container-main">
         {% block page_content %}
+            {% block cms_breadcrumb %}
+                {% if merchant.categories.first() %}
+                    <div class="breadcrumb cms-breadcrumb container">
+                        {% sw_include '@Storefront/storefront/layout/breadcrumb.html.twig' with {
+                            context: context,
+                            category: merchant.categories.first()
+                        } %}
+                    </div>
+                {% endif %}
+            {% endblock %}
+
             {% block cms_content %}
                 {% set cmsPageClasses = ('cms-page ' ~ page.cmsPage.cssClass|striptags)|trim %}
                 <div class="{{ cmsPageClasses }}" itemscope itemtype="https://www.schema.org/Place">
