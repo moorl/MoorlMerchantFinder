@@ -12,7 +12,7 @@
             {{ $tc('moorl-foundation.buttons.addMerchantButtonText') }}
         </sw-button>
 
-        <moorl-demo-button pluginName="MoorlMerchantFinder"/>
+        <moorl-demo-button pluginName="MoorlMerchantFinder" @on-finish="getList"/>
     </template>
 
     <template #language-switch>
