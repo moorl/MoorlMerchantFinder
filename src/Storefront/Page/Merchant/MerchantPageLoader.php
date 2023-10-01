@@ -67,12 +67,14 @@ class MerchantPageLoader
             return;
         }
 
-        $metaDescription = $page->getMerchant()->getTranslation('teaser')
+        $metaDescription = $page->getMerchant()->getTranslation('metaDescription')
             ?? $page->getMerchant()->getTranslation('teaser');
         $metaInformation->setMetaDescription((string) $metaDescription);
 
-        if ((string) $page->getMerchant()->getTranslation('name') !== '') {
-            $metaInformation->setMetaTitle((string) $page->getMerchant()->getTranslation('name'));
+        $metaInformation->setMetaKeywords((string) $page->getMerchant()->getTranslation('keywords'));
+
+        if ((string) $page->getMerchant()->getTranslation('metaTitle') !== '') {
+            $metaInformation->setMetaTitle((string) $page->getMerchant()->getTranslation('metaTitle'));
             return;
         }
 
