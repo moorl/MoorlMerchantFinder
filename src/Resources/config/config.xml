@@ -171,14 +171,6 @@
             <label lang="de-DE">Öffnungszeiten zeigen</label>
             <defaultValue>true</defaultValue>
         </input-field>
-
-        <input-field type="int">
-            <name>positionDistanceDefault</name>
-            <label>Default distance</label>
-            <label lang="de-DE">Standard Entfernung</label>
-            <defaultValue>50</defaultValue>
-            <placeholder>50</placeholder>
-        </input-field>
     </card>
 
     <card>
