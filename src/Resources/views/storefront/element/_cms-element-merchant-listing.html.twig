@@ -3,7 +3,7 @@
 {# Set link to overview page with pre selected filter #}
 {% if config('MoorlMerchantFinder.config.category') %}
     {% if page.creator %}
-        {% set listingHeaderLink = seoUrl('frontend.navigation.page', { navigationId: config('MoorlMerchantFinder.config.category') }) ~ "?moorl-magazine-article-author=" ~ page.creator.id %}
+        {% set listingHeaderLink = seoUrl('frontend.navigation.page', { navigationId: config('MoorlMerchantFinder.config.category') }) ~ "?magazine-article-author=" ~ page.creator.id %}
     {% endif %}
 
     {% if page.product %}
