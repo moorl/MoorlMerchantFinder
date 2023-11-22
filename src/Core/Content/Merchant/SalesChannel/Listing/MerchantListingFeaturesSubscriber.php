@@ -54,17 +54,21 @@ class MerchantListingFeaturesSubscriber extends EntityListingFeaturesSubscriberE
     protected function getFilters(Request $request, SalesChannelContext $context): FilterCollection
     {
         $filters = new FilterCollection();
+        $salesChannelId = $context->getSalesChannelId();
 
-        if ($this->systemConfigService->get('MoorlMerchantFinder.config.merchantRadiusFilter')) {
+        if ($this->systemConfigService->get('MoorlMerchantFinder.config.merchantRadiusFilter', $salesChannelId)) {
             $filters->add($this->getRadiusFilter($request, $context));
         }
-        if ($this->systemConfigService->get('MoorlMerchantFinder.config.merchantManufacturerFilter')) {
+        if ($this->systemConfigService->get('MoorlMerchantFinder.config.merchantManufacturerFilter', $salesChannelId)) {
             $filters->add($this->getManufacturerFilter($request));
         }
-        if ($this->systemConfigService->get('MoorlMerchantFinder.config.merchantCountryFilter')) {
-            $filters->add($this->getCountryFilter($request));
+        if ($this->systemConfigService->get('MoorlMerchantFinder.config.merchantCountryFilter', $salesChannelId)) {
+            $filters->add($this->getCountryFilter(
+                $request,
+                $this->systemConfigService->get('MoorlMerchantFinder.config.merchantCountryFilterValues', $salesChannelId)
+            ));
         }
-        if ($this->systemConfigService->get('MoorlMerchantFinder.config.merchantTagFilter')) {
+        if ($this->systemConfigService->get('MoorlMerchantFinder.config.merchantTagFilter', $salesChannelId)) {
             $filters->add($this->getTagFilter($request));
         }
 

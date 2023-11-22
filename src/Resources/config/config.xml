@@ -97,6 +97,15 @@
             <defaultValue>true</defaultValue>
         </input-field>
 
+        <component name="sw-entity-multi-id-select">
+            <name>merchantCountryFilterValues</name>
+            <label>Preselected countries</label>
+            <label lang="de-DE">Vorselektierte Länder</label>
+            <entity>country</entity>
+            <helpText>Only show result from the selected countries, if no country filter is chosen.</helpText>
+            <helpText lang="de-DE">Nur Ergebnisse aus den ausgewählten Ländern anzeigen, wenn kein Länderfilter gewählt wurde.</helpText>
+        </component>
+
         <input-field type="bool">
             <name>merchantTagFilter</name>
             <label>Tag filter for merchant listing</label>
