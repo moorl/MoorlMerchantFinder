@@ -74,5 +74,8 @@
     },
     "error": {
         "merchant-not-selected": "Please chose your local merchant to proceed the checkout."
+    },
+    "checkout": {
+        "merchant-not-selected": "Please chose your local merchant to proceed the checkout."
     }
 }

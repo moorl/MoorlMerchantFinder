@@ -74,5 +74,8 @@
     },
     "error": {
         "merchant-not-selected": "Bitte wählen Sie einen Händler aus um die Bestellung abzuschließen"
+    },
+    "checkout": {
+        "merchant-not-selected": "Bitte wählen Sie einen Händler aus um die Bestellung abzuschließen"
     }
 }

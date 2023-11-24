@@ -74,5 +74,8 @@
     },
     "error": {
         "merchant-not-selected": "Kies uw lokale handelaar om verder te gaan met de kassa."
+    },
+    "checkout": {
+        "merchant-not-selected": "Kies uw lokale handelaar om verder te gaan met de kassa."
     }
 }

@@ -8,7 +8,7 @@
                 {% if merchant.media %}
                     {% block element_moorl_merchant_finder_result_logo %}
                         {% if config('MoorlMerchantFinder.config.showLogo') %}
-                            <div class="d-none d-lg-flex col-2 bg-light" style="align-items: center; justify-content: center;">
+                            <div class="d-none d-lg-flex col-2" style="align-items: center; justify-content: center;">
                                 {% sw_thumbnails 'moorl-listing-item-image-thumbnails' with {
                                     media: merchant.media,
                                     attributes: {
@@ -47,7 +47,7 @@
                     </div>
                 </div>
 
-                <div class="col-12 col-md-3 bg-light">
+                <div class="col-12 col-md-3">
                     <div class="card-body">
                         {% if merchant.locationCache.first() %}
                             {% set unit = "moorl-foundation.listing.filter.#{config('MoorlFoundation.config.osmUnitOfMeasurement')}" %}
