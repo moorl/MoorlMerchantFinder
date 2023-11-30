@@ -1,6 +1,20 @@
 .cms-element-merchant-listing {
- .sorting {
-   width: 100%;
-   margin-top: 0;
- }
+  .sorting {
+    width: 100%;
+    margin-top: 0;
+  }
+
+  .tags,
+  .categories,
+  .manufacturers {
+    span {
+      &:after {
+        content: ",";
+      }
+
+      &:last-child:after {
+        content: none;
+      }
+    }
+  }
 }
