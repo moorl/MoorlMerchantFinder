@@ -2,23 +2,15 @@
 
 namespace Moorl\MerchantFinder;
 
-use Doctrine\DBAL\Connection;
-use MoorlFoundation\Core\Service\DataService;
-use MoorlFoundation\Core\Service\LocationServiceV2;
-use Shopware\Core\Framework\Migration\InheritanceUpdaterTrait;
+use MoorlFoundation\Core\PluginLifecycleHelper;
 use Shopware\Core\Framework\Plugin;
 use Shopware\Core\Framework\Plugin\Context\ActivateContext;
 use Shopware\Core\Framework\Plugin\Context\UninstallContext;
 use Shopware\Core\Framework\Plugin\Context\UpdateContext;
-use Shopware\Elasticsearch\Framework\AbstractElasticsearchDefinition;
-use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
 class MoorlMerchantFinder extends Plugin
 {
-    use InheritanceUpdaterTrait;
-
     final public const NAME = 'MoorlMerchantFinder';
     final public const DATA_CREATED_AT = '2003-03-03 03:03:10.000';
     final public const CMS_PAGE = 'moorl_merchant';
@@ -62,99 +54,32 @@ class MoorlMerchantFinder extends Plugin
 
     public function build(ContainerBuilder $container): void
     {
-        if (class_exists(LocationServiceV2::class)) {
-            parent::build($container);
-        }
+        parent::build($container);
 
-        if (class_exists(AbstractElasticsearchDefinition::class)) {
-            $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/ElasticSearch'));
-            $loader->load('services.xml');
-        }
+        PluginLifecycleHelper::build($container, __DIR__ . '/ElasticSearch');
     }
 
     public function activate(ActivateContext $activateContext): void
     {
         parent::activate($activateContext);
 
-        $this->updateInheritances();
-
-        /* @var $dataService DataService */
-        $dataService = $this->container->get(DataService::class);
-        $dataService->install(self::NAME);
+        PluginLifecycleHelper::update(self::class, $this->container);
     }
 
     public function update(UpdateContext $updateContext): void
     {
         parent::update($updateContext);
 
-        $this->updateInheritances();
+        PluginLifecycleHelper::update(self::class, $this->container);
     }
 
     public function uninstall(UninstallContext $uninstallContext): void
     {
         parent::uninstall($uninstallContext);
-
         if ($uninstallContext->keepUserData()) {
             return;
         }
 
-        $this->uninstallTrait();
-    }
-
-    private function updateInheritances(): void
-    {
-        $connection = $this->container->get(Connection::class);
-
-        foreach (self::INHERITANCES as $table => $propertyNames) {
-            foreach ($propertyNames as $propertyName) {
-                try {
-                    $this->updateInheritance($connection, $table, $propertyName);
-                } catch (\Exception) {
-                    continue;
-                }
-            }
-        }
-    }
-
-    private function uninstallTrait(): void
-    {
-        $connection = $this->container->get(Connection::class);
-
-        foreach (self::PLUGIN_TABLES as $table) {
-            $sql = sprintf('SET FOREIGN_KEY_CHECKS=0; DROP TABLE IF EXISTS `%s`;', $table);
-            $connection->executeStatement ($sql);
-        }
-
-        foreach (array_reverse(self::SHOPWARE_TABLES) as $table) {
-            $sql = sprintf("SET FOREIGN_KEY_CHECKS=0; DELETE FROM `%s` WHERE `created_at` = '%s';", $table, self::DATA_CREATED_AT);
-
-            try {
-                $connection->executeStatement ($sql);
-            } catch (\Exception) {
-                continue;
-            }
-        }
-
-        foreach (self::INHERITANCES as $table => $propertyNames) {
-            foreach ($propertyNames as $propertyName) {
-                $sql = sprintf("ALTER TABLE `%s` DROP `%s`;", $table, $propertyName);
-
-                try {
-                    $connection->executeStatement ($sql);
-                } catch (\Exception) {
-                    continue;
-                }
-            }
-        }
-    }
-
-    private static array $_defaults = [
-        'allowedSearchCountryCodes' => ['de', 'at', 'ch'],
-        'nominatim' => 'https://nominatim.openstreetmap.org/search',
-    ];
-
-    public static function getDefault($key)
-    {
-        return static::$_defaults[$key];
+        PluginLifecycleHelper::uninstall(self::class, $this->container);
     }
 }

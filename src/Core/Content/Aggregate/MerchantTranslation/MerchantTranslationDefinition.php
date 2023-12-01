@@ -7,6 +7,7 @@ use MoorlFoundation\Core\Framework\DataAbstractionLayer\Collection\FieldThingCol
 use Shopware\Core\Framework\DataAbstractionLayer\EntityTranslationDefinition;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\AllowHtml;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\LongTextField;
+use Shopware\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Shopware\Core\Framework\DataAbstractionLayer\FieldCollection;
 
 class MerchantTranslationDefinition extends EntityTranslationDefinition
@@ -36,7 +37,8 @@ class MerchantTranslationDefinition extends EntityTranslationDefinition
     protected function defineFields(): FieldCollection
     {
         $collection =  [
-            (new LongTextField('description_html', 'descriptionHtml'))->addFlags(new AllowHtml())
+            (new LongTextField('description_html', 'descriptionHtml'))->addFlags(new AllowHtml()),
+            new StringField('seo_url', 'seoUrl'),
         ];
 
         $collection = array_merge(

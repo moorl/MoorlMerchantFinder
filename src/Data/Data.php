@@ -2,6 +2,8 @@
 
 namespace Moorl\MerchantFinder\Data;
 
+use Moorl\MerchantFinder\Core\Content\Merchant\MerchantDefinition;
+use Moorl\MerchantFinder\Core\Seo\MerchantSeoUrlRoute;
 use Moorl\MerchantFinder\MoorlMerchantFinder;
 use MoorlFoundation\Core\System\DataExtension;
 use MoorlFoundation\Core\System\DataInterface;
@@ -45,7 +47,10 @@ class Data extends DataExtension implements DataInterface
     public function getLocalReplacers(): array
     {
         return [
-            '{CMS_PAGE_ID}' => MoorlMerchantFinder::CMS_PAGE_ID
+            '{CMS_PAGE_ID}' => MoorlMerchantFinder::CMS_PAGE_ID,
+            '{MAIN_ENTITY}' => MerchantDefinition::ENTITY_NAME,
+            '{SEO_ROUTE_NAME}' => MerchantSeoUrlRoute::ROUTE_NAME,
+            '{SEO_DEFAULT_TEMPLATE}' => MerchantSeoUrlRoute::DEFAULT_TEMPLATE
         ];
     }
 
@@ -74,7 +79,7 @@ class Data extends DataExtension implements DataInterface
     public function getInstallQueries(): array
     {
         return [
-            "INSERT IGNORE INTO `seo_url_template` (`id`,`is_valid`,`route_name`,`entity_name`,`template`) VALUES (UNHEX('{ID:WILD_0}'),1,'moorl.merchant.detail','moorl_merchant','merchant/{{ merchant.translated.name }}');"
+            "INSERT IGNORE INTO `seo_url_template` (`id`,`is_valid`,`route_name`,`entity_name`,`template`,`created_at`) VALUES (UNHEX('{ID:WILD_0}'),1,'{SEO_ROUTE_NAME}','{MAIN_ENTITY}','{SEO_DEFAULT_TEMPLATE}','{DATA_CREATED_AT}');"
         ];
     }
 }

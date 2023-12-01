@@ -1,9 +1,0 @@
-[
-  {
-    "id": "{ID:WILD_0}",
-    "isValid": true,
-    "routeName": "moorl.merchant.detail",
-    "entityName": "moorl_merchant",
-    "template": "merchant/{{ merchant.translated.name }}"
-  }
-]

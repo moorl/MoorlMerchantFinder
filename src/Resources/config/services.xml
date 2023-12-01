@@ -204,7 +204,6 @@
         <!-- SEO Urls -->
         <service id="Moorl\MerchantFinder\Core\Seo\MerchantSeoUrlRoute">
             <argument type="service" id="Moorl\MerchantFinder\Core\Content\Merchant\MerchantDefinition"/>
-            <argument type="service" id="moorl_merchant.repository"/>
 
             <tag name="shopware.seo_url.route"/>
         </service>

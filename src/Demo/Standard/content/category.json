@@ -2,7 +2,7 @@
   {
     "id": "{ID:CATEGORY_0}",
     "parentId": "{NAVIGATION_CATEGORY_ID}",
-    "cmsPageId": "{ID:CMS_PAGE_LISTING_A}",
+    "cmsPageId": "{ID:CMS_PAGE_LISTING_C}",
     "active": true,
     "name": "Store Locator Demo"
   }
