@@ -40,7 +40,7 @@
         </li>
     {% else %}
         {% sw_include '@MoorlFoundation/plugin/moorl-foundation/listing-item.html.twig' with {
-            url: seoUrl('moorl.merchant.detail', {merchantId: item.id}),
+            url: seoUrl('frontend.moorl.merchant.detail', {merchantId: item.id}),
             media: item.media,
             title: item.translated.name,
             meta: item.city,

@@ -6,7 +6,7 @@
     <meta property="og:site_name"
           content="{{ config('core.basicInformation.shopName') }}"/>
     <meta property="og:url"
-          content="{{ seoUrl('moorl.merchant.detail', { merchantId: merchant.id }) }}"/>
+          content="{{ seoUrl('frontend.moorl.merchant.detail', { merchantId: merchant.id }) }}"/>
     <meta property="og:title"
           content="{{ merchant.translated.metaTitle ? merchant.translated.metaTitle : metaTitle }}"/>
     <meta property="og:description"
@@ -27,5 +27,5 @@
 {% endblock %}
 
 {% block layout_head_canonical %}
-    <link rel="canonical" href="{{ seoUrl('moorl.merchant.detail', { merchantId: merchant.id }) }}" />
+    <link rel="canonical" href="{{ seoUrl('frontend.moorl.merchant.detail', { merchantId: merchant.id }) }}" />
 {% endblock %}

@@ -4,7 +4,7 @@
         <div class="moorl-merchant-listing-box {% if item.highlight %}is-highlight{% endif %}">
             {% block moorl_merchant_listing_box_image %}
                 <a class="header-image"
-                   href="{{ seoUrl('moorl.merchant.detail', { merchantId: item.id }) }}">
+                   href="{{ seoUrl('frontend.moorl.merchant.detail', { merchantId: item.id }) }}">
                     {% if item.media.url %}
                         {% sw_thumbnails 'moorl-listing-item-image-thumbnails' with {
                             media: item.media,
@@ -39,7 +39,7 @@
                         <div class="moorl-listing-item-title">
                             <a itemprop="name"
                                title="{{ item.translated.name }}"
-                               href="{{ seoUrl('moorl.merchant.detail', { merchantId: item.id }) }}">
+                               href="{{ seoUrl('frontend.moorl.merchant.detail', { merchantId: item.id }) }}">
                                 {{ item.translated.name }}
                             </a>
                         </div>

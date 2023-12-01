@@ -25,7 +25,7 @@
                 <div class="{{ cmsPageClasses }}" itemscope itemtype="https://www.schema.org/Place">
                     {% block page_base_meta %}
                         <div class="d-none">
-                            <a itemprop="mainEntityOfPage" title="{{ page.merchant.translated.name }}" href="{{ seoUrl('moorl.merchant.detail', { merchantId: page.merchant.id }) }}">
+                            <a itemprop="mainEntityOfPage" title="{{ page.merchant.translated.name }}" href="{{ seoUrl('frontend.moorl.merchant.detail', { merchantId: page.merchant.id }) }}">
                                 <span itemprop="headline">{{ page.merchant.translated.name }}</span>
                             </a>
 

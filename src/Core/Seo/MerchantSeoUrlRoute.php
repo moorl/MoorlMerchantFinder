@@ -13,7 +13,7 @@ use Shopware\Core\System\SalesChannel\SalesChannelEntity;
 
 class MerchantSeoUrlRoute implements SeoUrlRouteInterface
 {
-    final public const ROUTE_NAME = 'moorl.merchant.detail';
+    final public const ROUTE_NAME = 'frontend.moorl.merchant.detail';
     final public const DEFAULT_TEMPLATE = '{% if merchant.translated.seoUrl %}{{ merchant.translated.seoUrl }}{% else %}merchant/{{ merchant.translated.name }}{% endif %}';
 
     public function __construct(private readonly MerchantDefinition $entityDefinition)

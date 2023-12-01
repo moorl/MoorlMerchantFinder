@@ -19,7 +19,7 @@ class MerchantController extends StorefrontController
     {
     }
 
-    #[Route(path: '/merchant/{merchantId}', name: 'moorl.merchant.detail', methods: ['GET'], defaults: ['XmlHttpRequest' => true])]
+    #[Route(path: '/merchant/{merchantId}', name: 'frontend.moorl.merchant.detail', methods: ['GET'], defaults: ['XmlHttpRequest' => true])]
     public function detail(SalesChannelContext $context, Request $request): Response
     {
         $page = $this->merchantPageLoader->load($request, $context);

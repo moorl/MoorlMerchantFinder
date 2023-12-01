@@ -2,6 +2,7 @@
 
 namespace Moorl\MerchantFinder;
 
+use Doctrine\DBAL\Connection;
 use MoorlFoundation\Core\PluginLifecycleHelper;
 use Shopware\Core\Framework\Plugin;
 use Shopware\Core\Framework\Plugin\Context\ActivateContext;
@@ -71,6 +72,9 @@ class MoorlMerchantFinder extends Plugin
         parent::update($updateContext);
 
         PluginLifecycleHelper::update(self::class, $this->container);
+
+        $connection = $this->container->get(Connection::class);
+        $connection->executeStatement("UPDATE `seo_url_template` SET `route_name` = 'frontend.moorl.merchant.detail' WHERE `route_name` = 'moorl.merchant.detail';");
     }
 
     public function uninstall(UninstallContext $uninstallContext): void
