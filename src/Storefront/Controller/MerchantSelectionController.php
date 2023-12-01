@@ -4,7 +4,6 @@ namespace Moorl\MerchantFinder\Storefront\Controller;
 
 use Moorl\MerchantFinder\Core\Content\Merchant\SalesChannel\SalesChannelMerchantEntity;
 use MoorlCustomerAccounts\Core\Content\CustomerAccountStruct;
-use Shopware\Core\Checkout\Customer\CustomerEntity;
 use Shopware\Core\Content\Product\SalesChannel\Listing\AbstractProductListingRoute;
 use Shopware\Core\Content\Product\SalesChannel\Listing\ProductListingResult;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -29,7 +28,7 @@ class MerchantSelectionController extends StorefrontController
     {
     }
 
-    #[Route(path: '/merchant-selection/modal', name: 'moorl.merchant-selection.modal', methods: ['GET'], defaults: ['XmlHttpRequest' => true])]
+    #[Route(path: '/merchant-selection/modal', name: 'frontend.frontend.moorl.merchant-selection.modal', methods: ['GET'], defaults: ['XmlHttpRequest' => true])]
     public function selectionModal(SalesChannelContext $salesChannelContext, Request $request): Response
     {
         $initiator = $request->query->get('initiator', 'moorl-merchant-finder');
@@ -40,7 +39,7 @@ class MerchantSelectionController extends StorefrontController
         ]);
     }
 
-    #[Route(path: '/merchant-selection/search', name: 'moorl.merchant-selection.search', methods: ['GET','POST'], defaults: ['XmlHttpRequest' => true])]
+    #[Route(path: '/merchant-selection/search', name: 'frontend.moorl.merchant-selection.search', methods: ['GET','POST'], defaults: ['XmlHttpRequest' => true])]
     public function selectionSearch(SalesChannelContext $salesChannelContext, Request $request): Response
     {
         $initiator = $request->query->get('initiator', 'moorl-merchant-finder');
@@ -51,7 +50,7 @@ class MerchantSelectionController extends StorefrontController
         ]);
     }
 
-    #[Route(path: '/merchant-selection/pick', name: 'moorl.merchant-selection.pick', methods: ['GET','POST'], defaults: ['XmlHttpRequest' => true])]
+    #[Route(path: '/merchant-selection/pick', name: 'frontend.moorl.merchant-selection.pick', methods: ['GET','POST'], defaults: ['XmlHttpRequest' => true])]
     public function selectionPick(SalesChannelContext $salesChannelContext, Request $request): JsonResponse
     {
         $initiator = $request->query->get('initiator', 'moorl-merchant-finder');
@@ -76,7 +75,7 @@ class MerchantSelectionController extends StorefrontController
         return $response;
     }
 
-    #[Route(path: '/merchant-selection/name', name: 'moorl.merchant-selection.name', methods: ['GET','POST'], defaults: ['XmlHttpRequest' => true])]
+    #[Route(path: '/merchant-selection/name', name: 'frontend.moorl.merchant-selection.name', methods: ['GET','POST'], defaults: ['XmlHttpRequest' => true])]
     public function selectionName(SalesChannelContext $salesChannelContext, Request $request): Response
     {
         $initiator = $request->query->get('initiator', 'moorl-merchant-finder');
@@ -95,7 +94,7 @@ class MerchantSelectionController extends StorefrontController
         ));
     }
 
-    #[Route(path: '/merchant-selection/checkout', name: 'moorl.merchant-selection.checkout', methods: ['POST'], defaults: ['XmlHttpRequest' => true])]
+    #[Route(path: '/merchant-selection/checkout', name: 'frontend.moorl.merchant-selection.checkout', methods: ['POST'], defaults: ['XmlHttpRequest' => true])]
     public function selectionCheckout(SalesChannelContext $salesChannelContext, Request $request): Response
     {
         $this->updateCustomer([
