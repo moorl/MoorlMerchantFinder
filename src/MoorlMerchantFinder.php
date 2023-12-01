@@ -75,6 +75,7 @@ class MoorlMerchantFinder extends Plugin
 
         $connection = $this->container->get(Connection::class);
         $connection->executeStatement("UPDATE `seo_url_template` SET `route_name` = 'frontend.moorl.merchant.detail' WHERE `route_name` = 'moorl.merchant.detail';");
+        $connection->executeStatement("UPDATE `seo_url` SET `route_name` = 'frontend.moorl.merchant.detail' WHERE `route_name` = 'moorl.merchant.detail';");
     }
 
     public function uninstall(UninstallContext $uninstallContext): void
