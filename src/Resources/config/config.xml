@@ -154,6 +154,20 @@
         </input-field>
 
         <input-field type="bool">
+            <name>showMerchantUrl</name>
+            <label>Show merchant URL</label>
+            <label lang="de-DE">Händler URL anzeigen</label>
+            <defaultValue>true</defaultValue>
+        </input-field>
+
+        <input-field type="bool">
+            <name>showShopUrl</name>
+            <label>Show shop URL</label>
+            <label lang="de-DE">Shop URL anzeigen</label>
+            <defaultValue>true</defaultValue>
+        </input-field>
+
+        <input-field type="bool">
             <name>showPhoneNumber</name>
             <label>Show phone number</label>
             <label lang="de-DE">Telefonnummer zeigen</label>

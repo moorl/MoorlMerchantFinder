@@ -20,6 +20,28 @@
                 {% endif %}
             {% endblock %}
 
+            {% block merchant_meta_merchant_url %}
+                {% if merchant.merchantUrl and config('MoorlMerchantFinder.config.showMerchantUrl') %}
+                    <li>
+                        {% sw_icon 'home' style {size:'sm', pack:'fas'} %}
+                        <a href="{{ merchant.merchantUrl }}" target="_blank" rel="noopener">
+                            {{ "moorl-foundation.properties.merchantUrl"|trans }}
+                        </a>
+                    </li>
+                {% endif %}
+            {% endblock %}
+
+            {% block merchant_meta_shop_url %}
+                {% if merchant.shopUrl and config('MoorlMerchantFinder.config.showShopUrl') %}
+                    <li>
+                        {% sw_icon 'shopping-cart' style {size:'sm', pack:'fas'} %}
+                        <a href="{{ merchant.shopUrl }}" target="_blank" rel="noopener">
+                            {{ "moorl-merchant-finder.shop"|trans }}
+                        </a>
+                    </li>
+                {% endif %}
+            {% endblock %}
+
             {% block merchant_meta_phone %}
                 {% if merchant.phoneNumber and config('MoorlMerchantFinder.config.showPhoneNumber') %}
                     <li>
@@ -67,8 +89,9 @@
                         <div>
                             {% for tag in merchant.tags %}
                                 {% if overviewLink %}
-                                    <a href="{{ overviewLink }}?tag={{ tag.id }}"
-                                       title="{{ tag.name }}">{{ tag.name }}</a>
+                                    <a href="{{ overviewLink }}?tag={{ tag.id }}" title="{{ tag.name }}">
+                                        {{ tag.name }}
+                                    </a>
                                 {% else %}
                                     <span>{{ tag.name }}</span>
                                 {% endif %}
@@ -82,8 +105,7 @@
                 {% if overviewLink %}
                     <li>
                         {% sw_icon 'stack' %}
-                        <a href="{{ overviewLink }}"
-                           title="{{ "moorl-merchant-finder.backToOverview"|trans }}">
+                        <a href="{{ overviewLink }}" title="{{ "moorl-merchant-finder.backToOverview"|trans }}">
                             {{ "moorl-merchant-finder.backToOverview"|trans }}
                         </a>
                     </li>
