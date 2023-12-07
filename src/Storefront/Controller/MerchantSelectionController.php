@@ -28,7 +28,7 @@ class MerchantSelectionController extends StorefrontController
     {
     }
 
-    #[Route(path: '/merchant-selection/modal', name: 'frontend.frontend.moorl.merchant-selection.modal', methods: ['GET'], defaults: ['XmlHttpRequest' => true])]
+    #[Route(path: '/merchant-selection/modal', name: 'frontend.moorl.merchant-selection.modal', methods: ['GET'], defaults: ['XmlHttpRequest' => true])]
     public function selectionModal(SalesChannelContext $salesChannelContext, Request $request): Response
     {
         $initiator = $request->query->get('initiator', 'moorl-merchant-finder');
