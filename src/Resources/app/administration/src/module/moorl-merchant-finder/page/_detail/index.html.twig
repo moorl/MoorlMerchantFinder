@@ -1,9 +1,9 @@
 <sw-page class="moorl-merchant-finder-detail">
-    <template slot="smart-bar-header" v-if="item">
+    <template #smart-bar-header v-if="item">
         <h2>{{ item.name }}</h2>
     </template>
 
-    <template slot="smart-bar-actions">
+    <template #smart-bar-actions>
         <sw-button :routerLink="{ name: 'moorl.merchant.finder.list' }">
             {{ $t('moorl-merchant-finder.buttons.cancelButtonText') }}
         </sw-button>
@@ -20,16 +20,16 @@
 
     <template #language-switch>
         <sw-language-switch
-                slot="language-switch"
+                #language-switch
                 :disabled="item && item._isNew"
                 @on-change="onChangeLanguage"
         />
     </template>
 
-    <template slot="content">
+    <template #content>
         <sw-card-view>
             <sw-tabs defaultItem="general">
-                <template slot-scope="{ active }">
+                <template #default="{ active }">
                     <sw-tabs-item name="general" :activeTab="active">
                         {{ $tc('moorl-merchant-finder.cards.general') }}
                     </sw-tabs-item>
@@ -59,24 +59,22 @@
                     </sw-tabs-item>
                 </template>
 
-                <template slot="content" slot-scope="{ active }">
+                <template #content="{ active }">
                     <moorl-thing-card v-if="active === 'general'" :item="item">
-                        <template slot="append">
+                        <template #append>
                             <sw-container columns="1fr 1fr" gap="0 20px">
-                                <sw-number-field :label="$tc('moorl-merchant-finder.properties.priority')" v-model="item.priority"/>
-                                <sw-field :label="$tc('moorl-merchant-finder.properties.originId')" v-model="item.originId"/>
-                                <sw-field :label="$tc('moorl-merchant-finder.properties.type')" v-model="item.type"/>
-                                <sw-field
-                                        type="switch"
+                                <sw-number-field :label="$tc('moorl-merchant-finder.properties.priority')" v-model:value="item.priority"/>
+                                <sw-text-field :label="$tc('moorl-merchant-finder.properties.originId')" v-model:value="item.originId"/>
+                                <sw-text-field :label="$tc('moorl-merchant-finder.properties.type')" v-model:value="item.type"/>
+                                <sw-switch-field
                                         bordered
                                         :label="$tc('moorl-merchant-finder.properties.highlight')"
-                                        v-model="item.highlight"
+                                        v-model:value="item.highlight"
                                 />
-                                <sw-field
-                                        type="switch"
+                                <sw-switch-field
                                         bordered
                                         :label="$tc('moorl-merchant-finder.properties.showCmsPage')"
-                                        v-model="item.showCmsPage"
+                                        v-model:value="item.showCmsPage"
                                 />
                             </sw-container>
                         </template>
@@ -118,29 +116,26 @@
                              :isLoading="isLoading"
                              :title="$tc('moorl-merchant-finder.cards.merchantArea')">
                         <sw-container columns="1fr 1fr" gap="0 20px">
-                            <sw-single-select v-model="item.deliveryType"
+                            <sw-single-select v-model:value="item.deliveryType"
                                               :options="deliveryTypeOptions"
                                               :label="$tc('moorl-merchant-finder.properties.deliveryType')">
                             </sw-single-select>
 
-                            <sw-field v-if="item.deliveryType === 'radius'"
-                                      type="number"
+                            <sw-number-field v-if="item.deliveryType === 'radius'"
                                       :label="$tc('moorl-merchant-finder.properties.maxRadius')"
                                       :helpText="$tc('moorl-merchant-finder.tooltip.merchantMaxRadius')"
-                                      v-model="item.maxRadius">
-                            </sw-field>
+                                      v-model:value="item.maxRadius">
+                            </sw-number-field>
 
-                            <sw-field v-if="item.deliveryType === 'radius'"
-                                      type="number"
+                            <sw-number-field v-if="item.deliveryType === 'radius'"
                                       :label="$tc('moorl-merchant-finder.properties.minOrderValue')"
-                                      v-model="item.minOrderValue">
-                            </sw-field>
+                                      v-model:value="item.minOrderValue">
+                            </sw-number-field>
 
-                            <sw-field v-if="item.deliveryType === 'radius'"
-                                      type="number"
+                            <sw-number-field v-if="item.deliveryType === 'radius'"
                                       :label="$tc('moorl-merchant-finder.properties.deliveryPrice')"
-                                      v-model="item.deliveryPrice">
-                            </sw-field>
+                                      v-model:value="item.deliveryPrice">
+                            </sw-number-field>
                         </sw-container>
                     </sw-card>
 
@@ -159,12 +154,11 @@
                     </sw-card>
 
                     <moorl-opening-hours-card v-if="active === 'timeSettings'" :item="item">
-                        <template slot="append">
-                            <sw-field
-                                    type="switch"
+                        <template #append>
+                            <sw-switch-field
                                     bordered
                                     :label="$tc('moorl-merchant-finder.properties.showOpeningHours')"
-                                    v-model="item.showOpeningHours"
+                                    v-model:value="item.showOpeningHours"
                             />
                         </template>
                     </moorl-opening-hours-card>
@@ -180,10 +174,10 @@
                                 :label="$tc('moorl-merchant-finder.properties.salesChannels')"
                                 :localMode="true"
                                 labelProperty="name"
-                                v-model="item.salesChannels">
+                                v-model:value="item.salesChannels">
                         </sw-entity-many-to-many-select>
 
-                        <sw-inherit-wrapper v-model="item.categories"
+                        <sw-inherit-wrapper v-model:value="item.categories"
                                             isAssociation
                                             :label="$tc('sw-product.categoryForm.labelCategory')">
                             <template #content="{ currentValue }">
@@ -196,17 +190,17 @@
                         <sw-entity-single-select
                                 :label="$t('moorl-foundation.properties.customerGroupId')"
                                 entity="customer_group"
-                                v-model="item.customerGroupId">
+                                v-model:value="item.customerGroupId">
                         </sw-entity-single-select>
 
                         <sw-entity-tag-select
                                 :label="$t('sw-customer.baseForm.labelTags')"
-                                v-model="item.tags">
+                                v-model:value="item.tags">
                         </sw-entity-tag-select>
 
                         <sw-entity-multi-select
                                 :label="$t('sw-product.basicForm.labelManufacturer')"
-                                v-model="item.productManufacturers">
+                                v-model:value="item.productManufacturers">
                         </sw-entity-multi-select>
 
                         <sw-alert variant="info">

@@ -7,7 +7,7 @@
         />
     </template>
 
-    <template slot="smart-bar-actions">
+    <template #smart-bar-actions>
         <sw-button variant="primary" :routerLink="{ name: 'moorl.merchant.finder.create' }">
             {{ $tc('moorl-foundation.buttons.addMerchantButtonText') }}
         </sw-button>
@@ -16,7 +16,7 @@
     </template>
 
     <template #language-switch>
-        <sw-language-switch slot="language-switch" @on-change="getList"/>
+        <sw-language-switch #language-switch @on-change="getList"/>
     </template>
 
     <template #sidebar>
@@ -41,7 +41,7 @@
         </sw-sidebar>
     </template>
 
-    <template slot="content">
+    <template #content>
         <sw-entity-listing
                 v-if="entitySearchable"
                 detailRoute="moorl.merchant.finder.detail"
