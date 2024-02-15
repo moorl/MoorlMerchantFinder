@@ -10,7 +10,7 @@
     ],
     "require": {
         "shopware/core": "6.6.*",
-        "moorl/foundation": "^1.5.30"
+        "moorl/foundation": "1.6.*"
     },
     "type": "shopware-platform-plugin",
     "autoload": {
