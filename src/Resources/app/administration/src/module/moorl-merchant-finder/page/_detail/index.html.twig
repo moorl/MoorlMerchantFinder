@@ -28,7 +28,7 @@
 
     <template #content>
         <sw-card-view>
-            <sw-tabs defaultItem="general">
+            <sw-tabs default-item="general">
                 <template #default="{ active }">
                     <sw-tabs-item name="general" :activeTab="active">
                         {{ $tc('moorl-merchant-finder.cards.general') }}
@@ -60,7 +60,7 @@
                 </template>
 
                 <template #content="{ active }">
-                    <moorl-thing-card v-if="active === 'general'" :item="item">
+                    <moorl-thing-card v-if="active === 'general'" v-model:item="item">
                         <template #append>
                             <sw-container columns="1fr 1fr" gap="0 20px">
                                 <sw-number-field :label="$tc('moorl-merchant-finder.properties.priority')" v-model:value="item.priority"/>
@@ -80,19 +80,19 @@
                         </template>
                     </moorl-thing-card>
 
-                    <moorl-person-card v-if="active === 'general'" :item="item"/>
+                    <moorl-person-card v-if="active === 'general'" v-model:item="item"/>
 
-                    <moorl-contact-card v-if="active === 'general'" :item="item"/>
+                    <moorl-contact-card v-if="active === 'general'" v-model:item="item"/>
 
-                    <moorl-company-card v-if="active === 'general'" :item="item"/>
+                    <moorl-company-card v-if="active === 'general'" v-model:item="item"/>
 
-                    <moorl-address-card v-if="active === 'address'" :item="item"/>
+                    <moorl-address-card v-if="active === 'address'" v-model:item="item"/>
 
-                    <moorl-location-card v-if="active === 'address'" :item="item"/>
+                    <moorl-location-card v-if="active === 'address'" v-model:item="item"/>
 
                     <moorl-layout-card-v2
                             v-if="active === 'layout'"
-                            :item="item"
+                            v-model:item="item"
                             entity="moorl_merchant"
                             pageType="merchant_detail"
                             @save-cms-config="onClickSave"
@@ -108,7 +108,7 @@
                                 :isLoading="isLoading"
                                 :criteria="merchantStockCriteria"
                                 :filterColumns="merchantStockFilterColumns"
-                                :defaultItem="{ merchantId: item.id }"
+                                :default-item="{ merchantId: item.id }"
                         />
                     </sw-card>
 
@@ -149,7 +149,7 @@
                                 :isLoading="isLoading"
                                 :criteria="merchantAreaCriteria"
                                 :filterColumns="merchantAreaFilterColumns"
-                                :defaultItem="{ merchantId: item.id }">
+                                :default-item="{ merchantId: item.id }">
                         </moorl-entity-grid>
                     </sw-card>
 
@@ -212,7 +212,7 @@
                                 :isLoading="isLoading"
                                 :criteria="merchantCustomerCriteria"
                                 :filterColumns="merchantCustomerFilterColumns"
-                                :defaultItem="{ merchantId: item.id }"
+                                :default-item="{ merchantId: item.id }"
                         />
                     </sw-card>
 
