@@ -108,7 +108,7 @@
                                 :isLoading="isLoading"
                                 :criteria="merchantStockCriteria"
                                 :filterColumns="merchantStockFilterColumns"
-                                :default-item="{ merchantId: item.id }"
+                                :defaultItem="{ merchantId: item.id }"
                         />
                     </sw-card>
 
@@ -174,34 +174,37 @@
                                 :label="$tc('moorl-merchant-finder.properties.salesChannels')"
                                 :localMode="true"
                                 labelProperty="name"
-                                v-model:value="item.salesChannels">
-                        </sw-entity-many-to-many-select>
+                                v-model:entityCollection="item.salesChannels"
+                        />
 
-                        <sw-inherit-wrapper v-model:value="item.categories"
-                                            isAssociation
-                                            :label="$tc('sw-product.categoryForm.labelCategory')">
+                        <sw-inherit-wrapper
+                                v-model:value="item.categories"
+                                isAssociation
+                                :label="$tc('sw-product.categoryForm.labelCategory')"
+                        >
                             <template #content="{ currentValue }">
-                                <sw-category-tree-field :categoriesCollection="currentValue ? currentValue : []"
-                                                        :placeholder="$tc('sw-product.categoryForm.placeholderCategory')">
-                                </sw-category-tree-field>
+                                <sw-category-tree-field
+                                        :categoriesCollection="currentValue ? currentValue : []"
+                                        :placeholder="$tc('sw-product.categoryForm.placeholderCategory')"
+                                />
                             </template>
                         </sw-inherit-wrapper>
 
                         <sw-entity-single-select
                                 :label="$t('moorl-foundation.properties.customerGroupId')"
                                 entity="customer_group"
-                                v-model:value="item.customerGroupId">
-                        </sw-entity-single-select>
+                                v-model:value="item.customerGroupId"
+                        />
 
                         <sw-entity-tag-select
                                 :label="$t('sw-customer.baseForm.labelTags')"
-                                v-model:value="item.tags">
-                        </sw-entity-tag-select>
+                                v-model:entityCollection="item.tags"
+                        />
 
                         <sw-entity-multi-select
                                 :label="$t('sw-product.basicForm.labelManufacturer')"
-                                v-model:entityCollection="item.productManufacturers">
-                        </sw-entity-multi-select>
+                                v-model:entityCollection="item.productManufacturers"
+                        />
 
                         <sw-alert variant="info">
                             {{ $tc('moorl-merchant-finder.notification.linkedCustomers') }}
