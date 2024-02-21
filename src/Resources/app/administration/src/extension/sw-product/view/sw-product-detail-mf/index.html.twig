@@ -3,11 +3,12 @@
              :isLoading="isLoading"
              :title="$tc('moorl-foundation.label.stockCard')"
              class="moorl-entity-grid">
-        <moorl-entity-grid entity="moorl_merchant_stock"
-                           :isLoading="isLoading"
-                           :criteria="merchantStockCriteria"
-                           :filterColumns="merchantStockFilterColumns"
-                           :default-item="{ productId: product.id }">
-        </moorl-entity-grid>
+        <moorl-entity-grid
+                entity="moorl_merchant_stock"
+                :isLoading="isLoading"
+                :criteria="merchantStockCriteria"
+                :filterColumns="merchantStockFilterColumns"
+                :default-item="{ productId: product.id }"
+        />
     </sw-card>
 </div>

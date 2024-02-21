@@ -3,11 +3,12 @@
              :isLoading="isLoading"
              :title="$tc('moorl-merchant-finder.general.mainMenuItemGeneral')"
              class="moorl-entity-grid">
-        <moorl-entity-grid entity="moorl_merchant_customer"
-                           :isLoading="isLoading"
-                           :criteria="merchantCustomerCriteria"
-                           :filterColumns="merchantCustomerFilterColumns"
-                           :default-item="{ customerId: customer.id }">
-        </moorl-entity-grid>
+        <moorl-entity-grid
+                entity="moorl_merchant_customer"
+                :isLoading="isLoading"
+                :criteria="merchantCustomerCriteria"
+                :filterColumns="merchantCustomerFilterColumns"
+                :default-item="{ customerId: customer.id }"
+        />
     </sw-card>
 </div>
