@@ -115,26 +115,30 @@
                              :isLoading="isLoading"
                              :title="$tc('moorl-merchant-finder.cards.merchantArea')">
                         <sw-container columns="1fr 1fr" gap="0 20px">
-                            <sw-single-select v-model:value="item.deliveryType"
-                                              :options="deliveryTypeOptions"
-                                              :label="$tc('moorl-merchant-finder.properties.deliveryType')">
-                            </sw-single-select>
+                            <sw-single-select
+                                    v-model:value="item.deliveryType"
+                                    :options="deliveryTypeOptions"
+                                    :label="$tc('moorl-merchant-finder.properties.deliveryType')"
+                            />
 
-                            <sw-number-field v-if="item.deliveryType === 'radius'"
-                                      :label="$tc('moorl-merchant-finder.properties.maxRadius')"
-                                      :helpText="$tc('moorl-merchant-finder.tooltip.merchantMaxRadius')"
-                                      v-model:value="item.maxRadius">
-                            </sw-number-field>
+                            <sw-number-field
+                                    v-if="item.deliveryType === 'radius'"
+                                    :label="$tc('moorl-merchant-finder.properties.maxRadius')"
+                                    :helpText="$tc('moorl-merchant-finder.tooltip.merchantMaxRadius')"
+                                    v-model:value="item.maxRadius"
+                            />
 
-                            <sw-number-field v-if="item.deliveryType === 'radius'"
-                                      :label="$tc('moorl-merchant-finder.properties.minOrderValue')"
-                                      v-model:value="item.minOrderValue">
-                            </sw-number-field>
+                            <sw-number-field
+                                    v-if="item.deliveryType === 'radius'"
+                                    :label="$tc('moorl-merchant-finder.properties.minOrderValue')"
+                                    v-model:value="item.minOrderValue"
+                            />
 
-                            <sw-number-field v-if="item.deliveryType === 'radius'"
-                                      :label="$tc('moorl-merchant-finder.properties.deliveryPrice')"
-                                      v-model:value="item.deliveryPrice">
-                            </sw-number-field>
+                            <sw-number-field
+                                    v-if="item.deliveryType === 'radius'"
+                                    :label="$tc('moorl-merchant-finder.properties.deliveryPrice')"
+                                    v-model:value="item.deliveryPrice"
+                            />
                         </sw-container>
                     </sw-card>
 
@@ -148,8 +152,8 @@
                                 :isLoading="isLoading"
                                 :criteria="merchantAreaCriteria"
                                 :filterColumns="merchantAreaFilterColumns"
-                                :default-item="{ merchantId: item.id }">
-                        </moorl-entity-grid>
+                                :default-item="{ merchantId: item.id }"
+                        />
                     </sw-card>
 
                     <moorl-opening-hours-card v-if="active === 'timeSettings'" :item="item">
