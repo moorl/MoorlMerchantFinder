@@ -18,8 +18,8 @@
         <service id="Moorl\MerchantFinder\Core\Content\Merchant\SalesChannel\MerchantListing">
             <argument type="service" id="sales_channel.moorl_merchant.repository"/>
 
-            <tag name="moorl.foundation.entity_suggest" priority="0" />
-            <tag name="moorl.foundation.entity_search" priority="0" />
+            <tag name="moorl.foundation.entity_suggest" priority="0"/>
+            <tag name="moorl.foundation.entity_search" priority="0"/>
         </service>
 
         <!-- Listing Route Decorator -->
@@ -29,7 +29,7 @@
                  public="true">
             <argument type="service" id="Moorl\MerchantFinder\Core\Content\Product\SalesChannel\Listing\MerchantProductListingRoute.inner"/>
             <argument type="service" id="Shopware\Core\Content\Product\SalesChannel\Listing\ProductListingLoader"/>
-            <argument type="service" id="event_dispatcher" />
+            <argument type="service" id="event_dispatcher"/>
         </service>
 
         <!-- DetailRoute -->
@@ -60,7 +60,7 @@
         </service>
 
         <service id="Moorl\MerchantFinder\Storefront\Controller\MerchantSelectionController" public="true">
-            <argument type="service" id="Shopware\Core\Content\Product\SalesChannel\Listing\ProductListingRoute" />
+            <argument type="service" id="Shopware\Core\Content\Product\SalesChannel\Listing\ProductListingRoute"/>
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
             <argument type="service" id="customer.repository"/>
 
@@ -100,7 +100,7 @@
 
         <!-- Merchant -->
         <service id="Moorl\MerchantFinder\Core\Content\Merchant\MerchantDefinition">
-            <tag name="shopware.entity.definition" entity="moorl_merchant" />
+            <tag name="shopware.entity.definition" entity="moorl_merchant"/>
         </service>
         <service id="Moorl\MerchantFinder\Core\Content\Merchant\Cms\MoorlMerchantFinderCmsElementResolver">
             <argument type="service" id="MoorlFoundation\Core\Service\SortingService"/>
@@ -118,35 +118,35 @@
         </service>
 
         <service id="Moorl\MerchantFinder\Core\Content\Marker\MarkerDefinition">
-            <tag name="shopware.entity.definition" entity="moorl_merchant_marker" />
+            <tag name="shopware.entity.definition" entity="moorl_merchant_marker"/>
         </service>
 
         <service id="Moorl\MerchantFinder\Core\Content\Aggregate\MerchantTranslation\MerchantTranslationDefinition">
-            <tag name="shopware.entity.definition" entity="moorl_merchant_translation" />
+            <tag name="shopware.entity.definition" entity="moorl_merchant_translation"/>
         </service>
 
         <service id="Moorl\MerchantFinder\Core\Content\Aggregate\MerchantSalesChannel\MerchantSalesChannelDefinition">
-            <tag name="shopware.entity.definition" entity="moorl_merchant_sales_channel" />
+            <tag name="shopware.entity.definition" entity="moorl_merchant_sales_channel"/>
         </service>
 
         <service id="Moorl\MerchantFinder\Core\Content\Aggregate\MerchantCategory\MerchantCategoryDefinition">
-            <tag name="shopware.entity.definition" entity="moorl_merchant_category" />
+            <tag name="shopware.entity.definition" entity="moorl_merchant_category"/>
         </service>
 
         <service id="Moorl\MerchantFinder\Core\Content\Aggregate\MerchantTag\MerchantTagDefinition">
-            <tag name="shopware.entity.definition" entity="moorl_merchant_tag" />
+            <tag name="shopware.entity.definition" entity="moorl_merchant_tag"/>
         </service>
 
         <service id="Moorl\MerchantFinder\Core\Content\Aggregate\MerchantProductManufacturer\MerchantProductManufacturerDefinition">
-            <tag name="shopware.entity.definition" entity="moorl_merchant_product_manufacturer" />
+            <tag name="shopware.entity.definition" entity="moorl_merchant_product_manufacturer"/>
         </service>
 
         <service id="Moorl\MerchantFinder\Core\Content\Aggregate\MerchantArea\MerchantAreaDefinition">
-            <tag name="shopware.entity.definition" entity="moorl_merchant_area" />
+            <tag name="shopware.entity.definition" entity="moorl_merchant_area"/>
         </service>
 
         <service id="Moorl\MerchantFinder\Core\Content\Aggregate\MerchantCustomer\MerchantCustomerDefinition">
-            <tag name="shopware.entity.definition" entity="moorl_merchant_customer" />
+            <tag name="shopware.entity.definition" entity="moorl_merchant_customer"/>
         </service>
 
         <!-- Merchant Stock -->
@@ -173,32 +173,32 @@
 
         <!-- Entity Extensions -->
         <service id="Moorl\MerchantFinder\Core\Content\Product\ProductExtension">
-            <tag name="shopware.entity.extension" />
+            <tag name="shopware.entity.extension"/>
         </service>
 
         <service id="Moorl\MerchantFinder\Core\Content\Customer\CustomerExtension">
-            <tag name="shopware.entity.extension" />
+            <tag name="shopware.entity.extension"/>
         </service>
 
         <service id="Moorl\MerchantFinder\Core\Content\OrderLineItem\OrderLineItemExtension">
-            <tag name="shopware.entity.extension" />
+            <tag name="shopware.entity.extension"/>
         </service>
 
         <service id="Moorl\MerchantFinder\Core\Content\SalesChannel\SalesChannelExtension">
-            <tag name="shopware.entity.extension" />
+            <tag name="shopware.entity.extension"/>
         </service>
 
         <!-- CMS Resolver -->
         <service id="Moorl\MerchantFinder\Core\Content\Merchant\Cms\MerchantListingCmsElementResolver">
             <argument type="service" id="MoorlFoundation\Core\Service\SortingService"/>
-            <argument type="service" id="Shopware\Core\Content\Product\SalesChannel\Listing\ProductListingRoute" />
+            <argument type="service" id="Shopware\Core\Content\Product\SalesChannel\Listing\ProductListingRoute"/>
 
             <tag name="shopware.cms.data_resolver"/>
         </service>
 
         <!-- Translate -->
         <service id="Moorl\MerchantFinder\EntityTranslation\MerchantTranslation">
-            <tag name="moorl.foundation.entity_translation" priority="0" />
+            <tag name="moorl.foundation.entity_translation" priority="0"/>
         </service>
 
         <!-- SEO Urls -->

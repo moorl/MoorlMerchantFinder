@@ -10,12 +10,12 @@
             <argument type="service" id="Doctrine\DBAL\Connection"/>
             <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry"/>
 
-            <tag name="moorl.foundation.data" priority="2000" />
+            <tag name="moorl.foundation.data" priority="2000"/>
         </service>
 
         <!-- priority <= 1000 = run manually (Demo Data) -->
         <service id="Moorl\MerchantFinder\Demo\Standard\DemoStandard">
-            <tag name="moorl.foundation.data" priority="0" />
+            <tag name="moorl.foundation.data" priority="0"/>
         </service>
     </services>
 </container>
