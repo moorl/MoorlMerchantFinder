@@ -19,7 +19,7 @@ Component.extend('moorl-merchant-finder-create', 'moorl-merchant-finder-detail',
                 }).catch((exception) => {
                 this.isLoading = false;
                 this.createNotificationError({
-                    title: this.$t('moorl-merchant-finder.detail.errorTitle'),
+                    title: this.$tc('moorl-merchant-finder.detail.errorTitle'),
                     message: exception
                 });
             });
