@@ -57,7 +57,7 @@ class MoorlMerchantFinder extends Plugin
     {
         parent::build($container);
 
-        //PluginLifecycleHelper::build($container, __DIR__ . '/ElasticSearch');
+        PluginLifecycleHelper::build($container, __DIR__ . '/ElasticSearch');
     }
 
     public function activate(ActivateContext $activateContext): void
