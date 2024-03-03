@@ -12,7 +12,6 @@ use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\Uuid\Uuid;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Shopware\Elasticsearch\Framework\AbstractElasticsearchDefinition;
-use Shopware\Elasticsearch\Product\ElasticsearchProductDefinition;
 
 class ProductEsDefinitionDecorator extends AbstractElasticsearchDefinition
 {
@@ -50,7 +49,7 @@ class ProductEsDefinitionDecorator extends AbstractElasticsearchDefinition
         $decoratedMapping['properties']['MoorlMerchants'] = [
             'type' => 'nested',
             'properties' => [
-                'id' => ElasticsearchProductDefinition::KEYWORD_FIELD
+                'id' => AbstractElasticsearchDefinition::KEYWORD_FIELD
             ],
         ];
 
