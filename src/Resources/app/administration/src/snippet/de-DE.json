@@ -1,7 +1,7 @@
 {
     "sw-seo-url-template-card": {
         "routeNames": {
-            "moorl-merchant-detail": "Händler Detail Seite"
+            "frontend-moorl-merchant-detail": "Händler Detail Seite"
         }
     },
     "global": {
