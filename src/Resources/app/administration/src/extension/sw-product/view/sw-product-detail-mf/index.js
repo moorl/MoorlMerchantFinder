@@ -9,13 +9,6 @@ Component.register('sw-product-detail-mf', {
 
     inject: ['repositoryFactory', 'context'],
 
-    props: {
-        product: {
-            type: Object,
-            required: true
-        }
-    },
-
     mixins: [
         Mixin.getByName('notification'),
         Mixin.getByName('placeholder')
