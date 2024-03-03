@@ -11,10 +11,9 @@ Module.register('moorl-merchant-finder', {
     type: 'plugin',
     name: 'moorl-merchant-finder',
     title: 'moorl-merchant-finder.general.mainMenuItemGeneral',
-    color: '#ff3d58',
+    color: '#57d9a3',
     icon: 'regular-globe-stand',
     entity: 'moorl_merchant',
-
     routes: {
         list: {
             component: 'moorl-merchant-finder-list',
@@ -35,10 +34,9 @@ Module.register('moorl-merchant-finder', {
             }
         }
     },
-
     navigation: [{
         label: 'moorl-merchant-finder.general.mainMenuItemGeneral',
-        color: '#ff3d58',
+        color: '#57d9a3',
         path: 'moorl.merchant.finder.list',
         icon: 'regular-globe-stand',
         position: 40,

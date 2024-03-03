@@ -49,7 +49,7 @@
         "buttons": {
             "saveButtonText": "Save",
             "refreshButtonText": "Reload",
-            "addStoreButtonText": "New merchant",
+            "addStoreButtonText": "New store",
             "cancelButtonText": "Cancel",
             "startImportButtonText": "Start import",
             "importButtonText": "Import CSV",
