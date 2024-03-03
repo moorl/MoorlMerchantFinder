@@ -9,7 +9,7 @@
 
     <template #smart-bar-actions>
         <sw-button variant="primary" :routerLink="{ name: 'moorl.merchant.finder.create' }">
-            {{ $tc('moorl-foundation.buttons.addMerchantButtonText') }}
+            {{ $tc('moorl-merchant-finder.action.newShop') }}
         </sw-button>
 
         <moorl-demo-button pluginName="MoorlMerchantFinder" @on-finish="getList"/>
