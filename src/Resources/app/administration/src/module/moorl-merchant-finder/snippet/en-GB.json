@@ -59,6 +59,7 @@
             "printerBinaries": "Printer Binaries"
         },
         "cards": {
+            "seo": "SEO",
             "layout": "Layout",
             "marker": "Marker",
             "imprint": "Imprint and Invoice",

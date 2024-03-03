@@ -8,7 +8,8 @@ Component.register('moorl-merchant-finder-detail', {
     template,
 
     inject: [
-        'repositoryFactory'
+        'repositoryFactory',
+        'seoUrlService'
     ],
 
     mixins: [
@@ -61,6 +62,9 @@ Component.register('moorl-merchant-finder-detail', {
                 .addAssociation('categories')
                 .addAssociation('productManufacturers')
                 .addAssociation('salesChannels');
+
+            criteria.getAssociation('seoUrls')
+                .addFilter(Criteria.equals('isCanonical', true));
 
             return criteria;
         },
@@ -157,8 +161,10 @@ Component.register('moorl-merchant-finder-detail', {
             this.getItem();
         },
 
-        onClickSave() {
+        async onClickSave() {
             this.isLoading = true;
+
+            await this.updateSeoUrls();
 
             if (this.item.openingHours === false) {
                 this.item.openingHours = null;
@@ -178,6 +184,23 @@ Component.register('moorl-merchant-finder-detail', {
                         message: this.$tc('global.notification.notificationSaveErrorMessageRequiredFieldsInvalid'),
                     });
                 });
+        },
+
+        updateSeoUrls() {
+            if (!Shopware.State.list().includes('swSeoUrl')) {
+                return Promise.resolve();
+            }
+
+            const seoUrls = Shopware.State.getters['swSeoUrl/getNewOrModifiedUrls']();
+
+            return Promise.all(seoUrls.map((seoUrl) => {
+                if (seoUrl.seoPathInfo) {
+                    seoUrl.isModified = true;
+                    return this.seoUrlService.updateCanonicalUrl(seoUrl, seoUrl.languageId);
+                }
+
+                return Promise.resolve();
+            }));
         },
 
         saveFinish() {

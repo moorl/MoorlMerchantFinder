@@ -41,6 +41,10 @@
                         {{ $tc('moorl-merchant-finder.cards.layout') }}
                     </sw-tabs-item>
 
+                    <sw-tabs-item name="seo" :activeTab="active" :disabled="item && item._isNew">
+                        {{ $tc('moorl-merchant-finder.cards.seo') }}
+                    </sw-tabs-item>
+
                     <sw-tabs-item name="stock" :activeTab="active">
                         {{ $tc('moorl-merchant-finder.cards.stock') }}
                     </sw-tabs-item>
@@ -78,6 +82,8 @@
                             </sw-container>
                         </template>
                     </moorl-thing-card>
+
+                    <moorl-thing-seo-card v-if="active === 'seo'" v-model:item="item"/>
 
                     <moorl-person-card v-if="active === 'general'" v-model:item="item"/>
 
